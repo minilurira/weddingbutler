@@ -6,10 +6,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import {
   ButtonLink,
   Container,
-  Eyebrow,
-  Lead,
   Section,
-  SectionTitle,
+  SectionHead,
 } from "@/components/ui/Primitives";
 import { formatWon } from "@/lib/format";
 import {
@@ -49,18 +47,18 @@ export default function PricingPage() {
     <>
       <Section className="pt-32 sm:pt-40 lg:pt-44">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>요금제</Eyebrow>
-            <SectionTitle>
-              하객 규모에 맞춰
-              <br />
-              세 가지로 나눴습니다.
-            </SectionTitle>
-            <Lead>
-              표시된 금액은 모두 부가세 포함입니다. 숨은 비용은 없습니다.
-              예약할 때는 총 금액의 {depositPercent}%만 결제하시고, 잔금은 예식
-              당일 실제 하객 수를 확인한 뒤 정산합니다.
-            </Lead>
+          <Reveal>
+            <SectionHead
+              label="Pricing"
+              title={
+                <>
+                  하객 규모에 맞춰
+                  <br />
+                  세 가지로 나눴습니다.
+                </>
+              }
+              lead={`표시된 금액은 모두 부가세 포함입니다. 숨은 비용은 없습니다. 예약할 때는 총 금액의 ${depositPercent}%만 결제하시고, 잔금은 예식 당일 실제 하객 수를 확인한 뒤 정산합니다.`}
+            />
           </Reveal>
 
           <div className="mt-14">
@@ -72,12 +70,12 @@ export default function PricingPage() {
       {/* ── 계산기 ── */}
       <Section className="bg-cream-deep/50">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>요금 계산기</Eyebrow>
-            <SectionTitle>내 예식은 얼마일까요?</SectionTitle>
-            <Lead>
-              예상 하객 수를 넣으면 총액과 지금 결제할 예약금이 바로 나옵니다.
-            </Lead>
+          <Reveal>
+            <SectionHead
+              label="Calculator"
+              title="내 예식은 얼마일까요?"
+              lead="예상 하객 수를 넣으면 총액과 지금 결제할 예약금이 바로 나옵니다."
+            />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-12">
@@ -91,12 +89,12 @@ export default function PricingPage() {
         <Container>
           <div className="grid gap-14 lg:grid-cols-[.8fr_1.2fr] lg:gap-20">
             <Reveal>
-              <Eyebrow>추가 요금</Eyebrow>
-              <SectionTitle>추가되는 항목은 두 가지뿐입니다.</SectionTitle>
-              <Lead>
-                그 외에 예약 후에 붙는 비용은 없습니다. 예상보다 하객이 적게
-                오셨다면 그만큼 잔금에서 차감됩니다.
-              </Lead>
+              <SectionHead
+                className="!mx-0 !max-w-none text-left"
+                label="Extra"
+                title="추가되는 항목은 두 가지뿐입니다."
+                lead="그 외에 예약 후에 붙는 비용은 없습니다. 예상보다 하객이 적게 오셨다면 그만큼 잔금에서 차감됩니다."
+              />
             </Reveal>
 
             <Reveal delay={0.08}>
@@ -170,17 +168,16 @@ export default function PricingPage() {
       {/* ── FAQ ── */}
       <Section className="bg-cream-deep/50 pb-24 sm:pb-32">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>자주 묻는 질문</Eyebrow>
-            <SectionTitle>요금에 대해 많이 묻는 것들.</SectionTitle>
+          <Reveal>
+            <SectionHead label="FAQ" title="요금에 대해 많이 묻는 것들." />
           </Reveal>
 
-          <Reveal delay={0.08} className="mt-12">
+          <Reveal delay={0.08} className="mx-auto mt-12 max-w-3xl">
             <Accordion items={FAQ_ITEMS.slice(3, 7)} />
           </Reveal>
 
           <Reveal delay={0.12}>
-            <div className="mt-12 flex flex-wrap gap-3">
+            <div className="mt-12 flex flex-wrap justify-center gap-3">
               <ButtonLink href="/booking" size="lg">
                 예약 가능한 날짜 보기
               </ButtonLink>

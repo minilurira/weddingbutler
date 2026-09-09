@@ -35,14 +35,16 @@ export const IMAGES = {
   hero: {
     src: "https://images.unsplash.com/photo-1519741497674-611481863552",
     alt: "예식장에서 하객을 맞이하는 결혼식 현장",
-    intent: "밝고 따뜻한 예식장 전경. 인물 얼굴이 크게 잡히지 않는 넓은 컷.",
-    tone: "rose",
+    intent:
+      "예식장 전경. 흰 글씨를 얹으므로 너무 밝지 않고 여백이 넉넉한 넓은 컷이 좋습니다.",
+    tone: "ink",
   },
   reception: {
     src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
     alt: "방명록과 답례품이 놓인 결혼식 접수대",
-    intent: "접수대·방명록·펜이 놓인 테이블 클로즈업. 사람은 없거나 손만.",
-    tone: "blush",
+    intent:
+      "접수대·방명록·펜이 놓인 테이블 클로즈업. 어두운 섹션 안에 놓이므로 차분한 톤이 좋습니다.",
+    tone: "ink",
   },
   butler: {
     src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",

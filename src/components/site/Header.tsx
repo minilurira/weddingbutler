@@ -11,6 +11,13 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  /*
+   * 홈은 어두운 사진 히어로로 시작한다. 맨 위에 있을 때 헤더가 투명하므로
+   * 글씨를 밝게 바꾸지 않으면 로고와 메뉴가 배경에 묻혀 안 보인다.
+   * 스크롤해서 헤더에 배경이 깔리면 원래 색으로 돌아온다.
+   */
+  const onDarkHero = pathname === "/" && !scrolled;
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
 
@@ -51,8 +58,18 @@ export function Header() {
           className="flex items-baseline gap-2 font-semibold tracking-tight"
           aria-label={`${SITE.name} 홈으로`}
         >
-          <span className="text-[17px] text-ink">{SITE.name}</span>
-          <span className="hidden text-[10px] uppercase tracking-[0.22em] text-ink-mute sm:inline">
+          <span
+            className={`text-[17px] transition-colors ${
+              onDarkHero ? "text-white" : "text-ink"
+            }`}
+          >
+            {SITE.name}
+          </span>
+          <span
+            className={`hidden text-[10px] uppercase tracking-[0.22em] transition-colors sm:inline ${
+              onDarkHero ? "text-white/55" : "text-ink-mute"
+            }`}
+          >
             Wedding Butler
           </span>
         </Link>
@@ -65,7 +82,13 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-                  active ? "text-ink" : "text-ink-soft hover:text-ink"
+                  onDarkHero
+                    ? active
+                      ? "text-white"
+                      : "text-white/70 hover:text-white"
+                    : active
+                      ? "text-ink"
+                      : "text-ink-soft hover:text-ink"
                 }`}
               >
                 {link.label}
@@ -88,7 +111,11 @@ export function Header() {
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
-          className="-mr-2 flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/[.05] md:hidden"
+          className={`-mr-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors md:hidden ${
+            onDarkHero
+              ? "text-white hover:bg-white/10"
+              : "text-ink hover:bg-ink/[.05]"
+          }`}
         >
           <span className="relative block h-3 w-5">
             <span

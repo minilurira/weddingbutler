@@ -36,6 +36,9 @@
 
   --radius-card: 20px;
 
+  /* 떠 있는 문의 버튼 크기 (기본 스케일에 없는 값) */
+  --spacing-13: 3.25rem;
+
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

@@ -1,100 +1,145 @@
 /** 사이트 카피(문구) 모음. 문구만 고치고 싶을 때 여기만 보면 된다. */
 
 import type { AccordionItem } from "@/components/ui/Accordion";
+import type { IconName } from "@/components/ui/Icon";
+
+/** 히어로 아래에 붙는 짧은 신뢰 요약 */
+export const HERO_CHIPS = [
+  { icon: "calendar" as IconName, label: "주말 예식 전문" },
+  { icon: "users" as IconName, label: "항상 2인 1조" },
+  { icon: "card" as IconName, label: "예약금 10%" },
+  { icon: "receipt" as IconName, label: "현장 정산 인계" },
+];
 
 /** 축의대를 지인에게 부탁했을 때 실제로 생기는 문제들 */
-export const PAIN_POINTS = [
+export const PAIN_POINTS: {
+  icon: IconName;
+  title: string;
+  body: string;
+}[] = [
   {
+    icon: "phone",
     title: "부탁하는 것부터가 일입니다",
     body: "믿을 만한 사람을 찾고, 미리 부탁하고, 당일 아침 다시 확인하고. 정작 그분도 식사 한 번 편히 못 하십니다.",
   },
   {
+    icon: "queue",
     title: "가장 붐빌 때 줄이 멈춥니다",
     body: "예식 시작 20분 전에 하객이 몰립니다. 익숙하지 않은 손으로는 봉투 접수와 방명록 안내를 동시에 감당하기 어렵습니다.",
   },
   {
+    icon: "alert",
     title: "돈 문제는 뒤끝이 남습니다",
     body: "금액이 맞지 않으면 누구도 편하지 않습니다. 기록이 남지 않으면 확인할 방법도 없습니다.",
   },
-] as const;
+];
 
 /** 웨딩버틀러가 현장에서 실제로 하는 일 */
-export const SERVICE_ITEMS = [
+export const SERVICE_ITEMS: {
+  number: string;
+  icon: IconName;
+  title: string;
+  body: string;
+}[] = [
   {
     number: "01",
+    icon: "envelope",
     title: "축의금 접수",
     body: "봉투를 받고, 성함을 확인하고, 방명록을 안내합니다. 두 줄 이상 밀리지 않도록 대기 동선을 관리합니다.",
   },
   {
     number: "02",
+    icon: "notebook",
     title: "실시간 기록",
     body: "접수하는 즉시 성함과 금액을 기록합니다. 예식이 끝나면 정리된 명단을 그대로 받으실 수 있습니다.",
   },
   {
     number: "03",
+    icon: "lock",
     title: "현금 보관",
     body: "접수된 축의금은 잠금 보관함에 즉시 옮깁니다. 접수대 위에 현금을 쌓아두지 않습니다.",
   },
   {
     number: "04",
+    icon: "gift",
     title: "답례품 전달",
     body: "준비하신 답례품이나 식권을 하객에게 안내하고 전달합니다.",
   },
   {
     number: "05",
+    icon: "receipt",
     title: "현장 정산",
     body: "예식 종료 후 지정하신 분 앞에서 함께 세어 확인하고 인계합니다.",
   },
   {
     number: "06",
+    icon: "list",
     title: "정산 내역 전달",
     body: "성함·금액이 정리된 내역을 전달해 드립니다. 답례 인사를 준비하실 때 그대로 쓰실 수 있습니다.",
   },
-] as const;
+];
 
 /** 예약부터 정산까지의 흐름 */
 export const PROCESS_STEPS = [
   {
-    step: "STEP 1",
+    step: "01",
     title: "온라인 예약",
     body: "요금제를 고르고, 달력에서 예식 날짜와 시간을 선택합니다. 3분이면 끝납니다.",
+    detail: "주말(토·일) 11시–19시 · 예식일 7일 전까지",
   },
   {
-    step: "STEP 2",
+    step: "02",
     title: "예약금 결제",
-    body: "총 금액의 10%를 예약금으로 결제하면 그 시간대가 확정됩니다. 잔금은 예식 당일 정산합니다.",
+    body: "총 금액의 10%를 예약금으로 결제하면 그 시간대가 확정됩니다.",
+    detail: "잔금은 예식 당일 현장 정산",
   },
   {
-    step: "STEP 3",
+    step: "03",
     title: "사전 조율",
     body: "예식 일주일 전, 담당자가 연락드려 접수대 위치·답례품·정산 방식을 확인합니다.",
+    detail: "담당자가 먼저 연락드립니다",
   },
   {
-    step: "STEP 4",
+    step: "04",
     title: "예식 당일",
-    body: "버틀러가 예식 1시간 전 도착해 접수대를 세팅하고, 종료 후 정산까지 마칩니다.",
+    body: "버틀러가 예식 1시간 전 도착해 접수대를 세팅하고, 접수와 기록을 맡습니다.",
+    detail: "예식 1시간 전 도착",
   },
-] as const;
+  {
+    step: "05",
+    title: "정산 및 인계",
+    body: "예식이 끝나면 지정하신 분 앞에서 함께 세어 확인하고, 정리된 명단과 함께 인계합니다.",
+    detail: "정산 내역 전달까지",
+  },
+];
 
 /** 신뢰 요소 — 실적이 없는 지금 단계에서 약속할 수 있는 것들 */
-export const TRUST_POINTS = [
+export const TRUST_POINTS: {
+  icon: IconName;
+  title: string;
+  body: string;
+}[] = [
   {
+    icon: "lock",
     title: "접수대 위에 현금을 쌓지 않습니다",
     body: "받는 즉시 잠금 보관함으로 옮깁니다. 오가는 하객의 시선에 현금이 노출되지 않습니다.",
   },
   {
+    icon: "users",
     title: "두 명 이상이 함께 봅니다",
     body: "모든 요금제는 최소 2명이 한 조로 움직입니다. 접수와 기록을 나눠 맡아 서로 확인합니다.",
   },
   {
+    icon: "eye",
     title: "정산은 눈앞에서 합니다",
     body: "예식이 끝나면 혼주나 지정하신 분 앞에서 함께 세어 확인하고 인계합니다.",
   },
   {
+    icon: "notebook",
     title: "기록이 남습니다",
     body: "누가 얼마를 냈는지 정리된 내역으로 전달합니다. 나중에 확인할 방법이 있습니다.",
   },
-] as const;
+];
 
 export const FAQ_ITEMS: AccordionItem[] = [
   {

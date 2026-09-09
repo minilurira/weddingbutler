@@ -66,6 +66,78 @@ export function SectionTitle({
   );
 }
 
+/**
+ * 가운데 정렬 섹션 머리말.
+ *
+ * 작은 영문 라벨 → 한글 제목 → 설명 순서로, 모든 섹션이 같은 리듬을 갖게 한다.
+ */
+export function SectionHead({
+  label,
+  title,
+  lead,
+  tone = "light",
+  className = "",
+}: {
+  /** 제목 위 작은 영문 라벨 (예: "OUR SERVICE") */
+  label: string;
+  title: ReactNode;
+  lead?: ReactNode;
+  /** 어두운 배경 위에 놓일 때는 "dark" */
+  tone?: "light" | "dark";
+  className?: string;
+}) {
+  const isDark = tone === "dark";
+
+  return (
+    <div className={`mx-auto max-w-[46rem] text-center ${className}`}>
+      <p
+        className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${
+          isDark ? "text-rose" : "text-rose-deep"
+        }`}
+      >
+        {label}
+      </p>
+      <span
+        aria-hidden
+        className={`mx-auto mt-4 block h-4 w-px ${isDark ? "bg-rose/50" : "bg-rose"}`}
+      />
+      <h2
+        className={`mt-4 text-[clamp(1.6rem,4.4vw,2.5rem)] font-semibold ${
+          isDark ? "text-cream" : "text-ink"
+        }`}
+      >
+        {title}
+      </h2>
+      {lead && (
+        <p
+          className={`mx-auto mt-5 max-w-[42ch] text-[15px] leading-[1.85] ${
+            isDark ? "text-cream/70" : "text-ink-soft"
+          }`}
+        >
+          {lead}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** 아이콘 + 제목 + 설명으로 이뤄진 흰 카드. 목록형 섹션의 기본 단위. */
+export function IconCard({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`h-full rounded-[18px] border border-line bg-white p-6 shadow-[0_2px_16px_rgba(59,41,50,.045)] transition-all duration-400 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(59,41,50,.09)] sm:p-7 ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function Lead({
   children,
   className = "",

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { IconBadge } from "@/components/ui/Icon";
 import {
   ButtonLink,
   Container,
   Eyebrow,
+  IconCard,
   Lead,
   Section,
+  SectionHead,
   SectionTitle,
 } from "@/components/ui/Primitives";
 import { IMAGES } from "@/lib/images";
@@ -107,25 +110,27 @@ export default function ServicePage() {
       {/* ── 하는 일 ── */}
       <Section className="bg-cream-deep/50">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>업무 범위</Eyebrow>
-            <SectionTitle>여섯 가지를 맡습니다.</SectionTitle>
+          <Reveal>
+            <SectionHead label="Our Service" title="여섯 가지를 맡습니다." />
           </Reveal>
 
-          <RevealGroup className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <RevealGroup className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICE_ITEMS.map((item) => (
-              <RevealItem key={item.number}>
-                <div className="border-t border-line pt-6">
-                  <span className="font-mono text-[11px] tracking-[0.14em] text-rose-deep">
-                    {item.number}
-                  </span>
-                  <h3 className="mt-3 text-[17px] font-semibold tracking-tight text-ink">
+              <RevealItem key={item.number} className="h-full">
+                <IconCard>
+                  <div className="flex items-center gap-4">
+                    <IconBadge name={item.icon} />
+                    <span className="font-mono text-[11px] tracking-[0.16em] text-rose-deep">
+                      {item.number}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 text-[16.5px] font-semibold tracking-tight text-ink">
                     {item.title}
                   </h3>
-                  <p className="mt-2.5 text-[14.5px] leading-[1.8] text-ink-soft">
+                  <p className="mt-2.5 text-[14px] leading-[1.85] text-ink-soft">
                     {item.body}
                   </p>
-                </div>
+                </IconCard>
               </RevealItem>
             ))}
           </RevealGroup>
@@ -135,13 +140,12 @@ export default function ServicePage() {
       {/* ── 당일 타임라인 ── */}
       <Section>
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>예식 당일</Eyebrow>
-            <SectionTitle>시간대별로 이렇게 움직입니다.</SectionTitle>
-            <Lead>
-              두 분은 아무것도 하지 않으셔도 됩니다. 확인이 필요한 순간에만
-              짧게 여쭙습니다.
-            </Lead>
+          <Reveal>
+            <SectionHead
+              label="On The Day"
+              title="시간대별로 이렇게 움직입니다."
+              lead="두 분은 아무것도 하지 않으셔도 됩니다. 확인이 필요한 순간에만 짧게 여쭙습니다."
+            />
           </Reveal>
 
           <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_.75fr] lg:gap-20">
@@ -189,13 +193,12 @@ export default function ServicePage() {
       {/* ── 준비해 주실 것 ── */}
       <Section className="bg-cream-deep/50">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>사전 조율</Eyebrow>
-            <SectionTitle>네 가지만 알려주시면 됩니다.</SectionTitle>
-            <Lead>
-              예식 일주일 전에 담당자가 먼저 연락드립니다. 그때 함께 확인하는
-              내용입니다.
-            </Lead>
+          <Reveal>
+            <SectionHead
+              label="Before The Day"
+              title="네 가지만 알려주시면 됩니다."
+              lead="예식 일주일 전에 담당자가 먼저 연락드립니다. 그때 함께 확인하는 내용입니다."
+            />
           </Reveal>
 
           <RevealGroup className="mt-14 grid gap-5 sm:grid-cols-2">
@@ -218,28 +221,35 @@ export default function ServicePage() {
       {/* ── 안심 요소 ── */}
       <Section className="pb-24 sm:pb-32">
         <Container>
-          <Reveal className="max-w-2xl">
-            <Eyebrow>운영 원칙</Eyebrow>
-            <SectionTitle>현금을 다루는 방식은 공개합니다.</SectionTitle>
+          <Reveal>
+            <SectionHead
+              label="Our Promise"
+              title="현금을 다루는 방식은 공개합니다."
+            />
           </Reveal>
 
-          <RevealGroup className="mt-12 grid gap-px overflow-hidden rounded-[20px] border border-line bg-line sm:grid-cols-2">
+          <RevealGroup className="mt-14 grid gap-4 sm:grid-cols-2">
             {TRUST_POINTS.map((point) => (
               <RevealItem key={point.title} className="h-full">
-                <div className="h-full bg-cream p-7">
-                  <h3 className="text-[16px] font-semibold tracking-tight text-ink">
-                    {point.title}
-                  </h3>
-                  <p className="mt-2.5 text-[14px] leading-[1.8] text-ink-soft">
-                    {point.body}
-                  </p>
-                </div>
+                <IconCard>
+                  <div className="flex items-start gap-4">
+                    <IconBadge name={point.icon} />
+                    <div>
+                      <h3 className="text-[16.5px] font-semibold tracking-tight text-ink">
+                        {point.title}
+                      </h3>
+                      <p className="mt-2 text-[14px] leading-[1.85] text-ink-soft">
+                        {point.body}
+                      </p>
+                    </div>
+                  </div>
+                </IconCard>
               </RevealItem>
             ))}
           </RevealGroup>
 
           <Reveal delay={0.1}>
-            <div className="mt-12 flex flex-wrap gap-3">
+            <div className="mt-12 flex flex-wrap justify-center gap-3">
               <ButtonLink href="/booking" size="lg">
                 예약하기
               </ButtonLink>
