@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette — warm ivory ground, ink text, champagne accent */
+  --color-ivory: #faf8f5;
+  --color-ivory-deep: #f2ede6;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4a4a;
+  --color-ink-mute: #8a8580;
+  --color-line: #e6e0d8;
+  --color-champagne: #c4a77d;
+  --color-champagne-deep: #a98a5e;
+  --color-sage: #8c9a8e;
+  --color-blush: #e8d9d2;
+
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
+    BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+
+  --radius-card: 20px;
+
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+::selection {
+  background: var(--color-champagne);
+  color: #fff;
+}
+
+/* Headings run tighter than body copy */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.28;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+/* Numbers should never reflow while counting up */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Thin, unobtrusive focus ring that still passes keyboard-only use */
+:focus-visible {
+  outline: 2px solid var(--color-champagne-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── 스크롤 리빌 ──────────────────────────────────────────────────────────
+   콘텐츠를 감추는 일은 오직 아래 세 조건이 모두 참일 때만 일어난다.
+     1. JS 가 살아 있다 (.js-reveal 이 <html> 에 붙는다)
+     2. 사용자가 모션을 줄이도록 설정하지 않았다
+     3. 아직 화면에 들어오지 않았다 (.is-shown 이 없다)
+   하나라도 어긋나면 그냥 보인다. 그래서 어떤 경우에도 글이 사라지지 않는다.
+   ──────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 28px), 0);
+  }
+
+  .js-reveal [data-reveal].is-shown {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s var(--ease-brand) var(--reveal-delay, 0s),
+      transform 0.7s var(--ease-brand) var(--reveal-delay, 0s);
+  }
+
+  /* 그룹 안의 카드들은 순서대로 조금씩 늦게 나타난다. */
+  .js-reveal [data-reveal-group] > *:nth-child(1) {
+    --reveal-delay: 0s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(2) {
+    --reveal-delay: 0.09s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(3) {
+    --reveal-delay: 0.18s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(4) {
+    --reveal-delay: 0.27s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(5) {
+    --reveal-delay: 0.36s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(6) {
+    --reveal-delay: 0.45s;
+  }
+  .js-reveal [data-reveal-group] > *:nth-child(n + 7) {
+    --reveal-delay: 0.5s;
+  }
+}
+
+/* ── 등장/전환 모션 ───────────────────────────────────────────────────── */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(18px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.22s var(--ease-brand) both;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.45s var(--ease-brand) both;
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.34s var(--ease-brand) both;
+}
+
+.animate-pop-in {
+  animation: pop-in 0.32s var(--ease-brand) both;
+}
+
+/* 아코디언 본문 — 높이를 모르는 콘텐츠도 부드럽게 여닫는다.
+   닫혀 있어도 DOM 에는 남으므로 검색·번역·찾기가 정상 동작한다. */
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.36s var(--ease-brand);
+}
+
+.collapsible[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.collapsible > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Slow ambient drift for the hero backdrop */
+@keyframes brand-drift {
+  0%,
+  100% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(0, -1.5%, 0);
+  }
+}
+
+.animate-drift {
+  animation: brand-drift 26s var(--ease-brand) infinite;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-x 38s linear infinite;
+}
