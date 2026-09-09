@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ isOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ close }}" style="position:fixed; inset:0; z-index:200; background:rgba(18,18,18,0.66); backdrop-filter:blur(4px); overflow-y:auto; padding:48px 20px; font-family:'Noto Sans KR', sans-serif; color:#33232A;">
+    <div onClick="{{ stop }}" style="max-width:1060px; margin:0 auto; position:relative;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:22px;">
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.4em; color:#E9CAD1; margin:0 0 10px;">RESERVATION</p>
+          <h2 style="font-family:'Noto Serif KR',serif; font-size:30px; font-weight:600; margin:0 0 8px; color:#FFFFFF; letter-spacing:-0.02em;">온라인 예약 · 결제</h2>
+          <p style="font-size:14px; line-height:1.8; color:#D8C3C9; margin:0;">날짜와 시간을 고르고 결제까지 3분이면 끝납니다.</p>
+        </div>
+        <button onClick="{{ close }}" style="flex:none; width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.4); background:transparent; color:#FFFFFF; font-size:20px; line-height:1; cursor:pointer;" style-hover="background:rgba(255,255,255,0.15);">×</button>
+      </div>
+
+      <div style="background:#F3E9EB; border-radius:6px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.45);">
+        <sc-if value="{{ notDone }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);">
+            <div style="padding:44px 40px; border-right:1px solid #E7D5DA;">
+
+              <div style="font-size:13px; letter-spacing:0.2em; color:#A9647E; margin-bottom:16px;">STEP 1 · 요금제</div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                <sc-for list="{{ planChips }}" as="plan" hint-placeholder-count="3">
+                  <div onClick="{{ plan.onClick }}" style="{{ plan.style }}">{{ plan.label }}</div>
+                </sc-for>
+              </div>
+
+              <div style="height:1px; background:#E7D5DA; margin:32px 0;"></div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+                <span style="font-size:13px; letter-spacing:0.2em; color:#A9647E;">STEP 2 · 예식 날짜</span>
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <button onClick="{{ prevMonth }}" style="width:30px; height:30px; border:1px solid #E2CDD4; background:#fff; border-radius:50%; cursor:pointer; color:#6B5A60; font-size:14px; line-height:1;" style-hover="border-color:#A9647E; color:#A9647E;">‹</button>
+                  <span style="font-family:'Noto Serif KR',serif; font-size:17px; min-width:118px; text-align:center;">{{ monthLabel }}</span>
+                  <button onClick="{{ nextMonth }}" style="width:30px; height:30px; border:1px solid #E2CDD4; background:#fff; border-radius:50%; cursor:pointer; color:#6B5A60; font-size:14px; line-height:1;" style-hover="border-color:#A9647E; color:#A9647E;">›</button>
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:8px;">
+                <div style="text-align:center; font-size:12px; color:#C0607F; padding:6px 0;">일</div>
+                <div style="text-align:center; font-size:12px; color:#9A8189; padding:6px 0;">월</div>
+                <div style="text-align:center; font-size:12px; color:#9A8189; padding:6px 0;">화</div>
+                <div style="text-align:center; font-size:12px; color:#9A8189; padding:6px 0;">수</div>
+                <div style="text-align:center; font-size:12px; color:#9A8189; padding:6px 0;">목</div>
+                <div style="text-align:center; font-size:12px; color:#9A8189; padding:6px 0;">금</div>
+                <div style="text-align:center; font-size:12px; color:#8A9BB0; padding:6px 0;">토</div>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px;">
+                <sc-for list="{{ days }}" as="day" hint-placeholder-count="35">
+                  <div onClick="{{ day.onClick }}" style="{{ day.style }}">{{ day.label }}</div>
+                </sc-for>
+              </div>
+
+              <div style="height:1px; background:#E7D5DA; margin:32px 0;"></div>
+
+              <div style="font-size:13px; letter-spacing:0.2em; color:#A9647E; margin-bottom:16px;">STEP 3 · 예식 시간</div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(96px,1fr)); gap:8px;">
+                <sc-for list="{{ slots }}" as="slot" hint-placeholder-count="8">
+                  <div onClick="{{ slot.onClick }}" style="{{ slot.style }}">{{ slot.label }}</div>
+                </sc-for>
+              </div>
+
+              <div style="height:1px; background:#E7D5DA; margin:32px 0;"></div>
+
+              <div style="font-size:13px; letter-spacing:0.2em; color:#A9647E; margin-bottom:16px;">STEP 4 · 예식 정보</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <label style="display:flex; flex-direction:column; gap:7px; font-size:13px; color:#6B5A60;">신랑 · 신부 성함
+                  <input value="{{ name }}" onChange="{{ setName }}" placeholder="김민준 · 이서연" style="border:1px solid #E2CDD4; background:#fff; border-radius:3px; padding:12px 13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+                </label>
+                <label style="display:flex; flex-direction:column; gap:7px; font-size:13px; color:#6B5A60;">연락처
+                  <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="010-0000-0000" style="border:1px solid #E2CDD4; background:#fff; border-radius:3px; padding:12px 13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+                </label>
+                <label style="display:flex; flex-direction:column; gap:7px; font-size:13px; color:#6B5A60; grid-column:span 2;">예식장 · 홀 이름
+                  <input value="{{ venue }}" onChange="{{ setVenue }}" placeholder="서울 · 그랜드컨벤션 3층 그레이스홀" style="border:1px solid #E2CDD4; background:#fff; border-radius:3px; padding:12px 13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+                </label>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px;">
+                <div style="display:flex; flex-direction:column; gap:7px; font-size:13px; color:#6B5A60;">예상 하객 수
+                  <div style="display:flex; align-items:center; border:1px solid #E2CDD4; background:#fff; border-radius:3px;">
+                    <button onClick="{{ guestsDown }}" style="width:42px; height:44px; border:none; background:transparent; cursor:pointer; color:#6B5A60; font-size:16px;" style-hover="color:#A9647E;">−</button>
+                    <div style="flex:1; text-align:center; font-size:15px; color:#33232A;">{{ guestsLabel }}</div>
+                    <button onClick="{{ guestsUp }}" style="width:42px; height:44px; border:none; background:transparent; cursor:pointer; color:#6B5A60; font-size:16px;" style-hover="color:#A9647E;">＋</button>
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:7px; font-size:13px; color:#6B5A60;">버틀러 추가 <span style="color:#9A8189;">(1명 10만원)</span>
+                  <div style="display:flex; align-items:center; border:1px solid #E2CDD4; background:#fff; border-radius:3px;">
+                    <button onClick="{{ butlersDown }}" style="width:42px; height:44px; border:none; background:transparent; cursor:pointer; color:#6B5A60; font-size:16px;" style-hover="color:#A9647E;">−</button>
+                    <div style="flex:1; text-align:center; font-size:15px; color:#33232A;">{{ butlersLabel }}</div>
+                    <button onClick="{{ butlersUp }}" style="width:42px; height:44px; border:none; background:transparent; cursor:pointer; color:#6B5A60; font-size:16px;" style-hover="color:#A9647E;">＋</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height:1px; background:#E7D5DA; margin:32px 0;"></div>
+
+              <div style="font-size:13px; letter-spacing:0.2em; color:#A9647E; margin-bottom:16px;">STEP 5 · 결제 수단</div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+                <sc-for list="{{ pays }}" as="pay" hint-placeholder-count="3">
+                  <div onClick="{{ pay.onClick }}" style="{{ pay.style }}">{{ pay.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="padding:44px 36px; background:#E9CAD1; display:flex; flex-direction:column;">
+              <div style="font-size:13px; letter-spacing:0.2em; color:#A9647E; margin-bottom:22px;">예약 내역</div>
+              <div style="font-family:'Noto Serif KR',serif; font-size:22px; font-weight:600; margin-bottom:6px;">{{ planName }}</div>
+              <div style="font-size:13px; color:#6B5A60; line-height:1.8; margin-bottom:26px;">{{ planDesc }}</div>
+
+              <div style="display:flex; flex-direction:column; gap:14px; padding:22px 0; border-top:1px solid #DCC4CC; border-bottom:1px solid #DCC4CC;">
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">예식 일시</span><span style="color:#33232A; text-align:right;">{{ whenLabel }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">예식장</span><span style="color:#33232A; text-align:right;">{{ venueLabel }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">배정 버틀러</span><span style="color:#33232A;">{{ butlerTotalLabel }}</span></div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:12px; padding:22px 0; border-bottom:1px solid #DCC4CC;">
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">기본 요금</span><span>{{ baseLabel }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">{{ overText }}</span><span>{{ overLabel }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:#6B5A60;">버틀러 추가</span><span>{{ extraButlerLabel }}</span></div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:baseline; padding:24px 0 6px;">
+                <span style="font-size:15px; color:#473A3F;">총 결제 금액</span>
+                <span style="font-family:'Noto Serif KR',serif; font-size:30px; font-weight:600; color:#33232A;">{{ totalLabel }}</span>
+              </div>
+              <div style="text-align:right; font-size:12px; color:#9A8189; margin-bottom:22px;">부가세 포함 · 오늘 50% 선결제 {{ depositLabel }} / 예식 후 잔금 {{ balanceLabel }}</div>
+
+              <button onClick="{{ submit }}" style="{{ submitStyle }}">{{ submitLabel }}</button>
+              <p style="font-size:12px; line-height:1.8; color:#9A8189; margin:16px 0 0;">오늘은 전체 금액의 50%만 결제되며, 잔금은 예식 종료 후 정산 내역 확인 뒤 결제하시면 됩니다. 예식 7일 전까지 전액 환불, 3일 전까지 50% 환불됩니다.</p>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:80px 40px; text-align:center;">
+            <div style="width:58px; height:58px; border-radius:50%; background:#A9647E; color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 26px; font-size:26px;">✓</div>
+            <h3 style="font-family:'Noto Serif KR',serif; font-size:28px; font-weight:600; margin:0 0 14px;">예약이 확정되었습니다</h3>
+            <p style="font-size:15px; line-height:1.9; color:#6B5A60; margin:0 0 32px;">담당 매니저가 24시간 내로 연락드립니다.<br />두 분의 가장 빛나는 날, 저희가 함께하겠습니다.</p>
+            <div style="display:inline-flex; flex-direction:column; gap:12px; background:#E9CAD1; padding:28px 40px; border-radius:4px; text-align:left; min-width:320px;">
+              <div style="display:flex; justify-content:space-between; gap:40px; font-size:14px;"><span style="color:#6B5A60;">예약번호</span><span>{{ bookingNo }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:40px; font-size:14px;"><span style="color:#6B5A60;">요금제</span><span>{{ planName }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:40px; font-size:14px;"><span style="color:#6B5A60;">예식 일시</span><span>{{ whenLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:40px; font-size:14px;"><span style="color:#6B5A60;">선결제 금액</span><span>{{ depositLabel }}</span></div>
+            </div>
+            <div style="margin-top:30px; display:flex; gap:10px; justify-content:center;">
+              <button onClick="{{ reset }}" style="border:1px solid #E2CDD4; background:transparent; color:#6B5A60; padding:13px 28px; border-radius:999px; font-size:14px; cursor:pointer;" style-hover="border-color:#A9647E; color:#A9647E;">다시 예약하기</button>
+              <button onClick="{{ close }}" style="border:none; background:#33232A; color:#F3E9EB; padding:13px 28px; border-radius:999px; font-size:14px; cursor:pointer;" style-hover="background:#A9647E;">닫기</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;plan&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;small&quot;,&quot;standard&quot;,&quot;premium&quot;],&quot;default&quot;:&quot;standard&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+const PLANS = {
+  small: { name: '스몰케어', base: 390000, incl: 200, butlers: 2, desc: '하객 200명 이하 · 웨딩버틀러 2명' },
+  standard: { name: '스탠다드', base: 450000, incl: 300, butlers: 2, desc: '하객 300명 이하 · 웨딩버틀러 2명' },
+  premium: { name: '프리미엄', base: 800000, incl: 400, butlers: 4, desc: '양가 각 200명 기준 · 웨딩버틀러 4명' }
+};
+const WON = n => n.toLocaleString('ko-KR') + '원';
+
+class Component extends DCLogic {
+  state = {
+    plan: null, y: null, m: null, date: null, time: null,
+    guests: 250, extraButlers: 0, name: '', phone: '', venue: '',
+    pay: '신용카드', done: false, no: ''
+  };
+
+  componentDidUpdate(prev) {
+    if (this.props.plan !== prev.plan && PLANS[this.props.plan]) this.pick(this.props.plan);
+  }
+
+  plan() { return this.state.plan || (PLANS[this.props.plan] ? this.props.plan : 'standard'); }
+
+  pick(p) {
+    const s = { plan: p };
+    if (p === 'small' && this.state.guests > 200) s.guests = 200;
+    if (p === 'premium' && this.state.guests < 400) s.guests = 400;
+    if (p === 'standard' && this.state.guests > 300) s.guests = 300;
+    this.setState(s);
+  }
+
+  shiftMonth(d) {
+    const now = new Date();
+    let y = this.state.y || now.getFullYear(), m = (this.state.m || now.getMonth() + 1) + d;
+    if (m > 12) { m = 1; y++; } if (m < 1) { m = 12; y--; }
+    this.setState({ y, m, date: null });
+  }
+
+  renderVals() {
+    const st = this.state, key = this.plan(), P = PLANS[key];
+    const now = new Date();
+    const y = st.y || now.getFullYear(), m = st.m || now.getMonth() + 1;
+    const over = Math.max(0, st.guests - P.incl) * 2000;
+    const eb = st.extraButlers * 100000;
+    const total = P.base + over + eb;
+    const deposit = Math.round(total / 2);
+
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const start = new Date(y, m - 1, 1).getDay();
+    const last = new Date(y, m, 0).getDate();
+    const days = [];
+    for (let i = 0; i < start; i++) days.push({ key: 'b' + i, label: '', style: { height: '42px' }, onClick: null });
+    for (let d = 1; d <= last; d++) {
+      const dt = new Date(y, m - 1, d), dow = dt.getDay(), past = dt < today, sel = st.date === d && !past;
+      days.push({
+        key: 'd' + d, label: String(d),
+        onClick: past ? null : () => this.setState({ date: d, y, m }),
+        style: {
+          height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '14px', borderRadius: '3px', userSelect: 'none', cursor: past ? 'default' : 'pointer',
+          background: sel ? '#33232A' : (past ? 'transparent' : '#FFFFFF'),
+          border: sel ? '1px solid #33232A' : '1px solid ' + (past ? 'transparent' : '#E7D5DA'),
+          color: sel ? '#FFFFFF' : past ? '#D8C3C9' : dow === 0 ? '#C0607F' : dow === 6 ? '#8A9BB0' : '#473A3F',
+          transition: 'background .2s ease, border-color .2s ease, color .2s ease'
+        }
+      });
+    }
+
+    const chip = on => ({
+      padding: '12px 6px', textAlign: 'center', fontSize: '14px', borderRadius: '3px', cursor: 'pointer',
+      userSelect: 'none', transition: 'all .2s ease',
+      background: on ? '#33232A' : '#FFFFFF', color: on ? '#FFFFFF' : '#473A3F',
+      border: '1px solid ' + (on ? '#33232A' : '#E2CDD4')
+    });
+
+    const ready = st.date && st.time && st.name.trim() && st.phone.trim();
+
+    return {
+      isOpen: !!this.props.open,
+      close: () => { if (this.props.onClose) this.props.onClose(); },
+      stop: e => e.stopPropagation(),
+      notDone: !st.done, done: st.done,
+      monthLabel: y + '년 ' + m + '월',
+      prevMonth: () => this.shiftMonth(-1), nextMonth: () => this.shiftMonth(1),
+      days,
+      slots: ['11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'].map(t => ({
+        key: t, label: t, onClick: () => this.setState({ time: t }), style: chip(st.time === t)
+      })),
+      pays: ['신용카드', '계좌이체', '카카오페이'].map(p => ({
+        key: p, label: p, onClick: () => this.setState({ pay: p }), style: chip(st.pay === p)
+      })),
+      planChips: Object.keys(PLANS).map(k => ({
+        key: k, label: PLANS[k].name, onClick: () => this.pick(k), style: chip(key === k)
+      })),
+      name: st.name, phone: st.phone, venue: st.venue,
+      setName: e => this.setState({ name: e.target.value }),
+      setPhone: e => this.setState({ phone: e.target.value }),
+      setVenue: e => this.setState({ venue: e.target.value }),
+      guestsLabel: st.guests.toLocaleString('ko-KR') + '명',
+      guestsUp: () => this.setState(s => ({ guests: s.guests + 10 })),
+      guestsDown: () => this.setState(s => ({ guests: Math.max(50, s.guests - 10) })),
+      butlersLabel: st.extraButlers + '명',
+      butlersUp: () => this.setState(s => ({ extraButlers: Math.min(6, s.extraButlers + 1) })),
+      butlersDown: () => this.setState(s => ({ extraButlers: Math.max(0, s.extraButlers - 1) })),
+      planName: P.name, planDesc: P.desc,
+      whenLabel: st.date ? y + '년 ' + m + '월 ' + st.date + '일' + (st.time ? ' ' + st.time : '') : '날짜를 선택해 주세요',
+      venueLabel: st.venue.trim() || '미입력',
+      butlerTotalLabel: (P.butlers + st.extraButlers) + '명',
+      baseLabel: WON(P.base),
+      overText: '추가 하객 ' + Math.max(0, st.guests - P.incl) + '명',
+      overLabel: over ? '+ ' + WON(over) : '-',
+      extraButlerLabel: eb ? '+ ' + WON(eb) : '-',
+      totalLabel: WON(total),
+      depositLabel: WON(deposit),
+      balanceLabel: WON(total - deposit),
+      submitLabel: ready ? WON(deposit) + ' 선결제하기' : '날짜 · 시간 · 정보를 입력해 주세요',
+      submitStyle: {
+        width: '100%', padding: '18px', borderRadius: '999px', border: 'none', fontSize: '16px', fontWeight: 500,
+        cursor: ready ? 'pointer' : 'default', transition: 'all .25s ease',
+        background: ready ? '#33232A' : '#DCC4CC', color: ready ? '#F3E9EB' : '#9A8189'
+      },
+      submit: () => {
+        if (!ready) return;
+        this.setState({ done: true, no: 'WB' + y + String(m).padStart(2, '0') + String(st.date).padStart(2, '0') + '-' + Math.floor(1000 + Math.random() * 8999) });
+      },
+      reset: () => this.setState({ done: false, date: null, time: null, name: '', phone: '', venue: '' }),
+      bookingNo: st.no
+    };
+  }
+}
+
+</script>
+</body>
+</html>

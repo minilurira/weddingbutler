@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #F3E9EB; color: #33232A; font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #A9647E; text-decoration: none; }
+  a:hover { color: #8E4E68; }
+  input, textarea, select { font-family: inherit; }
+  ::selection { background: #E9CAD1; }
+</style>
+</helmet>
+
+<div style="width:100%; overflow-x:hidden; background:#F3E9EB; min-height:100vh;">
+
+  <header style="position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(243,233,235,0.88); border-bottom:1px solid #E7D5DA;">
+    <nav style="max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+      <a href="웨딩버틀러.dc.html" style="display:flex; flex-direction:column; line-height:1.05; color:#33232A;">
+        <span style="font-family:'Cormorant Garamond',serif; font-size:22px; letter-spacing:0.22em; color:#A9647E;">WEDDING BUTLER</span>
+        <span style="font-family:'Noto Serif KR',serif; font-size:12px; letter-spacing:0.34em; color:#9A8189; margin-top:3px;">웨 딩 버 틀 러</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:28px;">
+        <div style="display:flex; gap:26px; font-size:14px; font-weight:500;">
+          <a href="서비스.dc.html" style="color:#473A3F;">서비스</a>
+          <a href="요금제.dc.html" style="color:#473A3F;">요금제</a>
+          <a href="문의하기.dc.html" style="color:#A9647E;">문의하기</a>
+        </div>
+        <a href="웨딩버틀러.dc.html?booking=1" style="background:#33232A; color:#F3E9EB; padding:12px 22px; border-radius:999px; font-size:14px; font-weight:500;" style-hover="background:#A9647E; color:#FFFFFF;">예약하기</a>
+      </div>
+    </nav>
+  </header>
+
+  <section style="padding:90px 24px 60px; text-align:center;">
+    <p style="font-family:'Cormorant Garamond',serif; font-size:14px; letter-spacing:0.4em; color:#A9647E; margin:0 0 16px;">CONTACT</p>
+    <h1 style="font-family:'Noto Serif KR',serif; font-size:40px; font-weight:600; margin:0 0 18px; letter-spacing:-0.02em;">문의하기</h1>
+    <p style="font-size:16px; line-height:1.9; color:#6B5A60; margin:0;">궁금한 점을 남겨주시면 영업일 기준 24시간 내 답변드립니다.</p>
+  </section>
+
+  <section style="padding:0 24px 100px;">
+    <div style="max-width:1000px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:22px; align-items:start;">
+
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:6px; padding:44px 40px;">
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <label style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#6B5A60;">성함
+              <input value="{{ name }}" onChange="{{ setName }}" placeholder="김민준" style="border:1px solid #E2CDD4; border-radius:3px; padding:13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+            </label>
+            <label style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#6B5A60;">연락처
+              <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="010-0000-0000" style="border:1px solid #E2CDD4; border-radius:3px; padding:13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+            </label>
+            <label style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#6B5A60;">예식 예정일
+              <input value="{{ date }}" onChange="{{ setDate }}" placeholder="2026-11-14" style="border:1px solid #E2CDD4; border-radius:3px; padding:13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+            </label>
+            <label style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#6B5A60;">예식장 지역
+              <input value="{{ area }}" onChange="{{ setArea }}" placeholder="서울 강남 / 경기 성남" style="border:1px solid #E2CDD4; border-radius:3px; padding:13px; font-size:14px; color:#33232A; outline:none;" style-focus="border-color:#A9647E;" />
+            </label>
+          </div>
+
+          <div style="font-size:13px; color:#6B5A60; margin:24px 0 12px;">문의 유형</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:8px;">
+            <sc-for list="{{ topics }}" as="topic" hint-placeholder-count="4">
+              <div onClick="{{ topic.onClick }}" style="{{ topic.style }}">{{ topic.label }}</div>
+            </sc-for>
+          </div>
+
+          <label style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#6B5A60; margin-top:24px;">문의 내용
+            <textarea value="{{ msg }}" onChange="{{ setMsg }}" rows="6" placeholder="하객 규모, 양가 축의대 여부 등 알려주시면 더 정확히 안내드립니다." style="border:1px solid #E2CDD4; border-radius:3px; padding:13px; font-size:14px; color:#33232A; outline:none; resize:vertical; line-height:1.7;" style-focus="border-color:#A9647E;"></textarea>
+          </label>
+
+          <label style="display:flex; align-items:center; gap:10px; margin-top:20px; font-size:13px; color:#6B5A60; cursor:pointer;">
+            <input type="checkbox" checked="{{ agree }}" onChange="{{ toggleAgree }}" style="width:16px; height:16px; accent-color:#A9647E;" />
+            개인정보 수집 및 이용에 동의합니다 (문의 응대 목적, 6개월 보관)
+          </label>
+
+          <button onClick="{{ send }}" style="{{ sendStyle }}">{{ sendLabel }}</button>
+        </sc-if>
+
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; padding:40px 0;">
+            <div style="width:54px; height:54px; border-radius:50%; background:#A9647E; color:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:24px;">✓</div>
+            <h2 style="font-family:'Noto Serif KR',serif; font-size:24px; font-weight:600; margin:0 0 12px;">문의가 접수되었습니다</h2>
+            <p style="font-size:15px; line-height:1.9; color:#6B5A60; margin:0 0 28px;">영업일 기준 24시간 내에 남겨주신 연락처로 답변드리겠습니다.</p>
+            <button onClick="{{ reset }}" style="border:1px solid #E2CDD4; background:transparent; color:#6B5A60; padding:13px 28px; border-radius:999px; font-size:14px; cursor:pointer;" style-hover="border-color:#A9647E; color:#A9647E;">새 문의 작성</button>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:#33232A; border-radius:6px; padding:34px 30px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.34em; color:#E9CAD1; margin-bottom:20px;">DIRECT</div>
+          <div style="display:flex; flex-direction:column; gap:16px; font-size:14px; color:#F3E9EB; line-height:1.7;">
+            <div><div style="font-size:12px; color:#B79AA3; margin-bottom:4px;">이메일</div>cs@weddingbutler.co.kr</div>
+            <div><div style="font-size:12px; color:#B79AA3; margin-bottom:4px;">카카오톡</div>채널 @웨딩버틀러</div>
+            <div><div style="font-size:12px; color:#B79AA3; margin-bottom:4px;">상담 시간</div>평일 10:00 – 19:00<br />주말·공휴일은 예식 현장 운영</div>
+          </div>
+        </div>
+        <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:6px; padding:30px;">
+          <div style="font-size:14px; font-weight:500; margin-bottom:12px;">오시는 길</div>
+          <p style="font-size:13px; line-height:1.9; color:#6B5A60; margin:0;">경기 성남시 분당구 운중로 124<br />8층 804-S80호</p>
+        </div>
+        <div style="background:#FEE500; border-radius:6px; padding:30px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <span style="width:34px; height:34px; border-radius:10px; background:#3C1E1E; color:#FEE500; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;">k</span>
+            <div style="font-size:15px; font-weight:500; color:#3C1E1E;">카카오로 문의하기</div>
+          </div>
+          <p style="font-size:13px; line-height:1.9; color:#5A3A28; margin:0 0 18px;">채널 추가 후 메시지를 남겨주시면 상담 시간 내 가장 빠르게 답변드립니다.</p>
+          <a href="https://pf.kakao.com" style="display:inline-block; background:#3C1E1E; color:#FEE500; padding:13px 26px; border-radius:999px; font-size:14px;" style-hover="background:#241010; color:#FEE500;">카카오톡 채널 문의</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#33232A; padding:56px 24px 40px;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:20px; letter-spacing:0.22em; color:#E9CAD1;">WEDDING BUTLER</div>
+      <p style="font-size:12px; line-height:1.9; color:#6B5A60; margin:22px 0 0;">웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502<br />경기 성남시 분당구 운중로 124 8층 804-S80호 · cs@weddingbutler.co.kr<br />© 2026 Wedding Butler. All rights reserved.</p>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { name: '', phone: '', date: '', area: '', topic: '요금 문의', msg: '', agree: false, sent: false };
+
+  renderVals() {
+    const st = this.state;
+    const chip = on => ({
+      padding: '12px 6px', textAlign: 'center', fontSize: '14px', borderRadius: '3px', cursor: 'pointer',
+      userSelect: 'none', transition: 'all .2s ease',
+      background: on ? '#33232A' : '#FFFFFF', color: on ? '#FFFFFF' : '#473A3F',
+      border: '1px solid ' + (on ? '#33232A' : '#E2CDD4')
+    });
+    const ready = st.name.trim() && st.phone.trim() && st.msg.trim() && st.agree;
+    return {
+      notSent: !st.sent, sent: st.sent,
+      name: st.name, phone: st.phone, date: st.date, area: st.area, msg: st.msg, agree: st.agree,
+      setName: e => this.setState({ name: e.target.value }),
+      setPhone: e => this.setState({ phone: e.target.value }),
+      setDate: e => this.setState({ date: e.target.value }),
+      setArea: e => this.setState({ area: e.target.value }),
+      setMsg: e => this.setState({ msg: e.target.value }),
+      toggleAgree: () => this.setState(s => ({ agree: !s.agree })),
+      topics: ['요금 문의', '지역 문의', '기타'].map(t => ({
+        key: t, label: t, onClick: () => this.setState({ topic: t }), style: chip(st.topic === t)
+      })),
+      sendLabel: ready ? '문의 보내기' : '필수 항목을 입력해 주세요',
+      sendStyle: {
+        width: '100%', marginTop: '26px', padding: '18px', borderRadius: '999px', border: 'none',
+        fontSize: '16px', fontWeight: 500, cursor: ready ? 'pointer' : 'default', transition: 'all .25s ease',
+        background: ready ? '#33232A' : '#EFE2E5', color: ready ? '#F3E9EB' : '#9A8189'
+      },
+      send: () => { if (ready) this.setState({ sent: true }); },
+      reset: () => this.setState({ sent: false, name: '', phone: '', date: '', area: '', msg: '', agree: false })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

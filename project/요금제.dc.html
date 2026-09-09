@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #F3E9EB; color: #33232A; font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #A9647E; text-decoration: none; }
+  a:hover { color: #8E4E68; }
+  ::selection { background: #E9CAD1; }
+</style>
+</helmet>
+
+<div style="width:100%; overflow-x:hidden; background:#F3E9EB;">
+
+  <header style="position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(243,233,235,0.88); border-bottom:1px solid #E7D5DA;">
+    <nav style="max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+      <a href="웨딩버틀러.dc.html" style="display:flex; flex-direction:column; line-height:1.05; color:#33232A;">
+        <span style="font-family:'Cormorant Garamond',serif; font-size:22px; letter-spacing:0.22em; color:#A9647E;">WEDDING BUTLER</span>
+        <span style="font-family:'Noto Serif KR',serif; font-size:12px; letter-spacing:0.34em; color:#9A8189; margin-top:3px;">웨 딩 버 틀 러</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:28px;">
+        <div style="display:flex; gap:26px; font-size:14px; color:#473A3F; font-weight:500;">
+          <a href="서비스.dc.html" style="color:#473A3F;">서비스</a>
+          <a href="요금제.dc.html" style="color:#A9647E;">요금제</a>
+          <a href="문의하기.dc.html" style="color:#473A3F;">문의하기</a>
+        </div>
+        <button onClick="{{ openStandard }}" style="background:#33232A; color:#F3E9EB; padding:12px 22px; border:none; border-radius:999px; font-size:14px; font-weight:500; cursor:pointer;" style-hover="background:#A9647E; color:#FFFFFF;">예약하기</button>
+      </div>
+    </nav>
+  </header>
+
+  <section style="padding:90px 24px 60px; text-align:center;">
+    <p style="font-family:'Cormorant Garamond',serif; font-size:14px; letter-spacing:0.4em; color:#A9647E; margin:0 0 16px;">PRICE PLANS</p>
+    <h1 style="font-family:'Noto Serif KR',serif; font-size:40px; font-weight:600; margin:0 0 18px; letter-spacing:-0.02em;">요금제 안내</h1>
+    <p style="font-size:16px; line-height:1.9; color:#6B5A60; margin:0;">하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
+  </section>
+
+  <section style="padding:0 24px 90px;">
+    <div style="max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:22px; align-items:start;">
+
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:4px; padding:46px 36px 40px;">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.34em; color:#A9647E; margin:0 0 10px;">01 SMALL CARE</p>
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:28px; font-weight:600; margin:0 0 24px;">스몰케어</h2>
+        <div style="display:flex; align-items:baseline; gap:6px; padding-bottom:26px; border-bottom:1px solid #E7D5DA;">
+          <span style="font-family:'Noto Serif KR',serif; font-size:46px; font-weight:600; letter-spacing:-0.02em;">39</span>
+          <span style="font-size:18px; color:#473A3F;">만원</span>
+          <span style="font-size:13px; color:#9A8189; margin-left:6px;">VAT 포함</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; margin:28px 0 34px;">
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>하객 200명 이하 예식</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>웨딩버틀러 2명 배정</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>추가 하객 1명당 2,000원</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>실시간 집계 리포트 제공</span></div>
+        </div>
+        <div onClick="{{ openSmall }}" style="text-align:center; padding:15px; border-radius:999px; font-size:15px; background:#F7F3EA; color:#473A3F; cursor:pointer;" style-hover="background:#A9647E; color:#FFFFFF;">이 요금제로 예약</div>
+      </div>
+
+      <div style="position:relative; background:#33232A; border:1px solid #33232A; border-radius:4px; padding:46px 36px 40px;">
+        <div style="position:absolute; top:-13px; left:36px; background:#A9647E; color:#fff; font-size:12px; letter-spacing:0.14em; padding:6px 14px; border-radius:999px;">BEST</div>
+        <p style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.34em; color:#E9CAD1; margin:0 0 10px;">02 STANDARD</p>
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:28px; font-weight:600; margin:0 0 24px; color:#FFFFFF;">스탠다드</h2>
+        <div style="display:flex; align-items:baseline; gap:6px; padding-bottom:26px; border-bottom:1px solid rgba(255,255,255,0.16);">
+          <span style="font-family:'Noto Serif KR',serif; font-size:46px; font-weight:600; color:#FFFFFF; letter-spacing:-0.02em;">45</span>
+          <span style="font-size:18px; color:#F3E9EB;">만원</span>
+          <span style="font-size:13px; color:#B79AA3; margin-left:6px;">VAT 포함</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; margin:28px 0 34px;">
+          <div style="display:flex; gap:10px; font-size:15px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">·</span><span>하객 200명 초과 ~ 300명 이하</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">·</span><span>웨딩버틀러 2명 배정</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">·</span><span>추가 하객 1명당 2,000원</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">·</span><span>버틀러 추가 1명당 10만원</span></div>
+        </div>
+        <div onClick="{{ openStandard }}" style="text-align:center; padding:15px; border-radius:999px; font-size:15px; background:#A9647E; color:#FFFFFF; cursor:pointer;" style-hover="background:#C07E96;">이 요금제로 예약</div>
+      </div>
+
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:4px; padding:46px 36px 40px;">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.34em; color:#A9647E; margin:0 0 10px;">03 PREMIUM</p>
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:28px; font-weight:600; margin:0 0 24px;">프리미엄</h2>
+        <div style="display:flex; align-items:baseline; gap:6px; padding-bottom:26px; border-bottom:1px solid #E7D5DA;">
+          <span style="font-size:16px; color:#9A8189;">부터</span>
+          <span style="font-family:'Noto Serif KR',serif; font-size:46px; font-weight:600; letter-spacing:-0.02em;">80</span>
+          <span style="font-size:18px; color:#473A3F;">만원</span>
+          <span style="font-size:13px; color:#9A8189; margin-left:6px;">VAT 포함</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; margin:28px 0 34px;">
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>양가 하객 각 200명 기준</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>웨딩버틀러 4명 배정 (양가 2명씩)</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>추가 하객 1명당 2,000원</span></div>
+          <div style="display:flex; gap:10px; font-size:15px; color:#473A3F; line-height:1.7;"><span style="color:#A9647E;">·</span><span>버틀러 추가 1명당 10만원</span></div>
+        </div>
+        <div onClick="{{ openPremium }}" style="text-align:center; padding:15px; border-radius:999px; font-size:15px; background:#F7F3EA; color:#473A3F; cursor:pointer;" style-hover="background:#A9647E; color:#FFFFFF;">이 요금제로 예약</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:90px 24px; background:rgba(255,255,255,0.75);">
+    <div style="max-width:980px; margin:0 auto;">
+      <h2 style="font-family:'Noto Serif KR',serif; font-size:30px; font-weight:600; margin:0 0 34px; letter-spacing:-0.02em;">한눈에 비교하기</h2>
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:4px; overflow:hidden;">
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; background:#33232A;">
+          <div style="padding:18px 22px; font-size:14px; color:#D8C3C9;">항목</div>
+          <div style="padding:18px 22px; font-size:14px; color:#FFFFFF;">스몰케어</div>
+          <div style="padding:18px 22px; font-size:14px; color:#FFFFFF;">스탠다드</div>
+          <div style="padding:18px 22px; font-size:14px; color:#FFFFFF;">프리미엄</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; border-bottom:1px solid #F0E3E6;">
+          <div style="padding:18px 22px; font-size:14px; color:#6B5A60;">기본 요금</div>
+          <div style="padding:18px 22px; font-size:15px;">39만원</div>
+          <div style="padding:18px 22px; font-size:15px;">45만원</div>
+          <div style="padding:18px 22px; font-size:15px;">80만원~</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; border-bottom:1px solid #F0E3E6;">
+          <div style="padding:18px 22px; font-size:14px; color:#6B5A60;">기준 하객</div>
+          <div style="padding:18px 22px; font-size:15px;">200명 이하</div>
+          <div style="padding:18px 22px; font-size:15px;">300명 이하</div>
+          <div style="padding:18px 22px; font-size:15px;">양가 각 200명</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; border-bottom:1px solid #F0E3E6;">
+          <div style="padding:18px 22px; font-size:14px; color:#6B5A60;">배정 버틀러</div>
+          <div style="padding:18px 22px; font-size:15px;">2명</div>
+          <div style="padding:18px 22px; font-size:15px;">2명</div>
+          <div style="padding:18px 22px; font-size:15px;">4명</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; border-bottom:1px solid #F0E3E6;">
+          <div style="padding:18px 22px; font-size:14px; color:#6B5A60;">추가 하객</div>
+          <div style="padding:18px 22px; font-size:15px;">1명당 2,000원</div>
+          <div style="padding:18px 22px; font-size:15px;">1명당 2,000원</div>
+          <div style="padding:18px 22px; font-size:15px;">1명당 2,000원</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr;">
+          <div style="padding:18px 22px; font-size:14px; color:#6B5A60;">버틀러 추가</div>
+          <div style="padding:18px 22px; font-size:15px; color:#9A8189;">해당 없음</div>
+          <div style="padding:18px 22px; font-size:15px;">1명 10만원</div>
+          <div style="padding:18px 22px; font-size:15px;">1명 10만원</div>
+        </div>
+      </div>
+      <p style="font-size:13px; line-height:1.9; color:#9A8189; margin:22px 0 0;">추가 하객 요금은 예식 후 실제 접수 인원 기준으로 정산되며, 차액은 예식 다음 영업일에 청구·환불됩니다. 모든 요금에는 출장비와 리포트 제공이 포함되어 있습니다.</p>
+    </div>
+  </section>
+
+  <section style="padding:90px 24px 0;">
+    <div style="max-width:980px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:22px; align-items:stretch;">
+      <div style="background:#33232A; border-radius:6px; padding:44px 40px;">
+        <div style="display:inline-block; background:#A9647E; color:#FFFFFF; font-size:12px; letter-spacing:0.14em; padding:6px 14px; border-radius:999px; margin-bottom:22px;">EVENT</div>
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:28px; font-weight:600; color:#FFFFFF; margin:0 0 16px; line-height:1.45; letter-spacing:-0.02em;">블로그 후기 작성하면<br />결제 금액의 10% 페이백</h2>
+        <p style="font-size:15px; line-height:1.9; color:#F3E9EB; margin:0 0 28px;">예식 후 서비스 이용 후기를 블로그에 남겨주시면, 실제 결제하신 금액의 10%를 계좌로 돌려드립니다.</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; gap:12px; font-size:14px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">01</span><span>예식 후 30일 이내, 사진 3장 이상 + 500자 이상 포스팅</span></div>
+          <div style="display:flex; gap:12px; font-size:14px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">02</span><span>게시글 링크를 카카오톡 채널 또는 이메일로 전달</span></div>
+          <div style="display:flex; gap:12px; font-size:14px; color:#F3E9EB; line-height:1.7;"><span style="color:#E9CAD1;">03</span><span>확인 후 영업일 기준 5일 내 지정 계좌로 입금</span></div>
+        </div>
+        <p style="font-size:12px; line-height:1.8; color:#B79AA3; margin:24px 0 0;">※ 포스팅은 최소 6개월간 유지되어야 하며, 1건의 예식당 1회 지급됩니다.</p>
+      </div>
+
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:6px; padding:44px 40px;">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.34em; color:#A9647E; margin:0 0 14px;">PAYMENT</p>
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:26px; font-weight:600; margin:0 0 18px; line-height:1.45; letter-spacing:-0.02em;">50% 선결제,<br />잔금은 예식이 끝난 뒤에</h2>
+        <p style="font-size:15px; line-height:1.9; color:#6B5A60; margin:0 0 28px;">예약 시 전체 금액의 50%만 결제하시면 예약이 확정됩니다. 나머지 50%는 예식 종료 후 정산 내역을 확인하고 결제하시면 됩니다.</p>
+        <div style="display:flex; gap:12px; margin-bottom:22px;">
+          <div style="flex:1; background:#F7F3EA; border-radius:4px; padding:20px;">
+            <div style="font-size:12px; color:#9A8189; margin-bottom:8px;">예약 시</div>
+            <div style="font-family:'Noto Serif KR',serif; font-size:26px; font-weight:600;">50%</div>
+            <div style="font-size:13px; color:#6B5A60; margin-top:6px;">선결제 · 예약 확정</div>
+          </div>
+          <div style="flex:1; background:#F7F3EA; border-radius:4px; padding:20px;">
+            <div style="font-size:12px; color:#9A8189; margin-bottom:8px;">예식 종료 후</div>
+            <div style="font-family:'Noto Serif KR',serif; font-size:26px; font-weight:600;">50%</div>
+            <div style="font-size:13px; color:#6B5A60; margin-top:6px;">잔금 · 추가분 합산</div>
+          </div>
+        </div>
+        <p style="font-size:12px; line-height:1.8; color:#9A8189; margin:0;">※ 추가 하객·추가 버틀러 요금은 잔금 결제 시 함께 청구됩니다. 잔금은 예식 다음 영업일까지 결제해 주세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:90px 24px;">
+    <div style="max-width:980px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:22px;">
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:4px; padding:34px 30px;">
+        <h3 style="font-family:'Noto Serif KR',serif; font-size:19px; font-weight:600; margin:0 0 14px;">모든 요금제 공통 포함</h3>
+        <p style="font-size:14px; line-height:1.95; color:#6B5A60; margin:0;">축의금 접수 · 방명록 안내 · 식권 배부 · 답례품 전달 · 2인 교차 검수 정산 · 엑셀 리포트 당일 전달 · 영업배상책임보험</p>
+      </div>
+      <div style="background:#FFFFFF; border:1px solid #E7D5DA; border-radius:4px; padding:34px 30px;">
+        <h3 style="font-family:'Noto Serif KR',serif; font-size:19px; font-weight:600; margin:0 0 14px;">환불 규정</h3>
+        <p style="font-size:14px; line-height:1.95; color:#6B5A60; margin:0;">예식 7일 전까지 전액 환불, 3일 전까지 50% 환불. 2일 전부터는 인력 배정 확정으로 환불이 어렵습니다. 예식장 사정에 따른 연기는 1회 무료 변경.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:110px 24px; text-align:center; background-image:linear-gradient(rgba(18,18,18,0.58), rgba(35,35,35,0.66)), url('img/couple.jpeg'); background-size:cover; background-position:center 30%;">
+    <h2 style="font-family:'Noto Serif KR',serif; font-size:34px; font-weight:600; color:#FFFFFF; margin:0 0 18px; line-height:1.5; letter-spacing:-0.02em;">날짜만 정하시면 됩니다</h2>
+    <p style="font-size:16px; line-height:1.9; color:#F3E9EB; margin:0 0 34px;">온라인에서 예약과 결제까지 3분이면 끝납니다.</p>
+    <button onClick="{{ openStandard }}" style="background:#F3E9EB; color:#33232A; padding:18px 44px; border:none; border-radius:999px; font-size:16px; font-weight:500; cursor:pointer;" style-hover="background:#A9647E; color:#FFFFFF;">예약하기</button>
+  </section>
+
+  <dc-import name="예약레이어" open="{{ modalOpen }}" plan="{{ pickedPlan }}" on-close="{{ closeModal }}" hint-size="0,0"></dc-import>
+
+  <footer style="background:#33232A; padding:56px 24px 40px;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:20px; letter-spacing:0.22em; color:#E9CAD1;">WEDDING BUTLER</div>
+      <p style="font-size:12px; line-height:1.9; color:#6B5A60; margin:22px 0 0;">웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502<br />경기 성남시 분당구 운중로 124 8층 804-S80호 · cs@weddingbutler.co.kr<br />© 2026 Wedding Butler. All rights reserved.</p>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { modal: false, plan: 'standard' };
+  open(p) { this.setState({ modal: true, plan: p }); }
+  renderVals() {
+    return {
+      modalOpen: this.state.modal,
+      pickedPlan: this.state.plan,
+      closeModal: () => this.setState({ modal: false }),
+      openSmall: () => this.open('small'),
+      openStandard: () => this.open('standard'),
+      openPremium: () => this.open('premium')
+    };
+  }
+}
+
+</script>
+</body>
+</html>
