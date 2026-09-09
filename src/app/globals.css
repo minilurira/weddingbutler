@@ -1,0 +1,141 @@
+:root {
+  --bg: #f3e9eb;
+  --bg-ivory: #f7f3ea;
+  --text: #33232a;
+  --text-soft: #473a3f;
+  --text-muted: #6b5a60;
+  --text-faint: #9a8189;
+  --border: #e7d5da;
+  --border-soft: #e2cdd4;
+  --accent: #a9647e;
+  --accent-hover: #8e4e68;
+  --accent-light: #c07e96;
+  --blush: #e9cad1;
+  --blush-border: #dcc4cc;
+  --dark: #33232a;
+  --white: #ffffff;
+  --kakao: #fee500;
+  --kakao-dark: #3c1e1e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+input,
+select,
+button,
+textarea {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--blush);
+}
+
+button {
+  font: inherit;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reusable hover treatments mirroring the prototype's `style-hover` attrs */
+.btn-dark-hover {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-dark-hover:hover {
+  background: #a9647e !important;
+  color: #ffffff !important;
+}
+
+.btn-accent-hover {
+  transition: background 0.2s ease;
+}
+.btn-accent-hover:hover {
+  background: #c07e96 !important;
+}
+
+.btn-outline-hover {
+  transition: background 0.2s ease;
+}
+.btn-outline-hover:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.btn-ivory-hover {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-ivory-hover:hover {
+  background: #a9647e !important;
+  color: #ffffff !important;
+}
+
+.card-hover-border {
+  transition: border-color 0.2s ease;
+}
+.card-hover-border:hover {
+  border-color: #e9cad1 !important;
+}
+
+.modal-close-hover:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.round-nav-hover {
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.round-nav-hover:hover {
+  border-color: #a9647e !important;
+  color: #a9647e !important;
+}
+
+.stepper-btn-hover:hover {
+  color: #a9647e !important;
+}
+
+.kakao-btn-hover:hover {
+  background: #241010 !important;
+}
+
+.field-focus {
+  transition: border-color 0.2s ease;
+}
+.field-focus:focus {
+  border-color: #a9647e !important;
+  outline: none;
+}
+
+.chip-hover:hover {
+  border-color: #a9647e;
+}

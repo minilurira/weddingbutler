@@ -1,0 +1,27 @@
+name: CI
+
+# Deployment itself is handled by Vercel's native GitHub integration
+# (already connected to this repo) — it auto-builds and deploys on every
+# push to main, and creates a preview deployment for every PR. This
+# workflow is just a CI gate: it fails the PR/commit status if the app
+# doesn't type-check or build, independent of Vercel's own build.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    name: Type-check & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
