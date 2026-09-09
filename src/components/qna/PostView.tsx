@@ -82,7 +82,7 @@ export function PostBody({
               className="rounded-[20px] border border-line bg-white/70 p-6 sm:p-7"
             >
               <div className="flex items-center gap-2.5">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-[11px] font-semibold text-ivory">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-deep text-[11px] font-semibold text-white">
                   WB
                 </span>
                 <p className="text-[13.5px] font-semibold text-ink">
@@ -156,7 +156,7 @@ export function PostBody({
       </div>
 
       {deleteError && !askPassword && (
-        <p role="alert" className="mt-3 text-[13px] text-[#b4532a]">
+        <p role="alert" className="mt-3 text-[13px] text-[#a8392f]">
           {deleteError}
         </p>
       )}
@@ -215,7 +215,7 @@ export function SecretGate({
   return (
     <div className="rounded-[24px] border border-line bg-white/60 px-7 py-14 sm:px-12">
       <div className="mx-auto max-w-sm text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-ivory-deep">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cream-deep">
           <svg
             aria-hidden
             viewBox="0 0 24 24"

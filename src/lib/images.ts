@@ -28,7 +28,7 @@ export type SiteImage = {
   /** 이 자리에 어울리는 사진의 조건 */
   intent: string;
   /** 폴백 그라디언트 톤 */
-  tone: "champagne" | "sage" | "blush" | "ink";
+  tone: "rose" | "lilac" | "blush" | "ink";
 };
 
 export const IMAGES = {
@@ -36,7 +36,7 @@ export const IMAGES = {
     src: "https://images.unsplash.com/photo-1519741497674-611481863552",
     alt: "예식장에서 하객을 맞이하는 결혼식 현장",
     intent: "밝고 따뜻한 예식장 전경. 인물 얼굴이 크게 잡히지 않는 넓은 컷.",
-    tone: "champagne",
+    tone: "rose",
   },
   reception: {
     src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
@@ -54,13 +54,13 @@ export const IMAGES = {
     src: "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6",
     alt: "예식 중인 신랑 신부",
     intent: "예식 순간. 부부가 주인공인 컷 — 얼굴이 또렷하지 않아도 좋음.",
-    tone: "champagne",
+    tone: "rose",
   },
   detail: {
     src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
     alt: "결혼식장에 놓인 꽃 장식",
     intent: "플로럴·테이블 세팅 등 디테일 컷. 여백이 넉넉한 정적인 사진.",
-    tone: "sage",
+    tone: "lilac",
   },
   guests: {
     src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d",
@@ -91,9 +91,8 @@ export function buildSrc(
 
 /** 사진이 로드되기 전/실패했을 때 깔리는 브랜드 그라디언트. */
 export const TONE_GRADIENT: Record<SiteImage["tone"], string> = {
-  champagne:
-    "linear-gradient(135deg, #f2ede6 0%, #e3d3b8 45%, #c4a77d 100%)",
-  sage: "linear-gradient(135deg, #eef0ec 0%, #cdd6cd 45%, #8c9a8e 100%)",
-  blush: "linear-gradient(135deg, #f7efec 0%, #e8d9d2 45%, #d3b3a6 100%)",
-  ink: "linear-gradient(135deg, #4a4a4a 0%, #2c2c2c 55%, #1a1a1a 100%)",
+  rose: "linear-gradient(135deg, #fdeef2 0%, #f6c9d5 45%, #eda5b7 100%)",
+  lilac: "linear-gradient(135deg, #f8f1f6 0%, #ded0dd 45%, #a98caa 100%)",
+  blush: "linear-gradient(135deg, #fff5f7 0%, #fadde4 45%, #f0b8c4 100%)",
+  ink: "linear-gradient(135deg, #5d444f 0%, #47323c 55%, #3b2932 100%)",
 };

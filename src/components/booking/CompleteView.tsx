@@ -120,7 +120,7 @@ export function CompleteView() {
   if (phase.kind === "loading") {
     return (
       <div className="rounded-[24px] border border-line bg-white/70 px-8 py-20 text-center">
-        <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-line border-t-champagne" />
+        <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-line border-t-rose" />
         <p className="mt-6 text-[14.5px] text-ink-soft">
           결제 내역을 확인하고 있습니다…
         </p>
@@ -131,10 +131,10 @@ export function CompleteView() {
   if (phase.kind === "error") {
     return (
       <div className="rounded-[24px] border border-line bg-white/70 px-8 py-16 text-center sm:px-12">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#b4532a]/10">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#a8392f]/10">
           <svg
             viewBox="0 0 24 24"
-            className="h-6 w-6 text-[#b4532a]"
+            className="h-6 w-6 text-[#a8392f]"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.8"
@@ -177,10 +177,10 @@ export function CompleteView() {
   return (
     <div className="animate-fade-up">
       <div className="rounded-[24px] border border-line bg-white/70 px-7 py-14 text-center sm:px-12">
-        <div className="animate-pop-in mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-champagne/20 [animation-delay:.15s]">
+        <div className="animate-pop-in mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose/20 [animation-delay:.15s]">
           <svg
             viewBox="0 0 24 24"
-            className="h-7 w-7 text-champagne-deep"
+            className="h-7 w-7 text-rose-deep"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -212,7 +212,7 @@ export function CompleteView() {
           ))}
         </dl>
 
-        <div className="mx-auto mt-8 max-w-md rounded-[18px] bg-ivory-deep/70 px-6 py-5 text-left">
+        <div className="mx-auto mt-8 max-w-md rounded-[18px] bg-cream-deep/70 px-6 py-5 text-left">
           <div className="flex justify-between gap-4 text-[13.5px]">
             <span className="text-ink-mute">총 서비스 금액</span>
             <span className="tabular text-ink">
@@ -221,7 +221,7 @@ export function CompleteView() {
           </div>
           <div className="mt-2 flex justify-between gap-4 text-[13.5px]">
             <span className="text-ink-mute">결제하신 예약금</span>
-            <span className="tabular font-semibold text-champagne-deep">
+            <span className="tabular font-semibold text-rose-deep">
               {formatWon(booking.depositAmount)}
             </span>
           </div>
@@ -247,7 +247,7 @@ export function CompleteView() {
         취소 시점에 따른 환불 기준은{" "}
         <a
           href="/policy/refund"
-          className="underline decoration-champagne underline-offset-4"
+          className="underline decoration-rose underline-offset-4"
         >
           취소·환불규정
         </a>

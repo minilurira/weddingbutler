@@ -15,7 +15,7 @@ export default function BookingCompletePage() {
         <Suspense
           fallback={
             <div className="rounded-[24px] border border-line bg-white/70 px-8 py-20 text-center">
-              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-line border-t-champagne" />
+              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-line border-t-rose" />
             </div>
           }
         >

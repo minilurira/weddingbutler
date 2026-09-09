@@ -153,7 +153,7 @@ export function WriteForm() {
         <Link
           href="/policy/privacy"
           target="_blank"
-          className="underline decoration-champagne underline-offset-4"
+          className="underline decoration-rose underline-offset-4"
         >
           전문 보기
         </Link>
@@ -162,7 +162,7 @@ export function WriteForm() {
       {submitError && (
         <p
           role="alert"
-          className="rounded-xl bg-[#b4532a]/[.08] px-4 py-3 text-[13.5px] text-[#b4532a]"
+          className="rounded-xl bg-[#a8392f]/[.08] px-4 py-3 text-[13.5px] text-[#a8392f]"
         >
           {submitError}
         </p>

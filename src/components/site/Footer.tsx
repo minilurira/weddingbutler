@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Primitives";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-ivory-deep/60">
+    <footer className="border-t border-line bg-cream-deep/60">
       <Container className="py-14 sm:py-16">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div className="max-w-sm">
@@ -18,7 +18,7 @@ export function Footer() {
             </p>
             <a
               href={BUSINESS.phoneHref}
-              className="mt-5 inline-block text-[15px] font-semibold tracking-tight text-ink transition-colors hover:text-champagne-deep"
+              className="mt-5 inline-block text-[15px] font-semibold tracking-tight text-ink transition-colors hover:text-rose-deep"
             >
               {BUSINESS.phone}
             </a>
@@ -93,7 +93,7 @@ export function Footer() {
           </dl>
 
           {BUSINESS.isPlaceholder && (
-            <p className="mt-4 rounded-lg bg-[#b4532a]/[.07] px-3 py-2 text-[12px] text-[#b4532a]">
+            <p className="mt-4 rounded-lg bg-[#a8392f]/[.07] px-3 py-2 text-[12px] text-[#a8392f]">
               사업자 정보가 아직 자리표시자입니다. 실제 값으로 교체해 주세요
               (<code className="font-mono">src/lib/site.ts</code>).
             </p>

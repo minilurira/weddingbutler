@@ -47,7 +47,7 @@ export default function HomePage() {
             {PAIN_POINTS.map((point, index) => (
               <RevealItem key={point.title}>
                 <div className="h-full rounded-[20px] border border-line bg-white/60 p-7">
-                  <span className="font-mono text-[11px] tracking-[0.14em] text-champagne-deep">
+                  <span className="font-mono text-[11px] tracking-[0.14em] text-rose-deep">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="mt-4 text-[17px] font-semibold tracking-tight text-ink">
@@ -64,7 +64,7 @@ export default function HomePage() {
       </Section>
 
       {/* ── 무엇을 하나 ─────────────────────────────────── */}
-      <Section className="bg-ivory-deep/50">
+      <Section className="bg-cream-deep/50">
         <Container>
           <div className="grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:gap-20">
             <Reveal>
@@ -90,7 +90,7 @@ export default function HomePage() {
               {SERVICE_ITEMS.map((item) => (
                 <RevealItem key={item.number}>
                   <div className="border-t border-line pt-5">
-                    <span className="font-mono text-[11px] tracking-[0.14em] text-champagne-deep">
+                    <span className="font-mono text-[11px] tracking-[0.14em] text-rose-deep">
                       {item.number}
                     </span>
                     <h3 className="mt-2.5 text-[16px] font-semibold tracking-tight text-ink">
@@ -122,8 +122,8 @@ export default function HomePage() {
           <RevealGroup className="mt-14 grid gap-px overflow-hidden rounded-[20px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
             {PROCESS_STEPS.map((step) => (
               <RevealItem key={step.step} className="h-full">
-                <div className="flex h-full flex-col bg-ivory p-7">
-                  <span className="font-mono text-[11px] tracking-[0.14em] text-champagne-deep">
+                <div className="flex h-full flex-col bg-cream p-7">
+                  <span className="font-mono text-[11px] tracking-[0.14em] text-rose-deep">
                     {step.step}
                   </span>
                   <h3 className="mt-4 text-[17px] font-semibold tracking-tight text-ink">
@@ -147,20 +147,20 @@ export default function HomePage() {
       </Section>
 
       {/* ── 안심 요소 ───────────────────────────────────── */}
-      <Section className="bg-ink text-ivory">
+      <Section className="bg-plum text-cream">
         <Container>
           <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
             <Reveal>
-              <p className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-champagne">
-                <span aria-hidden className="h-px w-6 bg-champagne/60" />
+              <p className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose">
+                <span aria-hidden className="h-px w-6 bg-rose/60" />
                 맡기실 때 가장 걱정되는 것
               </p>
-              <h2 className="mt-4 text-[clamp(1.75rem,4vw,2.75rem)] font-semibold text-ivory">
+              <h2 className="mt-4 text-[clamp(1.75rem,4vw,2.75rem)] font-semibold text-cream">
                 현금을 다루는 일이니까,
                 <br />
                 방식이 분명해야 합니다.
               </h2>
-              <p className="mt-5 max-w-[44ch] text-[15px] leading-[1.85] text-ivory/70">
+              <p className="mt-5 max-w-[44ch] text-[15px] leading-[1.85] text-cream/70">
                 저희는 아직 쌓아둔 사례가 없습니다. 그래서 실적 대신 일하는
                 방식을 먼저 공개합니다.
               </p>
@@ -175,14 +175,14 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <RevealGroup className="flex flex-col divide-y divide-ivory/12 border-t border-ivory/12">
+            <RevealGroup className="flex flex-col divide-y divide-cream/12 border-t border-cream/12">
               {TRUST_POINTS.map((point) => (
                 <RevealItem key={point.title}>
                   <div className="py-7">
-                    <h3 className="text-[17px] font-semibold tracking-tight text-ivory">
+                    <h3 className="text-[17px] font-semibold tracking-tight text-cream">
                       {point.title}
                     </h3>
-                    <p className="mt-2.5 text-[14.5px] leading-[1.8] text-ivory/65">
+                    <p className="mt-2.5 text-[14.5px] leading-[1.8] text-cream/65">
                       {point.body}
                     </p>
                   </div>
@@ -214,7 +214,7 @@ export default function HomePage() {
               하객 수를 넣으면 정확한 금액이 계산됩니다 —{" "}
               <Link
                 href="/pricing"
-                className="font-medium text-ink underline decoration-champagne decoration-2 underline-offset-4 transition-colors hover:text-champagne-deep"
+                className="font-medium text-ink underline decoration-rose decoration-2 underline-offset-4 transition-colors hover:text-rose-deep"
               >
                 요금 계산기 열기
               </Link>
@@ -224,7 +224,7 @@ export default function HomePage() {
       </Section>
 
       {/* ── FAQ ─────────────────────────────────────────── */}
-      <Section className="bg-ivory-deep/50">
+      <Section className="bg-cream-deep/50">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
             <Reveal>
@@ -258,7 +258,7 @@ export default function HomePage() {
                 className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[520px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(196,167,125,.38) 0%, rgba(196,167,125,0) 70%)",
+                    "radial-gradient(circle, rgba(237,165,183,.5) 0%, rgba(237,165,183,0) 70%)",
                 }}
               />
               <div className="relative">

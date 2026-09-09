@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { useId } from "react";
 
 const CONTROL =
-  "w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-mute/60 transition-colors focus:border-champagne focus:outline-none";
+  "w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-mute/60 transition-colors focus:border-rose focus:outline-none";
 
 export function Field({
   label,
@@ -29,7 +29,7 @@ export function Field({
       >
         {label}
         {required && (
-          <span aria-hidden className="text-champagne-deep">
+          <span aria-hidden className="text-rose-deep">
             *
           </span>
         )}
@@ -37,7 +37,7 @@ export function Field({
       {hint && <p className="mt-1 text-[12px] text-ink-mute">{hint}</p>}
       <div className="mt-2">{children({ id, "aria-invalid": Boolean(error) })}</div>
       {error && (
-        <p role="alert" className="mt-1.5 text-[12.5px] text-[#b4532a]">
+        <p role="alert" className="mt-1.5 text-[12.5px] text-[#a8392f]">
           {error}
         </p>
       )}
@@ -51,7 +51,7 @@ export function TextInput({
 }: ComponentPropsWithoutRef<"input">) {
   return (
     <input
-      className={`${CONTROL} aria-[invalid=true]:border-[#b4532a] ${className}`}
+      className={`${CONTROL} aria-[invalid=true]:border-[#a8392f] ${className}`}
       {...rest}
     />
   );
@@ -63,7 +63,7 @@ export function TextArea({
 }: ComponentPropsWithoutRef<"textarea">) {
   return (
     <textarea
-      className={`${CONTROL} min-h-28 resize-y leading-relaxed aria-[invalid=true]:border-[#b4532a] ${className}`}
+      className={`${CONTROL} min-h-28 resize-y leading-relaxed aria-[invalid=true]:border-[#a8392f] ${className}`}
       {...rest}
     />
   );
@@ -100,7 +100,7 @@ export function Checkbox({
         </label>
       </div>
       {error && (
-        <p role="alert" className="ml-[30px] mt-1 text-[12.5px] text-[#b4532a]">
+        <p role="alert" className="ml-[30px] mt-1 text-[12.5px] text-[#a8392f]">
           {error}
         </p>
       )}

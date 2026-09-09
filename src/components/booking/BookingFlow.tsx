@@ -343,7 +343,7 @@ export function BookingFlow() {
                 <div className="flex-1">
                   <div
                     className={`h-[3px] rounded-full transition-colors duration-500 ${
-                      state === "upcoming" ? "bg-line" : "bg-ink"
+                      state === "upcoming" ? "bg-line" : "bg-rose-deep"
                     }`}
                   />
                   <p
@@ -421,7 +421,7 @@ export function BookingFlow() {
         {submitError && (
           <p
             role="alert"
-            className="mt-6 rounded-xl bg-[#b4532a]/[.08] px-4 py-3 text-[13.5px] leading-relaxed text-[#b4532a]"
+            className="mt-6 rounded-xl bg-[#a8392f]/[.08] px-4 py-3 text-[13.5px] leading-relaxed text-[#a8392f]"
           >
             {submitError}
           </p>
@@ -456,26 +456,26 @@ export function BookingFlow() {
 
       {/* ── 항상 보이는 견적 요약 ── */}
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="rounded-[20px] border border-line bg-ink p-6 text-ivory sm:p-7">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ivory/45">
+        <div className="rounded-[20px] border border-line bg-plum p-6 text-cream sm:p-7">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/45">
             예약 요약
           </p>
 
           <dl className="mt-5 flex flex-col gap-2.5 text-[13.5px]">
             <div className="flex justify-between gap-3">
-              <dt className="text-ivory/55">요금제</dt>
+              <dt className="text-cream/55">요금제</dt>
               <dd>{plan.name}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-ivory/55">예상 하객</dt>
+              <dt className="text-cream/55">예상 하객</dt>
               <dd className="tabular">{guestCount}명</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-ivory/55">버틀러</dt>
+              <dt className="text-cream/55">버틀러</dt>
               <dd className="tabular">{plan.butlers + extraButlers}명</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-ivory/55">일시</dt>
+              <dt className="text-cream/55">일시</dt>
               <dd className="text-right">
                 {date && time ? (
                   <>
@@ -484,32 +484,32 @@ export function BookingFlow() {
                     {formatKoreanTime(time)}
                   </>
                 ) : (
-                  <span className="text-ivory/35">선택 전</span>
+                  <span className="text-cream/35">선택 전</span>
                 )}
               </dd>
             </div>
           </dl>
 
-          <div className="mt-6 border-t border-ivory/12 pt-5">
+          <div className="mt-6 border-t border-cream/12 pt-5">
             <div className="flex justify-between gap-3 text-[13.5px]">
-              <span className="text-ivory/55">총 서비스 금액</span>
+              <span className="text-cream/55">총 서비스 금액</span>
               <span className="tabular">{formatWon(quote.total)}</span>
             </div>
             <div className="mt-4">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-champagne">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-rose">
                 지금 결제할 예약금
               </p>
               <p className="mt-1.5 text-[26px] font-semibold tracking-tight">
                 <CountUp value={quote.deposit} />
               </p>
-              <p className="mt-1.5 text-[12px] leading-relaxed text-ivory/45">
+              <p className="mt-1.5 text-[12px] leading-relaxed text-cream/45">
                 잔금 {formatWon(quote.balance)}은 예식 당일 정산합니다.
               </p>
             </div>
           </div>
 
           {IS_MOCK_PAYMENT && (
-            <p className="mt-5 rounded-xl bg-champagne/15 px-3.5 py-3 text-[12px] leading-relaxed text-champagne">
+            <p className="mt-5 rounded-xl bg-rose/15 px-3.5 py-3 text-[12px] leading-relaxed text-rose">
               결제 키가 아직 등록되지 않아 <b>테스트 모드</b>로 동작합니다.
               실제 결제는 이뤄지지 않습니다.
             </p>
@@ -520,7 +520,7 @@ export function BookingFlow() {
           예약이 어려우시면{" "}
           <Link
             href="/qna"
-            className="underline decoration-champagne underline-offset-4"
+            className="underline decoration-rose underline-offset-4"
           >
             문의 게시판
           </Link>
@@ -593,7 +593,7 @@ function StepPlan({
                 <span
                   aria-hidden
                   className={`mt-1 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border transition-colors ${
-                    selected ? "border-[5px] border-ink" : "border-line"
+                    selected ? "border-[5px] border-rose-deep" : "border-line"
                   }`}
                 />
                 <div>
@@ -642,7 +642,7 @@ function StepPlan({
                 )
               }
               aria-label="예상 하객 수 직접 입력"
-              className="tabular w-24 rounded-lg border border-line bg-white px-3 py-1.5 text-right text-[18px] font-semibold text-ink focus:border-champagne"
+              className="tabular w-24 rounded-lg border border-line bg-white px-3 py-1.5 text-right text-[18px] font-semibold text-ink focus:border-rose"
             />
             <span className="text-[13px] text-ink-mute">명</span>
           </div>
@@ -768,10 +768,10 @@ function StepSchedule({
                     aria-pressed={selected}
                     className={`tabular rounded-xl border py-2.5 text-[13.5px] transition-all duration-200 ${
                       selected
-                        ? "border-ink bg-ink font-semibold text-ivory"
+                        ? "border-rose-deep bg-rose-deep font-semibold text-white"
                         : slot.available
                           ? "border-line bg-white text-ink hover:border-ink/30"
-                          : "cursor-not-allowed border-line/60 bg-ivory-deep/40 text-ink-mute/40 line-through"
+                          : "cursor-not-allowed border-line/60 bg-cream-deep/40 text-ink-mute/40 line-through"
                     }`}
                   >
                     {slot.time}
@@ -993,7 +993,7 @@ function StepConfirm({
         </div>
       )}
 
-      <div className="mt-6 rounded-[20px] border border-line bg-ivory-deep/60 px-6 py-5">
+      <div className="mt-6 rounded-[20px] border border-line bg-cream-deep/60 px-6 py-5">
         <dl className="flex flex-col gap-2 text-[13.5px]">
           <div className="flex justify-between gap-4">
             <dt className="text-ink-mute">{quote.plan.name} 기본</dt>
@@ -1024,10 +1024,10 @@ function StepConfirm({
             </dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="font-medium text-champagne-deep">
+            <dt className="font-medium text-rose-deep">
               지금 결제할 예약금 (10%)
             </dt>
-            <dd className="tabular font-semibold text-champagne-deep">
+            <dd className="tabular font-semibold text-rose-deep">
               {formatWon(quote.deposit)}
             </dd>
           </div>
@@ -1046,7 +1046,7 @@ function StepConfirm({
           <Link
             href="/policy/privacy"
             target="_blank"
-            className="underline decoration-champagne underline-offset-4"
+            className="underline decoration-rose underline-offset-4"
           >
             전문 보기
           </Link>
@@ -1058,7 +1058,7 @@ function StepConfirm({
           <Link
             href="/policy/refund"
             target="_blank"
-            className="underline decoration-champagne underline-offset-4"
+            className="underline decoration-rose underline-offset-4"
           >
             환불규정 보기
           </Link>

@@ -43,8 +43,8 @@ export function MockPaymentDialog({
       aria-modal="true"
       aria-labelledby="mock-pay-title"
     >
-      <div className="animate-pop-in w-full max-w-sm rounded-[22px] bg-ivory p-7">
-            <p className="inline-flex rounded-full bg-[#b4532a]/10 px-2.5 py-1 text-[11px] font-semibold text-[#b4532a]">
+      <div className="animate-pop-in w-full max-w-sm rounded-[22px] bg-cream p-7">
+            <p className="inline-flex rounded-full bg-[#a8392f]/10 px-2.5 py-1 text-[11px] font-semibold text-[#a8392f]">
               테스트 모드
             </p>
 

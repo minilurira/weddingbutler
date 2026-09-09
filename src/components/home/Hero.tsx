@@ -16,13 +16,13 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden pt-32 sm:pt-40 lg:pt-44">
-      {/* 우측 상단에서 은은하게 번지는 샴페인 톤 */}
+      {/* 우측 상단에서 은은하게 번지는 핑크 톤 */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full opacity-50 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, rgba(196,167,125,.42) 0%, rgba(196,167,125,0) 68%)",
+            "radial-gradient(circle, rgba(237,165,183,.55) 0%, rgba(237,165,183,0) 68%)",
         }}
       />
 
@@ -30,8 +30,8 @@ export function Hero() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr] lg:gap-16">
           <div>
             <Reveal direction="up">
-              <p className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-champagne-deep">
-                <span aria-hidden className="h-px w-6 bg-champagne" />
+              <p className="flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-deep">
+                <span aria-hidden className="h-px w-6 bg-rose" />
                 결혼식 축의대 대행
               </p>
             </Reveal>
@@ -103,7 +103,7 @@ export function Hero() {
             />
 
             {/* 사진 위에 겹치는 작은 안내 카드 — 서비스의 핵심 약속 하나 */}
-            <div className="absolute -bottom-6 -left-4 max-w-[248px] rounded-[18px] border border-line bg-ivory/95 p-5 backdrop-blur-xl sm:-left-8">
+            <div className="absolute -bottom-6 -left-4 max-w-[248px] rounded-[18px] border border-line bg-cream/95 p-5 backdrop-blur-xl sm:-left-8">
               <p className="text-[13px] font-semibold text-ink">
                 정산은 눈앞에서
               </p>

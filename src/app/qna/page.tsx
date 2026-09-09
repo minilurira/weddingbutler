@@ -109,7 +109,7 @@ export default async function QnaPage({
                       <li key={post.id}>
                         <Link
                           href={`/qna/${post.id}`}
-                          className="group grid gap-1.5 px-6 py-4 transition-colors hover:bg-champagne/[.07] sm:grid-cols-[64px_1fr_120px_110px_72px] sm:items-center sm:gap-4"
+                          className="group grid gap-1.5 px-6 py-4 transition-colors hover:bg-rose/[.07] sm:grid-cols-[64px_1fr_120px_110px_72px] sm:items-center sm:gap-4"
                         >
                           <span className="tabular hidden text-[13px] text-ink-mute sm:block">
                             {displayNumber}
@@ -117,7 +117,7 @@ export default async function QnaPage({
 
                           <span className="flex items-center gap-2">
                             {post.isSecret && <LockIcon />}
-                            <span className="text-[14.5px] font-medium text-ink transition-colors group-hover:text-champagne-deep">
+                            <span className="text-[14.5px] font-medium text-ink transition-colors group-hover:text-rose-deep">
                               {post.isSecret ? "비밀글입니다" : post.title}
                             </span>
                             {post.isAnswered && (
@@ -166,7 +166,7 @@ export default async function QnaPage({
                         aria-current={active ? "page" : undefined}
                         className={`tabular flex h-9 min-w-9 items-center justify-center rounded-full px-3 text-[13px] transition-colors ${
                           active
-                            ? "bg-ink font-semibold text-ivory"
+                            ? "bg-rose-deep font-semibold text-white"
                             : "text-ink-soft hover:bg-ink/[.05]"
                         }`}
                       >

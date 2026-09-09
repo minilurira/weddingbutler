@@ -42,9 +42,9 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-champagne-deep ${className}`}
+      className={`flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-deep ${className}`}
     >
-      <span aria-hidden className="h-px w-6 bg-champagne" />
+      <span aria-hidden className="h-px w-6 bg-rose" />
       {children}
     </p>
   );
@@ -85,12 +85,12 @@ type ButtonSize = "sm" | "md" | "lg";
 
 const VARIANT: Record<ButtonVariant, string> = {
   primary:
-    "bg-ink text-ivory hover:bg-black shadow-[0_1px_2px_rgba(26,26,26,.16)]",
+    "bg-rose-deep text-white hover:bg-[#9b455d] shadow-[0_1px_2px_rgba(59,41,50,.16)]",
   outline:
     "border border-ink/15 bg-transparent text-ink hover:border-ink/40 hover:bg-ink/[.03]",
   ghost: "text-ink-soft hover:text-ink hover:bg-ink/[.04]",
   light:
-    "bg-ivory text-ink hover:bg-white shadow-[0_1px_2px_rgba(26,26,26,.16)]",
+    "bg-cream text-ink hover:bg-white shadow-[0_1px_2px_rgba(59,41,50,.16)]",
 };
 
 const SIZE: Record<ButtonSize, string> = {
@@ -174,13 +174,13 @@ export function Badge({
   tone = "neutral",
 }: {
   children: ReactNode;
-  tone?: "neutral" | "gold" | "sage" | "warn";
+  tone?: "neutral" | "gold" | "lilac" | "warn";
 }) {
   const tones = {
     neutral: "bg-ink/[.05] text-ink-soft",
-    gold: "bg-champagne/20 text-champagne-deep",
-    sage: "bg-sage/20 text-sage",
-    warn: "bg-[#b4532a]/10 text-[#b4532a]",
+    gold: "bg-rose/20 text-rose-deep",
+    lilac: "bg-lilac/20 text-[#7d5f7e]",
+    warn: "bg-[#a8392f]/10 text-[#a8392f]",
   } as const;
   return (
     <span

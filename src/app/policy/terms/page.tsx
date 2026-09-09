@@ -77,7 +77,7 @@ export default function TermsPage() {
           예약 취소 및 환불에 관한 사항은 별도의{" "}
           <Link
             href="/policy/refund"
-            className="underline decoration-champagne underline-offset-4"
+            className="underline decoration-rose underline-offset-4"
           >
             취소·환불규정
           </Link>

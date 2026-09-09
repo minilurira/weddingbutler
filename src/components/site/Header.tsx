@@ -37,7 +37,7 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
         scrolled
-          ? "border-b border-line/80 bg-ivory/95 backdrop-blur-xl backdrop-saturate-150"
+          ? "border-b border-line/80 bg-cream/95 backdrop-blur-xl backdrop-saturate-150"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -71,7 +71,7 @@ export function Header() {
                 {link.label}
                 <span
                   aria-hidden
-                  className={`absolute inset-x-4 -bottom-0.5 h-px origin-left bg-champagne transition-transform duration-400 ease-[cubic-bezier(.22,1,.36,1)] ${
+                  className={`absolute inset-x-4 -bottom-0.5 h-px origin-left bg-rose transition-transform duration-400 ease-[cubic-bezier(.22,1,.36,1)] ${
                     active ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
@@ -106,7 +106,7 @@ export function Header() {
       </div>
 
       {menuOpen && (
-        <div className="animate-fade-up border-t border-line bg-ivory/98 backdrop-blur-xl md:hidden">
+        <div className="animate-fade-up border-t border-line bg-cream/98 backdrop-blur-xl md:hidden">
             <nav className="flex flex-col gap-1 px-5 py-6">
               {NAV_LINKS.map((link) => (
                 <Link

@@ -9,7 +9,7 @@ function CheckIcon() {
     <svg
       aria-hidden
       viewBox="0 0 16 16"
-      className="mt-[7px] h-3 w-3 shrink-0 text-champagne-deep"
+      className="mt-[7px] h-3 w-3 shrink-0 text-rose-deep"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -71,7 +71,7 @@ export function PlanCard({ plan }: { plan: Plan }) {
         </li>
       </ul>
 
-      <p className="mt-7 rounded-xl bg-ivory-deep/70 px-4 py-3 text-[12.5px] leading-relaxed text-ink-soft">
+      <p className="mt-7 rounded-xl bg-cream-deep/70 px-4 py-3 text-[12.5px] leading-relaxed text-ink-soft">
         {plan.bestFor}
       </p>
 

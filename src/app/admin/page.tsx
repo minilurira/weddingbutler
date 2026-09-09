@@ -24,10 +24,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const STATUS_LABEL: Record<string, { label: string; tone: "gold" | "neutral" | "warn" | "sage" }> = {
+const STATUS_LABEL: Record<string, { label: string; tone: "gold" | "neutral" | "warn" | "lilac" }> = {
   pending: { label: "결제 대기", tone: "neutral" },
   paid: { label: "예약 확정", tone: "gold" },
-  completed: { label: "진행 완료", tone: "sage" },
+  completed: { label: "진행 완료", tone: "lilac" },
   cancelled: { label: "취소됨", tone: "warn" },
 };
 
@@ -144,7 +144,7 @@ export default async function AdminPage() {
                   {post.authorName} · {formatDateTime(post.createdAt)}
                 </p>
 
-                <p className="mt-3 whitespace-pre-line rounded-xl bg-ivory-deep/60 px-4 py-3 text-[13.5px] leading-relaxed text-ink-soft">
+                <p className="mt-3 whitespace-pre-line rounded-xl bg-cream-deep/60 px-4 py-3 text-[13.5px] leading-relaxed text-ink-soft">
                   {post.content}
                 </p>
 
@@ -178,7 +178,7 @@ function StatCard({
   return (
     <div
       className={`rounded-[20px] border p-6 ${
-        highlight ? "border-champagne bg-champagne/[.08]" : "border-line bg-white/60"
+        highlight ? "border-rose bg-rose/[.08]" : "border-line bg-white/60"
       }`}
     >
       <dt className="text-[12.5px] text-ink-mute">{label}</dt>
@@ -287,7 +287,7 @@ function BookingRowView({
       </div>
 
       {booking.notes && (
-        <p className="mt-3 whitespace-pre-line rounded-xl bg-ivory-deep/60 px-4 py-3 text-[13px] leading-relaxed text-ink-soft">
+        <p className="mt-3 whitespace-pre-line rounded-xl bg-cream-deep/60 px-4 py-3 text-[13px] leading-relaxed text-ink-soft">
           {booking.notes}
         </p>
       )}

@@ -70,7 +70,7 @@ export default function PricingPage() {
       </Section>
 
       {/* ── 계산기 ── */}
-      <Section className="bg-ivory-deep/50">
+      <Section className="bg-cream-deep/50">
         <Container>
           <Reveal className="max-w-2xl">
             <Eyebrow>요금 계산기</Eyebrow>
@@ -135,13 +135,13 @@ export default function PricingPage() {
 
               <div className="mt-5 grid gap-5 sm:grid-cols-2">
                 <div className="rounded-[20px] border border-line bg-white/70 p-7">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-champagne-deep">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-rose-deep">
                     포함됩니다
                   </p>
                   <ul className="mt-4 flex flex-col gap-2.5 text-[13.5px] leading-relaxed text-ink-soft">
                     {INCLUDED.map((item) => (
                       <li key={item} className="flex gap-2.5">
-                        <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-champagne" />
+                        <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-rose" />
                         {item}
                       </li>
                     ))}
@@ -168,7 +168,7 @@ export default function PricingPage() {
       </Section>
 
       {/* ── FAQ ── */}
-      <Section className="bg-ivory-deep/50 pb-24 sm:pb-32">
+      <Section className="bg-cream-deep/50 pb-24 sm:pb-32">
         <Container>
           <Reveal className="max-w-2xl">
             <Eyebrow>자주 묻는 질문</Eyebrow>

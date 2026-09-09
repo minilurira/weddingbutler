@@ -157,9 +157,9 @@ export function Calendar({
                   }`}
                   className={`relative flex h-11 items-center justify-center rounded-xl text-[14px] transition-all duration-200 ${
                     isSelected
-                      ? "bg-ink font-semibold text-ivory"
+                      ? "bg-rose-deep font-semibold text-white"
                       : cell.selectable
-                        ? "text-ink hover:bg-champagne/20"
+                        ? "text-ink hover:bg-rose/20"
                         : "cursor-not-allowed text-ink-mute/35"
                   }`}
                 >
@@ -172,7 +172,7 @@ export function Calendar({
                   {cell.selectable && !isSelected && (
                     <span
                       aria-hidden
-                      className="absolute bottom-1.5 h-1 w-1 rounded-full bg-champagne"
+                      className="absolute bottom-1.5 h-1 w-1 rounded-full bg-rose"
                     />
                   )}
                 </button>
@@ -182,7 +182,7 @@ export function Calendar({
       </div>
 
       <p className="mt-5 flex items-center gap-2 border-t border-line pt-4 text-[12px] text-ink-mute">
-        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-champagne" />
+        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-rose" />
         예약 가능한 날 (토·일요일만)
         {loading && <span className="ml-auto">현황 불러오는 중…</span>}
       </p>

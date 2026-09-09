@@ -58,7 +58,7 @@ export function List({ items }: { items: (string | ReactNode)[] }) {
         <li key={index} className="flex gap-2.5">
           <span
             aria-hidden
-            className="mt-[11px] h-1 w-1 shrink-0 rounded-full bg-champagne"
+            className="mt-[11px] h-1 w-1 shrink-0 rounded-full bg-rose"
           />
           <span>{item}</span>
         </li>
@@ -70,7 +70,7 @@ export function List({ items }: { items: (string | ReactNode)[] }) {
 /** 아직 확정되지 않은 내용임을 분명히 표시한다. */
 export function DraftNotice({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-xl bg-[#b4532a]/[.07] px-4 py-3 text-[13px] leading-relaxed text-[#b4532a]">
+    <p className="rounded-xl bg-[#a8392f]/[.07] px-4 py-3 text-[13px] leading-relaxed text-[#a8392f]">
       {children}
     </p>
   );

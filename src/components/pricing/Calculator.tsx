@@ -59,7 +59,7 @@ export function Calculator() {
                     }}
                     className={`relative rounded-2xl border px-4 py-4 text-left transition-all duration-300 ${
                       selected
-                        ? "border-ink bg-ink text-ivory"
+                        ? "border-rose-deep bg-rose-deep text-white"
                         : "border-line bg-white text-ink hover:border-ink/25"
                     }`}
                   >
@@ -70,7 +70,7 @@ export function Calculator() {
                       {option.name}
                     </span>
                     <span
-                      className={`mt-0.5 block text-[11.5px] ${selected ? "text-ivory/60" : "text-ink-mute"}`}
+                      className={`mt-0.5 block text-[11.5px] ${selected ? "text-cream/60" : "text-ink-mute"}`}
                     >
                       {option.includedGuests}명 포함
                     </span>
@@ -108,7 +108,7 @@ export function Calculator() {
                     )
                   }
                   aria-label="예상 하객 수 직접 입력"
-                  className="tabular w-24 rounded-lg border border-line bg-white px-3 py-1.5 text-right text-[19px] font-semibold tracking-tight text-ink focus:border-champagne"
+                  className="tabular w-24 rounded-lg border border-line bg-white px-3 py-1.5 text-right text-[19px] font-semibold tracking-tight text-ink focus:border-rose"
                 />
                 <span className="text-[14px] text-ink-mute">명</span>
               </div>
@@ -133,7 +133,7 @@ export function Calculator() {
 
             <div className="collapsible" data-open={showSuggestion}>
               <div>
-                <p className="text-[13px] leading-relaxed text-champagne-deep">
+                <p className="text-[13px] leading-relaxed text-rose-deep">
                   <span className="mt-3 block">
                     {guestCount}명이면 {recommended.name} 요금제가 더 유리할 수
                     있습니다.{" "}
@@ -197,21 +197,21 @@ export function Calculator() {
         </div>
 
         {/* ── 결과 ── */}
-        <div className="border-t border-line bg-ink p-7 text-ivory sm:p-9 lg:border-l lg:border-t-0 lg:p-10">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-ivory/45">
+        <div className="border-t border-line bg-plum p-7 text-cream sm:p-9 lg:border-l lg:border-t-0 lg:p-10">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/45">
             예상 견적
           </p>
 
           <dl className="mt-6 flex flex-col gap-3 text-[14px]">
             <div className="flex justify-between gap-4">
-              <dt className="text-ivory/60">{plan.name} 기본</dt>
+              <dt className="text-cream/60">{plan.name} 기본</dt>
               <dd className="tabular">{formatWon(quote.basePrice)}</dd>
             </div>
 
             <div className="flex justify-between gap-4">
-              <dt className="text-ivory/60">
+              <dt className="text-cream/60">
                 추가 하객 {quote.extraGuests}명
-                <span className="ml-1 text-[11.5px] text-ivory/35">
+                <span className="ml-1 text-[11.5px] text-cream/35">
                   ×{formatWon(EXTRA_GUEST_FEE)}
                 </span>
               </dt>
@@ -220,28 +220,28 @@ export function Calculator() {
 
             {plan.allowsExtraButler && (
               <div className="flex justify-between gap-4">
-                <dt className="text-ivory/60">추가 버틀러 {extraButlers}명</dt>
+                <dt className="text-cream/60">추가 버틀러 {extraButlers}명</dt>
                 <dd className="tabular">{formatWon(quote.extraButlerFee)}</dd>
               </div>
             )}
           </dl>
 
-          <div className="mt-6 border-t border-ivory/12 pt-6">
-            <p className="text-[13px] text-ivory/60">총 서비스 금액</p>
-            <p className="mt-1.5 text-[30px] font-semibold tracking-tight text-ivory">
+          <div className="mt-6 border-t border-cream/12 pt-6">
+            <p className="text-[13px] text-cream/60">총 서비스 금액</p>
+            <p className="mt-1.5 text-[30px] font-semibold tracking-tight text-cream">
               <CountUp value={quote.total} />
             </p>
-            <p className="mt-1 text-[12px] text-ivory/40">부가세 포함</p>
+            <p className="mt-1 text-[12px] text-cream/40">부가세 포함</p>
           </div>
 
-          <div className="mt-7 rounded-2xl bg-ivory/[.07] p-5">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-champagne">
+          <div className="mt-7 rounded-2xl bg-cream/[.07] p-5">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-rose">
               지금 결제할 예약금 (10%)
             </p>
-            <p className="mt-2 text-[26px] font-semibold tracking-tight text-ivory">
+            <p className="mt-2 text-[26px] font-semibold tracking-tight text-cream">
               <CountUp value={quote.deposit} />
             </p>
-            <p className="mt-2.5 text-[12.5px] leading-relaxed text-ivory/50">
+            <p className="mt-2.5 text-[12.5px] leading-relaxed text-cream/50">
               잔금 {formatWon(quote.balance)}은 예식 당일 현장에서 정산합니다.
               실제 하객 수에 따라 조정됩니다.
             </p>

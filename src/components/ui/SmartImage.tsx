@@ -33,7 +33,7 @@ export function SmartImage({
 
   return (
     <div
-      className={`relative overflow-hidden bg-ivory-deep ${className}`}
+      className={`relative overflow-hidden bg-cream-deep ${className}`}
       style={{ backgroundImage: TONE_GRADIENT[image.tone] }}
     >
       {/* 폴백 텍스처 — 사진이 얹히면 아래로 가려진다 */}

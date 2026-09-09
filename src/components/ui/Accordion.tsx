@@ -34,7 +34,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-start justify-between gap-6 py-6 text-left transition-colors hover:text-champagne-deep"
+                className="flex w-full items-start justify-between gap-6 py-6 text-left transition-colors hover:text-rose-deep"
               >
                 <span className="text-[15px] font-medium leading-relaxed text-ink sm:text-base">
                   {item.question}

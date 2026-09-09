@@ -45,7 +45,7 @@ export function AnswerForm({ postId }: { postId: number }) {
 
   if (done) {
     return (
-      <p className="mt-4 rounded-xl bg-champagne/15 px-4 py-3 text-[13px] text-champagne-deep">
+      <p className="mt-4 rounded-xl bg-rose/15 px-4 py-3 text-[13px] text-rose-deep">
         답변이 등록되었습니다.
       </p>
     );
@@ -61,7 +61,7 @@ export function AnswerForm({ postId }: { postId: number }) {
         maxLength={4000}
       />
       {error && (
-        <p role="alert" className="mt-2 text-[12.5px] text-[#b4532a]">
+        <p role="alert" className="mt-2 text-[12.5px] text-[#a8392f]">
           {error}
         </p>
       )}

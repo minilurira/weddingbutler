@@ -105,7 +105,7 @@ export default function ServicePage() {
       </Section>
 
       {/* ── 하는 일 ── */}
-      <Section className="bg-ivory-deep/50">
+      <Section className="bg-cream-deep/50">
         <Container>
           <Reveal className="max-w-2xl">
             <Eyebrow>업무 범위</Eyebrow>
@@ -116,7 +116,7 @@ export default function ServicePage() {
             {SERVICE_ITEMS.map((item) => (
               <RevealItem key={item.number}>
                 <div className="border-t border-line pt-6">
-                  <span className="font-mono text-[11px] tracking-[0.14em] text-champagne-deep">
+                  <span className="font-mono text-[11px] tracking-[0.14em] text-rose-deep">
                     {item.number}
                   </span>
                   <h3 className="mt-3 text-[17px] font-semibold tracking-tight text-ink">
@@ -156,10 +156,10 @@ export default function ServicePage() {
                   <div className="relative flex gap-6 pb-10 pl-8 last:pb-0">
                     <span
                       aria-hidden
-                      className="absolute left-0 top-2.5 h-[15px] w-[15px] rounded-full border-2 border-champagne bg-ivory"
+                      className="absolute left-0 top-2.5 h-[15px] w-[15px] rounded-full border-2 border-rose bg-cream"
                     />
                     <div>
-                      <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-champagne-deep">
+                      <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-rose-deep">
                         {entry.time}
                       </p>
                       <h3 className="mt-2 text-[17px] font-semibold tracking-tight text-ink">
@@ -187,7 +187,7 @@ export default function ServicePage() {
       </Section>
 
       {/* ── 준비해 주실 것 ── */}
-      <Section className="bg-ivory-deep/50">
+      <Section className="bg-cream-deep/50">
         <Container>
           <Reveal className="max-w-2xl">
             <Eyebrow>사전 조율</Eyebrow>
@@ -226,7 +226,7 @@ export default function ServicePage() {
           <RevealGroup className="mt-12 grid gap-px overflow-hidden rounded-[20px] border border-line bg-line sm:grid-cols-2">
             {TRUST_POINTS.map((point) => (
               <RevealItem key={point.title} className="h-full">
-                <div className="h-full bg-ivory p-7">
+                <div className="h-full bg-cream p-7">
                   <h3 className="text-[16px] font-semibold tracking-tight text-ink">
                     {point.title}
                   </h3>
