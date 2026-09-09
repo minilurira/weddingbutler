@@ -29,14 +29,14 @@ export function Hero() {
           width={1920}
           sizes="100vw"
           className="h-full w-full"
-          imgClassName="animate-drift opacity-55"
+          imgClassName="animate-drift"
         />
       </div>
 
       {/* 글씨가 잘 읽히도록 어둡게 덮어준다 */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-plum/75 via-plum/60 to-plum/90"
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-plum/70 via-plum/55 to-plum/85"
       />
 
       <Container className="relative text-center">

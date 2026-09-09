@@ -1,100 +1,112 @@
+import type { SceneName } from "@/components/ui/Illustration";
+
 /**
- * 사이트에서 쓰는 사진 레지스트리.
+ * 사이트에서 쓰는 그림/사진 목록.
  *
  * ─────────────────────────────────────────────────────────────
- * 사진을 바꾸고 싶다면 이 파일만 고치면 됩니다.
+ * 지금은 전부 직접 그린 일러스트입니다.
+ * (components/ui/Illustration.tsx — 왜 그림인지도 거기 적혀 있습니다)
  *
- * 1. unsplash.com 에서 마음에 드는 사진을 엽니다.
- * 2. 사진 위에서 우클릭 → "이미지 주소 복사".
- *    https://images.unsplash.com/photo-XXXXXXXXXXXXX-YYYYYYYYYYYY?... 형태입니다.
- * 3. 아래 항목의 `src` 를 `?` 앞부분까지만 잘라서 붙여넣습니다.
- *    (뒤 파라미터는 buildSrc 가 알아서 붙입니다)
- * 4. `alt` 를 사진 내용에 맞게 고쳐 주세요. 화면에 안 보이지만
- *    스크린리더와 검색엔진이 읽습니다.
+ * 실제 예식 사진으로 바꾸고 싶으시면
  * ─────────────────────────────────────────────────────────────
+ * 아래 항목에 `photo` 한 줄만 추가하면 됩니다.
  *
- * `intent` 는 "이 자리에 어떤 사진이 와야 하는가"를 적어둔 것입니다.
- * 사진이 마음에 안 들 때 무엇으로 바꿔야 할지 판단하는 기준입니다.
+ *   hero: {
+ *     scene: "reception",
+ *     variant: "dark",
+ *     alt: "...",
+ *     photo: "https://images.unsplash.com/photo-XXXXXXXX",  ← 이 줄
+ *   },
  *
- * 모든 사진은 로딩에 실패해도 브랜드 그라디언트로 자연스럽게 대체되므로
- * (components/ui/SmartImage.tsx) 깨진 이미지가 노출되지 않습니다.
+ * 사진 주소 얻는 법
+ *  1. unsplash.com 등에서 사진을 엽니다.
+ *  2. 사진 위 우클릭 → "이미지 주소 복사".
+ *  3. `?` 앞부분까지만 잘라서 붙여넣습니다. 뒤 옵션은 알아서 붙습니다.
+ *  4. `alt` 를 사진 내용에 맞게 고쳐주세요. 화면에는 안 보이지만
+ *     스크린리더와 검색엔진이 읽습니다.
+ *
+ * 직접 찍은 사진을 쓰시려면 public/ 폴더에 넣고
+ * photo: "/photos/접수대.jpg" 처럼 적으시면 됩니다.
+ *
+ * 사진이 어떤 이유로든 안 뜨면 자동으로 그림으로 되돌아갑니다.
+ * 그래서 깨진 이미지가 노출될 일은 없습니다.
+ *
+ * next.config.ts 의 remotePatterns 에 없는 도메인의 사진은 차단되니,
+ * unsplash 가 아닌 곳을 쓰실 때는 거기에 도메인을 추가해 주세요.
  */
 
 export type SiteImage = {
-  /** Unsplash 원본 주소 (쿼리스트링 제외) */
-  src: string;
-  /** 스크린리더·SEO용 대체 텍스트 */
+  /** 기본으로 보여줄 일러스트 장면 */
+  scene: SceneName;
+  /** 어두운 배경에 놓이면 "dark" */
+  variant?: "dark" | "light";
+  /** 스크린리더·SEO용 설명 */
   alt: string;
-  /** 이 자리에 어울리는 사진의 조건 */
-  intent: string;
-  /** 폴백 그라디언트 톤 */
-  tone: "rose" | "lilac" | "blush" | "ink";
+  /** (선택) 실제 사진 주소. 넣으면 사진이 그림을 대신합니다. */
+  photo?: string;
 };
 
 export const IMAGES = {
+  /** 첫 화면 배경 — 흰 글씨를 얹으므로 어두운 톤 */
   hero: {
-    src: "https://images.unsplash.com/photo-1519741497674-611481863552",
-    alt: "예식장에서 하객을 맞이하는 결혼식 현장",
-    intent:
-      "예식장 전경. 흰 글씨를 얹으므로 너무 밝지 않고 여백이 넉넉한 넓은 컷이 좋습니다.",
-    tone: "ink",
+    scene: "reception",
+    variant: "dark",
+    alt: "웨딩버틀러 두 명이 축의금 접수대를 지키고 있는 결혼식 접수 현장",
   },
+
+  /** 접수대 위 클로즈업 — 방명록, 봉투, 잠금 보관함 */
   reception: {
-    src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
-    alt: "방명록과 답례품이 놓인 결혼식 접수대",
-    intent:
-      "접수대·방명록·펜이 놓인 테이블 클로즈업. 어두운 섹션 안에 놓이므로 차분한 톤이 좋습니다.",
-    tone: "ink",
+    scene: "desk",
+    variant: "dark",
+    alt: "방명록과 축의금 봉투, 잠금 보관함이 놓인 접수대",
   },
+
+  /** 버틀러 소개 */
   butler: {
-    src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d",
-    alt: "단정한 정장 차림으로 응대를 준비하는 스태프",
-    intent: "정장·유니폼 차림의 단정한 응대 인력. 신뢰감을 주는 톤.",
-    tone: "ink",
+    scene: "butlers",
+    variant: "light",
+    alt: "정장을 갖춰 입고 접수를 준비하는 웨딩버틀러 두 명",
   },
-  ceremony: {
-    src: "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6",
-    alt: "예식 중인 신랑 신부",
-    intent: "예식 순간. 부부가 주인공인 컷 — 얼굴이 또렷하지 않아도 좋음.",
-    tone: "rose",
-  },
-  detail: {
-    src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
-    alt: "결혼식장에 놓인 꽃 장식",
-    intent: "플로럴·테이블 세팅 등 디테일 컷. 여백이 넉넉한 정적인 사진.",
-    tone: "lilac",
-  },
+
+  /** 하객 응대 */
   guests: {
-    src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d",
-    alt: "결혼식장에 모인 하객들",
-    intent: "하객이 모여 있는 로비/홀. 붐비는 느낌이 드러나야 함.",
-    tone: "blush",
+    scene: "queue",
+    variant: "light",
+    alt: "축의금 봉투를 들고 접수대 앞에 줄을 선 하객들",
+  },
+
+  /** 예식 분위기 */
+  ceremony: {
+    scene: "flowers",
+    variant: "light",
+    alt: "꽃으로 장식된 예식장 아치",
+  },
+
+  /** 디테일 컷 */
+  detail: {
+    scene: "flowers",
+    variant: "light",
+    alt: "예식장에 놓인 꽃 장식",
   },
 } as const satisfies Record<string, SiteImage>;
 
 export type ImageKey = keyof typeof IMAGES;
 
 /**
- * Unsplash 이미지 주소에 크기·품질 파라미터를 붙인다.
- * Next.js 이미지 최적화를 거치지만, 원본을 미리 줄여 받으면 전송량이 준다.
+ * 사진 주소에 크기·품질 옵션을 붙인다.
+ * 직접 올린 파일(/photos/...)에는 붙이지 않는다.
  */
-export function buildSrc(
-  image: SiteImage,
+export function buildPhotoSrc(
+  photo: string,
   { width = 1600, quality = 75 }: { width?: number; quality?: number } = {},
 ): string {
+  if (!photo.startsWith("http")) return photo;
+
   const params = new URLSearchParams({
     auto: "format",
     fit: "crop",
     w: String(width),
     q: String(quality),
   });
-  return `${image.src}?${params.toString()}`;
+  return `${photo}?${params.toString()}`;
 }
-
-/** 사진이 로드되기 전/실패했을 때 깔리는 브랜드 그라디언트. */
-export const TONE_GRADIENT: Record<SiteImage["tone"], string> = {
-  rose: "linear-gradient(135deg, #fdeef2 0%, #f6c9d5 45%, #eda5b7 100%)",
-  lilac: "linear-gradient(135deg, #f8f1f6 0%, #ded0dd 45%, #a98caa 100%)",
-  blush: "linear-gradient(135deg, #fff5f7 0%, #fadde4 45%, #f0b8c4 100%)",
-  ink: "linear-gradient(135deg, #5d444f 0%, #47323c 55%, #3b2932 100%)",
-};

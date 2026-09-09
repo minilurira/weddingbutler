@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { buildSrc, TONE_GRADIENT, type SiteImage } from "@/lib/images";
+import { Illustration } from "@/components/ui/Illustration";
+import { buildPhotoSrc, type SiteImage } from "@/lib/images";
 
 /**
- * 사진이 아직 안 왔거나 로딩에 실패해도 자리가 비어 보이지 않는 이미지.
+ * 그림을 기본으로 깔고, 사진이 등록돼 있으면 그 위에 얹는 이미지.
  *
- * 폴백은 "회색 네모"가 아니라 브랜드 그라디언트 + 얇은 격자 패턴이라
- * 사진이 끝내 안 뜨더라도 의도한 디자인처럼 보인다.
+ * 사진이 없거나(기본 상태), 주소가 잘못됐거나, 네트워크가 막혀 못 불러오면
+ * 아래 깔린 그림이 그대로 보인다. 그래서 어떤 상황에서도 빈 자리나
+ * 깨진 이미지가 노출되지 않는다.
  */
 export function SmartImage({
   image,
@@ -25,39 +27,36 @@ export function SmartImage({
   sizes?: string;
   width?: number;
   priority?: boolean;
-  /** 사진 위에 텍스트를 올릴 때 가독성을 위한 어두운 레이어 */
+  /** 사진 위에 글씨를 올릴 때 가독성을 위한 어두운 레이어 */
   overlay?: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const [photoLoaded, setPhotoLoaded] = useState(false);
+
+  const showPhoto = Boolean(image.photo) && !photoFailed;
 
   return (
-    <div
-      className={`relative overflow-hidden bg-cream-deep ${className}`}
-      style={{ backgroundImage: TONE_GRADIENT[image.tone] }}
-    >
-      {/* 폴백 텍스처 — 사진이 얹히면 아래로 가려진다 */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)",
-          backgroundSize: "44px 44px",
-        }}
-      />
+    <div className={`relative overflow-hidden ${className}`}>
+      {/* 기본 그림 — 사진이 뜨기 전에도, 끝내 안 떠도 이 자리를 채운다 */}
+      <div className="absolute inset-0">
+        <Illustration
+          scene={image.scene}
+          variant={image.variant ?? "light"}
+          className={imgClassName}
+        />
+      </div>
 
-      {!failed && (
+      {showPhoto && (
         <Image
-          src={buildSrc(image, { width })}
+          src={buildPhotoSrc(image.photo!, { width })}
           alt={image.alt}
           fill
           sizes={sizes}
           priority={priority}
-          onError={() => setFailed(true)}
-          onLoad={() => setLoaded(true)}
+          onError={() => setPhotoFailed(true)}
+          onLoad={() => setPhotoLoaded(true)}
           className={`object-cover transition-opacity duration-1000 ease-out ${
-            loaded ? "opacity-100" : "opacity-0"
+            photoLoaded ? "opacity-100" : "opacity-0"
           } ${imgClassName}`}
         />
       )}
@@ -65,7 +64,7 @@ export function SmartImage({
       {overlay && (
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/15 to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-plum/55 via-plum/15 to-transparent"
         />
       )}
     </div>
