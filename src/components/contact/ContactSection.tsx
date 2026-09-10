@@ -200,8 +200,7 @@ export function ContactSection() {
               </div>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>상담 시간</div>
-                평일 10:00 – 19:00
-                <br />주말·공휴일은 예식 현장 운영
+                매일 오전 9:00 – 오후 10:00
               </div>
             </div>
           </div>
@@ -234,7 +233,7 @@ export function ContactSection() {
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.9, color: "#5A3A28", margin: "0 0 18px" }}>채널 추가 후 메시지를 남겨주시면 상담 시간 내 가장 빠르게 답변드립니다.</p>
             <a
-              href="https://pf.kakao.com"
+              href="http://pf.kakao.com/_AIhxnX/chat"
               target="_blank"
               rel="noreferrer"
               className="kakao-btn-hover"
