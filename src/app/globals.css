@@ -149,7 +149,14 @@ button {
     display: flex !important;
   }
   [data-mq="split"] {
-    grid-template-columns: 1fr !important;
+    /* minmax(0, 1fr), not bare 1fr — grid tracks default to min-width:auto,
+       so a plain 1fr column still refuses to shrink below the intrinsic
+       (min-content) width of whatever's inside it (inputs, the calendar
+       row, chip labels...) and overflows off-screen instead of collapsing. */
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  [data-mq="split"] > * {
+    min-width: 0;
   }
   [data-mq="split-left"] {
     border-right: none !important;
