@@ -5,8 +5,9 @@ import { ContactSection } from "@/components/contact/ContactSection";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
-  title: "문의하기 | 웨딩버틀러",
+  title: "문의하기",
   description: "궁금한 점을 남겨주시면 영업일 기준 24시간 내 답변드립니다.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

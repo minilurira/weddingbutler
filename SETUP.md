@@ -40,6 +40,43 @@ from any page's "예약하기" button.
 Until these are set, the booking flow works end-to-end in the UI but the
 final payment step will show a clear inline error instead of crashing.
 
+## SEO (Google / Naver)
+
+Already in the code, live as soon as it's deployed:
+
+- Per-page `<title>`/description, Open Graph + Twitter card tags, canonical
+  URLs (`src/app/layout.tsx` + each page's `metadata` export).
+- `robots.txt` and `sitemap.xml` (`src/app/robots.ts`, `src/app/sitemap.ts`) —
+  auto-generated, list all 4 pages, allow all crawlers except `/api/`.
+- `LocalBusiness` structured data (`src/components/LocalBusinessJsonLd.tsx`)
+  using the real business info from the footer (name, address, email) — this
+  is what lets Google/Naver show a rich business card instead of a plain link.
+
+Two things only you can do, since they require your own Google/Naver accounts:
+
+### 1. Google Search Console
+
+1. Go to search.google.com/search-console → Add property → `weddingbutler.co.kr`.
+2. Verify ownership via the "HTML tag" method — it gives you a `content="..."`
+   value. Put just that value in `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` in
+   Vercel's env vars, then redeploy.
+3. Once verified, submit `https://weddingbutler.co.kr/sitemap.xml` under
+   Sitemaps so Google crawls all pages promptly instead of waiting to
+   discover them organically.
+
+### 2. Naver Search Advisor (네이버 서치어드바이저)
+
+1. Go to searchadvisor.naver.com → 사이트 등록 → `weddingbutler.co.kr`.
+2. Verify via the HTML 태그 method the same way — put the value in
+   `NEXT_PUBLIC_NAVER_SITE_VERIFICATION` in Vercel, redeploy.
+3. Submit the sitemap URL there too, and use "요청 > 웹페이지 수집" to ask
+   Naver to crawl the site now instead of waiting.
+
+Naver also has a separate **네이버 플레이스/스마트플레이스** listing for
+local businesses (map search, business hours, phone) — that's a distinct
+registration from search-engine indexing and isn't something code affects;
+worth doing separately at business.naver.com if useful for this business.
+
 ## Where things live
 
 - `src/app/{page,service,pricing,contact}` — the four routes.

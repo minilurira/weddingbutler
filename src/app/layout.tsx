@@ -2,12 +2,46 @@ import type { Metadata } from "next";
 import { cormorant, notoSansKr, notoSerifKr } from "@/lib/fonts";
 import { fontSans } from "@/lib/style";
 import { ReservationProvider } from "@/components/ReservationProvider";
+import { LocalBusinessJsonLd } from "@/components/LocalBusinessJsonLd";
+import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "웨딩버틀러 | 축의대 대행 서비스",
-  description:
-    "전문 교육을 받은 웨딩버틀러가 축의금 접수부터 정산까지 책임집니다. 날짜 선택부터 결제까지 온라인에서 3분이면 끝납니다.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | 축의대 대행 서비스`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: ["웨딩버틀러", "축의대", "축의대 대행", "축의금 접수", "결혼식 축의대", "웨딩 하객 접수"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | 축의대 대행 서비스`,
+    description: SITE_DESCRIPTION,
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} | 축의대 대행 서비스`,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION
+      ? { "naver-site-verification": process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION }
+      : undefined,
+  },
 };
 
 export default function RootLayout({
@@ -18,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${notoSansKr.variable} ${notoSerifKr.variable} ${cormorant.variable}`}>
       <body style={{ fontFamily: fontSans }}>
+        <LocalBusinessJsonLd />
         <ReservationProvider>{children}</ReservationProvider>
       </body>
     </html>

@@ -5,8 +5,9 @@ import { OpenModalButton } from "@/components/OpenModalButton";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
-  title: "요금제 안내 | 웨딩버틀러",
+  title: "요금제 안내",
   description: "하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.",
+  alternates: { canonical: "/pricing" },
 };
 
 const CARDS = [

@@ -6,8 +6,9 @@ import { OpenModalButton } from "@/components/OpenModalButton";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
-  title: "서비스 소개 | 웨딩버틀러",
+  title: "서비스 소개",
   description: "전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.",
+  alternates: { canonical: "/service" },
 };
 
 const SERVICE_STEPS = [
