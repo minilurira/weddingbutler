@@ -34,12 +34,32 @@ shows over any record copied from elsewhere). As of now that's typically:
 | `@` (apex) | A | `76.76.21.21` |
 | `www` | CNAME | `cname.vercel-dns.com` |
 
-### 3. Add those records at your registrar (가비아 / 카페24)
+### 3. Point the domain at Vercel (registrar: 후이즈, whois.co.kr)
 
-가비아: 마이가비아 → 서비스 관리 → DNS 관리 → 도메인 선택 → 레코드 추가.
-카페24: 통합회원 로그인 → 도메인 관리 → DNS 설정 → 가비아와 동일한 방식으로
-호스트(`@`, `www`)에 위 레코드를 추가합니다. DNS 전파는 보통 몇 분~수 시간
-걸립니다. Vercel의 Domains 탭에서 확인 상태(✓)가 뜨면 완료입니다.
+The domain is currently on 후이즈's default/parking nameserver, which won't
+let you add the records above. Two ways to fix it — pick one:
+
+**Option A — delegate nameservers to Vercel (recommended, simplest for an
+apex domain).** 후이즈 로그인 → 도메인 관리 → `weddingbutler.co.kr` 선택 →
+**네임서버 설정** (or 네임서버 변경) → "사용자 지정 네임서버"로 바꾸고 아래
+두 개를 입력:
+
+```
+ns1.vercel-dns.com
+ns2.vercel-dns.com
+```
+
+Vercel then manages all DNS for the domain directly — no separate A/CNAME
+records to keep in sync at 후이즈. Vercel's Domains tab will show this as
+the recommended setup when you add the domain there.
+
+**Option B — keep 후이즈 as DNS host, add records manually.** 네임서버
+설정에서 "후이즈 DNS 사용"(또는 호스팅 없이 DNS 레코드만 사용하는 옵션)을
+선택하면 A/CNAME 레코드 편집 화면이 나옵니다. 거기서 호스트 `@`에 A 레코드,
+`www`에 CNAME 레코드로 위 표의 값을 추가하세요.
+
+Either way, DNS propagation usually takes minutes to a few hours. Vercel's
+Domains tab shows a ✓ once it verifies — that's the signal it's done.
 
 ## After setup
 
