@@ -162,11 +162,13 @@ export function ReservationModal({
     const dt = new Date(state.y, state.m - 1, d);
     const dow = dt.getDay();
     const past = dt < today;
-    const sel = state.date === d && !past;
+    const isWeekend = dow === 0 || dow === 6;
+    const disabled = past || !isWeekend;
+    const sel = state.date === d && !disabled;
     days.push({
       key: "d" + d,
       label: String(d),
-      onClick: past ? null : () => patch({ date: d }),
+      onClick: disabled ? null : () => patch({ date: d }),
       style: {
         height: 42,
         display: "flex",
@@ -175,10 +177,10 @@ export function ReservationModal({
         fontSize: 14,
         borderRadius: 3,
         userSelect: "none",
-        cursor: past ? "default" : "pointer",
-        background: sel ? "#33232A" : past ? "transparent" : "#FFFFFF",
-        border: "1px solid " + (sel ? "#33232A" : past ? "transparent" : "#E7D5DA"),
-        color: sel ? "#FFFFFF" : past ? "#D8C3C9" : dow === 0 ? "#C0607F" : dow === 6 ? "#8A9BB0" : "#473A3F",
+        cursor: disabled ? "default" : "pointer",
+        background: sel ? "#33232A" : disabled ? "transparent" : "#FFFFFF",
+        border: "1px solid " + (sel ? "#33232A" : disabled ? "transparent" : "#E7D5DA"),
+        color: sel ? "#FFFFFF" : disabled ? "#D8C3C9" : dow === 0 ? "#C0607F" : "#8A9BB0",
         transition: "background .2s ease, border-color .2s ease, color .2s ease",
       },
     });
@@ -341,7 +343,7 @@ export function ReservationModal({
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E" }}>STEP 2 · 예식 날짜</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                     <button onClick={() => shiftMonth(-1)} className="round-nav-hover" style={navBtnStyle}>
@@ -355,6 +357,7 @@ export function ReservationModal({
                     </button>
                   </div>
                 </div>
+                <p style={{ fontSize: 12, color: "#9A8189", margin: "0 0 12px" }}>토요일 · 일요일만 예약 가능합니다.</p>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 6, marginBottom: 8 }}>
                   {["일", "월", "화", "수", "목", "금", "토"].map((d, i) => (
@@ -501,12 +504,16 @@ export function ReservationModal({
                   <SummaryRow label="버틀러 추가" value={price.extraButlerAmount ? "+ " + won(price.extraButlerAmount) : "-"} />
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "24px 0 6px" }}>
-                  <span style={{ fontSize: 15, color: "#473A3F" }}>총 결제 금액</span>
-                  <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.total)}</span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "20px 0 0" }}>
+                  <span style={{ fontSize: 13, color: "#9A8189" }}>총 금액 (부가세 포함)</span>
+                  <span style={{ fontSize: 14, color: "#6B5A60" }}>{won(price.total)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0 6px" }}>
+                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 결제할 선결제 금액</span>
+                  <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
                 <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 22 }}>
-                  부가세 포함 · 오늘 50% 선결제 {won(price.deposit)} / 예식 후 잔금 {won(price.balance)}
+                  예식 당일 전체 금액의 50%만 결제됩니다 · 예식 후 잔금 {won(price.balance)}
                 </div>
 
                 <button onClick={submit} disabled={!ready || state.phase === "submitting"} style={submitStyle}>
