@@ -52,6 +52,7 @@ export default function HomePage() {
 
       <section
         id="top"
+        data-mq="hero"
         style={{
           position: "relative",
           minHeight: 640,
@@ -63,12 +64,12 @@ export default function HomePage() {
           backgroundPosition: "center right",
         }}
       >
-        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "110px 24px", width: "100%" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(64px,11vw,110px) clamp(18px,5vw,24px)", width: "100%" }}>
           <Reveal style={{ maxWidth: 620 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 15, letterSpacing: "0.42em", color: "#E9CAD1", margin: "0 0 22px" }}>
               FOR YOUR MOST PRECIOUS DAY
             </p>
-            <h1 style={{ fontFamily: fontSerif, fontSize: 52, lineHeight: 1.34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 24px", letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(30px,6.8vw,52px)", lineHeight: 1.34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 24px", letterSpacing: "-0.02em" }}>
               축의대는 맡기고,
               <br />두 분은 웃기만 하세요
             </h1>
@@ -120,11 +121,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="service" style={{ padding: "120px 24px" }}>
+      <section id="service" style={{ padding: "clamp(64px,11vw,120px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 64 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>WHY WEDDING BUTLER</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대에 세울 사람, 아직 못 정하셨나요</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대에 세울 사람, 아직 못 정하셨나요</h2>
             <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>가장 바쁜 날, 가장 예민한 자리입니다. 웨딩버틀러가 대신 지킵니다.</p>
           </Reveal>
 
@@ -144,13 +145,21 @@ export default function HomePage() {
             ))}
           </div>
 
-          <Reveal style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 56, alignItems: "center", marginTop: 96 }}>
-            <div style={{ borderRadius: 4, overflow: "hidden", minHeight: 380, position: "relative" }}>
+          <Reveal
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,320px), 1fr))",
+              gap: "clamp(32px,5vw,56px)",
+              alignItems: "center",
+              marginTop: "clamp(56px,9vw,96px)",
+            }}
+          >
+            <div style={{ borderRadius: 4, overflow: "hidden", minHeight: "clamp(240px,50vw,380px)", position: "relative" }}>
               <Image src="/img/butlers.jpeg" alt="웨딩버틀러 현장 응대" fill style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
             <div>
               <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 18px" }}>SERVICE SCOPE</p>
-              <h2 style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "0 0 30px", lineHeight: 1.4, letterSpacing: "-0.02em" }}>
+              <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,4.8vw,34px)", fontWeight: 600, margin: "0 0 30px", lineHeight: 1.4, letterSpacing: "-0.02em" }}>
                 예식 당일, 이 모든 것을
                 <br />대신 해드립니다
               </h2>
@@ -176,11 +185,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="flow" style={{ padding: "110px 24px", backgroundColor: "#FFFFFFBC" }}>
+      <section id="flow" style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px)", backgroundColor: "#FFFFFFBC" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 60 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>HOW IT WORKS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 20 }}>
             {HOW_IT_WORKS.map((s, i) => (
@@ -203,8 +212,9 @@ export default function HomePage() {
 
       <section
         id="price"
+        data-mq="parallax"
         style={{
-          padding: "120px 24px",
+          padding: "clamp(64px,11vw,120px) clamp(18px,5vw,24px)",
           backgroundImage: "linear-gradient(rgba(243,233,235,0.72), rgba(243,233,235,0.82)), url('/img/hall.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -214,7 +224,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>하객 규모에 맞춰 고르세요</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>하객 규모에 맞춰 고르세요</h2>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>모든 금액은 부가세 포함입니다. 자세한 금액과 비교표는 요금제 페이지에서 확인하세요.</p>
           </Reveal>
 
@@ -235,11 +245,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="area" style={{ padding: "110px 24px", backgroundColor: "#FFFFFFC0" }}>
+      <section id="area" style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px)", backgroundColor: "#FFFFFFC0" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>SERVICE AREA</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>서울 전역 · 경기 전역 출장</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>서울 전역 · 경기 전역 출장</h2>
             <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>수도권 어느 예식장이든 웨딩버틀러가 찾아갑니다.</p>
           </Reveal>
 
@@ -259,11 +269,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="review" style={{ padding: "120px 24px" }}>
+      <section id="review" style={{ padding: "clamp(64px,11vw,120px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>REAL REVIEWS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예식을 마친 부부들의 이야기</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예식을 마친 부부들의 이야기</h2>
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px,1fr))", gap: 22 }}>
             {REVIEWS.map((r, i) => (
@@ -282,11 +292,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="faq" style={{ padding: "110px 24px 120px", backgroundColor: "#FFFFFFBE" }}>
+      <section id="faq" style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px) clamp(70px,11vw,120px)", backgroundColor: "#FFFFFFBE" }}>
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>FAQ</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>자주 묻는 질문</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>자주 묻는 질문</h2>
           </Reveal>
           <FaqAccordion />
         </div>
@@ -295,14 +305,14 @@ export default function HomePage() {
       <section
         style={{
           position: "relative",
-          padding: "130px 24px",
+          padding: "clamp(76px,12vw,130px) clamp(18px,5vw,24px)",
           backgroundImage: "linear-gradient(rgba(18,18,18,0.58), rgba(35,35,35,0.66)), url('/img/couple.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center 30%",
         }}
       >
         <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontFamily: fontSerif, fontSize: 38, fontWeight: 600, color: "#FFFFFF", margin: "0 0 20px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.4vw,38px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 20px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
             가장 행복한 날의 걱정 하나,
             <br />저희가 덜어드릴게요
           </h2>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
@@ -12,6 +13,12 @@ const NAV = [
 
 export function Header({ active }: { active?: "service" | "pricing" | "contact" }) {
   const { openModal } = useReservation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function openBookingFromMenu() {
+    setMenuOpen(false);
+    openModal();
+  }
 
   return (
     <header
@@ -28,7 +35,7 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
         style={{
           maxWidth: 1180,
           margin: "0 auto",
-          padding: "16px 24px",
+          padding: "14px clamp(16px,4vw,24px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -39,7 +46,7 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
           href="/"
           style={{ display: "flex", flexDirection: "column", lineHeight: 1.05, color: "#33232A" }}
         >
-          <span style={{ fontFamily: fontDisplay, fontSize: 22, letterSpacing: "0.22em", color: "#A9647E" }}>
+          <span style={{ fontFamily: fontDisplay, fontSize: "clamp(17px,4.4vw,22px)", letterSpacing: "0.22em", color: "#A9647E" }}>
             WEDDING BUTLER
           </span>
           <span
@@ -54,7 +61,7 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
             웨 딩 버 틀 러
           </span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        <div data-mq="nav-menu" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <div style={{ display: "flex", gap: 26, fontSize: 14, fontWeight: 500 }}>
             {NAV.map((item) => (
               <Link
@@ -79,12 +86,77 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
               letterSpacing: "0.02em",
               cursor: "pointer",
             }}
-            className="btn-hover-accent"
+            className="btn-dark-hover"
           >
             예약하기
           </button>
         </div>
+        <button
+          data-mq="burger"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="메뉴"
+          style={{
+            display: "none",
+            width: 44,
+            height: 44,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+            background: "transparent",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+        >
+          <span style={{ display: "block", width: 22, height: 1.5, background: "#33232A" }} />
+          <span style={{ display: "block", width: 22, height: 1.5, background: "#33232A" }} />
+        </button>
       </nav>
+      {menuOpen && (
+        <div
+          data-mq="drawer"
+          style={{
+            borderTop: "1px solid #E7D5DA",
+            background: "#F3E9EB",
+            padding: "8px 18px 20px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              style={{
+                padding: "16px 4px",
+                fontSize: 16,
+                color: active === item.href.slice(1) ? "#A9647E" : "#473A3F",
+                borderBottom: "1px solid #EBDCE0",
+              }}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <button
+            onClick={openBookingFromMenu}
+            style={{
+              marginTop: 16,
+              textAlign: "center",
+              background: "#33232A",
+              color: "#F3E9EB",
+              padding: 16,
+              border: "none",
+              borderRadius: 999,
+              fontSize: 15,
+              cursor: "pointer",
+            }}
+          >
+            예약하기
+          </button>
+        </div>
+      )}
     </header>
   );
 }

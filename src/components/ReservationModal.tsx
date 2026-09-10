@@ -281,7 +281,7 @@ export function ReservationModal({
         background: "rgba(18,18,18,0.66)",
         backdropFilter: "blur(4px)",
         overflowY: "auto",
-        padding: "48px 20px",
+        padding: "clamp(16px,4vw,48px) clamp(12px,3vw,20px)",
         fontFamily: "var(--font-sans), sans-serif",
         color: "#33232A",
       }}
@@ -292,7 +292,7 @@ export function ReservationModal({
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#E9CAD1", margin: "0 0 10px" }}>
               RESERVATION
             </p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, margin: "0 0 8px", color: "#FFFFFF", letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(22px,5vw,30px)", fontWeight: 600, margin: "0 0 8px", color: "#FFFFFF", letterSpacing: "-0.02em" }}>
               온라인 예약 · 결제
             </h2>
             <p style={{ fontSize: 14, lineHeight: 1.8, color: "#D8C3C9", margin: 0 }}>
@@ -321,8 +321,8 @@ export function ReservationModal({
 
         <div style={{ background: "#F3E9EB", borderRadius: 6, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}>
           {state.phase !== "done" && (
-            <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.35fr) minmax(0,1fr)" }}>
-              <div style={{ padding: "44px 40px", borderRight: "1px solid #E7D5DA" }}>
+            <div data-mq="split" style={{ display: "grid", gridTemplateColumns: "minmax(0,1.35fr) minmax(0,1fr)" }}>
+              <div data-mq="split-left" style={{ padding: "clamp(26px,5vw,44px) clamp(18px,4.5vw,40px)", borderRight: "1px solid #E7D5DA" }}>
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 1 · 요금제</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8 }}>
                   {PLAN_ORDER.map((k) => (
@@ -393,7 +393,7 @@ export function ReservationModal({
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 4 · 예식 정보</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 14 }}>
                   <label style={fieldLabelStyle}>
                     신랑 · 신부 성함
                     <input
@@ -426,7 +426,7 @@ export function ReservationModal({
                   </label>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 18 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 14, marginTop: 18 }}>
                   <div style={fieldLabelStyle}>
                     예상 하객 수
                     <div style={stepperWrapStyle}>
@@ -481,7 +481,7 @@ export function ReservationModal({
                 </div>
               </div>
 
-              <div style={{ padding: "44px 36px", background: "#E9CAD1", display: "flex", flexDirection: "column" }}>
+              <div style={{ padding: "clamp(26px,5vw,44px) clamp(18px,4.5vw,36px)", background: "#E9CAD1", display: "flex", flexDirection: "column" }}>
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 22 }}>예약 내역</div>
                 <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600, marginBottom: 6 }}>{P.name}</div>
                 <div style={{ fontSize: 13, color: "#6B5A60", lineHeight: 1.8, marginBottom: 26 }}>{P.desc}</div>
@@ -523,7 +523,7 @@ export function ReservationModal({
           )}
 
           {state.phase === "done" && (
-            <div style={{ padding: "80px 40px", textAlign: "center" }}>
+            <div style={{ padding: "clamp(50px,9vw,80px) clamp(20px,5vw,40px)", textAlign: "center" }}>
               <div
                 style={{
                   width: 58,
@@ -551,10 +551,10 @@ export function ReservationModal({
                   flexDirection: "column",
                   gap: 12,
                   background: "#E9CAD1",
-                  padding: "28px 40px",
+                  padding: "28px clamp(22px,5vw,40px)",
                   borderRadius: 4,
                   textAlign: "left",
-                  minWidth: 320,
+                  minWidth: "min(320px,100%)",
                 }}
               >
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
@@ -562,7 +562,7 @@ export function ReservationModal({
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
                 <SummaryRow label="선결제 금액" value={won(price.deposit)} wide />
               </div>
-              <div style={{ marginTop: 30, display: "flex", gap: 10, justifyContent: "center" }}>
+              <div style={{ marginTop: 30, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <button onClick={reset} className="round-nav-hover" style={outlineBtnStyle}>
                   다시 예약하기
                 </button>

@@ -79,12 +79,15 @@ export function ContactSection() {
   }
 
   return (
-    <section style={{ padding: "0 24px 100px" }}>
-      <div style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(0,1fr)", gap: 22, alignItems: "start" }}>
-        <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "44px 40px" }}>
+    <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(64px,10vw,100px)" }}>
+      <div
+        data-mq="split"
+        style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(0,1fr)", gap: 22, alignItems: "start" }}
+      >
+        <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(26px,5vw,44px) clamp(20px,5vw,40px)" }}>
           {!sent ? (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 16 }}>
                 <label style={fieldLabel}>
                   성함
                   <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="김민준" className="field-focus" style={fieldInput} />

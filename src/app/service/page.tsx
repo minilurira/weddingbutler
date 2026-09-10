@@ -30,19 +30,28 @@ export default function ServicePage() {
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB" }}>
       <Header active="service" />
 
-      <section style={{ padding: "90px 24px 60px", textAlign: "center" }}>
+      <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>OUR SERVICE</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대 대행 서비스</h1>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대 대행 서비스</h1>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.</p>
       </section>
 
-      <section style={{ padding: "0 24px 90px" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px,1fr))", gap: 48, alignItems: "center" }}>
-          <div style={{ borderRadius: 4, overflow: "hidden", minHeight: 400, position: "relative" }}>
+      <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(56px,9vw,90px)" }}>
+        <div
+          style={{
+            maxWidth: 1180,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,320px),1fr))",
+            gap: "clamp(28px,5vw,48px)",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ borderRadius: 4, overflow: "hidden", minHeight: "clamp(240px,52vw,400px)", position: "relative" }}>
             <Image src="/img/butlers.jpeg" alt="웨딩버틀러 현장 응대" fill priority style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
           </div>
           <div>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, margin: "0 0 28px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 28px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
               예식 당일, 이 모든 것을
               <br />대신 해드립니다
             </h2>
@@ -67,11 +76,11 @@ export default function ServicePage() {
         </div>
       </section>
 
-      <section style={{ padding: "90px 24px", backgroundColor: "#FFFFFF9F" }}>
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", backgroundColor: "#FFFFFF9F" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>HOW IT WORKS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 32, fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,32px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px,1fr))", gap: 20 }}>
             {HOW_IT_WORKS.map((s) => (
@@ -92,14 +101,14 @@ export default function ServicePage() {
 
       <section
         style={{
-          padding: "110px 24px",
+          padding: "clamp(70px,11vw,110px) clamp(18px,5vw,24px)",
           textAlign: "center",
           backgroundImage: "linear-gradient(rgba(18,18,18,0.58), rgba(35,35,35,0.66)), url('/img/couple.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center 30%",
         }}
       >
-        <h2 style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
+        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
           가장 행복한 날의 걱정 하나,
           <br />저희가 덜어드릴게요
         </h2>

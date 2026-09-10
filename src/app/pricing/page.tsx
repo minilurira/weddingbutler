@@ -52,14 +52,14 @@ export default function PricingPage() {
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB", minHeight: "100vh" }}>
       <Header active="pricing" />
 
-      <section style={{ padding: "90px 24px 60px", textAlign: "center" }}>
+      <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE PLANS</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: 40, fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>요금제 안내</h1>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>요금제 안내</h1>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
       </section>
 
-      <section style={{ padding: "0 24px 90px" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px,1fr))", gap: 22, alignItems: "start" }}>
+      <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(56px,9vw,90px)" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 22, alignItems: "start" }}>
           {CARDS.map((c) => (
             <div
               key={c.plan}
@@ -123,31 +123,33 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section style={{ padding: "90px 24px", background: "rgba(255,255,255,0.75)" }}>
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.75)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, margin: "0 0 34px", letterSpacing: "-0.02em" }}>한눈에 비교하기</h2>
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, overflow: "hidden" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr 1fr", background: "#33232A" }}>
-              <div style={{ padding: "18px 22px", fontSize: 14, color: "#D8C3C9" }}>항목</div>
-              <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스몰케어</div>
-              <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스탠다드</div>
-              <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>프리미엄</div>
-            </div>
-            {COMPARE_ROWS.map((row, i) => (
-              <div
-                key={row[0]}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1.2fr 1fr 1fr 1fr",
-                  borderBottom: i === COMPARE_ROWS.length - 1 ? undefined : "1px solid #F0E3E6",
-                }}
-              >
-                <div style={{ padding: "18px 22px", fontSize: 14, color: "#6B5A60" }}>{row[0]}</div>
-                <div style={{ padding: "18px 22px", fontSize: 15, color: row[1] === "해당 없음" ? "#9A8189" : undefined }}>{row[1]}</div>
-                <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[2]}</div>
-                <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[3]}</div>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 34px", letterSpacing: "-0.02em" }}>한눈에 비교하기</h2>
+          <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, overflow: "hidden", minWidth: 620 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr 1fr", background: "#33232A" }}>
+                <div style={{ padding: "18px 22px", fontSize: 14, color: "#D8C3C9" }}>항목</div>
+                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스몰케어</div>
+                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스탠다드</div>
+                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>프리미엄</div>
               </div>
-            ))}
+              {COMPARE_ROWS.map((row, i) => (
+                <div
+                  key={row[0]}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1.2fr 1fr 1fr 1fr",
+                    borderBottom: i === COMPARE_ROWS.length - 1 ? undefined : "1px solid #F0E3E6",
+                  }}
+                >
+                  <div style={{ padding: "18px 22px", fontSize: 14, color: "#6B5A60" }}>{row[0]}</div>
+                  <div style={{ padding: "18px 22px", fontSize: 15, color: row[1] === "해당 없음" ? "#9A8189" : undefined }}>{row[1]}</div>
+                  <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[2]}</div>
+                  <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[3]}</div>
+                </div>
+              ))}
+            </div>
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.9, color: "#9A8189", margin: "22px 0 0" }}>
             추가 하객 요금은 예식 후 실제 접수 인원 기준으로 정산되며, 차액은 예식 다음 영업일에 청구·환불됩니다. 모든 요금에는 출장비와 리포트 제공이 포함되어 있습니다.
@@ -155,9 +157,12 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section style={{ padding: "90px 24px 0" }}>
-        <div style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.15fr) minmax(0,1fr)", gap: 22, alignItems: "stretch" }}>
-          <div style={{ background: "#33232A", borderRadius: 6, padding: "44px 40px" }}>
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px) 0" }}>
+        <div
+          data-mq="split"
+          style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.15fr) minmax(0,1fr)", gap: 22, alignItems: "stretch" }}
+        >
+          <div style={{ background: "#33232A", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <div style={{ display: "inline-block", background: "#A9647E", color: "#FFFFFF", fontSize: 12, letterSpacing: "0.14em", padding: "6px 14px", borderRadius: 999, marginBottom: 22 }}>
               EVENT
             </div>
@@ -187,7 +192,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "44px 40px" }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>PAYMENT</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
               50% 선결제,
@@ -196,7 +201,7 @@ export default function PricingPage() {
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>
               예약 시 전체 금액의 50%만 결제하시면 예약이 확정됩니다. 나머지 50%는 예식 종료 후 정산 내역을 확인하고 결제하시면 됩니다.
             </p>
-            <div style={{ display: "flex", gap: 12, marginBottom: 22 }}>
+            <div style={{ display: "flex", gap: 12, marginBottom: 22, flexWrap: "wrap" }}>
               <div style={{ flex: 1, background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
                 <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예약 시</div>
                 <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>50%</div>
@@ -215,8 +220,8 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section style={{ padding: "90px 24px" }}>
-        <div style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))", gap: 22 }}>
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,280px),1fr))", gap: 22 }}>
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "34px 30px" }}>
             <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 14px" }}>모든 요금제 공통 포함</h3>
             <p style={{ fontSize: 14, lineHeight: 1.95, color: "#6B5A60", margin: 0 }}>
@@ -234,14 +239,14 @@ export default function PricingPage() {
 
       <section
         style={{
-          padding: "110px 24px",
+          padding: "clamp(70px,11vw,110px) clamp(18px,5vw,24px)",
           textAlign: "center",
           backgroundImage: "linear-gradient(rgba(18,18,18,0.58), rgba(35,35,35,0.66)), url('/img/couple.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center 30%",
         }}
       >
-        <h2 style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>날짜만 정하시면 됩니다</h2>
+        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>날짜만 정하시면 됩니다</h2>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#F3E9EB", margin: "0 0 34px" }}>온라인에서 예약과 결제까지 3분이면 끝납니다.</p>
         <OpenModalButton
           plan="standard"

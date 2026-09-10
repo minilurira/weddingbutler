@@ -139,3 +139,31 @@ button {
 .chip-hover:hover {
   border-color: #a9647e;
 }
+
+/* Responsive: mobile nav burger/drawer + layout collapses below 860px */
+@media (max-width: 860px) {
+  [data-mq="nav-menu"] {
+    display: none !important;
+  }
+  [data-mq="burger"] {
+    display: flex !important;
+  }
+  [data-mq="split"] {
+    grid-template-columns: 1fr !important;
+  }
+  [data-mq="split-left"] {
+    border-right: none !important;
+    border-bottom: 1px solid #e7d5da !important;
+  }
+  [data-mq="parallax"] {
+    background-attachment: scroll !important;
+  }
+  [data-mq="hero"] {
+    min-height: auto !important;
+  }
+}
+@media (min-width: 861px) {
+  [data-mq="drawer"] {
+    display: none !important;
+  }
+}

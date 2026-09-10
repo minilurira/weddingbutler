@@ -12,7 +12,7 @@ export function Footer({ full = false }: { full?: boolean }) {
 
   if (!full) {
     return (
-      <footer style={{ background: "#33232A", padding: "56px 24px 40px" }}>
+      <footer style={{ background: "#33232A", padding: "clamp(40px,7vw,56px) clamp(18px,5vw,24px) 40px" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
             WEDDING BUTLER
@@ -26,7 +26,7 @@ export function Footer({ full = false }: { full?: boolean }) {
   }
 
   return (
-    <footer style={{ background: "#33232A", padding: "70px 24px 44px" }}>
+    <footer style={{ background: "#33232A", padding: "clamp(48px,8vw,70px) clamp(18px,5vw,24px) 44px" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
         <div
           style={{
