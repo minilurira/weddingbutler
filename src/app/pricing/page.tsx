@@ -48,6 +48,104 @@ const COMPARE_ROWS: [string, string, string, string][] = [
   ["버틀러 추가", "해당 없음", "1명 10만원", "1명 10만원"],
 ];
 
+const INCLUDED = [
+  "축의금 접수 및 실시간 집계",
+  "방명록 안내 · 정리",
+  "식권 배부 및 수량 관리",
+  "답례품 전달 안내",
+  "2인 교차 검수 정산",
+  "엑셀 리포트 당일 전달",
+  "현금영수증 발행 대행",
+  "영업배상책임보험 가입",
+];
+
+const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
+  {
+    icon: "◷",
+    title: "예약 및 결제",
+    body: (
+      <>
+        <NoticeItem>전체 금액의 50%를 선결제하시면 예약이 확정됩니다.</NoticeItem>
+        <NoticeItem>잔금 50%는 예식 종료 후 정산 내역 확인 뒤 결제해 주세요.</NoticeItem>
+        <NoticeItem>추가 하객·추가 버틀러 요금은 잔금 결제 시 함께 청구됩니다.</NoticeItem>
+        <NoticeItem>현금영수증·세금계산서는 잔금 결제 후 다음 영업일에 처리됩니다.</NoticeItem>
+      </>
+    ),
+  },
+  {
+    icon: "↺",
+    title: "취소 및 환불",
+    body: (
+      <>
+        <NoticeItem>예식 7일 전까지 전액 환불, 3일 전까지 50% 환불됩니다.</NoticeItem>
+        <NoticeItem>예식 2일 전부터는 인력 배정이 확정되어 환불이 어렵습니다.</NoticeItem>
+        <NoticeItem>예식장 사정에 따른 일정 연기는 1회 무료로 변경해 드립니다.</NoticeItem>
+      </>
+    ),
+  },
+  {
+    icon: "!",
+    title: "사전 확인 필수",
+    body: (
+      <>
+        <NoticeItem>접수대 운영에 테이블·의자·전원 확보가 필요하니, 예식장에 설치 가능 여부를 확인해 주세요.</NoticeItem>
+        <NoticeItem>예식 3일 전까지 식순·하객 예상 인원·답례품 수량을 알려주셔야 정상 운영이 가능합니다.</NoticeItem>
+      </>
+    ),
+  },
+  {
+    icon: "⌸",
+    title: "하객 인원 기준",
+    body: (
+      <>
+        <NoticeLabel>기본 보장 인원</NoticeLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
+          <NoticeItem>스몰케어 · 스탠다드 — 버틀러 2명, 하객 200 ~ 300명</NoticeItem>
+          <NoticeItem>프리미엄 — 버틀러 4명, 양가 각 200명</NoticeItem>
+        </div>
+        <NoticeLabel>인원 초과 시</NoticeLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
+          <NoticeItem>보장 인원 초과 시 1명당 2,000원이 추가됩니다.</NoticeItem>
+          <NoticeItem>스탠다드 300명 초과 시 버틀러 1명 추가가 필요합니다.</NoticeItem>
+          <NoticeItem>프리미엄 양가 각 250명 초과 시 버틀러 1명 추가가 필요합니다.</NoticeItem>
+        </div>
+        <div style={{ background: "#FAF4F5", borderRadius: 6, padding: "18px 20px" }}>
+          <NoticeLabel muted>예시</NoticeLabel>
+          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+            <NoticeItem small>스몰케어 230명 → 30명 초과, 6만원 추가</NoticeItem>
+            <NoticeItem small>스탠다드 320명 → 20명 초과 4만원 + 버틀러 1명 추가 10만원</NoticeItem>
+            <NoticeItem small>프리미엄 양가 각 260명 → 120명 초과 24만원 + 버틀러 1명 10만원</NoticeItem>
+          </div>
+        </div>
+      </>
+    ),
+  },
+  {
+    icon: "ⓘ",
+    title: "참고 안내",
+    body: (
+      <>
+        <NoticeItem>서비스는 축의금 접수대 구역 내에서 진행되며, 해당 구역 밖에서 발생한 사안에 대해서는 책임을 지지 않습니다.</NoticeItem>
+        <NoticeItem>본인·혼주 외 제3자의 축의금 수령 요청은 확인 절차 후에만 진행되며, 하객 요청에 따른 예외 처리 시에는 별도로 안내드립니다.</NoticeItem>
+        <NoticeItem>서비스 지역은 수도권 기준이며, 그 외 지역은 출장 가능 여부를 별도로 문의해 주세요.</NoticeItem>
+      </>
+    ),
+  },
+];
+
+function NoticeItem({ children, small }: { children: React.ReactNode; small?: boolean }) {
+  return (
+    <div style={{ display: "flex", gap: 9, fontSize: small ? 13 : 14, lineHeight: small ? 1.7 : 1.75, color: "#6B5A60" }}>
+      <span style={{ color: "#CBA9B4" }}>·</span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+function NoticeLabel({ children, muted }: { children: React.ReactNode; muted?: boolean }) {
+  return <p style={{ fontSize: 12, letterSpacing: "0.08em", color: muted ? "#9A8189" : "#A9647E", margin: "0 0 10px", fontWeight: 500 }}>{children}</p>;
+}
+
 export default function PricingPage() {
   return (
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB", minHeight: "100vh" }}>
@@ -221,19 +319,47 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
-        <div style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,280px),1fr))", gap: 22 }}>
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "34px 30px" }}>
-            <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 14px" }}>모든 요금제 공통 포함</h3>
-            <p style={{ fontSize: 14, lineHeight: 1.95, color: "#6B5A60", margin: 0 }}>
-              축의금 접수 · 방명록 안내 · 식권 배부 · 답례품 전달 · 2인 교차 검수 정산 · 엑셀 리포트 당일 전달 · 영업배상책임보험
-            </p>
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.55)" }}>
+        <div style={{ maxWidth: 980, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 14 }}>
+            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
+            <span style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#A9647E" }}>INCLUDED</span>
+            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
           </div>
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "34px 30px" }}>
-            <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 14px" }}>환불 규정</h3>
-            <p style={{ fontSize: 14, lineHeight: 1.95, color: "#6B5A60", margin: 0 }}>
-              예식 7일 전까지 전액 환불, 3일 전까지 50% 환불. 2일 전부터는 인력 배정 확정으로 환불이 어렵습니다. 예식장 사정에 따른 연기는 1회 무료 변경.
-            </p>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
+            모든 패키지 공통 포함
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 14 }}>
+            {INCLUDED.map((item) => (
+              <div key={item} style={{ display: "flex", alignItems: "center", gap: 14, background: "#FFFFFF", border: "1px solid #EEDDE2", borderRadius: 999, padding: "18px 26px" }}>
+                <span style={{ flex: "none", color: "#A9647E", fontSize: 15, fontWeight: 700 }}>✓</span>
+                <span style={{ fontSize: 15, color: "#473A3F", lineHeight: 1.6 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 14 }}>
+            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
+            <span style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#A9647E" }}>NOTICE</span>
+            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
+          </div>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
+            예약 전 확인사항
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {NOTICES.map((n) => (
+              <div key={n.title} style={{ background: "#FFFFFF", border: "1px solid #EEDDE2", borderRadius: 8, padding: "clamp(22px,4vw,30px) clamp(20px,4vw,32px)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                  <span style={{ fontSize: 16, color: "#A9647E" }}>{n.icon}</span>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 600, margin: 0 }}>{n.title}</h3>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>{n.body}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
