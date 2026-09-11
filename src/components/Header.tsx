@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
@@ -45,31 +44,21 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
       >
         <Link
           href="/"
-          style={{ display: "flex", alignItems: "center", gap: 10, color: "#33232A" }}
+          style={{ display: "flex", flexDirection: "column", lineHeight: 1.05, color: "#33232A" }}
         >
-          <Image
-            src="/favicon-wb.png"
-            alt="웨딩버틀러"
-            width={34}
-            height={34}
-            style={{ width: "clamp(26px,6vw,34px)", height: "clamp(26px,6vw,34px)", borderRadius: 8, flexShrink: 0 }}
-            priority
-          />
-          <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
-            <span style={{ fontFamily: fontDisplay, fontSize: "clamp(17px,4.4vw,22px)", letterSpacing: "0.22em", color: "#A9647E" }}>
-              WEDDING BUTLER
-            </span>
-            <span
-              style={{
-                fontFamily: fontSerif,
-                fontSize: 12,
-                letterSpacing: "0.34em",
-                color: "#8A7C6D",
-                marginTop: 3,
-              }}
-            >
-              웨 딩 버 틀 러
-            </span>
+          <span style={{ fontFamily: fontDisplay, fontSize: "clamp(17px,4.4vw,22px)", letterSpacing: "0.22em", color: "#A9647E" }}>
+            WEDDING BUTLER
+          </span>
+          <span
+            style={{
+              fontFamily: fontSerif,
+              fontSize: 12,
+              letterSpacing: "0.34em",
+              color: "#8A7C6D",
+              marginTop: 3,
+            }}
+          >
+            웨 딩 버 틀 러
           </span>
         </Link>
         <div data-mq="nav-menu" style={{ display: "flex", alignItems: "center", gap: 28 }}>
