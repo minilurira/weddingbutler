@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { fontDisplay } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
@@ -14,8 +15,11 @@ export function Footer({ full = false }: { full?: boolean }) {
     return (
       <footer style={{ background: "#33232A", padding: "clamp(40px,7vw,56px) clamp(18px,5vw,24px) 40px" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
-          <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
-            WEDDING BUTLER
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Image src="/favicon-wb.png" alt="웨딩버틀러" width={28} height={28} style={{ borderRadius: 7 }} />
+            <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
+              WEDDING BUTLER
+            </div>
           </div>
           <p style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0", whiteSpace: "pre-line" }}>
             {BUSINESS_LINE}
@@ -38,8 +42,11 @@ export function Footer({ full = false }: { full?: boolean }) {
           }}
         >
           <div>
-            <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
-              WEDDING BUTLER
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Image src="/favicon-wb.png" alt="웨딩버틀러" width={28} height={28} style={{ borderRadius: 7 }} />
+              <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
+                WEDDING BUTLER
+              </div>
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.9, color: "#9A8189", margin: "16px 0 0" }}>
               축의대 대행 전문 서비스

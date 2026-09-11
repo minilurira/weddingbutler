@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/favicon-wb.png",
+    apple: "/favicon-wb.png",
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
