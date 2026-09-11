@@ -61,7 +61,7 @@ export function Footer({ full = false }: { full?: boolean }) {
                 서비스 소개
               </Link>
               <Link href="/pricing" style={{ color: "#9A8189" }}>
-                요금 안내
+                가격 안내
               </Link>
               <Link href="/contact" style={{ color: "#9A8189" }}>
                 문의하기

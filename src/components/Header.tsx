@@ -8,7 +8,7 @@ import { useReservation } from "@/components/ReservationProvider";
 
 const NAV = [
   { href: "/service", label: "서비스" },
-  { href: "/pricing", label: "요금제" },
+  { href: "/pricing", label: "가격 안내" },
   { href: "/contact", label: "문의하기" },
 ] as const;
 

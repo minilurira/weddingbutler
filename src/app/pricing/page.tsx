@@ -5,7 +5,7 @@ import { OpenModalButton } from "@/components/OpenModalButton";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
-  title: "요금제 안내",
+  title: "가격 안내",
   description: "하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.",
   alternates: { canonical: "/pricing" },
 };
@@ -153,7 +153,7 @@ export default function PricingPage() {
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE PLANS</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>요금제 안내</h1>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>가격 안내</h1>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
       </section>
 
