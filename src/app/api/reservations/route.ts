@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { calcPrice, PLANS, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
+import { syncReservationToAdmin } from "@/lib/admin-sync";
 import type {
   CreateReservationInput,
   CreateReservationResponse,
@@ -92,6 +93,23 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error || !data) throw error ?? new Error("insert returned no data");
+
+    // Fire-and-forget-ish: staff should see the request in the admin as soon
+    // as it's submitted, even before the deposit payment step runs. Never
+    // blocks or fails the customer's booking if the admin is unreachable.
+    void syncReservationToAdmin({
+      bookingNo,
+      plan,
+      year,
+      month,
+      day,
+      time,
+      name,
+      phone,
+      venue: venue ?? "",
+      guests,
+      payMethod,
+    });
 
     const response: CreateReservationResponse = {
       id: data.id,
