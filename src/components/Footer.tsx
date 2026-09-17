@@ -5,7 +5,22 @@ import { fontDisplay } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 
 const BUSINESS_LINE =
-  "웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502\n경기 성남시 분당구 운중로 124 8층 804-S80호 · cs@weddingbutler.co.kr\n© 2026 Wedding Butler. All rights reserved.";
+  "웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502\n경기 성남시 분당구 운중로 124 8층 804-S80호 · 010-5918-9203\n© 2026 Wedding Butler. All rights reserved.";
+
+const legalLinkStyle = { color: "#9A8189" } as const;
+
+function LegalLinks() {
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 18, fontSize: 12.5 }}>
+      <Link href="/terms" style={legalLinkStyle} className="footer-legal-hover">
+        서비스 이용약관
+      </Link>
+      <Link href="/privacy" style={{ ...legalLinkStyle, fontWeight: 700 }} className="footer-legal-hover">
+        개인정보처리방침
+      </Link>
+    </div>
+  );
+}
 
 export function Footer({ full = false }: { full?: boolean }) {
   const { openModal } = useReservation();
@@ -20,6 +35,7 @@ export function Footer({ full = false }: { full?: boolean }) {
           <p style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0", whiteSpace: "pre-line" }}>
             {BUSINESS_LINE}
           </p>
+          <LegalLinks />
         </div>
       </footer>
     );
@@ -54,7 +70,7 @@ export function Footer({ full = false }: { full?: boolean }) {
                 서비스 소개
               </Link>
               <Link href="/pricing" style={{ color: "#9A8189" }}>
-                가격 안내
+                가격안내
               </Link>
               <Link href="/contact" style={{ color: "#9A8189" }}>
                 문의하기
@@ -70,7 +86,9 @@ export function Footer({ full = false }: { full?: boolean }) {
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#D8C3C9", marginBottom: 16 }}>CONTACT</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 14, color: "#9A8189" }}>
-              <span>cs@weddingbutler.co.kr</span>
+              <a href="tel:01059189203" style={{ color: "#9A8189" }}>
+                010-5918-9203
+              </a>
               <span>
                 경기 성남시 분당구 운중로 124
                 <br />
@@ -83,6 +101,7 @@ export function Footer({ full = false }: { full?: boolean }) {
         <p style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "26px 0 0", whiteSpace: "pre-line" }}>
           {BUSINESS_LINE}
         </p>
+        <LegalLinks />
       </div>
     </footer>
   );

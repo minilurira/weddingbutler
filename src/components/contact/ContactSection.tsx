@@ -191,8 +191,10 @@ export function ContactSection() {
             <div style={{ fontFamily: "var(--font-display), serif", fontSize: 13, letterSpacing: "0.34em", color: "#E9CAD1", marginBottom: 20 }}>DIRECT</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, fontSize: 14, color: "#F3E9EB", lineHeight: 1.7 }}>
               <div>
-                <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>이메일</div>
-                cs@weddingbutler.co.kr
+                <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>전화</div>
+                <a href="tel:01059189203" style={{ color: "#F3E9EB" }}>
+                  010-5918-9203
+                </a>
               </div>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>카카오톡</div>

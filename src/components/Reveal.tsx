@@ -59,7 +59,7 @@ export function Reveal({
     <div
       ref={ref}
       className={`reveal${shown ? " reveal-in" : ""}`}
-      style={{ transitionDelay: delay ? `${delay}ms` : undefined, ...style }}
+      style={{ display: "grid", transitionDelay: delay ? `${delay}ms` : undefined, ...style }}
     >
       {children}
     </div>

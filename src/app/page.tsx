@@ -225,7 +225,7 @@ export default function HomePage() {
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>하객 규모에 맞춰 고르세요</h2>
-            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>모든 금액은 부가세 포함입니다. 자세한 금액과 비교표는 가격 안내 페이지에서 확인하세요.</p>
+            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>모든 금액은 부가세 포함입니다. 자세한 금액과 비교표는 가격안내 페이지에서 확인하세요.</p>
           </Reveal>
 
           <PriceTeaserCards />

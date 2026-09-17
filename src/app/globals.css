@@ -86,6 +86,13 @@ button {
   background: #c07e96 !important;
 }
 
+.footer-legal-hover {
+  transition: color 0.2s ease;
+}
+.footer-legal-hover:hover {
+  color: #e9cad1 !important;
+}
+
 .btn-outline-hover {
   transition: background 0.2s ease;
 }
