@@ -220,6 +220,7 @@ export const PRIVACY_HTML = `
       <div style="color:#9A8189;">대표자</div><div style="color:#4A3B41;">이강</div>
       <div style="color:#9A8189;">사업장 소재지</div><div style="color:#4A3B41;">경기도 성남시 분당구 운중로 124, 8층 804-S80호 (운중동)</div>
       <div style="color:#9A8189;">사업자등록번호</div><div style="color:#4A3B41;">677-08-03502</div>
+      <div style="color:#9A8189;">통신판매업 신고번호</div><div style="color:#4A3B41;">제2026-성남분당A-0820</div>
       <div style="color:#9A8189;">전화번호</div><div style="color:#4A3B41;">010-5918-9203</div>
     </div>
   </div>

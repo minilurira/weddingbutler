@@ -4,8 +4,25 @@ import Link from "next/link";
 import { fontDisplay } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 
-const BUSINESS_LINE =
-  "웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502\n경기 성남시 분당구 운중로 124 8층 804-S80호 · 010-5918-9203\n© 2026 Wedding Butler. All rights reserved.";
+function openBizInfo() {
+  window.open("https://www.ftc.go.kr/bizCommPop.do?wrkr_no=6770803502", "bizCommPop", "width=750,height=700");
+}
+
+function BusinessInfo({ style }: { style: React.CSSProperties }) {
+  return (
+    <p style={style}>
+      웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502
+      <br />
+      통신판매업신고{" "}
+      <a onClick={openBizInfo} style={{ color: "#9A8189", cursor: "pointer" }} className="footer-legal-hover">
+        제2026-성남분당A-0820
+      </a>
+      <br />
+      경기 성남시 분당구 운중로 124 8층 804-S80호 · 010-5918-9203
+      <br />© 2026 Wedding Butler. All rights reserved.
+    </p>
+  );
+}
 
 const legalLinkStyle = { color: "#9A8189" } as const;
 
@@ -32,9 +49,7 @@ export function Footer({ full = false }: { full?: boolean }) {
           <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
             WEDDING BUTLER
           </div>
-          <p style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0", whiteSpace: "pre-line" }}>
-            {BUSINESS_LINE}
-          </p>
+          <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0" }} />
           <LegalLinks />
         </div>
       </footer>
@@ -98,9 +113,7 @@ export function Footer({ full = false }: { full?: boolean }) {
             </div>
           </div>
         </div>
-        <p style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "26px 0 0", whiteSpace: "pre-line" }}>
-          {BUSINESS_LINE}
-        </p>
+        <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "26px 0 0" }} />
         <LegalLinks />
       </div>
     </footer>
