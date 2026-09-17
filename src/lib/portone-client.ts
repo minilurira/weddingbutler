@@ -18,7 +18,7 @@ export interface RequestDepositPaymentResult {
 
 /**
  * Kicks off a PortOne V2 payment for the given deposit amount, using the
- * Toss Payments channel configured for this store. Requires
+ * KG이니시스 channel configured for this store. Requires
  * NEXT_PUBLIC_PORTONE_STORE_ID and NEXT_PUBLIC_PORTONE_CHANNEL_KEY.
  */
 export async function requestDepositPayment(

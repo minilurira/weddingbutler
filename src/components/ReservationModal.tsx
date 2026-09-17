@@ -13,7 +13,11 @@ import {
   type PlanKey,
 } from "@/lib/plans";
 import { fontDisplay, fontSerif } from "@/lib/style";
-import type { CreateReservationResponse } from "@/lib/reservation-types";
+import { requestDepositPayment } from "@/lib/portone-client";
+import type {
+  ConfirmReservationResponse,
+  CreateReservationResponse,
+} from "@/lib/reservation-types";
 
 interface ModalState {
   plan: PlanKey;
@@ -212,8 +216,29 @@ export function ReservationModal({
         throw new Error(created.message || "예약 생성에 실패했습니다.");
       }
 
-      // PG(결제) 연동 전까지 임시 조치: 실제 결제 없이 예약만 접수한다.
-      patch({ phase: "done", bookingNo: created.bookingNo, error: null });
+      const payResult = await requestDepositPayment({
+        paymentId: created.paymentId,
+        orderName: created.orderName,
+        amount: created.amount,
+        payMethod: state.pay,
+        customerName: state.name,
+        customerPhone: state.phone,
+      });
+      if (!payResult.ok) {
+        throw new Error(payResult.message || "결제가 취소되었습니다.");
+      }
+
+      const confirmRes = await fetch(`/api/reservations/${created.id}/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId: created.paymentId }),
+      });
+      const confirmed = (await confirmRes.json()) as ConfirmReservationResponse;
+      if (!confirmed.ok) {
+        throw new Error(confirmed.message || "결제 확인에 실패했습니다.");
+      }
+
+      patch({ phase: "done", bookingNo: confirmed.bookingNo || created.bookingNo, error: null });
     } catch (err) {
       patch({
         phase: "form",
@@ -228,9 +253,9 @@ export function ReservationModal({
 
   const submitLabel =
     state.phase === "submitting"
-      ? "예약 접수 중..."
+      ? "결제 진행 중..."
       : ready
-        ? "예약 신청하기"
+        ? `${won(price.deposit)} 선결제하기`
         : "날짜 · 시간 · 정보를 입력해 주세요";
 
   const submitStyle: CSSProperties = {
@@ -522,9 +547,9 @@ export function ReservationModal({
               >
                 ✓
               </div>
-              <h3 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 14px" }}>예약 신청이 접수되었습니다</h3>
+              <h3 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 14px" }}>예약이 확정되었습니다</h3>
               <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 32px" }}>
-                담당 매니저가 24시간 내로 연락드려 결제를 안내해 드립니다.
+                담당 매니저가 24시간 내로 연락드립니다.
                 <br />두 분의 가장 빛나는 날, 저희가 함께하겠습니다.
               </p>
               <div
@@ -542,7 +567,7 @@ export function ReservationModal({
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
                 <SummaryRow label="요금제" value={P.name} wide />
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
-                <SummaryRow label="선결제 예정 금액" value={won(price.deposit)} wide />
+                <SummaryRow label="선결제 금액" value={won(price.deposit)} wide />
               </div>
               <div style={{ marginTop: 30, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <button onClick={reset} className="round-nav-hover" style={outlineBtnStyle}>
