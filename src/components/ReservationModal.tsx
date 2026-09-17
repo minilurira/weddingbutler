@@ -444,7 +444,7 @@ export function ReservationModal({
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 14, marginTop: 18 }}>
-                  <div style={fieldLabelStyle}>
+                  <div style={numFieldLabelStyle}>
                     예상 하객 수
                     <div style={stepperWrapStyle}>
                       <button
@@ -464,8 +464,10 @@ export function ReservationModal({
                       </button>
                     </div>
                   </div>
-                  <div style={fieldLabelStyle}>
-                    버틀러 추가 <span style={{ color: "#9A8189" }}>(1명 10만원)</span>
+                  <div style={numFieldLabelStyle}>
+                    <span style={{ whiteSpace: "nowrap" }}>
+                      버틀러 추가 <span style={{ color: "#9A8189", fontSize: 11.5 }}>(1명 10만원)</span>
+                    </span>
                     <div style={stepperWrapStyle}>
                       <button
                         onClick={() => patch((s) => ({ extraButlers: Math.max(0, s.extraButlers - 1) }))}
@@ -694,6 +696,15 @@ const navBtnStyle: CSSProperties = {
 const fieldLabelStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
+  gap: 7,
+  fontSize: 13,
+  color: "#6B5A60",
+};
+
+const numFieldLabelStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-end",
   gap: 7,
   fontSize: 13,
   color: "#6B5A60",
