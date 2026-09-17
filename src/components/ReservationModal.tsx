@@ -31,6 +31,8 @@ interface ModalState {
   phone: string;
   venue: string;
   pay: PayMethod;
+  agree: boolean;
+  privacyOpen: boolean;
   phase: "form" | "submitting" | "done";
   bookingNo: string;
   error: string | null;
@@ -50,6 +52,8 @@ function initialState(plan: PlanKey): ModalState {
     phone: "",
     venue: "",
     pay: "신용카드",
+    agree: false,
+    privacyOpen: false,
     phase: "form",
     bookingNo: "",
     error: null,
@@ -146,7 +150,8 @@ export function ReservationModal({
 
   const P = PLANS[state.plan];
   const price = calcPrice(state.plan, state.guests, state.extraButlers);
-  const ready = !!(state.date && state.time && state.name.trim() && state.phone.trim());
+  const filled = !!(state.date && state.time && state.name.trim() && state.phone.trim());
+  const ready = filled && state.agree;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -162,13 +167,11 @@ export function ReservationModal({
     const dt = new Date(state.y, state.m - 1, d);
     const dow = dt.getDay();
     const past = dt < today;
-    const isWeekend = dow === 0 || dow === 6;
-    const disabled = past || !isWeekend;
-    const sel = state.date === d && !disabled;
+    const sel = state.date === d && !past;
     days.push({
       key: "d" + d,
       label: String(d),
-      onClick: disabled ? null : () => patch({ date: d }),
+      onClick: past ? null : () => patch({ date: d }),
       style: {
         height: 42,
         display: "flex",
@@ -177,10 +180,10 @@ export function ReservationModal({
         fontSize: 14,
         borderRadius: 3,
         userSelect: "none",
-        cursor: disabled ? "default" : "pointer",
-        background: sel ? "#33232A" : disabled ? "transparent" : "#FFFFFF",
-        border: "1px solid " + (sel ? "#33232A" : disabled ? "transparent" : "#E7D5DA"),
-        color: sel ? "#FFFFFF" : disabled ? "#D8C3C9" : dow === 0 ? "#C0607F" : "#8A9BB0",
+        cursor: past ? "default" : "pointer",
+        background: sel ? "#33232A" : past ? "transparent" : "#FFFFFF",
+        border: "1px solid " + (sel ? "#33232A" : past ? "transparent" : "#E7D5DA"),
+        color: sel ? "#FFFFFF" : past ? "#D8C3C9" : dow === 0 ? "#C0607F" : dow === 6 ? "#8A9BB0" : "#473A3F",
         transition: "background .2s ease, border-color .2s ease, color .2s ease",
       },
     });
@@ -256,7 +259,9 @@ export function ReservationModal({
       ? "결제 진행 중..."
       : ready
         ? `${won(price.deposit)} 선결제하기`
-        : "날짜 · 시간 · 정보를 입력해 주세요";
+        : filled
+          ? "개인정보 수집·이용에 동의해 주세요"
+          : "날짜 · 시간 · 정보를 입력해 주세요";
 
   const submitStyle: CSSProperties = {
     width: "100%",
@@ -273,6 +278,7 @@ export function ReservationModal({
   };
 
   return (
+    <>
     <div
       data-testid="reservation-modal"
       onClick={handleClose}
@@ -289,8 +295,8 @@ export function ReservationModal({
       }}
     >
       <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 1060, margin: "0 auto", position: "relative" }}>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 22 }}>
-          <div>
+        <div data-mq="modal-head" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 22 }}>
+          <div style={{ minWidth: 0, paddingRight: 52 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#E9CAD1", margin: "0 0 10px" }}>
               RESERVATION
             </p>
@@ -302,6 +308,7 @@ export function ReservationModal({
             </p>
           </div>
           <button
+            data-mq="modal-close"
             onClick={handleClose}
             className="modal-close-hover"
             style={{
@@ -343,13 +350,16 @@ export function ReservationModal({
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                <div
+                  data-mq="cal-head"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 20 }}
+                >
                   <span style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E" }}>STEP 2 · 예식 날짜</span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <button onClick={() => shiftMonth(-1)} className="round-nav-hover" style={navBtnStyle}>
                       ‹
                     </button>
-                    <span style={{ fontFamily: fontSerif, fontSize: 17, minWidth: 118, textAlign: "center" }}>
+                    <span style={{ fontFamily: fontSerif, fontSize: 17, minWidth: 104, textAlign: "center", whiteSpace: "nowrap" }}>
                       {state.y}년 {state.m}월
                     </span>
                     <button onClick={() => shiftMonth(1)} className="round-nav-hover" style={navBtnStyle}>
@@ -357,7 +367,6 @@ export function ReservationModal({
                     </button>
                   </div>
                 </div>
-                <p style={{ fontSize: 12, color: "#9A8189", margin: "0 0 12px" }}>토요일 · 일요일만 예약 가능합니다.</p>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 6, marginBottom: 8 }}>
                   {["일", "월", "화", "수", "목", "금", "토"].map((d, i) => (
@@ -385,7 +394,7 @@ export function ReservationModal({
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 3 · 예식 시간</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px,1fr))", gap: 8 }}>
+                <div data-mq="slots" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px,1fr))", gap: 8 }}>
                   {TIME_SLOTS.map((t) => (
                     <div key={t} onClick={() => patch({ time: t })} style={chipStyle(state.time === t)}>
                       {t}
@@ -417,7 +426,7 @@ export function ReservationModal({
                       style={fieldInputStyle}
                     />
                   </label>
-                  <label style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
+                  <label data-mq="span2" style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
                     예식장 · 홀 이름
                     <input
                       value={state.venue}
@@ -505,17 +514,35 @@ export function ReservationModal({
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "20px 0 0" }}>
-                  <span style={{ fontSize: 13, color: "#9A8189" }}>총 금액 (부가세 포함)</span>
+                  <span style={{ fontSize: 13, color: "#9A8189" }}>총 결제 금액</span>
                   <span style={{ fontSize: 14, color: "#6B5A60" }}>{won(price.total)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0 6px" }}>
-                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 결제할 선결제 금액</span>
+                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 선결제 금액</span>
                   <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
                 <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 22 }}>
-                  예식 당일 전체 금액의 50%만 결제됩니다 · 예식 후 잔금 {won(price.balance)}
+                  부가세 포함 · 예식 후 잔금 {won(price.balance)}
                 </div>
 
+                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "6px 8px", marginBottom: 14 }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12.5, color: "#473A3F", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={state.agree}
+                      onChange={() => patch((s) => ({ agree: !s.agree }))}
+                      style={{ width: 14, height: 14, margin: 0, flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
+                    />
+                    개인정보 수집·이용 동의
+                  </label>
+                  <a
+                    onClick={() => patch({ privacyOpen: true })}
+                    className="privacy-link-hover"
+                    style={{ fontSize: 12, color: "#8E4E67", textDecoration: "underline", cursor: "pointer", whiteSpace: "nowrap" }}
+                  >
+                    전문 보기
+                  </a>
+                </div>
                 <button onClick={submit} disabled={!ready || state.phase === "submitting"} style={submitStyle}>
                   {submitLabel}
                 </button>
@@ -582,6 +609,59 @@ export function ReservationModal({
         </div>
       </div>
     </div>
+    {state.privacyOpen && (
+      <div
+        onClick={() => patch({ privacyOpen: false })}
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 320,
+          background: "rgba(28,18,22,0.6)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "clamp(10px,3vw,40px)",
+          fontFamily: "var(--font-sans), sans-serif",
+        }}
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            width: "100%",
+            maxWidth: 880,
+            height: "min(90vh,100%)",
+            background: "#FFFFFF",
+            borderRadius: 6,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 16,
+              padding: "16px 20px",
+              borderBottom: "1px solid #EBDCE0",
+              flex: "0 0 auto",
+            }}
+          >
+            <div style={{ fontFamily: fontSerif, fontSize: 15, fontWeight: 600, color: "#33232A" }}>개인정보처리방침</div>
+            <button
+              onClick={() => patch({ privacyOpen: false })}
+              className="round-nav-hover"
+              style={{ border: "1px solid #E2CDD4", background: "#FFFFFF", color: "#6B5A60", borderRadius: 999, padding: "8px 18px", fontSize: 13, cursor: "pointer" }}
+            >
+              닫기
+            </button>
+          </div>
+          <iframe src="/privacy" title="개인정보처리방침" style={{ flex: "1 1 auto", width: "100%", border: "none", display: "block" }} />
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 

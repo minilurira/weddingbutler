@@ -93,6 +93,13 @@ button {
   color: #e9cad1 !important;
 }
 
+.privacy-link-hover {
+  transition: color 0.2s ease;
+}
+.privacy-link-hover:hover {
+  color: #33232a !important;
+}
+
 .btn-outline-hover {
   transition: background 0.2s ease;
 }
@@ -179,5 +186,28 @@ button {
 @media (min-width: 861px) {
   [data-mq="drawer"] {
     display: none !important;
+  }
+}
+
+/* Reservation modal: extra collapses below 560px */
+@media (max-width: 560px) {
+  [data-mq="cal-head"] {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+  [data-mq="slots"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  [data-mq="modal-head"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  [data-mq="modal-close"] {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+  }
+  [data-mq="span2"] {
+    grid-column: span 1 !important;
   }
 }

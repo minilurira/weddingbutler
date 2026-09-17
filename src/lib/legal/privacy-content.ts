@@ -6,7 +6,8 @@ export const PRIVACY_HTML = `
   <p style="font-size:13px; color:#9A8189; margin:0 0 28px;">시행일 2026년 1월 1일</p>
 
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">웨딩버틀러(이하 “회사”)는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 20px;">회사는 결혼식 축의금 접수·기록·인계 대행 서비스를 제공하는 과정에서, 서비스를 신청한 의뢰인뿐만 아니라 예식에 참석한 하객의 개인정보를 처리합니다. 회사는 봉투를 개봉하지 아니하므로 하객이 낸 금액은 수집하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회사는 결혼식 축의금 접수·기록·인계 대행 서비스를 제공하는 과정에서, 서비스를 신청한 의뢰인뿐만 아니라 예식에 참석한 하객의 개인정보를 처리합니다. 회사는 봉투를 개봉하지 아니하므로 하객이 낸 금액은 수집하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 20px;">회사는 회원제를 운영하지 아니합니다. 이용자는 회원 가입 없이 비회원으로 예약을 신청하며, 회사는 아이디·계정 비밀번호 등 회원 관리를 위한 개인정보를 수집하지 아니합니다.</p>
 
   <div style="background:#FAF3F5; border-radius:4px; padding:22px 24px; margin:0 0 34px;">
     <div style="font-size:12px; letter-spacing:0.2em; color:#A9647E; margin-bottom:12px;">목차</div>
@@ -31,15 +32,17 @@ export const PRIVACY_HTML = `
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:0 0 12px;">1. 개인정보의 처리 목적</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">회사는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행합니다.</p>
-  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(1) 회원 가입 및 관리</h3>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지, 각종 고지·통지, 고충처리를 목적으로 개인정보를 처리합니다.</p>
+  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(1) 비회원 예약의 확인 및 관리</h3>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">예약 신청자 본인 확인, 예약 내역 조회 요청에 대한 응대, 각종 고지·통지, 고충처리, 서비스 부정이용 방지를 목적으로 개인정보를 처리합니다. 회사는 회원제를 운영하지 아니하므로 회원 가입의사 확인, 회원자격 유지·관리, 회원 탈퇴에 관한 개인정보는 처리하지 아니합니다.</p>
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(2) 서비스의 예약 및 제공</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">예약 신청 접수 및 예약 가능 여부 확인, 이용계약의 체결, 대금 결제 및 정산, 매니저 배정 및 현장 운영, 축의금 인계 및 인수자 본인 확인, 정산 리포트 제공, 계약 관련 고지·통지를 목적으로 개인정보를 처리합니다.</p>
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(3) 접수 내역의 기록 및 인계</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">축의금 봉투의 접수 사실을 기록하고 이를 정산 리포트로 작성하여 의뢰인에게 인계하는 것을 목적으로, 하객의 성명 및 봉투 고유번호를 처리합니다.</p>
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(4) 분쟁의 예방 및 대응</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">접수·인계 과정에서 발생할 수 있는 분쟁의 예방 및 사실관계 확인을 목적으로, 운영 구역의 영상을 처리합니다.</p>
-  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(5) 마케팅 및 광고에의 활용</h3>
+  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(5) 게시판의 운영</h3>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">이용후기 및 상품 문의 게시판의 운영, 게시물 작성자 본인 확인, 문의에 대한 답변 및 그 결과의 통지를 목적으로 개인정보를 처리합니다.</p>
+  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(6) 마케팅 및 광고에의 활용</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">이벤트 및 광고성 정보 제공, 서비스 이용에 대한 통계 작성을 목적으로 개인정보를 처리합니다. 이 목적의 처리는 정보주체가 별도로 동의한 경우에 한합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">2. 개인정보의 처리 및 보유 기간</h2>
@@ -53,11 +56,12 @@ export const PRIVACY_HTML = `
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">회원 가입 및 관리</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">회원 탈퇴 시까지</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">서비스 예약 및 제공</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">서비스 제공 완료 및 대금 정산 완료 시까지</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약 신청 및 서비스 제공</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">서비스 제공 완료 및 대금 정산 완료 시까지<br />(제3항의 법정 보존기간이 적용되는 항목은 그 기간 동안 보존)</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약 조회용 비밀번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">서비스 제공 완료 및 대금 정산 완료 후 지체 없이 파기</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">하객의 성명 및 봉투 고유번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식일로부터 30일까지<br />(정산 리포트 인계로 목적이 달성된 후 회사 보관본을 파기)</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">운영 구역 촬영 영상</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식일로부터 30일까지</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">마케팅 및 광고 활용</td><td style="padding:11px 14px; color:#4A3B41;">동의 철회 시 또는 회원 탈퇴 시까지</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">게시판 게시물 및 작성자 정보</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">게시물 삭제 시까지<br />(작성자의 삭제 요청이 없는 경우 게시일로부터 3년까지)</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">마케팅 및 광고 활용</td><td style="padding:11px 14px; color:#4A3B41;">동의 철회 시까지<br />(동의일로부터 2년마다 수신동의 여부를 확인하며, 확인에 응하지 아니하는 경우 파기)</td></tr>
       </tbody>
     </table>
   </div>
@@ -69,18 +73,19 @@ export const PRIVACY_HTML = `
         <tr>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">보존 항목</th>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">보존 근거</th>
-          <th style="text-align:right; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">기간</th>
+          <th style="text-align:right; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">보존 기간</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">계약 또는 청약철회 등에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">5년</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">대금 결제 및 서비스 공급에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">5년</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">소비자 불만 또는 분쟁처리에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">3년</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">표시·광고에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">6개월</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">계약 또는 청약철회 등에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래 등에서의 소비자보호에 관한 법률</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">5년</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">대금 결제 및 서비스 공급에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래 등에서의 소비자보호에 관한 법률</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">5년</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">소비자 불만 또는 분쟁처리에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래 등에서의 소비자보호에 관한 법률</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">3년</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">표시·광고에 관한 기록</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">전자상거래 등에서의 소비자보호에 관한 법률</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41;">6개월</td></tr>
         <tr><td style="padding:11px 14px; color:#4A3B41;">서비스 방문 기록</td><td style="padding:11px 14px; color:#6B5A60;">통신비밀보호법</td><td style="padding:11px 14px; text-align:right; color:#4A3B41;">3개월</td></tr>
       </tbody>
     </table>
   </div>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(4) 회사는 회원제를 운영하지 아니하므로, 장기 미접속 이용자의 개인정보를 별도로 분리 보관하는 절차(휴면계정 전환)를 두지 아니합니다. 예약 관련 개인정보는 제1항 및 제3항의 기간이 경과하면 지체 없이 파기합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">3. 처리하는 개인정보의 항목 및 수집 방법</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(1) 처리하는 개인정보 항목</p>
@@ -94,15 +99,17 @@ export const PRIVACY_HTML = `
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">회원 가입</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">아이디, 비밀번호, 이름, 휴대전화번호, 이메일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약 신청<br />(회원·비회원 공통)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">의뢰인 성명, 휴대전화번호, 이메일, 예식 일시 및 장소, 예상 하객 규모, (비회원의 경우) 예약 조회 비밀번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신랑·신부 성명</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약 신청<br />(비회원)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">의뢰인 성명, 휴대전화번호, 이메일, 예식 일시 및 장소, 예상 하객 규모, 예약 조회용 비밀번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신랑·신부 성명</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">인수자 지정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">인수자 성명, 의뢰인과의 관계, 휴대전화번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">현장 접수</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">하객 성명, 봉투 고유번호, 신랑측·신부측 구분</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">결제</td><td style="padding:11px 14px; color:#4A3B41;">결제 수단 정보, 결제 승인 내역, 입금자명</td><td style="padding:11px 14px; color:#9A8189;">―</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">결제</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">결제 수단 정보, 결제 승인 내역, 입금자명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">게시판 이용<br />(이용후기·문의)</td><td style="padding:11px 14px; color:#4A3B41;">작성자명(닉네임 사용 가능), 게시물 조회·수정용 비밀번호</td><td style="padding:11px 14px; color:#4A3B41;">답변 알림 수신을 원하는 경우 휴대전화번호 또는 이메일</td></tr>
       </tbody>
     </table>
   </div>
-  <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 14px;">회사는 밀봉 방식으로만 서비스를 제공하므로, 하객이 낸 금액은 어떠한 경우에도 수집·기록하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회사는 회원제를 운영하지 아니하므로 아이디, 계정 비밀번호, 생년월일, 성별 등 회원 관리를 위한 개인정보를 수집하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 8px;">회사는 밀봉 방식으로만 서비스를 제공하므로, 하객이 낸 금액은 어떠한 경우에도 수집·기록하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">예약 조회용 비밀번호 및 게시물 비밀번호는 본인 확인만을 위하여 사용되며, 회사는 이를 복호화가 불가능한 방식으로 저장합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 서비스 이용과정에서 아래의 정보가 자동으로 생성되어 수집될 수 있습니다. — 서비스 이용기록, 접속 로그, 쿠키, 접속 IP 정보, 결제기록, 운영 구역 촬영 영상</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 수집 방법 — 홈페이지, 전화·문자·메신저를 통한 상담, 서면 계약서 및 인계확인서, 현장 접수 기록, 생성정보 수집 도구를 통한 수집</p>
 
@@ -122,8 +129,8 @@ export const PRIVACY_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(5) 촬영을 원하지 아니하는 정보주체는 현장 매니저에게 촬영 거부 의사를 표시할 수 있으며, 회사는 해당 정보주체가 촬영되지 않도록 조치합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">6. 만 14세 미만 아동의 개인정보 처리에 관한 사항</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 만 14세 미만 아동의 회원 가입을 받지 아니하며, 만 14세 미만 아동의 개인정보를 수집하지 아니합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 만 14세 미만 아동의 개인정보가 수집된 사실이 확인되는 경우, 회사는 지체 없이 해당 정보를 파기합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 만 14세 미만 아동을 대상으로 서비스를 제공하지 아니하며, 만 14세 미만 아동의 예약 신청 및 게시판 이용을 허용하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 회사는 만 14세 미만 아동의 개인정보를 수집하지 아니하며, 수집된 사실이 확인되는 경우 지체 없이 해당 정보를 파기합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">7. 개인정보의 제3자 제공에 관한 사항</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 정보주체의 개인정보를 제1항에서 명시한 목적 범위 내에서만 처리하며, 정보주체의 동의 또는 법률의 특별한 규정 등 「개인정보 보호법」 제17조 및 제18조에 해당하는 경우에만 제3자에게 제공합니다.</p>
@@ -141,9 +148,8 @@ export const PRIVACY_HTML = `
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">카페24 주식회사</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">쇼핑몰 호스팅 서비스의 시스템 제공 및 유지·보수</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">[ PG사명 — 계약 체결 후 기재 ]</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신용카드 결제 처리 및 결제 대행</td></tr>
-        <tr><td style="padding:11px 14px; color:#9A8189;">[ 문자·알림톡 발송 업체 — 이용 시 기재 ]</td><td style="padding:11px 14px; color:#4A3B41;">예약 확인 및 안내 메시지 발송</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이니시스</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신용카드 등 결제 처리 및 결제 대행</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">솔라피</td><td style="padding:11px 14px; color:#4A3B41;">예약 확인 및 안내 메시지(알림톡·문자) 발송</td></tr>
       </tbody>
     </table>
   </div>
@@ -163,28 +169,31 @@ export const PRIVACY_HTML = `
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">10. 정보주체와 법정대리인의 권리·의무 및 그 행사방법</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 정보주체는 회사에 대하여 언제든지 개인정보의 열람·정정·삭제·처리정지를 요구할 수 있습니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 회원은 홈페이지의 「회원정보 수정」을 통해 직접 개인정보를 조회·수정할 수 있으며, 「회원 탈퇴」를 통해 동의를 철회할 수 있습니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 하객은 자신의 성명 및 봉투 고유번호에 대하여 열람·정정·삭제를 요구할 수 있으며, 아래 개인정보 보호책임자에게 연락하시면 본인 확인 절차를 거친 후 지체 없이 조치합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(4) 제1항에 따른 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자를 통하여 할 수 있으며, 이 경우 「개인정보 처리 방법에 관한 고시」 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(5) 개인정보의 열람 및 처리정지 요구는 「개인정보 보호법」 제35조 제4항 및 제37조 제2항에 의하여 제한될 수 있으며, 다른 법령에서 그 개인정보가 수집 대상으로 명시되어 있는 경우에는 삭제를 요구할 수 없습니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(6) 회사는 열람·정정·삭제·처리정지 요구 시 요구를 한 자가 본인이거나 정당한 대리인인지를 확인합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 회사는 회원제를 운영하지 아니하므로 회원정보 수정 및 회원 탈퇴 절차를 두지 아니합니다. 예약자는 홈페이지의 「비회원 주문조회」에서 주문번호와 예약 시 설정한 비밀번호를 입력하여 본인의 예약 내역을 열람할 수 있으며, 정정·삭제·처리정지 및 마케팅 수신동의 철회는 아래 제13항의 개인정보 보호책임자에게 요청할 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 게시판에 게시물을 작성한 정보주체는 게시 시 설정한 비밀번호를 입력하여 본인의 게시물을 직접 수정·삭제할 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(4) 하객은 자신의 성명 및 봉투 고유번호에 대하여 열람·정정·삭제를 요구할 수 있으며, 아래 개인정보 보호책임자에게 연락하시면 본인 확인 절차를 거친 후 지체 없이 조치합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(5) 제1항에 따른 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자를 통하여 할 수 있으며, 이 경우 「개인정보 처리 방법에 관한 고시」 별지 제11호 서식에 따른 위임장을 제출하여야 합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(6) 개인정보의 열람 및 처리정지 요구는 「개인정보 보호법」 제35조 제4항 및 제37조 제2항에 의하여 제한될 수 있으며, 다른 법령에서 그 개인정보가 수집 대상으로 명시되어 있는 경우에는 삭제를 요구할 수 없습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(7) 회사는 열람·정정·삭제·처리정지 요구 시 요구를 한 자가 본인이거나 정당한 대리인인지를 확인합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">11. 개인정보의 안전성 확보조치</h2>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회사는 개인정보의 안전성 확보를 위하여 다음의 조치를 취하고 있습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 관리적 조치 — 내부 관리계획의 수립·시행, 개인정보 취급자의 최소화 및 지정, 매니저에 대한 정기적 개인정보 보호 교육 및 비밀유지 서약</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 기술적 조치 — 개인정보 처리시스템의 접근권한 관리, 접근통제, 개인정보의 암호화, 보안 프로그램의 설치 및 갱신</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 기술적 조치 — 개인정보 처리시스템의 접근권한 관리, 접근통제, 개인정보의 암호화, 예약 조회용 비밀번호 및 게시물 비밀번호의 일방향 암호화 저장, 보안 프로그램의 설치 및 갱신</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 물리적 조치 — 현장 접수 장부 및 인계확인서 등 서면 자료의 잠금 보관, 촬영 영상 저장 매체의 접근 통제</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(4) 현장 운영상의 조치 — 매니저 2인의 상호 확인을 원칙으로 하며, 매니저 개인 기기에 저장된 기록 사본은 업무 종료 후 지체 없이 파기합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">12. 개인정보를 자동으로 수집하는 장치의 설치·운영 및 그 거부에 관한 사항</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회사는 이용자에게 맞춤형 서비스를 제공하기 위하여 이용 정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다. 쿠키는 웹사이트를 운영하는 서버가 이용자의 브라우저에 보내는 소량의 정보로서, 이용자의 기기에 저장되기도 합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 쿠키의 사용 목적 — 이용자가 방문한 서비스와 페이지에 대한 방문 및 이용 형태, 보안 접속 여부 등을 파악하여 최적화된 정보를 제공하기 위해 사용됩니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 쿠키의 설치·운영 및 거부 — 이용자는 웹브라우저 상단의 도구 &gt; 인터넷 옵션 &gt; 개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부할 수 있습니다. 다만 쿠키 저장을 거부할 경우 맞춤형 서비스 이용에 어려움이 발생할 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">회사는 서비스의 제공 및 보안을 위하여 이용 정보를 저장하고 수시로 불러오는 ‘쿠키(cookie)’를 사용합니다. 쿠키는 웹사이트를 운영하는 서버가 이용자의 브라우저에 보내는 소량의 정보로서, 이용자의 기기에 저장되기도 합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 쿠키의 사용 목적 — 이용자가 방문한 서비스와 페이지에 대한 방문 및 이용 형태, 보안 접속 여부, 비회원 예약의 진행 상태를 유지하기 위하여 사용됩니다. 회사는 회원제를 운영하지 아니하므로 쿠키를 이용하여 개인을 식별하거나 이용자별 프로파일을 축적하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 쿠키의 설치·운영 및 거부 — 이용자는 웹브라우저 상단의 도구 &gt; 인터넷 옵션 &gt; 개인정보 메뉴의 옵션 설정을 통해 쿠키 저장을 거부할 수 있습니다. 다만 쿠키 저장을 거부할 경우 예약 진행 및 주문조회 등 서비스 이용에 어려움이 발생할 수 있습니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">13. 개인정보 보호책임자</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(1) 회사는 개인정보 처리에 관한 업무를 총괄하여 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
   <div style="display:grid; grid-template-columns:140px 1fr; gap:10px 16px; font-size:13.5px; line-height:1.7; background:#FAF3F5; border-radius:4px; padding:20px 22px; margin:0 0 14px;">
     <div style="color:#9A8189;">개인정보 보호책임자</div><div style="color:#4A3B41;">이강 (대표)</div>
     <div style="color:#9A8189;">연락처</div><div style="color:#4A3B41;">010-5918-9203</div>
+    <div style="color:#9A8189;">이메일</div><div style="color:#4A3B41;">cs@weddingbutler.co.kr</div>
   </div>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 정보주체는 회사의 서비스를 이용하면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자에게 문의할 수 있습니다. 회사는 이에 대하여 지체 없이 답변 및 처리합니다.</p>
 
@@ -200,10 +209,10 @@ export const PRIVACY_HTML = `
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">개인정보분쟁조정위원회</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">1833-6972</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">privacy.go.kr</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">개인정보침해신고센터</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">118</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">privacy.kisa.or.kr</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">대검찰청</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">1301</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">www.spo.go.kr</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">경찰청</td><td style="padding:11px 14px; color:#4A3B41;">182</td><td style="padding:11px 14px; color:#6B5A60;">ecrm.cyber.go.kr</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">개인정보분쟁조정위원회</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">(국번없이) 1833-6972</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">privacy.go.kr</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">개인정보침해신고센터</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">(국번없이) 118</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">privacy.kisa.or.kr</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">대검찰청</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">(국번없이) 1301</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#6B5A60;">www.spo.go.kr</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">경찰청</td><td style="padding:11px 14px; color:#4A3B41;">(국번없이) 182</td><td style="padding:11px 14px; color:#6B5A60;">ecrm.cyber.go.kr</td></tr>
       </tbody>
     </table>
   </div>
@@ -211,7 +220,23 @@ export const PRIVACY_HTML = `
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">15. 개인정보처리방침의 변경</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 이 개인정보처리방침은 2026년 1월 1일부터 적용됩니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 이 방침의 내용 추가, 삭제 및 수정이 있을 경우에는 개정 최소 7일 전부터 홈페이지 공지사항을 통하여 고지합니다. 다만 개인정보의 수집 및 활용, 제3자 제공 등 정보주체의 권리에 중요한 변경이 있을 경우에는 최소 30일 전에 고지합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(2) 이 방침의 내용 추가, 삭제 및 수정이 있을 경우에는 개정 최소 7일 전부터 홈페이지 공지사항을 통하여 고지합니다. 다만 개인정보의 수집 및 활용, 제3자 제공 등 정보주체의 권리에 중요한 변경이 있을 경우에는 최소 30일 전에 고지합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(3) 개정 이력</p>
+  <div style="overflow-x:auto; margin:0 0 14px;">
+    <table style="width:100%; border-collapse:collapse; font-size:13.5px; min-width:460px;">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">구분</th>
+          <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">시행일</th>
+          <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">주요 내용</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 1월 1일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">최초 수립</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">제1차 개정</td><td style="padding:11px 14px; color:#4A3B41;">2026년 9월 17일</td><td style="padding:11px 14px; color:#4A3B41;">회원제 운영 중단에 따른 개정. 회원 가입·관리 및 회원 탈퇴 관련 조항을 삭제하고, 비회원 예약 조회 및 게시판 이용에 관한 처리 항목을 신설</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div style="margin:40px 0 0; padding:28px 0 0; border-top:1px solid #EBDCE0;">
     <div style="font-size:12px; letter-spacing:0.22em; color:#A9647E; margin:0 0 16px;">사업자 정보</div>
