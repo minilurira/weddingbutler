@@ -52,6 +52,10 @@ export async function POST(req: NextRequest) {
   if (ceremonyDate < today) {
     return NextResponse.json({ message: "예식 날짜는 오늘 이후여야 합니다." }, { status: 400 });
   }
+  const dow = ceremonyDate.getDay();
+  if (dow !== 0 && dow !== 6) {
+    return NextResponse.json({ message: "토요일 · 일요일만 예약 가능합니다." }, { status: 400 });
+  }
 
   const price = calcPrice(plan, guests, extraButlers);
   const planInfo = PLANS[plan];

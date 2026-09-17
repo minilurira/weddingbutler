@@ -166,12 +166,14 @@ export function ReservationModal({
   for (let d = 1; d <= totalDays; d++) {
     const dt = new Date(state.y, state.m - 1, d);
     const dow = dt.getDay();
+    const isWeekend = dow === 0 || dow === 6;
     const past = dt < today;
-    const sel = state.date === d && !past;
+    const disabled = past || !isWeekend;
+    const sel = state.date === d && !disabled;
     days.push({
       key: "d" + d,
       label: String(d),
-      onClick: past ? null : () => patch({ date: d }),
+      onClick: disabled ? null : () => patch({ date: d }),
       style: {
         height: 42,
         display: "flex",
@@ -180,10 +182,10 @@ export function ReservationModal({
         fontSize: 14,
         borderRadius: 3,
         userSelect: "none",
-        cursor: past ? "default" : "pointer",
-        background: sel ? "#33232A" : past ? "transparent" : "#FFFFFF",
-        border: "1px solid " + (sel ? "#33232A" : past ? "transparent" : "#E7D5DA"),
-        color: sel ? "#FFFFFF" : past ? "#D8C3C9" : dow === 0 ? "#C0607F" : dow === 6 ? "#8A9BB0" : "#473A3F",
+        cursor: disabled ? "default" : "pointer",
+        background: sel ? "#33232A" : disabled ? "transparent" : "#FFFFFF",
+        border: "1px solid " + (sel ? "#33232A" : disabled ? "transparent" : "#E7D5DA"),
+        color: sel ? "#FFFFFF" : disabled ? "#D8C3C9" : dow === 0 ? "#C0607F" : "#8A9BB0",
         transition: "background .2s ease, border-color .2s ease, color .2s ease",
       },
     });
@@ -390,6 +392,9 @@ export function ReservationModal({
                     </div>
                   ))}
                 </div>
+                <p style={{ fontSize: 12, color: "#9A8189", margin: "10px 0 0" }}>
+                  토요일 · 일요일만 예약 가능합니다.
+                </p>
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
