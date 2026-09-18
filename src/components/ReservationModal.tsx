@@ -29,6 +29,7 @@ interface ModalState {
   extraButlers: number;
   name: string;
   phone: string;
+  email: string;
   venue: string;
   pay: PayMethod;
   agree: boolean;
@@ -50,6 +51,7 @@ function initialState(plan: PlanKey): ModalState {
     extraButlers: 0,
     name: "",
     phone: "",
+    email: "",
     venue: "",
     pay: "신용카드",
     agree: false,
@@ -150,7 +152,13 @@ export function ReservationModal({
 
   const P = PLANS[state.plan];
   const price = calcPrice(state.plan, state.guests, state.extraButlers);
-  const filled = !!(state.date && state.time && state.name.trim() && state.phone.trim());
+  const filled = !!(
+    state.date &&
+    state.time &&
+    state.name.trim() &&
+    state.phone.trim() &&
+    state.email.trim()
+  );
   const ready = filled && state.agree;
 
   const today = new Date();
@@ -210,6 +218,7 @@ export function ReservationModal({
           time: state.time,
           name: state.name,
           phone: state.phone,
+          email: state.email,
           venue: state.venue,
           guests: state.guests,
           extraButlers: state.extraButlers,
@@ -228,6 +237,7 @@ export function ReservationModal({
         payMethod: state.pay,
         customerName: state.name,
         customerPhone: state.phone,
+        customerEmail: state.email,
       });
       if (!payResult.ok) {
         throw new Error(payResult.message || "결제가 취소되었습니다.");
@@ -427,6 +437,17 @@ export function ReservationModal({
                       value={state.phone}
                       onChange={(e) => patch({ phone: e.target.value })}
                       placeholder="010-0000-0000"
+                      className="field-focus"
+                      style={fieldInputStyle}
+                    />
+                  </label>
+                  <label style={fieldLabelStyle}>
+                    이메일
+                    <input
+                      type="email"
+                      value={state.email}
+                      onChange={(e) => patch({ email: e.target.value })}
+                      placeholder="example@email.com"
                       className="field-focus"
                       style={fieldInputStyle}
                     />

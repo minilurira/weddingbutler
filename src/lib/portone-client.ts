@@ -9,6 +9,7 @@ export interface RequestDepositPaymentArgs {
   payMethod: PayMethod;
   customerName: string;
   customerPhone: string;
+  customerEmail: string;
 }
 
 export interface RequestDepositPaymentResult {
@@ -47,6 +48,7 @@ export async function requestDepositPayment(
     customer: {
       fullName: args.customerName,
       phoneNumber: args.customerPhone.replace(/[^0-9]/g, ""),
+      email: args.customerEmail,
     },
   };
 

@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, phone, venue, guests, extraButlers, payMethod } =
+  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod } =
     body;
 
   if (!isPlanKey(plan)) {
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
     !time ||
     !name?.trim() ||
     !phone?.trim() ||
+    !email?.trim() ||
     !Number.isInteger(guests) ||
     guests < 1 ||
     !Number.isInteger(extraButlers) ||
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
         ceremony_time: time,
         couple_name: name.trim(),
         phone: phone.trim(),
+        email: email.trim(),
         venue: venue?.trim() || null,
         guests,
         extra_butlers: extraButlers,

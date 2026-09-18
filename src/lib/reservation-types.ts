@@ -8,6 +8,7 @@ export interface CreateReservationInput {
   time: string;
   name: string;
   phone: string;
+  email: string;
   venue: string;
   guests: number;
   extraButlers: number;

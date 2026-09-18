@@ -13,6 +13,7 @@ create table if not exists reservations (
   ceremony_time text not null,
   couple_name text not null,
   phone text not null,
+  email text not null,
   venue text,
   guests int not null,
   extra_butlers int not null default 0,
@@ -33,6 +34,10 @@ create table if not exists reservations (
 
 create index if not exists reservations_payment_status_idx on reservations (payment_status);
 create index if not exists reservations_created_at_idx on reservations (created_at desc);
+
+-- Migration: existing deployments created before the "email" column existed
+-- (Inicis V2 requires a buyer email on requestPayment). Safe to re-run.
+alter table reservations add column if not exists email text not null default '';
 
 create table if not exists contact_messages (
   id uuid primary key default gen_random_uuid(),
