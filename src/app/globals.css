@@ -208,6 +208,6 @@ button {
     right: 0 !important;
   }
   [data-mq="span2"] {
-    grid-column: span 1 !important;
+    grid-column: 1 / -1 !important;
   }
 }

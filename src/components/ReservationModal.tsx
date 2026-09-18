@@ -441,13 +441,13 @@ export function ReservationModal({
                       style={fieldInputStyle}
                     />
                   </label>
-                  <label style={fieldLabelStyle}>
+                  <label data-mq="span2" style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
                     이메일
                     <input
                       type="email"
                       value={state.email}
                       onChange={(e) => patch({ email: e.target.value })}
-                      placeholder="example@email.com"
+                      placeholder="name@example.com"
                       className="field-focus"
                       style={fieldInputStyle}
                     />
