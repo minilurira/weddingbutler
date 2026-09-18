@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
     !name?.trim() ||
     !phone?.trim() ||
     !email?.trim() ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
+    !venue?.trim() ||
     !Number.isInteger(guests) ||
     guests < 1 ||
     !Number.isInteger(extraButlers) ||

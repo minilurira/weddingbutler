@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   calcPrice,
   guestsForPlanSwitch,
-  PAY_METHODS,
   PLAN_ORDER,
   PLANS,
   TIME_SLOTS,
@@ -19,6 +18,9 @@ import type {
   CreateReservationResponse,
 } from "@/lib/reservation-types";
 
+const FIXED_PAY_METHOD: PayMethod = "신용카드";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 interface ModalState {
   plan: PlanKey;
   y: number;
@@ -31,7 +33,6 @@ interface ModalState {
   phone: string;
   email: string;
   venue: string;
-  pay: PayMethod;
   agree: boolean;
   privacyOpen: boolean;
   phase: "form" | "submitting" | "done";
@@ -53,7 +54,6 @@ function initialState(plan: PlanKey): ModalState {
     phone: "",
     email: "",
     venue: "",
-    pay: "신용카드",
     agree: false,
     privacyOpen: false,
     phase: "form",
@@ -157,7 +157,8 @@ export function ReservationModal({
     state.time &&
     state.name.trim() &&
     state.phone.trim() &&
-    state.email.trim()
+    EMAIL_RE.test(state.email.trim()) &&
+    state.venue.trim()
   );
   const ready = filled && state.agree;
 
@@ -204,7 +205,25 @@ export function ReservationModal({
     : "날짜를 선택해 주세요";
 
   async function submit() {
-    if (!ready) return;
+    if (state.phase === "submitting") return;
+
+    const miss: string[] = [];
+    if (!state.date) miss.push("예식 날짜");
+    if (!state.time) miss.push("예식 시간");
+    if (!state.name.trim()) miss.push("신랑 · 신부 성함");
+    if (!state.phone.trim()) miss.push("연락처");
+    if (!state.email.trim()) miss.push("이메일");
+    else if (!EMAIL_RE.test(state.email.trim())) miss.push("이메일 (형식을 확인해 주세요)");
+    if (!state.venue.trim()) miss.push("예식장 · 홀 이름");
+    if (miss.length) {
+      window.alert("아래 항목을 입력해 주세요.\n\n· " + miss.join("\n· "));
+      return;
+    }
+    if (!state.agree) {
+      window.alert("개인정보 수집·이용에 동의해 주세요.");
+      return;
+    }
+
     patch({ phase: "submitting", error: null });
     try {
       const res = await fetch("/api/reservations", {
@@ -222,7 +241,7 @@ export function ReservationModal({
           venue: state.venue,
           guests: state.guests,
           extraButlers: state.extraButlers,
-          payMethod: state.pay,
+          payMethod: FIXED_PAY_METHOD,
         }),
       });
       const created = (await res.json()) as CreateReservationResponse & { message?: string };
@@ -234,7 +253,7 @@ export function ReservationModal({
         paymentId: created.paymentId,
         orderName: created.orderName,
         amount: created.amount,
-        payMethod: state.pay,
+        payMethod: FIXED_PAY_METHOD,
         customerName: state.name,
         customerPhone: state.phone,
         customerEmail: state.email,
@@ -263,7 +282,7 @@ export function ReservationModal({
   }
 
   function reset() {
-    patch((s) => ({ ...initialState(s.plan), guests: s.guests, extraButlers: s.extraButlers, pay: s.pay }));
+    patch((s) => ({ ...initialState(s.plan), guests: s.guests, extraButlers: s.extraButlers }));
   }
 
   const submitLabel =
@@ -282,10 +301,10 @@ export function ReservationModal({
     border: "none",
     fontSize: 16,
     fontWeight: 500,
-    cursor: ready && state.phase !== "submitting" ? "pointer" : "default",
+    cursor: state.phase === "submitting" ? "default" : "pointer",
     transition: "all .25s ease",
     background: ready ? "#33232A" : "#DCC4CC",
-    color: ready ? "#F3E9EB" : "#9A8189",
+    color: ready ? "#F3E9EB" : "#6B5A60",
     opacity: state.phase === "submitting" ? 0.7 : 1,
   };
 
@@ -442,7 +461,9 @@ export function ReservationModal({
                     />
                   </label>
                   <label data-mq="span2" style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
-                    이메일
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      이메일 <span style={{ fontSize: 12, color: "#9A8189" }}>결제 영수증이 발송됩니다.</span>
+                    </span>
                     <input
                       type="email"
                       value={state.email}
@@ -508,17 +529,6 @@ export function ReservationModal({
                     </div>
                   </div>
                 </div>
-
-                <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
-
-                <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 5 · 결제 수단</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8 }}>
-                  {PAY_METHODS.map((p) => (
-                    <div key={p} onClick={() => patch({ pay: p })} style={chipStyle(state.pay === p)}>
-                      {p}
-                    </div>
-                  ))}
-                </div>
               </div>
 
               <div style={{ padding: "clamp(26px,5vw,44px) clamp(18px,4.5vw,36px)", background: "#E9CAD1", display: "flex", flexDirection: "column" }}>
@@ -545,7 +555,11 @@ export function ReservationModal({
                   <span style={{ fontSize: 13, color: "#9A8189" }}>총 결제 금액</span>
                   <span style={{ fontSize: 14, color: "#6B5A60" }}>{won(price.total)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0 6px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0 0" }}>
+                  <span style={{ fontSize: 13, color: "#6B5A60" }}>결제 수단</span>
+                  <span style={{ fontSize: 13, color: "#473A3F" }}>{FIXED_PAY_METHOD}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "10px 0 6px" }}>
                   <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 선결제 금액</span>
                   <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
@@ -571,7 +585,7 @@ export function ReservationModal({
                     전문 보기
                   </a>
                 </div>
-                <button onClick={submit} disabled={!ready || state.phase === "submitting"} style={submitStyle}>
+                <button onClick={submit} disabled={state.phase === "submitting"} style={submitStyle}>
                   {submitLabel}
                 </button>
                 {state.error && (
