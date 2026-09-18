@@ -8,6 +8,52 @@ function openBizInfo() {
   window.open("https://www.ftc.go.kr/bizCommPop.do?wrkr_no=6770803502", "bizCommPop", "width=750,height=700");
 }
 
+function openInicisMark() {
+  window.open(
+    "https://mark.inicis.com/mark/popup_v3.php?mid=MOI3862967",
+    "mark",
+    "scrollbars=no,resizable=no,width=565,height=683"
+  );
+}
+
+function InicisMark() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        marginTop: 24,
+        paddingTop: 22,
+        borderTop: "1px solid rgba(233,202,209,0.18)",
+      }}
+    >
+      <img
+        src="https://image.inicis.com/mkt/certmark/inipay/inipay_74x74_color.png"
+        alt="클릭하시면 이니시스 결제시스템의 유효성을 확인하실 수 있습니다."
+        onClick={openInicisMark}
+        className="inicis-mark-hover"
+        style={{
+          width: 54,
+          height: 54,
+          display: "block",
+          border: "none",
+          borderRadius: 3,
+          background: "#FFFFFF",
+          cursor: "pointer",
+          opacity: 0.92,
+          transition: "opacity .2s ease",
+        }}
+      />
+      <span style={{ fontSize: 12, lineHeight: 1.8, color: "#D8C3C9" }}>
+        KG이니시스 안전결제
+        <br />
+        에스크로 가맹점 확인
+      </span>
+    </div>
+  );
+}
+
 function BusinessInfo({ style }: { style: React.CSSProperties }) {
   return (
     <p style={style}>
@@ -51,6 +97,7 @@ export function Footer({ full = false }: { full?: boolean }) {
           </div>
           <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0" }} />
           <LegalLinks />
+          <InicisMark />
         </div>
       </footer>
     );
@@ -115,6 +162,7 @@ export function Footer({ full = false }: { full?: boolean }) {
         </div>
         <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "26px 0 0" }} />
         <LegalLinks />
+        <InicisMark />
       </div>
     </footer>
   );

@@ -93,6 +93,10 @@ button {
   color: #e9cad1 !important;
 }
 
+.inicis-mark-hover:hover {
+  opacity: 1 !important;
+}
+
 .privacy-link-hover {
   transition: color 0.2s ease;
 }

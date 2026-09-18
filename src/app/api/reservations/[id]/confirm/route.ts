@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyPortOnePayment } from "@/lib/portone";
+import { syncReservationToAdmin } from "@/lib/admin-sync";
+import type { PlanKey } from "@/lib/plans";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
 
 export async function POST(
@@ -65,6 +67,24 @@ export async function POST(
         paid_at: new Date().toISOString(),
       })
       .eq("id", params.id);
+
+    // Fire-and-forget-ish: staff should only see the reservation in the admin
+    // once the deposit is actually paid, not while the customer is still
+    // filling out the form. Never blocks or fails the customer's booking if
+    // the admin is unreachable.
+    void syncReservationToAdmin({
+      bookingNo: reservation.booking_no,
+      plan: reservation.plan as PlanKey,
+      year: reservation.ceremony_year,
+      month: reservation.ceremony_month,
+      day: reservation.ceremony_day,
+      time: reservation.ceremony_time,
+      name: reservation.couple_name,
+      phone: reservation.phone,
+      venue: reservation.venue ?? "",
+      guests: reservation.guests,
+      payMethod: reservation.pay_method,
+    });
 
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };
     return NextResponse.json(res);
