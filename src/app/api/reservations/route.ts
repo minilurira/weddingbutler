@@ -51,8 +51,10 @@ export async function POST(req: NextRequest) {
   const ceremonyDate = new Date(year, month - 1, day);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  if (ceremonyDate < today) {
-    return NextResponse.json({ message: "예식 날짜는 오늘 이후여야 합니다." }, { status: 400 });
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() + 7);
+  if (ceremonyDate < minDate) {
+    return NextResponse.json({ message: "예식 7일 전까지만 예약할 수 있습니다." }, { status: 400 });
   }
   const dow = ceremonyDate.getDay();
   if (dow !== 0 && dow !== 6) {

@@ -18,7 +18,7 @@ export const PLANS: Record<PlanKey, Plan> = {
     base: 390000,
     incl: 200,
     butlers: 2,
-    desc: "하객 200명 이하 · 웨딩버틀러 2명",
+    desc: "식권 200매 이하 · 웨딩버틀러 2명",
   },
   standard: {
     key: "standard",
@@ -26,7 +26,7 @@ export const PLANS: Record<PlanKey, Plan> = {
     base: 450000,
     incl: 300,
     butlers: 2,
-    desc: "하객 300명 이하 · 웨딩버틀러 2명",
+    desc: "식권 201~300매 · 웨딩버틀러 2명",
   },
   premium: {
     key: "premium",
@@ -34,7 +34,7 @@ export const PLANS: Record<PlanKey, Plan> = {
     base: 800000,
     incl: 400,
     butlers: 4,
-    desc: "양가 각 200명 기준 · 웨딩버틀러 4명",
+    desc: "양가 합계 식권 400매 기준 · 웨딩버틀러 4명",
   },
 };
 
@@ -52,16 +52,23 @@ export interface PriceBreakdown {
   incl: number;
 }
 
+/** Fixed booking deposit, regardless of plan — the remaining balance
+ * (base + extras, minus this) is settled on-site right before handover,
+ * once the actual 식권 배부 매수 for the day is known. */
+export const DEPOSIT_AMOUNT = 100000;
+
 export function calcPrice(
   plan: PlanKey,
   guests: number,
   extraButlers: number
 ): PriceBreakdown {
   const p = PLANS[plan];
+  // Estimated only — actual 기준 초과 식권 fee is settled on-site after the
+  // real 식권 배부 매수 is counted, so it's not part of the online total/deposit.
   const over = Math.max(0, guests - p.incl) * 2000;
   const extraButlerAmount = extraButlers * 100000;
-  const total = p.base + over + extraButlerAmount;
-  const deposit = Math.round(total / 2);
+  const total = p.base + extraButlerAmount;
+  const deposit = DEPOSIT_AMOUNT;
   return {
     base: p.base,
     over,

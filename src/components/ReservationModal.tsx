@@ -21,6 +21,15 @@ import type {
 const FIXED_PAY_METHOD: PayMethod = "신용카드";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Earliest bookable date: the first Sat/Sun at least 7 days from today. */
+function firstBookableWeekend(): Date {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 7);
+  while (d.getDay() !== 0 && d.getDay() !== 6) d.setDate(d.getDate() + 1);
+  return d;
+}
+
 interface ModalState {
   plan: PlanKey;
   y: number;
@@ -33,19 +42,22 @@ interface ModalState {
   phone: string;
   email: string;
   venue: string;
-  agree: boolean;
+  agreeTerms: boolean;
+  agreeRefund: boolean;
+  agreePrivacy: boolean;
   privacyOpen: boolean;
+  doc: "terms" | "privacy";
   phase: "form" | "submitting" | "done";
   bookingNo: string;
   error: string | null;
 }
 
 function initialState(plan: PlanKey): ModalState {
-  const now = new Date();
+  const first = firstBookableWeekend();
   return {
     plan,
-    y: now.getFullYear(),
-    m: now.getMonth() + 1,
+    y: first.getFullYear(),
+    m: first.getMonth() + 1,
     date: null,
     time: null,
     guests: 250,
@@ -54,8 +66,11 @@ function initialState(plan: PlanKey): ModalState {
     phone: "",
     email: "",
     venue: "",
-    agree: false,
+    agreeTerms: false,
+    agreeRefund: false,
+    agreePrivacy: false,
     privacyOpen: false,
+    doc: "privacy",
     phase: "form",
     bookingNo: "",
     error: null,
@@ -160,10 +175,13 @@ export function ReservationModal({
     EMAIL_RE.test(state.email.trim()) &&
     state.venue.trim()
   );
-  const ready = filled && state.agree;
+  const agreed = state.agreeTerms && state.agreeRefund && state.agreePrivacy;
+  const ready = filled && agreed;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() + 7);
   const first = new Date(state.y, state.m - 1, 1);
   const start = first.getDay();
   const totalDays = new Date(state.y, state.m, 0).getDate();
@@ -175,14 +193,14 @@ export function ReservationModal({
   for (let d = 1; d <= totalDays; d++) {
     const dt = new Date(state.y, state.m - 1, d);
     const dow = dt.getDay();
-    const isWeekend = dow === 0 || dow === 6;
-    const past = dt < today;
-    const disabled = past || !isWeekend;
-    const sel = state.date === d && !disabled;
+    const weekend = dow === 0 || dow === 6;
+    const tooSoon = dt < minDate;
+    const open = weekend && !tooSoon;
+    const sel = state.date === d && open;
     days.push({
       key: "d" + d,
       label: String(d),
-      onClick: disabled ? null : () => patch({ date: d }),
+      onClick: open ? () => patch({ date: d }) : null,
       style: {
         height: 42,
         display: "flex",
@@ -191,10 +209,10 @@ export function ReservationModal({
         fontSize: 14,
         borderRadius: 3,
         userSelect: "none",
-        cursor: disabled ? "default" : "pointer",
-        background: sel ? "#33232A" : disabled ? "transparent" : "#FFFFFF",
-        border: "1px solid " + (sel ? "#33232A" : disabled ? "transparent" : "#E7D5DA"),
-        color: sel ? "#FFFFFF" : disabled ? "#D8C3C9" : dow === 0 ? "#C0607F" : "#8A9BB0",
+        cursor: open ? "pointer" : "default",
+        background: sel ? "#33232A" : open ? "#FFFFFF" : weekend ? "#EADDE1" : "transparent",
+        border: "1px solid " + (sel ? "#33232A" : open ? "#E7D5DA" : weekend ? "#E0CDD3" : "transparent"),
+        color: sel ? "#FFFFFF" : !open ? "#C3AEB5" : dow === 0 ? "#C0607F" : "#8A9BB0",
         transition: "background .2s ease, border-color .2s ease, color .2s ease",
       },
     });
@@ -219,8 +237,12 @@ export function ReservationModal({
       window.alert("아래 항목을 입력해 주세요.\n\n· " + miss.join("\n· "));
       return;
     }
-    if (!state.agree) {
-      window.alert("개인정보 수집·이용에 동의해 주세요.");
+    const need: string[] = [];
+    if (!state.agreeTerms) need.push("이용약관 동의");
+    if (!state.agreeRefund) need.push("취소·환불 기준 확인");
+    if (!state.agreePrivacy) need.push("개인정보 수집·이용 동의");
+    if (need.length) {
+      window.alert("아래 필수 항목에 동의해 주세요.\n\n· " + need.join("\n· "));
       return;
     }
 
@@ -289,9 +311,9 @@ export function ReservationModal({
     state.phase === "submitting"
       ? "결제 진행 중..."
       : ready
-        ? `${won(price.deposit)} 선결제하기`
+        ? `예약금 ${won(price.deposit)} 결제하기`
         : filled
-          ? "개인정보 수집·이용에 동의해 주세요"
+          ? "필수 항목에 동의해 주세요"
           : "날짜 · 시간 · 정보를 입력해 주세요";
 
   const submitStyle: CSSProperties = {
@@ -421,9 +443,6 @@ export function ReservationModal({
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: 12, color: "#9A8189", margin: "10px 0 0" }}>
-                  토요일 · 일요일만 예약 가능합니다.
-                </p>
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
@@ -544,10 +563,6 @@ export function ReservationModal({
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "22px 0", borderBottom: "1px solid #DCC4CC" }}>
                   <SummaryRow label="기본 요금" value={won(price.base)} />
-                  <SummaryRow
-                    label={`추가 하객 ${Math.max(0, state.guests - price.incl)}명`}
-                    value={price.over ? "+ " + won(price.over) : "-"}
-                  />
                   <SummaryRow label="버틀러 추가" value={price.extraButlerAmount ? "+ " + won(price.extraButlerAmount) : "-"} />
                 </div>
 
@@ -559,31 +574,64 @@ export function ReservationModal({
                   <span style={{ fontSize: 13, color: "#6B5A60" }}>결제 수단</span>
                   <span style={{ fontSize: 13, color: "#473A3F" }}>{FIXED_PAY_METHOD}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "10px 0 6px" }}>
-                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 선결제 금액</span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12, padding: "10px 0 6px" }}>
+                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 예약금</span>
                   <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
-                <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 22 }}>
-                  부가세 포함 · 예식 후 잔금 {won(price.balance)}
+                <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 20 }}>
+                  부가세 포함 · 잔금 {won(price.balance)}은 예식 당일 전달 직전 현장 결제
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "6px 8px", marginBottom: 14 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12.5, color: "#473A3F", cursor: "pointer" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 16 }}>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12.5, lineHeight: 1.7, color: "#473A3F", cursor: "pointer" }}>
                     <input
                       type="checkbox"
-                      checked={state.agree}
-                      onChange={() => patch((s) => ({ agree: !s.agree }))}
-                      style={{ width: 14, height: 14, margin: 0, flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
+                      checked={state.agreeTerms}
+                      onChange={() => patch((s) => ({ agreeTerms: !s.agreeTerms }))}
+                      style={{ width: 14, height: 14, margin: "3px 0 0", flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
                     />
-                    개인정보 수집·이용 동의
+                    <span>
+                      [필수] 이용약관에 동의합니다.{" "}
+                      <a
+                        onClick={() => patch({ privacyOpen: true, doc: "terms" })}
+                        className="privacy-link-hover"
+                        style={{ color: "#8E4E67", textDecoration: "underline", cursor: "pointer", whiteSpace: "nowrap" }}
+                      >
+                        전문 보기
+                      </a>
+                    </span>
                   </label>
-                  <a
-                    onClick={() => patch({ privacyOpen: true })}
-                    className="privacy-link-hover"
-                    style={{ fontSize: 12, color: "#8E4E67", textDecoration: "underline", cursor: "pointer", whiteSpace: "nowrap" }}
-                  >
-                    전문 보기
-                  </a>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12.5, lineHeight: 1.7, color: "#473A3F", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={state.agreeRefund}
+                      onChange={() => patch((s) => ({ agreeRefund: !s.agreeRefund }))}
+                      style={{ width: 14, height: 14, margin: "3px 0 0", flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
+                    />
+                    <span>
+                      [필수] 취소·환불 기준을 확인했습니다.
+                      <br />
+                      <span style={{ color: "#6B5A60" }}>7일 전까지 전액 · 6~3일 전 50% · 2일 전~당일 30% 환불 (선결제금 기준)</span>
+                    </span>
+                  </label>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12.5, lineHeight: 1.7, color: "#473A3F", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={state.agreePrivacy}
+                      onChange={() => patch((s) => ({ agreePrivacy: !s.agreePrivacy }))}
+                      style={{ width: 14, height: 14, margin: "3px 0 0", flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
+                    />
+                    <span>
+                      [필수] 개인정보 수집·이용에 동의합니다.{" "}
+                      <a
+                        onClick={() => patch({ privacyOpen: true, doc: "privacy" })}
+                        className="privacy-link-hover"
+                        style={{ color: "#8E4E67", textDecoration: "underline", cursor: "pointer", whiteSpace: "nowrap" }}
+                      >
+                        전문 보기
+                      </a>
+                    </span>
+                  </label>
                 </div>
                 <button onClick={submit} disabled={state.phase === "submitting"} style={submitStyle}>
                   {submitLabel}
@@ -592,7 +640,7 @@ export function ReservationModal({
                   <p style={{ fontSize: 13, lineHeight: 1.7, color: "#B0304A", margin: "12px 0 0" }}>{state.error}</p>
                 )}
                 <p style={{ fontSize: 12, lineHeight: 1.8, color: "#9A8189", margin: "16px 0 0" }}>
-                  오늘은 전체 금액의 50%만 결제되며, 잔금은 예식 종료 후 정산 내역 확인 뒤 결제하시면 됩니다. 예식 7일 전까지 전액 환불, 3일 전까지 50% 환불됩니다.
+                  오늘은 예약금 10만원만 카드로 결제되며, 남은 잔금은 예식 당일 전달 직전 현장에서 결제합니다.
                 </p>
               </div>
             </div>
@@ -618,8 +666,8 @@ export function ReservationModal({
               </div>
               <h3 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 14px" }}>예약이 확정되었습니다</h3>
               <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 32px" }}>
-                담당 매니저가 24시간 내로 연락드립니다.
-                <br />두 분의 가장 빛나는 날, 저희가 함께하겠습니다.
+                예약확인서를 알림톡과 이메일로 보내드렸습니다. 내용이 신청과 다르면 바로 알려 주세요.
+                <br />예식 7일 전 담당 매니저가 연락드립니다.
               </p>
               <div
                 style={{
@@ -636,7 +684,7 @@ export function ReservationModal({
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
                 <SummaryRow label="요금제" value={P.name} wide />
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
-                <SummaryRow label="선결제 금액" value={won(price.deposit)} wide />
+                <SummaryRow label="예약금" value={won(price.deposit)} wide />
               </div>
               <div style={{ marginTop: 30, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <button onClick={reset} className="round-nav-hover" style={outlineBtnStyle}>
@@ -690,7 +738,9 @@ export function ReservationModal({
               flex: "0 0 auto",
             }}
           >
-            <div style={{ fontFamily: fontSerif, fontSize: 15, fontWeight: 600, color: "#33232A" }}>개인정보처리방침</div>
+            <div style={{ fontFamily: fontSerif, fontSize: 15, fontWeight: 600, color: "#33232A" }}>
+              {state.doc === "terms" ? "서비스 이용약관" : "개인정보처리방침"}
+            </div>
             <button
               onClick={() => patch({ privacyOpen: false })}
               className="round-nav-hover"
@@ -699,7 +749,11 @@ export function ReservationModal({
               닫기
             </button>
           </div>
-          <iframe src="/privacy" title="개인정보처리방침" style={{ flex: "1 1 auto", width: "100%", border: "none", display: "block" }} />
+          <iframe
+            src={state.doc === "terms" ? "/terms" : "/privacy"}
+            title={state.doc === "terms" ? "서비스 이용약관" : "개인정보처리방침"}
+            style={{ flex: "1 1 auto", width: "100%", border: "none", display: "block" }}
+          />
         </div>
       </div>
     )}
