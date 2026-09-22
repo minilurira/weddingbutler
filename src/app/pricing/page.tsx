@@ -56,7 +56,6 @@ const INCLUDED = [
   "2인 교차 검수 정산",
   "엑셀 리포트 당일 전달",
   "현금영수증 발행 대행",
-  "영업배상책임보험 가입",
 ];
 
 const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
