@@ -115,9 +115,13 @@ export default function HomePage() {
           }}
         >
           <span>· 100% 온라인 예약 · 결제</span>
-          <span>· 배상 책임 보험 가입</span>
-          <span>· 실시간 축의금 집계 리포트</span>
-          <span>· 예식 7일 전까지 전액 환불</span>
+          <span>· 실시간 접수 현황</span>
+          <span>
+            · 예식 7일 전까지 전액 환불{" "}
+            <a href="/pricing" style={{ color: "#E9CAD1", textDecoration: "underline" }}>
+              자세히 보기
+            </a>
+          </span>
         </div>
       </section>
 
@@ -132,7 +136,7 @@ export default function HomePage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 22 }}>
             {[
               { n: "01", title: "부탁할 사람이 없어요", body: "사촌·친구에게 반나절을 부탁하고, 답례와 식대까지 챙기는 부담. 예약 한 번으로 정리됩니다.", delay: 50 },
-              { n: "02", title: "돈 문제는 예민합니다", body: "2인 1조 교차 검수, 봉투 개봉 전 촬영 기록, 실시간 집계로 금액 분쟁의 여지를 없앱니다.", delay: 150 },
+              { n: "02", title: "돈 문제는 예민합니다", body: "2인 1조 교차 검수, 접수부터 전달까지 카메라 기록, 실시간 접수 현황으로 금액 분쟁의 여지를 없앱니다.", delay: 150 },
               { n: "03", title: "첫인상은 축의대에서", body: "호텔 서비스 기준의 응대 교육을 이수한 매니저가 정장·화이트 글러브 차림으로 하객을 맞이합니다.", delay: 250 },
             ].map((c) => (
               <Reveal key={c.n} delay={c.delay}>
@@ -257,7 +261,7 @@ export default function HomePage() {
             <AreaCard title="서울 전체" tag="25개 자치구" body="강남·서초 일대 호텔 예식장부터 도심 소규모 웨딩홀까지 모두 가능합니다." tags={SEOUL_TAGS} />
             <AreaCard title="경기 전체" tag="31개 시·군" body="분당·판교 본사를 중심으로 경기 전역에 매니저를 배정합니다." tags={GYEONGGI_TAGS} />
             <div style={{ background: "#33232A", borderRadius: 4, padding: "40px 34px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
-              <AreaStat icon="1h" title="예식 1시간 전 도착" sub="이동 거리와 무관하게 보장" />
+              <AreaStat icon="1h" title="예식 1시간 전 도착" />
               <AreaStat icon="56" title="서울 25구 + 경기 31시·군" sub="수도권 전 지역 상시 운영" />
               <AreaStat icon="+" title="그 외 지역도 문의 가능" sub="인천·충청권은 개별 협의" />
             </div>
@@ -368,7 +372,7 @@ function AreaCard({ title, tag, body, tags }: { title: string; tag: string; body
   );
 }
 
-function AreaStat({ icon, title, sub }: { icon: string; title: string; sub: string }) {
+function AreaStat({ icon, title, sub }: { icon: string; title: string; sub?: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
       <span
@@ -389,7 +393,7 @@ function AreaStat({ icon, title, sub }: { icon: string; title: string; sub: stri
       </span>
       <div>
         <div style={{ fontSize: 15, color: "#FFFFFF" }}>{title}</div>
-        <div style={{ fontSize: 13, color: "#B79AA3", marginTop: 4 }}>{sub}</div>
+        {sub && <div style={{ fontSize: 13, color: "#B79AA3", marginTop: 4 }}>{sub}</div>}
       </div>
     </div>
   );
