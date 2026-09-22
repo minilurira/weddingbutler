@@ -10,16 +10,16 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 const SERVICE_STEPS = [
   "축의금 접수 및 방명록 안내 · 답례품 전달",
   "식권 배부 및 하객 동선 안내",
-  "봉투 개봉 전 봉인 · 2인 교차 검수 정산",
-  "성명·금액 엑셀 리포트 예식 당일 전달",
-  "양가 어른께 봉투 인계 및 최종 확인 서명",
+  "받은 봉투는 즉시 번호를 붙여 잠금 가방에 보관 · 2인 교차 검수",
+  "성명·봉투 번호·신랑/신부측 엑셀 리포트 (개봉 집계 시 금액 포함)",
+  "지정하신 인수자께 직접 전달 · 인계확인서 서명",
 ];
 
 const HOW_IT_WORKS = [
   { n: "1", tag: "ONLINE", title: "날짜 선택 · 결제", body: "홈페이지에서 예식 날짜와 시간, 요금제를 고르고 바로 결제하면 예약이 확정됩니다." },
   { n: "2", tag: "D-7", title: "사전 상담", body: "담당 매니저가 예식장 구조, 답례품, 양가 요청사항을 전화·카카오톡으로 확인합니다." },
-  { n: "3", tag: "D-DAY", title: "현장 운영", body: "예식 1시간 전 도착, 축의대 세팅 후 접수·식권·답례품 응대를 진행합니다." },
-  { n: "4", tag: "FINISH", title: "정산 · 인계", body: "2인 교차 검수로 정산하고, 리포트와 함께 지정하신 분께 직접 인계합니다." },
+  { n: "3", tag: "D-DAY", title: "현장 운영", body: "예식 1시간 전 도착해 접수대를 세팅합니다. 받은 식권을 함께 세고 시작하며, 봉투를 받는 즉시 번호를 붙이고 기록합니다." },
+  { n: "4", tag: "FINISH", title: "정산 · 인계", body: "버틀러 2명이 번호·장부·봉투 매수를 맞춰 보고, 잔금 결제 후 지정하신 인수자께 직접 전달합니다." },
 ];
 
 const REVIEWS = [
@@ -100,7 +100,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section style={{ background: "#33232A", padding: "22px 24px" }}>
+      <section data-mq="strip" style={{ background: "#33232A", padding: "22px 24px", overflow: "hidden" }}>
         <div
           style={{
             maxWidth: 1180,
@@ -114,14 +114,18 @@ export default function HomePage() {
             letterSpacing: "0.02em",
           }}
         >
-          <span>· 100% 온라인 예약 · 결제</span>
-          <span>· 실시간 접수 현황</span>
-          <span>
-            · 예식 7일 전까지 전액 환불{" "}
-            <a href="/pricing" style={{ color: "#E9CAD1", textDecoration: "underline" }}>
-              자세히 보기
-            </a>
-          </span>
+          <span style={{ whiteSpace: "nowrap" }}>· 100% 온라인 예약 · 결제</span>
+          <span style={{ whiteSpace: "nowrap" }}>· 실시간 접수 현황</span>
+          <span style={{ whiteSpace: "nowrap" }}>· 예식 7일 전까지 전액 환불</span>
+        </div>
+        <div
+          data-mq="strip-dup"
+          aria-hidden="true"
+          style={{ display: "none", fontSize: 14, color: "#E6D2D8", letterSpacing: "0.02em" }}
+        >
+          <span style={{ whiteSpace: "nowrap" }}>· 100% 온라인 예약 · 결제</span>
+          <span style={{ whiteSpace: "nowrap" }}>· 실시간 접수 현황</span>
+          <span style={{ whiteSpace: "nowrap" }}>· 예식 7일 전까지 전액 환불</span>
         </div>
       </section>
 
@@ -136,7 +140,7 @@ export default function HomePage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 22 }}>
             {[
               { n: "01", title: "부탁할 사람이 없어요", body: "사촌·친구에게 반나절을 부탁하고, 답례와 식대까지 챙기는 부담. 예약 한 번으로 정리됩니다.", delay: 50 },
-              { n: "02", title: "돈 문제는 예민합니다", body: "2인 1조 교차 검수, 접수부터 전달까지 카메라 기록, 실시간 접수 현황으로 금액 분쟁의 여지를 없앱니다.", delay: 150 },
+              { n: "02", title: "돈 문제는 예민합니다", body: "2인 1조 교차 검수, 접수부터 전달까지 카메라 기록, 실시간 접수 현황으로 분쟁의 여지를 없앱니다.", delay: 150 },
               { n: "03", title: "첫인상은 축의대에서", body: "호텔 서비스 기준의 응대 교육을 이수한 매니저가 정장·화이트 글러브 차림으로 하객을 맞이합니다.", delay: 250 },
             ].map((c) => (
               <Reveal key={c.n} delay={c.delay}>
@@ -261,7 +265,7 @@ export default function HomePage() {
             <AreaCard title="서울 전체" tag="25개 자치구" body="강남·서초 일대 호텔 예식장부터 도심 소규모 웨딩홀까지 모두 가능합니다." tags={SEOUL_TAGS} />
             <AreaCard title="경기 전체" tag="31개 시·군" body="분당·판교 본사를 중심으로 경기 전역에 매니저를 배정합니다." tags={GYEONGGI_TAGS} />
             <div style={{ background: "#33232A", borderRadius: 4, padding: "40px 34px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 26 }}>
-              <AreaStat icon="1h" title="예식 1시간 전 도착" />
+              <AreaStat icon="1h" title="예식 1시간 전 도착" sub="접수대 세팅과 식권 확인까지" />
               <AreaStat icon="56" title="서울 25구 + 경기 31시·군" sub="수도권 전 지역 상시 운영" />
               <AreaStat icon="+" title="그 외 지역도 문의 가능" sub="인천·충청권은 개별 협의" />
             </div>

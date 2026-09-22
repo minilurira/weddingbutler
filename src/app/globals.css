@@ -186,6 +186,40 @@ button {
   [data-mq="hero"] {
     min-height: auto !important;
   }
+  [data-mq="strip"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  [data-mq="strip"] > div {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    flex: 0 0 auto;
+    width: max-content !important;
+    max-width: none !important;
+    margin: 0 !important;
+    gap: 44px !important;
+    padding-right: 44px;
+    animation: om-marquee 18s linear infinite;
+  }
+  [data-mq="strip-dup"] {
+    display: flex !important;
+  }
+}
+@keyframes om-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-mq="strip"] > div {
+    animation: none !important;
+  }
 }
 @media (min-width: 861px) {
   [data-mq="drawer"] {
