@@ -17,17 +17,17 @@ const KAKAO_SDK_INTEGRITY = "sha384-8oNFBbAHWVovcMLgR+mLbxqwoucixezSAzniBcjnEoum
 function KakaoChannelButton() {
   useEffect(() => {
     function make() {
-      if (!document.getElementById("kakao-talk-channel-chat-button")) return false;
-      window.Kakao?.Channel?.createChatButton({ container: "#kakao-talk-channel-chat-button" });
-      return true;
+      const el = document.getElementById("kakao-talk-channel-chat-button");
+      if (!el || el.childElementCount > 0) return;
+      try {
+        window.Kakao?.Channel?.createChatButton({ container: "#kakao-talk-channel-chat-button" });
+      } catch {
+        // ignore
+      }
     }
     window.kakaoAsyncInit = () => {
-      if (!make()) {
-        const t = setInterval(() => {
-          if (make()) clearInterval(t);
-        }, 200);
-        setTimeout(() => clearInterval(t), 10000);
-      }
+      make();
+      setInterval(make, 500);
     };
 
     if (!document.getElementById(KAKAO_SDK_ID)) {
@@ -51,6 +51,7 @@ function KakaoChannelButton() {
       data-color="yellow"
       data-shape="pc"
       data-support-multiple-densities="true"
+      style={{ transform: "scale(0.8)", transformOrigin: "left center" }}
     />
   );
 }
@@ -134,7 +135,7 @@ export function ContactSection() {
     <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(64px,10vw,100px)" }}>
       <div
         data-mq="split"
-        style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(0,1fr)", gap: 22, alignItems: "start" }}
+        style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1fr)", gap: 22, alignItems: "start" }}
       >
         <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(26px,5vw,44px) clamp(20px,5vw,40px)" }}>
           {!sent ? (
@@ -241,7 +242,7 @@ export function ContactSection() {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ background: "#33232A", borderRadius: 6, padding: "34px 30px" }}>
             <div style={{ fontFamily: "var(--font-display), serif", fontSize: 13, letterSpacing: "0.34em", color: "#E9CAD1", marginBottom: 20 }}>DIRECT</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, fontSize: 14, color: "#F3E9EB", lineHeight: 1.7 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,220px),1fr))", gap: "20px 32px", fontSize: 14, color: "#F3E9EB", lineHeight: 1.7 }}>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>전화</div>
                 <a href="tel:01059189203" style={{ color: "#F3E9EB" }}>
@@ -250,7 +251,7 @@ export function ContactSection() {
               </div>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>카카오톡</div>
-                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
                   <span>채널 @웨딩버틀러</span>
                   <KakaoChannelButton />
                 </div>
@@ -262,13 +263,6 @@ export function ContactSection() {
                 주말·공휴일은 예식 현장 운영
               </div>
             </div>
-          </div>
-          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: 30 }}>
-            <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>오시는 길</div>
-            <p style={{ fontSize: 13, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>
-              경기 성남시 분당구 운중로 124
-              <br />8층 804-S80호
-            </p>
           </div>
         </div>
       </div>

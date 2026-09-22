@@ -91,11 +91,6 @@ export default function HomePage() {
                 요금제 보기
               </a>
             </div>
-            <div style={{ display: "flex", gap: 40, marginTop: 56, flexWrap: "wrap" }}>
-              <Stat value="1,200+" label="누적 예식 진행" />
-              <Stat value="100%" label="현장 정산 완료율" />
-              <Stat value="4.9 / 5" label="예비부부 만족도" />
-            </div>
           </Reveal>
         </div>
       </section>
@@ -335,15 +330,6 @@ export default function HomePage() {
       </section>
 
       <Footer full />
-    </div>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <div style={{ fontFamily: fontSerif, fontSize: 30, color: "#E9CAD1" }}>{value}</div>
-      <div style={{ fontSize: 13, color: "#D8C3C9", marginTop: 6 }}>{label}</div>
     </div>
   );
 }
