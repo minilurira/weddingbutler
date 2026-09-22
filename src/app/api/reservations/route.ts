@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
   const planInfo = PLANS[plan];
   const bookingNo = `WB${year}${pad(month)}${pad(day)}-${Math.floor(1000 + Math.random() * 8999)}`;
   const paymentId = randomUUID();
-  const orderName = `웨딩버틀러 ${planInfo.name} 예약금`;
+  const orderName = `웨딩버틀러 ${planInfo.name} 서비스 결제금`;
 
   try {
     const db = supabaseAdmin();
