@@ -16,45 +16,67 @@ const CARDS = [
     eyebrow: "01 SMALL CARE",
     name: "스몰케어",
     priceWhole: "39",
-    prefix: null as string | null,
     dark: false,
-    bullets: ["하객 200명 이하 예식", "웨딩버틀러 2명 배정", "추가 하객 1명당 2,000원", "실시간 집계 리포트 제공"],
+    bullets: ["하객 200명 이하 예식", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "정산 리포트 · 운영 영상 제공"],
   },
   {
     plan: "standard" as const,
     eyebrow: "02 STANDARD",
     name: "스탠다드",
     priceWhole: "45",
-    prefix: null as string | null,
     dark: true,
-    bullets: ["하객 200명 초과 ~ 300명 이하", "웨딩버틀러 2명 배정", "추가 하객 1명당 2,000원", "버틀러 추가 1명당 10만원"],
+    bullets: ["하객 201~300명 예식", "웨딩버틀러 2명 배정", "스몰케어 구성 전부 포함", "버틀러 추가 가능 (1명당 100,000원)"],
   },
   {
     plan: "premium" as const,
     eyebrow: "03 PREMIUM",
     name: "프리미엄",
     priceWhole: "80",
-    prefix: "부터",
     dark: false,
-    bullets: ["양가 하객 각 200명 기준", "웨딩버틀러 4명 배정 (양가 2명씩)", "추가 하객 1명당 2,000원", "버틀러 추가 1명당 10만원"],
+    bullets: ["양가 합계 하객 400명 기준", "웨딩버틀러 4명 배정 (양가 2명씩)", "신랑측 · 신부측 축의대 분리 운영", "버틀러 추가 가능 (1명당 100,000원)"],
   },
 ];
 
 const COMPARE_ROWS: [string, string, string, string][] = [
-  ["기본 요금", "39만원", "45만원", "80만원~"],
-  ["기준 하객", "200명 이하", "300명 이하", "양가 각 200명"],
+  ["기본 요금", "39만원", "45만원", "80만원"],
+  ["기준 하객", "200명 이하", "201~300명", "양가 합계 400명"],
   ["배정 버틀러", "2명", "2명", "4명"],
-  ["추가 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
+  ["기준 초과 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
   ["버틀러 추가", "해당 없음", "1명 10만원", "1명 10만원"],
+  ["개봉 집계", "무료", "무료", "무료"],
+];
+
+const EXTRA_COSTS = [
+  { label: "기준 초과 하객", value: "1명당 2,000원", note: "접수대에서 접수한 하객 기준 · 혼주·예식장이 직접 안내한 하객은 세지 않습니다" },
+  { label: "버틀러 추가", value: "1명당 100,000원", note: "스탠다드 · 프리미엄" },
+  { label: "서비스 지역 외", value: "사전 견적", note: "서울·경기 외 지역은 예약 전 출장비를 안내드립니다" },
+  { label: "개봉 집계", value: "무료", note: null as string | null },
+];
+
+const RECORDING = [
+  {
+    name: "밀봉",
+    tag: "기본",
+    body: "봉투를 열지 않고, 받은 순서대로 번호를 붙여 성함·신랑측/신부측과 함께 기록합니다. 봉투는 그대로 봉인해 전달드립니다.",
+    responsibility: "전달한 봉투 매수와 봉인 상태",
+    caveat: null as string | null,
+  },
+  {
+    name: "개봉 집계",
+    tag: "무료",
+    body: "예식이 끝나고 접수를 마감한 뒤, 버틀러 2명이 카메라 앞에서 번호 순서대로 봉투를 열어 봉투별 금액과 신랑측·신부측 합계, 총액을 정리합니다. 현금은 봉투 원본과 함께 전달드리며, 인수자께서 집계 과정에 함께하실 수 있습니다.",
+    responsibility: "리포트의 총액과 전달한 현금의 일치",
+    caveat: "하객이 봉투에 적은 금액과 실제 금액의 차이, 빈 봉투·위조지폐는 책임 범위에 포함되지 않습니다",
+  },
 ];
 
 const INCLUDED = [
-  "축의금 접수 및 실시간 집계",
+  "축의금 접수 및 실시간 접수 현황",
   "방명록 안내 · 정리",
-  "식권 배부 및 수량 관리",
+  "하객 안내 및 인원 관리",
   "답례품 전달 안내",
   "2인 교차 검수 정산",
-  "엑셀 리포트 당일 전달",
+  "엑셀 정산 리포트 당일 전달",
   "현금영수증 발행 대행",
 ];
 
@@ -64,10 +86,10 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     title: "예약 및 결제",
     body: (
       <>
-        <NoticeItem>전체 금액의 50%를 선결제하시면 예약이 확정됩니다.</NoticeItem>
-        <NoticeItem>잔금 50%는 예식 종료 후 정산 내역 확인 뒤 결제해 주세요.</NoticeItem>
-        <NoticeItem>추가 하객·추가 버틀러 요금은 잔금 결제 시 함께 청구됩니다.</NoticeItem>
-        <NoticeItem>현금영수증·세금계산서는 잔금 결제 후 다음 영업일에 처리됩니다.</NoticeItem>
+        <NoticeItem>모든 요금제의 서비스 결제 금액은 10만원이며, 카드로 결제하시면 예약이 확정됩니다.</NoticeItem>
+        <NoticeItem>남은 서비스 대금은 예식 당일 전달 직전 현장에서 결제합니다.</NoticeItem>
+        <NoticeItem>현장 결제는 카드 결제 링크 또는 계좌이체로 진행되며 현금영수증을 발행합니다.</NoticeItem>
+        <NoticeItem>예식일 7일 전까지만 온라인 예약을 받습니다.</NoticeItem>
       </>
     ),
   },
@@ -76,9 +98,32 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     title: "취소 및 환불",
     body: (
       <>
-        <NoticeItem>예식 7일 전까지 전액 환불, 3일 전까지 50% 환불됩니다.</NoticeItem>
-        <NoticeItem>예식 2일 전부터는 인력 배정이 확정되어 환불이 어렵습니다.</NoticeItem>
-        <NoticeItem>예식장 사정에 따른 일정 연기는 1회 무료로 변경해 드립니다.</NoticeItem>
+        <div style={{ overflowX: "auto", margin: "0 0 14px" }}>
+          <table style={{ width: "100%", minWidth: 320, borderCollapse: "collapse", fontSize: 14 }}>
+            <tbody>
+              <tr>
+                <th style={{ textAlign: "left", padding: "10px 14px", background: "#FAF3F5", color: "#6B5A60", fontWeight: 500, border: "1px solid #F0E3E6" }}>취소 시점</th>
+                <th style={{ textAlign: "left", padding: "10px 14px", background: "#FAF3F5", color: "#6B5A60", fontWeight: 500, border: "1px solid #F0E3E6" }}>서비스 결제 금액 환불</th>
+              </tr>
+              <tr>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>예식 7일 전까지</td>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>전액 환불</td>
+              </tr>
+              <tr>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>예식 6일 전 ~ 3일 전</td>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>50% 환불</td>
+              </tr>
+              <tr>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>예식 2일 전 ~ 당일</td>
+                <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>30% 환불</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <NoticeItem>예약 후 7일 이내 취소는 예식일과 관계없이 전액 환불됩니다. (예식 7일 전 당일에 예약하신 경우는 위 표를 따릅니다)</NoticeItem>
+        <NoticeItem>예식 7일 전까지 알려 주시면 한 번 무료로 날짜를 바꿔 드립니다. (버틀러 배정 가능 시)</NoticeItem>
+        <NoticeItem>천재지변, 감염병 관련 행정명령, 신랑·신부 또는 직계가족 상(喪)으로 예식이 취소되면 전액 환불됩니다.</NoticeItem>
+        <NoticeItem>웨딩버틀러 사정으로 서비스를 못 하게 되면 전액 환불하고 총 금액의 10%를 배상합니다.</NoticeItem>
       </>
     ),
   },
@@ -88,32 +133,33 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     body: (
       <>
         <NoticeItem>접수대 운영에 테이블·의자·전원 확보가 필요하니, 예식장에 설치 가능 여부를 확인해 주세요.</NoticeItem>
-        <NoticeItem>예식 3일 전까지 식순·하객 예상 인원·답례품 수량을 알려주셔야 정상 운영이 가능합니다.</NoticeItem>
+        <NoticeItem>예식 7일 전 사전 통화에서 예식장 구조, 신랑·신부측 구분 방법, 하객 기준, 인수자와 잔금 결제자를 확인합니다.</NoticeItem>
       </>
     ),
   },
   {
     icon: "⌸",
-    title: "하객 인원 기준",
+    title: "하객 기준",
     body: (
       <>
-        <NoticeLabel>기본 보장 인원</NoticeLabel>
+        <NoticeLabel>기준 하객 수</NoticeLabel>
         <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
-          <NoticeItem>스몰케어 · 스탠다드 — 버틀러 2명, 하객 200 ~ 300명</NoticeItem>
-          <NoticeItem>프리미엄 — 버틀러 4명, 양가 각 200명</NoticeItem>
+          <NoticeItem>스몰케어 — 버틀러 2명, 하객 200명 이하</NoticeItem>
+          <NoticeItem>스탠다드 — 버틀러 2명, 하객 201 ~ 300명</NoticeItem>
+          <NoticeItem>프리미엄 — 버틀러 4명, 양가 합계 400명</NoticeItem>
         </div>
-        <NoticeLabel>인원 초과 시</NoticeLabel>
+        <NoticeLabel>기준 초과 시</NoticeLabel>
         <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
-          <NoticeItem>보장 인원 초과 시 1명당 2,000원이 추가됩니다.</NoticeItem>
-          <NoticeItem>스탠다드 300명 초과 시 버틀러 1명 추가가 필요합니다.</NoticeItem>
-          <NoticeItem>프리미엄 양가 각 250명 초과 시 버틀러 1명 추가가 필요합니다.</NoticeItem>
+          <NoticeItem>기준을 넘긴 하객은 1명당 2,000원이 추가됩니다.</NoticeItem>
+          <NoticeItem>접수대에서 접수한 하객만 셉니다.</NoticeItem>
+          <NoticeItem>혼주·예식장이 직접 안내한 하객은 산정에 포함하지 않습니다.</NoticeItem>
         </div>
         <div style={{ background: "#FAF4F5", borderRadius: 6, padding: "18px 20px" }}>
           <NoticeLabel muted>예시</NoticeLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            <NoticeItem small>스몰케어 230명 → 30명 초과, 6만원 추가</NoticeItem>
-            <NoticeItem small>스탠다드 320명 → 20명 초과 4만원 + 버틀러 1명 추가 10만원</NoticeItem>
-            <NoticeItem small>프리미엄 양가 각 260명 → 120명 초과 24만원 + 버틀러 1명 10만원</NoticeItem>
+            <NoticeItem small>스몰케어 하객 230명 → 30명 초과, 6만원 추가</NoticeItem>
+            <NoticeItem small>스탠다드 하객 320명 → 20명 초과, 4만원 추가</NoticeItem>
+            <NoticeItem small>프리미엄 양가 합계 460명 → 60명 초과, 12만원 추가</NoticeItem>
           </div>
         </div>
       </>
@@ -125,8 +171,8 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     body: (
       <>
         <NoticeItem>서비스는 축의금 접수대 구역 내에서 진행되며, 해당 구역 밖에서 발생한 사안에 대해서는 책임을 지지 않습니다.</NoticeItem>
-        <NoticeItem>본인·혼주 외 제3자의 축의금 수령 요청은 확인 절차 후에만 진행되며, 하객 요청에 따른 예외 처리 시에는 별도로 안내드립니다.</NoticeItem>
-        <NoticeItem>서비스 지역은 수도권 기준이며, 그 외 지역은 출장 가능 여부를 별도로 문의해 주세요.</NoticeItem>
+        <NoticeItem>축의금은 예약 때 또는 사전 통화 때 지정하신 인수자께만 전달합니다. 지정되지 않은 분이 요청하시면 의뢰인께 직접 확인한 뒤 전달합니다.</NoticeItem>
+        <NoticeItem>서비스 지역은 서울·경기 기준이며, 그 외 지역은 예약 전 출장비를 안내드립니다.</NoticeItem>
       </>
     ),
   },
@@ -143,6 +189,16 @@ function NoticeItem({ children, small }: { children: React.ReactNode; small?: bo
 
 function NoticeLabel({ children, muted }: { children: React.ReactNode; muted?: boolean }) {
   return <p style={{ fontSize: 12, letterSpacing: "0.08em", color: muted ? "#9A8189" : "#A9647E", margin: "0 0 10px", fontWeight: 500 }}>{children}</p>;
+}
+
+function SectionEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 14 }}>
+      <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
+      <span style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#A9647E" }}>{children}</span>
+      <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
+    </div>
+  );
 }
 
 export default function PricingPage() {
@@ -185,7 +241,6 @@ export default function PricingPage() {
                   borderBottom: "1px solid " + (c.dark ? "rgba(255,255,255,0.16)" : "#E7D5DA"),
                 }}
               >
-                {c.prefix && <span style={{ fontSize: 16, color: "#9A8189" }}>{c.prefix}</span>}
                 <span style={{ fontFamily: fontSerif, fontSize: 46, fontWeight: 600, color: c.dark ? "#FFFFFF" : undefined, letterSpacing: "-0.02em" }}>{c.priceWhole}</span>
                 <span style={{ fontSize: 18, color: c.dark ? "#F3E9EB" : "#473A3F" }}>만원</span>
                 <span style={{ fontSize: 13, color: c.dark ? "#B79AA3" : "#9A8189", marginLeft: 6 }}>VAT 포함</span>
@@ -249,13 +304,53 @@ export default function PricingPage() {
               ))}
             </div>
           </div>
-          <p style={{ fontSize: 13, lineHeight: 1.9, color: "#9A8189", margin: "22px 0 0" }}>
-            추가 하객 요금은 예식 후 실제 접수 인원 기준으로 정산되며, 차액은 예식 다음 영업일에 청구·환불됩니다. 모든 요금에는 출장비와 리포트 제공이 포함되어 있습니다.
+          <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "clamp(22px,4vw,30px) clamp(20px,4vw,32px)", marginTop: 22 }}>
+            <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 600, margin: "0 0 18px" }}>추가 비용</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {EXTRA_COSTS.map((c) => (
+                <div key={c.label} style={{ display: "flex", flexWrap: "wrap", gap: "4px 14px", alignItems: "baseline" }}>
+                  <span style={{ fontSize: 14, color: "#6B5A60", minWidth: 108 }}>{c.label}</span>
+                  <span style={{ fontSize: 15, color: "#33232A" }}>{c.value}</span>
+                  {c.note && <span style={{ fontSize: 13, lineHeight: 1.8, color: "#9A8189", flex: "1 1 260px" }}>{c.note}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 980, margin: "0 auto" }}>
+          <SectionEyebrow>RECORDING</SectionEyebrow>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 14px", letterSpacing: "-0.02em", textAlign: "center" }}>
+            기록 방식
+          </h2>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 34px", textAlign: "center" }}>
+            두 가지 중 고르실 수 있습니다. 둘 다 추가 요금이 없습니다.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 18 }}>
+            {RECORDING.map((r) => (
+              <div key={r.name} style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(26px,4vw,34px) clamp(22px,4vw,32px)" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 16 }}>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: 0 }}>{r.name}</h3>
+                  <span style={{ fontSize: 12, color: "#A9647E", letterSpacing: "0.1em" }}>{r.tag}</span>
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.9, color: "#4A3B41", margin: "0 0 14px" }}>{r.body}</p>
+                <div style={{ background: "#FAF4F5", borderRadius: 4, padding: "14px 16px" }}>
+                  <p style={{ fontSize: 12, color: "#9A8189", margin: "0 0 6px", letterSpacing: "0.06em" }}>책임 범위</p>
+                  <p style={{ fontSize: 14, lineHeight: 1.8, color: "#4A3B41", margin: r.caveat ? "0 0 8px" : 0 }}>{r.responsibility}</p>
+                  {r.caveat && <p style={{ fontSize: 13, lineHeight: 1.8, color: "#9A8189", margin: 0 }}>{r.caveat}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 13.5, lineHeight: 1.9, color: "#9A8189", margin: "22px 0 0" }}>
+            기록 방식은 예식 7일 전 사전 통화까지 바꾸실 수 있고, 예식 당일에는 바꿀 수 없습니다.
           </p>
         </div>
       </section>
 
-      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px) 0" }}>
+      <section style={{ padding: "clamp(30px,6vw,60px) clamp(18px,5vw,24px) clamp(40px,7vw,70px)" }}>
         <div
           data-mq="split"
           style={{ maxWidth: 980, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1.15fr) minmax(0,1fr)", gap: 22, alignItems: "stretch" }}
@@ -293,26 +388,26 @@ export default function PricingPage() {
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>PAYMENT</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
-              50% 선결제,
-              <br />잔금은 예식이 끝난 뒤에
+              서비스 결제 10만원,
+              <br />나머지는 전달 직전 현장에서
             </h2>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>
-              예약 시 전체 금액의 50%만 결제하시면 예약이 확정됩니다. 나머지 50%는 예식 종료 후 정산 내역을 확인하고 결제하시면 됩니다.
+              요금제와 상관없이 서비스 결제 금액은 10만원입니다. 서비스 예약 시 카드로 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스). 예식 당일, 축의금을 전달드리기 직전에 남은 서비스 대금을 현장에서 결제합니다.
             </p>
             <div style={{ display: "flex", gap: 12, marginBottom: 22, flexWrap: "wrap" }}>
-              <div style={{ flex: 1, background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
-                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예약 시</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>50%</div>
-                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>선결제 · 예약 확정</div>
+              <div style={{ flex: "1 1 140px", background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
+                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>서비스 결제</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>10만원</div>
+                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>카드 결제 · 예약 확정</div>
               </div>
-              <div style={{ flex: 1, background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
-                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예식 종료 후</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>50%</div>
-                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>잔금 · 추가분 합산</div>
+              <div style={{ flex: "1 1 140px", background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
+                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예식 당일</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>현장 결제</div>
+                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>전달 직전 현장 결제</div>
               </div>
             </div>
-            <p style={{ fontSize: 12, lineHeight: 1.8, color: "#9A8189", margin: 0 }}>
-              ※ 추가 하객·추가 버틀러 요금은 잔금 결제 시 함께 청구됩니다. 잔금은 예식 다음 영업일까지 결제해 주세요.
+            <p style={{ fontSize: 12.5, lineHeight: 1.85, color: "#9A8189", margin: 0 }}>
+              ※ 현장 결제는 카드 결제 링크 또는 계좌이체로 진행되며 현금영수증을 발행합니다. 결제하실 분은 예약 때 또는 사전 통화 때 지정해 주세요. 인수자로 지정하시면 편합니다.
             </p>
           </div>
         </div>
@@ -320,11 +415,7 @@ export default function PricingPage() {
 
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.55)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 14 }}>
-            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
-            <span style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#A9647E" }}>INCLUDED</span>
-            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
-          </div>
+          <SectionEyebrow>INCLUDED</SectionEyebrow>
           <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
             모든 패키지 공통 포함
           </h2>
@@ -341,11 +432,7 @@ export default function PricingPage() {
 
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 14 }}>
-            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
-            <span style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#A9647E" }}>NOTICE</span>
-            <span style={{ display: "block", width: 26, height: 1, background: "#CBA9B4" }} />
-          </div>
+          <SectionEyebrow>NOTICE</SectionEyebrow>
           <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
             예약 전 확인사항
           </h2>
