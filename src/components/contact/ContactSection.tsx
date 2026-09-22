@@ -1,7 +1,59 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import type { ContactInput } from "@/lib/reservation-types";
+
+declare global {
+  interface Window {
+    kakaoAsyncInit: () => void;
+    Kakao?: { Channel?: { createChatButton: (opts: { container: string }) => void } };
+  }
+}
+
+const KAKAO_SDK_ID = "kakao-js-sdk";
+const KAKAO_SDK_SRC = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.channel.min.js";
+const KAKAO_SDK_INTEGRITY = "sha384-8oNFBbAHWVovcMLgR+mLbxqwoucixezSAzniBcjnEoumhfIbMIg4DrVsoiPEtlnt";
+
+function KakaoChannelButton() {
+  useEffect(() => {
+    function make() {
+      if (!document.getElementById("kakao-talk-channel-chat-button")) return false;
+      window.Kakao?.Channel?.createChatButton({ container: "#kakao-talk-channel-chat-button" });
+      return true;
+    }
+    window.kakaoAsyncInit = () => {
+      if (!make()) {
+        const t = setInterval(() => {
+          if (make()) clearInterval(t);
+        }, 200);
+        setTimeout(() => clearInterval(t), 10000);
+      }
+    };
+
+    if (!document.getElementById(KAKAO_SDK_ID)) {
+      const js = document.createElement("script");
+      js.id = KAKAO_SDK_ID;
+      js.src = KAKAO_SDK_SRC;
+      js.integrity = KAKAO_SDK_INTEGRITY;
+      js.crossOrigin = "anonymous";
+      document.body.appendChild(js);
+    } else {
+      window.kakaoAsyncInit();
+    }
+  }, []);
+
+  return (
+    <div
+      id="kakao-talk-channel-chat-button"
+      data-channel-public-id="_AlhxnX"
+      data-title="consult"
+      data-size="small"
+      data-color="yellow"
+      data-shape="pc"
+      data-support-multiple-densities="true"
+    />
+  );
+}
 
 const TOPICS = ["요금 문의", "지역 문의", "기타"];
 
@@ -198,11 +250,16 @@ export function ContactSection() {
               </div>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>카카오톡</div>
-                채널 @웨딩버틀러
+                <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                  <span>채널 @웨딩버틀러</span>
+                  <KakaoChannelButton />
+                </div>
               </div>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>상담 시간</div>
-                매일 오전 9:00 – 오후 10:00
+                평일 10:00 – 19:00
+                <br />
+                주말·공휴일은 예식 현장 운영
               </div>
             </div>
           </div>
@@ -212,37 +269,6 @@ export function ContactSection() {
               경기 성남시 분당구 운중로 124
               <br />8층 804-S80호
             </p>
-          </div>
-          <div style={{ background: "#FEE500", borderRadius: 6, padding: 30 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <span
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: "#3C1E1E",
-                  color: "#FEE500",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 16,
-                  fontWeight: 700,
-                }}
-              >
-                k
-              </span>
-              <div style={{ fontSize: 15, fontWeight: 500, color: "#3C1E1E" }}>카카오로 문의하기</div>
-            </div>
-            <p style={{ fontSize: 13, lineHeight: 1.9, color: "#5A3A28", margin: "0 0 18px" }}>채널 추가 후 메시지를 남겨주시면 상담 시간 내 가장 빠르게 답변드립니다.</p>
-            <a
-              href="http://pf.kakao.com/_AIhxnX/chat"
-              target="_blank"
-              rel="noreferrer"
-              className="kakao-btn-hover"
-              style={{ display: "inline-block", background: "#3C1E1E", color: "#FEE500", padding: "13px 26px", borderRadius: 999, fontSize: 14 }}
-            >
-              카카오톡 채널 문의
-            </a>
           </div>
         </div>
       </div>

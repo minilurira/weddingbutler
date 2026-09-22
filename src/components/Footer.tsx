@@ -57,14 +57,18 @@ function InicisMark() {
 function BusinessInfo({ style }: { style: React.CSSProperties }) {
   return (
     <p style={style}>
-      웨딩버틀러 · 대표자 이강 · 사업자등록번호 677-08-03502
+      웨딩버틀러 · 대표 이강 · 사업자등록번호 677-08-03502
       <br />
       통신판매업신고{" "}
-      <a onClick={openBizInfo} style={{ color: "#9A8189", cursor: "pointer" }} className="footer-legal-hover">
-        제2026-성남분당A-0820
+      <a onClick={openBizInfo} style={{ color: "#D8C3C9", cursor: "pointer" }} className="footer-legal-hover">
+        제2026-성남분당A-0820호
       </a>
       <br />
-      경기 성남시 분당구 운중로 124 8층 804-S80호 · 010-5918-9203
+      경기도 성남시 분당구 운중로 124, 8층 804-S80호
+      <br />
+      고객센터 010-5918-9203 (매일 09:00~22:00) · cs@weddingbutler.co.kr
+      <br />
+      카카오톡 채널 @웨딩버틀러
       <br />© 2026 Wedding Butler. All rights reserved.
     </p>
   );
@@ -95,7 +99,7 @@ export function Footer({ full = false }: { full?: boolean }) {
           <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
             WEDDING BUTLER
           </div>
-          <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "22px 0 0" }} />
+          <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#B79AA3", margin: "22px 0 0" }} />
           <LegalLinks />
           <InicisMark />
         </div>
@@ -160,7 +164,7 @@ export function Footer({ full = false }: { full?: boolean }) {
             </div>
           </div>
         </div>
-        <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#6B5A60", margin: "26px 0 0" }} />
+        <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#B79AA3", margin: "26px 0 0" }} />
         <LegalLinks />
         <InicisMark />
       </div>
