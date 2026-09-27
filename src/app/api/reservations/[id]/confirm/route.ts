@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyPortOnePayment } from "@/lib/portone";
 import { syncReservationToAdmin } from "@/lib/admin-sync";
+import { sendNewReservationAlimtalk } from "@/lib/notify-new-reservation";
 import type { PlanKey } from "@/lib/plans";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
 
@@ -84,6 +85,18 @@ export async function POST(
       venue: reservation.venue ?? "",
       guests: reservation.guests,
       payMethod: reservation.pay_method,
+    });
+    void sendNewReservationAlimtalk({
+      bookingNo: reservation.booking_no,
+      customerName: reservation.couple_name,
+      phone: reservation.phone,
+      plan: reservation.plan as PlanKey,
+      year: reservation.ceremony_year,
+      month: reservation.ceremony_month,
+      day: reservation.ceremony_day,
+      time: reservation.ceremony_time,
+      venue: reservation.venue ?? "",
+      amount: reservation.deposit_amount,
     });
 
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };
