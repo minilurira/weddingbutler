@@ -86,10 +86,8 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     title: "예약 및 결제",
     body: (
       <>
-        <NoticeItem>모든 요금제의 서비스 결제 금액은 10만원이며, 카드로 결제하시면 예약이 확정됩니다.</NoticeItem>
-        <NoticeItem>남은 서비스 대금은 예식 당일 전달 직전 현장에서 결제합니다.</NoticeItem>
-        <NoticeItem>현장 결제는 카드 결제 링크 또는 계좌이체로 진행되며 현금영수증을 발행합니다.</NoticeItem>
-        <NoticeItem>예식일 7일 전까지만 온라인 예약을 받습니다.</NoticeItem>
+        <NoticeItem>서비스 결제 금액을 예약 시 카드로 전액 결제하시면 예약이 확정됩니다.</NoticeItem>
+        <NoticeItem>예식일 7일 전까지, 예식일 기준 3개월 이내 날짜만 온라인 예약을 받습니다.</NoticeItem>
       </>
     ),
   },
@@ -133,7 +131,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     body: (
       <>
         <NoticeItem>접수대 운영에 테이블·의자·전원 확보가 필요하니, 예식장에 설치 가능 여부를 확인해 주세요.</NoticeItem>
-        <NoticeItem>예식 7일 전 사전 통화에서 예식장 구조, 신랑·신부측 구분 방법, 하객 기준, 인수자와 잔금 결제자를 확인합니다.</NoticeItem>
+        <NoticeItem>예식 7일 전 사전 통화에서 예식장 구조, 신랑·신부측 구분 방법, 하객 기준, 인수자를 확인합니다.</NoticeItem>
       </>
     ),
   },
@@ -388,27 +386,17 @@ export default function PricingPage() {
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>PAYMENT</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
-              서비스 결제 10만원,
-              <br />나머지는 전달 직전 현장에서
+              서비스 결제 금액,
+              <br />예약과 동시에 전액 결제
             </h2>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>
-              요금제와 상관없이 서비스 결제 금액은 10만원입니다. 서비스 예약 시 카드로 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스). 예식 당일, 축의금을 전달드리기 직전에 남은 서비스 대금을 현장에서 결제합니다.
+              요금제별 서비스 결제 금액을 예약 시 카드로 전액 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스).
             </p>
-            <div style={{ display: "flex", gap: 12, marginBottom: 22, flexWrap: "wrap" }}>
-              <div style={{ flex: "1 1 140px", background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
-                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>서비스 결제</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>10만원</div>
-                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>카드 결제 · 예약 확정</div>
-              </div>
-              <div style={{ flex: "1 1 140px", background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
-                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예식 당일</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>현장 결제</div>
-                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>전달 직전 현장 결제</div>
-              </div>
+            <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
+              <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>서비스 결제</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>전액 온라인 카드 결제</div>
+              <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>결제 즉시 예약 확정</div>
             </div>
-            <p style={{ fontSize: 12.5, lineHeight: 1.85, color: "#9A8189", margin: 0 }}>
-              ※ 현장 결제는 카드 결제 링크 또는 계좌이체로 진행되며 현금영수증을 발행합니다. 결제하실 분은 예약 때 또는 사전 통화 때 지정해 주세요. 인수자로 지정하시면 편합니다.
-            </p>
           </div>
         </div>
       </section>

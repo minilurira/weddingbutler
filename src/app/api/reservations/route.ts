@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { calcPrice, PLANS, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
@@ -49,16 +50,14 @@ export async function POST(req: NextRequest) {
   }
 
   const ceremonyDate = new Date(year, month - 1, day);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const minDate = new Date(today);
-  minDate.setDate(minDate.getDate() + 7);
-  if (ceremonyDate < minDate) {
+  if (ceremonyDate < minBookingDate()) {
     return NextResponse.json({ message: "예식 7일 전까지만 예약할 수 있습니다." }, { status: 400 });
   }
-  const dow = ceremonyDate.getDay();
-  if (dow !== 0 && dow !== 6) {
-    return NextResponse.json({ message: "토요일 · 일요일만 예약 가능합니다." }, { status: 400 });
+  if (ceremonyDate > maxBookingDate()) {
+    return NextResponse.json({ message: "예식 3개월 이내 날짜만 예약할 수 있습니다." }, { status: 400 });
+  }
+  if (!isBookableDow(ceremonyDate)) {
+    return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
   }
 
   const price = calcPrice(plan, guests, extraButlers);

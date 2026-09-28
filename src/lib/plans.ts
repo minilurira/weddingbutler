@@ -57,6 +57,11 @@ export interface PriceBreakdown {
  * once the actual 식권 배부 매수 for the day is known. */
 export const DEPOSIT_AMOUNT = 100000;
 
+/** PG(결제대행사) 심사 기간 동안 임시로 예약금이 아닌 패키지 전체 금액을 온라인
+ * 결제로 받는다. 심사가 끝나면 false로 되돌려 DEPOSIT_AMOUNT 고정 예약금 방식으로
+ * 복원한다 — 그 외 코드는 calcPrice의 deposit 값만 참조하므로 이 플래그만 바꾸면 된다. */
+export const CHARGE_FULL_AMOUNT_TEMP = true;
+
 export function calcPrice(
   plan: PlanKey,
   guests: number,
@@ -68,7 +73,7 @@ export function calcPrice(
   const over = Math.max(0, guests - p.incl) * 2000;
   const extraButlerAmount = extraButlers * 100000;
   const total = p.base + extraButlerAmount;
-  const deposit = DEPOSIT_AMOUNT;
+  const deposit = CHARGE_FULL_AMOUNT_TEMP ? total : DEPOSIT_AMOUNT;
   return {
     base: p.base,
     over,

@@ -11,6 +11,7 @@ import {
   type PayMethod,
   type PlanKey,
 } from "@/lib/plans";
+import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { requestDepositPayment } from "@/lib/portone-client";
 import type {
@@ -20,15 +21,6 @@ import type {
 
 const FIXED_PAY_METHOD: PayMethod = "신용카드";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/** Earliest bookable date: the first Sat/Sun at least 7 days from today. */
-function firstBookableWeekend(): Date {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() + 7);
-  while (d.getDay() !== 0 && d.getDay() !== 6) d.setDate(d.getDate() + 1);
-  return d;
-}
 
 interface ModalState {
   plan: PlanKey;
@@ -53,7 +45,7 @@ interface ModalState {
 }
 
 function initialState(plan: PlanKey): ModalState {
-  const first = firstBookableWeekend();
+  const first = firstBookableDate();
   return {
     plan,
     y: first.getFullYear(),
@@ -178,13 +170,13 @@ export function ReservationModal({
   const agreed = state.agreeTerms && state.agreeRefund && state.agreePrivacy;
   const ready = filled && agreed;
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const minDate = new Date(today);
-  minDate.setDate(minDate.getDate() + 7);
+  const minDate = minBookingDate();
+  const maxDate = maxBookingDate();
   const first = new Date(state.y, state.m - 1, 1);
   const start = first.getDay();
   const totalDays = new Date(state.y, state.m, 0).getDate();
+  const canPrevMonth = first > new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  const canNextMonth = first < new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
 
   const days: { key: string; label: string; style: CSSProperties; onClick: (() => void) | null }[] = [];
   for (let i = 0; i < start; i++) {
@@ -193,9 +185,9 @@ export function ReservationModal({
   for (let d = 1; d <= totalDays; d++) {
     const dt = new Date(state.y, state.m - 1, d);
     const dow = dt.getDay();
-    const weekend = dow === 0 || dow === 6;
-    const tooSoon = dt < minDate;
-    const open = weekend && !tooSoon;
+    const bookable = isBookableDow(dt);
+    const inRange = dt >= minDate && dt <= maxDate;
+    const open = bookable && inRange;
     const sel = state.date === d && open;
     days.push({
       key: "d" + d,
@@ -210,8 +202,8 @@ export function ReservationModal({
         borderRadius: 3,
         userSelect: "none",
         cursor: open ? "pointer" : "default",
-        background: sel ? "#33232A" : open ? "#FFFFFF" : weekend ? "#EADDE1" : "transparent",
-        border: "1px solid " + (sel ? "#33232A" : open ? "#E7D5DA" : weekend ? "#E0CDD3" : "transparent"),
+        background: sel ? "#33232A" : open ? "#FFFFFF" : bookable ? "#EADDE1" : "transparent",
+        border: "1px solid " + (sel ? "#33232A" : open ? "#E7D5DA" : bookable ? "#E0CDD3" : "transparent"),
         color: sel ? "#FFFFFF" : !open ? "#C3AEB5" : dow === 0 ? "#C0607F" : "#8A9BB0",
         transition: "background .2s ease, border-color .2s ease, color .2s ease",
       },
@@ -409,13 +401,23 @@ export function ReservationModal({
                 >
                   <span style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E" }}>STEP 2 · 예식 날짜</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <button onClick={() => shiftMonth(-1)} className="round-nav-hover" style={navBtnStyle}>
+                    <button
+                      onClick={() => canPrevMonth && shiftMonth(-1)}
+                      disabled={!canPrevMonth}
+                      className="round-nav-hover"
+                      style={{ ...navBtnStyle, opacity: canPrevMonth ? 1 : 0.35, cursor: canPrevMonth ? "pointer" : "default" }}
+                    >
                       ‹
                     </button>
                     <span style={{ fontFamily: fontSerif, fontSize: 17, minWidth: 104, textAlign: "center", whiteSpace: "nowrap" }}>
                       {state.y}년 {state.m}월
                     </span>
-                    <button onClick={() => shiftMonth(1)} className="round-nav-hover" style={navBtnStyle}>
+                    <button
+                      onClick={() => canNextMonth && shiftMonth(1)}
+                      disabled={!canNextMonth}
+                      className="round-nav-hover"
+                      style={{ ...navBtnStyle, opacity: canNextMonth ? 1 : 0.35, cursor: canNextMonth ? "pointer" : "default" }}
+                    >
                       ›
                     </button>
                   </div>
@@ -579,7 +581,9 @@ export function ReservationModal({
                   <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
                 <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 20 }}>
-                  부가세 포함 · 잔여 {won(price.balance)}은 예식 당일 전달 직전 현장 결제
+                  {price.balance > 0
+                    ? `부가세 포함 · 잔여 ${won(price.balance)}은 예식 당일 전달 직전 현장 결제`
+                    : "부가세 포함"}
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 16 }}>
@@ -640,7 +644,9 @@ export function ReservationModal({
                   <p style={{ fontSize: 13, lineHeight: 1.7, color: "#B0304A", margin: "12px 0 0" }}>{state.error}</p>
                 )}
                 <p style={{ fontSize: 12, lineHeight: 1.8, color: "#9A8189", margin: "16px 0 0" }}>
-                  오늘은 서비스 결제 10만원만 카드로 진행되며, 남은 서비스 대금은 예식 당일 전달 직전 현장에서 결제합니다.
+                  {price.balance > 0
+                    ? "오늘은 서비스 결제 10만원만 카드로 진행되며, 남은 서비스 대금은 예식 당일 전달 직전 현장에서 결제합니다."
+                    : "서비스 결제 금액 전액을 오늘 카드로 결제합니다."}
                 </p>
               </div>
             </div>
