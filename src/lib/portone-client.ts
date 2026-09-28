@@ -10,6 +10,11 @@ export interface RequestDepositPaymentArgs {
   customerName: string;
   customerPhone: string;
   customerEmail: string;
+  /** Where KG이니시스's mobile flow redirects back to after auth. Required for
+   * mobile — without it, PortOne can't use the REDIRECTION window type and
+   * falls back to the PC 웹표준 module, which 이니시스 then refuses on a
+   * mobile device ("[INIStdPay/Dev. Error] PC로 결제 진행을 부탁드립니다"). */
+  redirectUrl: string;
 }
 
 export interface RequestDepositPaymentResult {
@@ -45,6 +50,7 @@ export async function requestDepositPayment(
     orderName: args.orderName,
     totalAmount: args.amount,
     currency: "CURRENCY_KRW" as const,
+    redirectUrl: args.redirectUrl,
     customer: {
       fullName: args.customerName,
       phoneNumber: args.customerPhone.replace(/[^0-9]/g, ""),

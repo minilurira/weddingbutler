@@ -263,6 +263,10 @@ export function ReservationModal({
         throw new Error(created.message || "예약 생성에 실패했습니다.");
       }
 
+      const returnUrl = new URL("/reservation/return", window.location.origin);
+      returnUrl.searchParams.set("rid", created.id);
+      returnUrl.searchParams.set("paymentId", created.paymentId);
+
       const payResult = await requestDepositPayment({
         paymentId: created.paymentId,
         orderName: created.orderName,
@@ -271,6 +275,7 @@ export function ReservationModal({
         customerName: state.name,
         customerPhone: state.phone,
         customerEmail: state.email,
+        redirectUrl: returnUrl.toString(),
       });
       if (!payResult.ok) {
         throw new Error(payResult.message || "결제가 취소되었습니다.");
