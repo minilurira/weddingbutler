@@ -84,6 +84,7 @@ export async function POST(
       venue: reservation.venue ?? "",
       guests: reservation.guests,
       payMethod: reservation.pay_method,
+      depositAmount: reservation.deposit_amount,
     });
 
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };

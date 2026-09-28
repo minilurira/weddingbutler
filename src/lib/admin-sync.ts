@@ -13,6 +13,7 @@ export interface AdminSyncInput {
   venue: string;
   guests: number;
   payMethod: string;
+  depositAmount: number;
 }
 
 function pad(n: number) {
@@ -52,6 +53,7 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         guestCount: input.guests,
         plan: PLANS[input.plan].name,
         memo: `결제 수단: ${input.payMethod}`,
+        paidAmount: input.depositAmount,
       }),
     });
     if (!res.ok) {
