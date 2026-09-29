@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
-import { calcPrice, PLANS, type PlanKey } from "@/lib/plans";
+import { calcPrice, PLANS, TEST_PRICE, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
   CreateReservationInput,
@@ -24,8 +24,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod } =
+  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod, test, testKey } =
     body;
+
+  const isTest = test === true;
+  if (isTest && (!process.env.TEST_PAYMENT_KEY || testKey !== process.env.TEST_PAYMENT_KEY)) {
+    return NextResponse.json({ message: "잘못된 테스트 키입니다." }, { status: 403 });
+  }
 
   if (!isPlanKey(plan)) {
     return NextResponse.json({ message: "Unknown plan." }, { status: 400 });
@@ -60,11 +65,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
   }
 
-  const price = calcPrice(plan, guests, extraButlers);
+  const price = isTest ? TEST_PRICE : calcPrice(plan, guests, extraButlers);
   const planInfo = PLANS[plan];
   const bookingNo = `WB${year}${pad(month)}${pad(day)}-${Math.floor(1000 + Math.random() * 8999)}`;
   const paymentId = randomUUID();
-  const orderName = `웨딩버틀러 ${planInfo.name} 서비스 결제금`;
+  const orderName = isTest
+    ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
+    : `웨딩버틀러 ${planInfo.name} 서비스 결제금`;
 
   try {
     const db = supabaseAdmin();
@@ -77,7 +84,7 @@ export async function POST(req: NextRequest) {
         ceremony_month: month,
         ceremony_day: day,
         ceremony_time: time,
-        couple_name: name.trim(),
+        couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
         phone: phone.trim(),
         email: email.trim(),
         venue: venue?.trim() || null,

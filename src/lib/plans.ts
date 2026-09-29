@@ -85,6 +85,19 @@ export function calcPrice(
   };
 }
 
+/** Flat 1,000원 charge used only by the header's hidden test-payment button
+ * (결제/알림톡/카카오워크봇 파이프라인 점검용) — never reachable by a real
+ * customer, see TEST_PAYMENT_KEY handling in /api/reservations. */
+export const TEST_PRICE: PriceBreakdown = {
+  base: 1000,
+  over: 0,
+  extraButlerAmount: 0,
+  total: 1000,
+  deposit: 1000,
+  balance: 0,
+  incl: 0,
+};
+
 /** Clamp guest count when switching plans, mirroring the prototype's `pick()` behavior. */
 export function guestsForPlanSwitch(plan: PlanKey, guests: number): number {
   if (plan === "small" && guests > 200) return 200;

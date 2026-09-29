@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
@@ -14,10 +14,24 @@ const NAV = [
 export function Header({ active }: { active?: "service" | "pricing" | "contact" }) {
   const { openModal } = useReservation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [testKey, setTestKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const key = new URLSearchParams(window.location.search).get("testkey");
+      if (key) setTestKey(key);
+    } catch {
+      // ignore
+    }
+  }, []);
 
   function openBookingFromMenu() {
     setMenuOpen(false);
     openModal();
+  }
+
+  function openTestPayment() {
+    if (testKey) openModal(undefined, { test: true, testKey });
   }
 
   return (
@@ -90,6 +104,24 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
           >
             예약하기
           </button>
+          {testKey && (
+            <button
+              onClick={openTestPayment}
+              style={{
+                background: "#B0304A",
+                color: "#fff",
+                padding: "12px 18px",
+                border: "none",
+                borderRadius: 999,
+                fontSize: 13,
+                fontWeight: 500,
+                letterSpacing: "0.02em",
+                cursor: "pointer",
+              }}
+            >
+              테스트 결제 (1,000원)
+            </button>
+          )}
         </div>
         <button
           data-mq="burger"
@@ -155,6 +187,27 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
           >
             예약하기
           </button>
+          {testKey && (
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                openTestPayment();
+              }}
+              style={{
+                marginTop: 10,
+                textAlign: "center",
+                background: "#B0304A",
+                color: "#fff",
+                padding: 16,
+                border: "none",
+                borderRadius: 999,
+                fontSize: 15,
+                cursor: "pointer",
+              }}
+            >
+              테스트 결제 (1,000원)
+            </button>
+          )}
         </div>
       )}
     </header>

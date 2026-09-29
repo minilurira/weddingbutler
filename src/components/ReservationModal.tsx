@@ -6,6 +6,7 @@ import {
   guestsForPlanSwitch,
   PLAN_ORDER,
   PLANS,
+  TEST_PRICE,
   TIME_SLOTS,
   won,
   type PayMethod,
@@ -85,11 +86,15 @@ const chipStyle = (on: boolean): CSSProperties => ({
 export function ReservationModal({
   open,
   plan,
+  test = false,
+  testKey = "",
   onClose,
   onPlanChange,
 }: {
   open: boolean;
   plan: PlanKey;
+  test?: boolean;
+  testKey?: string;
   onClose: () => void;
   onPlanChange: (p: PlanKey) => void;
 }) {
@@ -158,7 +163,7 @@ export function ReservationModal({
   if (!open) return null;
 
   const P = PLANS[state.plan];
-  const price = calcPrice(state.plan, state.guests, state.extraButlers);
+  const price = test ? TEST_PRICE : calcPrice(state.plan, state.guests, state.extraButlers);
   const filled = !!(
     state.date &&
     state.time &&
@@ -256,6 +261,8 @@ export function ReservationModal({
           guests: state.guests,
           extraButlers: state.extraButlers,
           payMethod: FIXED_PAY_METHOD,
+          test,
+          testKey,
         }),
       });
       const created = (await res.json()) as CreateReservationResponse & { message?: string };
@@ -347,8 +354,13 @@ export function ReservationModal({
       <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 1060, margin: "0 auto", position: "relative" }}>
         <div data-mq="modal-head" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 22 }}>
           <div style={{ minWidth: 0, paddingRight: 52 }}>
-            <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#E9CAD1", margin: "0 0 10px" }}>
+            <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.4em", color: "#E9CAD1", margin: "0 0 10px", display: "flex", alignItems: "center", gap: 10 }}>
               RESERVATION
+              {test && (
+                <span style={{ fontFamily: "var(--font-sans), sans-serif", letterSpacing: 0, background: "#B0304A", color: "#fff", fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 999 }}>
+                  TEST · 1,000원
+                </span>
+              )}
             </p>
             <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(22px,5vw,30px)", fontWeight: 600, margin: "0 0 8px", color: "#FFFFFF", letterSpacing: "-0.02em" }}>
               온라인 예약 · 결제

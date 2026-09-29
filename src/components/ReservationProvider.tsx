@@ -13,7 +13,7 @@ import type { PlanKey } from "@/lib/plans";
 import { ReservationModal } from "@/components/ReservationModal";
 
 interface ReservationContextValue {
-  openModal: (plan?: PlanKey) => void;
+  openModal: (plan?: PlanKey, opts?: { test?: boolean; testKey?: string }) => void;
   closeModal: () => void;
 }
 
@@ -34,9 +34,13 @@ function isPlanKey(v: string | null): v is PlanKey {
 export function ReservationProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [plan, setPlan] = useState<PlanKey>("standard");
+  const [test, setTest] = useState(false);
+  const [testKey, setTestKey] = useState("");
 
-  const openModal = useCallback((p?: PlanKey) => {
+  const openModal = useCallback((p?: PlanKey, opts?: { test?: boolean; testKey?: string }) => {
     if (p) setPlan(p);
+    setTest(!!opts?.test);
+    setTestKey(opts?.testKey ?? "");
     setOpen(true);
   }, []);
   const closeModal = useCallback(() => setOpen(false), []);
@@ -57,7 +61,7 @@ export function ReservationProvider({ children }: { children: ReactNode }) {
   return (
     <ReservationContext.Provider value={value}>
       {children}
-      <ReservationModal open={open} plan={plan} onClose={closeModal} onPlanChange={setPlan} />
+      <ReservationModal open={open} plan={plan} test={test} testKey={testKey} onClose={closeModal} onPlanChange={setPlan} />
     </ReservationContext.Provider>
   );
 }
