@@ -72,11 +72,14 @@ export async function POST(
       })
       .eq("id", params.id);
 
-    // Fire-and-forget-ish: staff should only see the reservation in the admin
-    // once the deposit is actually paid, not while the customer is still
-    // filling out the form. Never blocks or fails the customer's booking if
-    // the admin is unreachable.
-    void syncReservationToAdmin({
+    // Awaited (not fire-and-forget): this Next.js version has no after()/
+    // waitUntil() to keep a serverless function alive past its response, so
+    // an un-awaited call here was getting cut off mid-flight once the
+    // response below was sent. syncReservationToAdmin never throws (it
+    // catches its own errors and only logs), so awaiting it still can't
+    // fail or block the customer's booking — it just makes sure the admin
+    // sync actually finishes before the function exits.
+    await syncReservationToAdmin({
       bookingNo: reservation.booking_no,
       plan: reservation.plan as PlanKey,
       year: reservation.ceremony_year,
