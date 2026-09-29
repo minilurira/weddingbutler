@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
+import { PLANS, type PlanKey } from "@/lib/plans";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 /**
- * TEMPORARY diagnostic route to verify ADMIN_API_URL/ADMIN_API_KEY actually
- * reach the admin app. Sends one clearly-marked ping payload (externalId
- * "DIAGNOSTIC-PING") so it's easy to spot/ignore in the admin's list, then
- * reports back exactly what the admin responded. Remove once admin sync is
- * confirmed working.
+ * TEMPORARY diagnostic route. Re-sends the most recent *real* reservation's
+ * data to ADMIN_API_URL (a genuine admin-sync attempt, not a synthetic
+ * payload) and reports back exactly what the admin responded — this catches
+ * payload-shape issues (special characters, field values) that a clean
+ * synthetic test payload wouldn't. Remove once admin sync is confirmed
+ * working end-to-end.
  */
 export async function GET() {
   const url = process.env.ADMIN_API_URL;
@@ -22,23 +25,43 @@ export async function GET() {
     });
   }
 
+  const db = supabaseAdmin();
+  const { data: reservation, error } = await db
+    .from("reservations")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error || !reservation) {
+    return NextResponse.json({ ok: false, meaning: "최근 예약을 찾지 못했습니다.", error: error?.message });
+  }
+
+  function pad(n: number) {
+    return String(n).padStart(2, "0");
+  }
+  const parts = String(reservation.couple_name).split("·").map((p: string) => p.trim()).filter(Boolean);
+  const customer = parts.length > 1 ? parts[parts.length - 1] : String(reservation.couple_name).trim();
+
+  const payload = {
+    externalId: reservation.booking_no,
+    customer,
+    couple: reservation.couple_name,
+    phone: reservation.phone,
+    weddingDate: `${reservation.ceremony_year}-${pad(reservation.ceremony_month)}-${pad(reservation.ceremony_day)}`,
+    weddingTime: reservation.ceremony_time,
+    venue: reservation.venue || "미정",
+    guestCount: reservation.guests,
+    plan: PLANS[reservation.plan as PlanKey]?.name ?? reservation.plan,
+    memo: `[admin-sync-debug 재전송] 결제 수단: ${reservation.pay_method}`,
+    paidAmount: reservation.deposit_amount,
+  };
+
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        externalId: "DIAGNOSTIC-PING",
-        customer: "진단테스트",
-        couple: "진단테스트",
-        phone: "010-0000-0000",
-        weddingDate: "2099-01-01",
-        weddingTime: "12:00",
-        venue: "진단용 - 무시해 주세요",
-        guestCount: 0,
-        plan: "스몰케어",
-        memo: "admin-sync-debug ping",
-        paidAmount: 0,
-      }),
+      body: JSON.stringify(payload),
     });
     const body = await res.text().catch(() => "");
 
@@ -48,16 +71,26 @@ export async function GET() {
         : res.status === 404
           ? "404 — ADMIN_API_URL 경로가 잘못됐거나 admin 쪽에 해당 엔드포인트가 없습니다."
           : res.ok
-            ? "성공 — admin이 정상적으로 받았습니다. 지금까지의 실패는 이전 배포/설정 문제였을 가능성이 높습니다."
-            : `예상치 못한 응답(${res.status}) — rawBody 확인 필요.`;
+            ? "성공 — 실제 예약 데이터로도 admin이 정상적으로 받았습니다."
+            : `admin이 이 실제 데이터를 거부했습니다 (상태 ${res.status}) — rawBody를 확인하세요. 필드 값/형식 문제일 수 있습니다.`;
 
-    return NextResponse.json({ ok: true, urlUsed: url, status: res.status, meaning, rawBody: body });
+    return NextResponse.json({
+      ok: true,
+      bookingNo: reservation.booking_no,
+      paymentStatus: reservation.payment_status,
+      urlUsed: url,
+      payloadSent: payload,
+      status: res.status,
+      meaning,
+      rawBody: body,
+    });
   } catch (err) {
     return NextResponse.json({
       ok: false,
       meaning: "admin API에 아예 연결이 안 됐습니다 (네트워크/도메인 문제).",
       error: err instanceof Error ? err.message : String(err),
       urlUsed: url,
+      payloadSent: payload,
     });
   }
 }
