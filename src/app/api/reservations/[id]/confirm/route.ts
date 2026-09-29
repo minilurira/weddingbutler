@@ -48,6 +48,10 @@ export async function POST(
     const payment = await verifyPortOnePayment(paymentId);
 
     if (payment.status !== "PAID" || payment.amountTotal !== reservation.deposit_amount) {
+      console.error(
+        `[reservations/confirm] payment not accepted for ${reservation.booking_no}: ` +
+          `portoneStatus=${payment.status} portoneAmount=${payment.amountTotal} expectedAmount=${reservation.deposit_amount} paymentId=${paymentId}`
+      );
       await db
         .from("reservations")
         .update({ payment_status: "failed" })
