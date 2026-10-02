@@ -10,7 +10,7 @@ export const TERMS_HTML = `
   <div style="font-size:12px; letter-spacing:0.22em; color:#A9647E; margin:0 0 6px;">제 1 장 &nbsp;총칙</div>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제1조 (목적)</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 웨딩버틀러(이하 "회사")가 운영하는 인터넷 사이트 weddingbutler.pro(이하 "사이트")에서 제공하는 결혼식 축의금 접수·기록·인계 대행 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 웨딩버틀러(이하 "회사")가 운영하는 인터넷 사이트 weddingbutler.co.kr(이하 "사이트")에서 제공하는 결혼식 축의금 접수·기록·인계 대행 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자의 권리·의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 전화·카카오톡 채널 등을 통한 예약에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 회사는 회원제를 운영하지 아니합니다. 이용자는 회원 가입 없이 서비스를 예약·이용하며, 회사는 이용자에게 아이디 및 비밀번호를 부여하지 아니합니다.</p>
 
