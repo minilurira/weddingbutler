@@ -1,8 +1,9 @@
 # Deploying to weddingbutler.co.kr (Vercel)
 
 Vercel's GitHub integration is already connected to this repo — it builds
-and deploys automatically on every push to `main` (and creates a preview
-deployment for every PR). Nothing further is needed to trigger a deploy.
+and deploys production automatically on every push to
+`claude/wedding-butler-website-k1qg8w` (and creates a preview deployment for
+every PR). Nothing further is needed to trigger a deploy.
 
 `.github/workflows/ci.yml` is a separate CI gate (type-check + build) that
 runs on the same events, independent of Vercel's own build — it just flags
@@ -63,6 +64,43 @@ Domains tab shows a ✓ once it verifies — that's the signal it's done.
 
 ## After setup
 
-Push to `main` → Vercel deploys to production automatically. Once Supabase
+Push to `claude/wedding-butler-website-k1qg8w` → Vercel deploys to production automatically. Once Supabase
 and PortOne env vars are set, reservations/contact/payments go live with no
 further changes needed.
+
+## 배포 승인 게이트 (카카오워크)
+
+Before pushing to the production branch, ask the KakaoWork group for approval:
+
+```
+APPROVAL_API_KEY=... node scripts/request-approval.mjs "변경 요약" ["상세 설명"]
+```
+
+The group gets a message with 승인/거부 buttons. The script waits and exits
+`0` on 승인, `1` on 거부 or after 30 minutes with no answer, `2` on error.
+Push only when it exits `0`. The result is also posted back to the group.
+
+### One-time setup
+
+1. **KakaoWork bot.** The admin project already has one (its
+   `KAKAOWORK_APP_KEY`). Reuse that App Key, or create a new bot in
+   카카오워크 관리자센터 → 봇 관리. Put the bot in the group that should approve
+   (동업자 포함) and get that conversation's id (the admin's
+   `KAKAOWORK_CONVERSATION_ID` if you use the same ops group).
+2. **Supabase.** Run the `approval_requests` part of `supabase/schema.sql` in
+   the SQL editor.
+3. **Vercel env (Production).** `KAKAOWORK_APP_KEY`,
+   `KAKAOWORK_CONVERSATION_ID`, `APPROVAL_API_KEY` (any long random string),
+   then redeploy.
+4. **Callback URL.** After the deploy that contains `/api/approvals/callback`
+   is live, set the bot's Callback URL in 관리자센터 to
+   `https://weddingbutler.co.kr/api/approvals/callback`. A bot has a single
+   Callback URL, so if the admin's bot already uses one, create a separate bot.
+5. **Script env.** Wherever pushes happen (your machine, the Claude
+   environment), set `APPROVAL_API_KEY` to the same value. Optional:
+   `APPROVAL_API_URL` (default `https://weddingbutler.co.kr`).
+6. Run the script once with a test title and press 승인/거부 to check the
+   round trip.
+
+The very first deploy of this feature can't go through the gate (the
+endpoints don't exist in production yet); every push after setup can.
