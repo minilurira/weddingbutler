@@ -76,6 +76,11 @@ Before pushing to the production branch, ask the KakaoWork group for approval:
 APPROVAL_API_KEY=... node scripts/request-approval.mjs "변경 요약" ["상세 설명"]
 ```
 
+Put what changed and what it affects in the 상세 설명, one `•` line each
+(e.g. `• 예약 폼: 웨딩 날짜 필수` / `• 영향: 신규 예약부터, DB 변경 없음`).
+The admin repo has its own copy of the script that calls this same API; its
+messages are tagged `[어드민]`, this repo's `[홈페이지]`.
+
 The group gets a message with 승인/거부 buttons. The script waits and exits
 `0` on 승인, `1` on 거부 or after 30 minutes with no answer, `2` on error.
 Push only when it exits `0`. The result is also posted back to the group.

@@ -54,6 +54,7 @@ const created = await call("/api/approvals", {
   method: "POST",
   body: JSON.stringify({
     title,
+    project: "homepage",
     description,
     commitSha: git("rev-parse HEAD"),
     commitMessage: git("log -1 --format=%s"),
