@@ -1,0 +1,39 @@
+/* 웨딩버틀러 디자인 토큰 — 현 어드민(admin.weddingbutler.co.kr) 스크린샷에서 추출.
+   Tailwind 프로젝트면 이 변수들을 theme에 매핑하면 된다(HANDOFF.md 참고). */
+:root {
+  /* brand */
+  --wb-primary: #A45B7D;        /* 주 버튼, 선택 칩. 흰 글자 대비 4.8:1 */
+  --wb-primary-ink: #9C486B;    /* 강조 텍스트, 링크 */
+  --wb-primary-deep: #8E3F61;   /* 큰 금액 숫자 */
+  --wb-primary-soft: #C98AA6;   /* 차트 보조 */
+  --wb-primary-tint: #F7EFF4;   /* 선택 카드·활성 메뉴 배경 */
+  --wb-badge-bg: #F5EAF0;       /* 배지 배경 */
+  --wb-gold: #A07A35;           /* 로고 골드 — 텍스트에는 쓰지 말 것(대비 부족) */
+
+  /* neutral */
+  --wb-ink: #221C20;
+  --wb-ink-2: #4F474C;
+  --wb-sub: #6B6268;            /* 보조 텍스트 (흰 배경 5.9:1) */
+  --wb-caption: #786E74;        /* 캡션 (흰 배경 5.0:1) */
+  --wb-disabled: #C9C0C5;
+  --wb-line: #EFE9EC;
+  --wb-line-2: #E4DCE1;
+  --wb-row-line: #F2EDF0;
+  --wb-surface: #F8F6F7;        /* 카드 */
+  --wb-field: #F5F3F5;          /* 입력창 */
+  --wb-hover: #FBF7F9;
+  --wb-bg: #FFFFFF;
+
+  /* status */
+  --wb-ok-fg: #2F6B4F;   --wb-ok-bg: #E6F2EC;
+  --wb-warn-fg: #8A5A00; --wb-warn-bg: #FBF0DC;
+  --wb-info-fg: #2B4F7A; --wb-info-bg: #E7EEF7;
+
+  /* shape & type */
+  --wb-r-sm: 12px;
+  --wb-r-md: 14px;
+  --wb-r-lg: 20px;
+  --wb-r-pill: 999px;
+  --wb-font: 'Pretendard', var(--font-sans), 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+  --wb-touch: 44px;     /* 최소 터치 영역 */
+}
