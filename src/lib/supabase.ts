@@ -14,5 +14,10 @@ export function supabaseAdmin() {
       "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (see .env.example)."
     );
   }
-  return createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, {
+    auth: { persistSession: false },
+    // Next.js caches GET fetches by default; without no-store a status poll
+    // keeps returning the first value it read (e.g. an approval stuck at pending).
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }) },
+  });
 }
