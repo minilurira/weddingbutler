@@ -3,11 +3,11 @@ import type { ApprovalButtonValue, ApprovalStatus } from "@/lib/approval-types";
 const API = "https://api.kakaowork.com/v1";
 
 function config() {
-  const appKey = process.env.KAKAOWORK_APP_KEY;
-  const conversationId = process.env.KAKAOWORK_CONVERSATION_ID;
+  const appKey = process.env.KAKAOWORK_APPROVAL_APP_KEY;
+  const conversationId = process.env.KAKAOWORK_APPROVAL_CONVERSATION_ID;
   if (!appKey || !conversationId) {
     throw new Error(
-      "KakaoWork is not configured. Set KAKAOWORK_APP_KEY and KAKAOWORK_CONVERSATION_ID (see .env.example)."
+      "KakaoWork is not configured. Set KAKAOWORK_APPROVAL_APP_KEY and KAKAOWORK_APPROVAL_CONVERSATION_ID (see .env.example)."
     );
   }
   return { appKey, conversationId };
