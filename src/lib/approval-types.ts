@@ -2,8 +2,12 @@ export type ApprovalStatus = "pending" | "approved" | "rejected" | "timeout" | "
 
 export type ApprovalDecision = "approve" | "reject";
 
+/** Which site the deploy is for; shown as a [홈페이지]/[어드민] tag on the message. */
+export type ApprovalProject = "homepage" | "admin";
+
 export interface CreateApprovalInput {
   title: string;
+  project?: ApprovalProject;
   description?: string;
   commitSha?: string;
   commitMessage?: string;

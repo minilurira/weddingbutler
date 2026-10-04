@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { sendApprovalMessage } from "@/lib/kakaowork";
 import { APPROVAL_TTL_MS, checkApiKey, toResponse, type ApprovalRow } from "@/lib/approvals";
-import type { CreateApprovalInput } from "@/lib/approval-types";
+import type { ApprovalProject, CreateApprovalInput } from "@/lib/approval-types";
+
+const PROJECT_TAG: Record<ApprovalProject, string> = { homepage: "[홈페이지]", admin: "[어드민]" };
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +26,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, message: "title is required." }, { status: 400 });
   }
 
+  const project: ApprovalProject = body.project === "admin" ? "admin" : "homepage";
+  const title = `${PROJECT_TAG[project]} ${body.title.trim()}`;
+
   const db = supabaseAdmin();
   const expiresAt = new Date(Date.now() + APPROVAL_TTL_MS);
 
   const { data: row, error } = await db
     .from("approval_requests")
     .insert({
-      title: body.title.trim(),
+      title,
       description: body.description?.trim() || null,
       commit_sha: body.commitSha?.trim() || null,
       commit_message: body.commitMessage?.trim() || null,
