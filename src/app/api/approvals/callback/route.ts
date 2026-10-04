@@ -9,20 +9,23 @@ export const dynamic = "force-dynamic";
 interface KakaoWorkCallback {
   type?: string;
   action_name?: string;
-  value?: string;
+  value?: unknown;
   react_user_id?: string | number;
   message?: { conversation_id?: string | number };
 }
 
 function parseValue(raw: unknown): ApprovalButtonValue | null {
-  if (typeof raw !== "string") return null;
-  try {
-    const v = JSON.parse(raw);
-    if (typeof v?.actionToken === "string" && (v.decision === "approve" || v.decision === "reject")) {
-      return v as ApprovalButtonValue;
+  let v: unknown = raw;
+  if (typeof raw === "string") {
+    try {
+      v = JSON.parse(raw);
+    } catch {
+      return null; // not one of our buttons
     }
-  } catch {
-    // not one of our buttons
+  }
+  const candidate = v as Partial<ApprovalButtonValue> | null;
+  if (typeof candidate?.actionToken === "string" && (candidate.decision === "approve" || candidate.decision === "reject")) {
+    return candidate as ApprovalButtonValue;
   }
   return null;
 }
@@ -46,13 +49,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, message: "Invalid JSON body." }, { status: 400 });
   }
 
-  if (body.type !== "submit_action") {
-    return NextResponse.json({ ok: true, ignored: true });
-  }
-
+  // Don't filter on `type`: the button value's random action token is what
+  // identifies (and authorizes) one of our clicks.
   const value = parseValue(body.value);
   if (!value) {
-    console.warn("[approvals/callback] submit_action without an approval payload", body.action_name);
+    console.warn("[approvals/callback] ignored callback without an approval payload", {
+      type: body.type,
+      action_name: body.action_name,
+      keys: Object.keys(body ?? {}),
+      valueType: typeof body.value,
+    });
     return NextResponse.json({ ok: true, ignored: true });
   }
 
@@ -84,13 +90,16 @@ export async function POST(req: NextRequest) {
   const status = value.decision === "approve" ? "approved" : "rejected";
   const resolvedBy = body.react_user_id != null ? await lookupUserName(body.react_user_id) : null;
 
-  const { data: updated } = await db
+  const { data: updated, error: updateError } = await db
     .from("approval_requests")
     .update({ status, resolved_by: resolvedBy, resolved_at: new Date().toISOString() })
     .eq("id", row.id)
     .eq("status", "pending")
     .select("id")
     .maybeSingle();
+  if (updateError) {
+    console.error("[approvals/callback] failed to save decision", updateError);
+  }
 
   if (updated) {
     await sendApprovalResult(row.title, status, resolvedBy);
