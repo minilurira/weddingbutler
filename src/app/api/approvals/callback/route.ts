@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, ignored: true });
   }
 
-  const expectedConversation = process.env.KAKAOWORK_CONVERSATION_ID;
+  const expectedConversation = process.env.KAKAOWORK_APPROVAL_CONVERSATION_ID;
   const conversation = body.message?.conversation_id;
   if (expectedConversation && conversation != null && String(conversation) !== expectedConversation) {
     console.warn("[approvals/callback] click from an unexpected conversation", conversation);

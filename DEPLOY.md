@@ -82,15 +82,14 @@ Push only when it exits `0`. The result is also posted back to the group.
 
 ### One-time setup
 
-1. **KakaoWork bot.** The admin project already has one (its
-   `KAKAOWORK_APP_KEY`). Reuse that App Key, or create a new bot in
-   카카오워크 관리자센터 → 봇 관리. Put the bot in the group that should approve
-   (동업자 포함) and get that conversation's id (the admin's
-   `KAKAOWORK_CONVERSATION_ID` if you use the same ops group).
+1. **KakaoWork bot.** Create a dedicated approval bot in 카카오워크 관리자센터 →
+   봇 관리 (separate from the admin's 신규예약봇, since a bot has only one
+   Callback URL). Put it in the group that should approve (동업자 포함) and
+   get that conversation's id.
 2. **Supabase.** Run the `approval_requests` part of `supabase/schema.sql` in
    the SQL editor.
-3. **Vercel env (Production).** `KAKAOWORK_APP_KEY`,
-   `KAKAOWORK_CONVERSATION_ID`, `APPROVAL_API_KEY` (any long random string),
+3. **Vercel env (Production).** `KAKAOWORK_APPROVAL_APP_KEY`,
+   `KAKAOWORK_APPROVAL_CONVERSATION_ID`, `APPROVAL_API_KEY` (any long random string),
    then redeploy.
 4. **Callback URL.** After the deploy that contains `/api/approvals/callback`
    is live, set the bot's Callback URL in 관리자센터 to
