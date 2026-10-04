@@ -59,3 +59,31 @@ create index if not exists contact_messages_created_at_idx on contact_messages (
 -- (names, phone numbers, venues) is never reachable directly from the browser.
 alter table reservations enable row level security;
 alter table contact_messages enable row level security;
+
+-- 배포 승인 게이트: a push to the production branch first creates a row here
+-- (POST /api/approvals), which sends 승인/거부 buttons to the KakaoWork group.
+-- The button click lands on /api/approvals/callback and flips `status`.
+-- `action_token` is the only thing embedded in the KakaoWork buttons and is
+-- never returned by the API, so knowing an approval's `id` is not enough to
+-- approve it. A pending row past `expires_at` is treated as 'timeout'.
+create table if not exists approval_requests (
+  id uuid primary key default gen_random_uuid(),
+  action_token uuid not null unique default gen_random_uuid(),
+  title text not null,
+  description text,
+  commit_sha text,
+  commit_message text,
+  branch text,
+  status text not null default 'pending'
+    check (status in ('pending', 'approved', 'rejected', 'timeout', 'error')),
+  kakaowork_conversation_id text,
+  kakaowork_message_id text,
+  resolved_by text,
+  resolved_at timestamptz,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists approval_requests_status_idx on approval_requests (status);
+
+alter table approval_requests enable row level security;
