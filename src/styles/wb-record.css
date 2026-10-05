@@ -131,3 +131,14 @@
 
 /* 데모 토큰용 샘플 표기 */
 .wbr-sample-banner { font-family: var(--wb-font); background: var(--wb-warn-bg); color: var(--wb-warn-fg); font-size: 14px; text-align: center; padding: 8px 16px; }
+
+/* 인증·만료·다운로드 전용 화면 */
+.wbr-main--narrow { max-width: 560px; }
+.wbr-gate h1 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.35; }
+.wbr-gate__lead { margin: 0; font-size: 16px; color: var(--wb-sub); line-height: 1.6; }
+.wbr-gate__form { display: flex; flex-wrap: wrap; gap: 8px; }
+.wbr-gate__input { flex: 1 1 180px; min-width: 0; min-height: var(--wb-touch); padding: 0 16px; border: 0; border-radius: var(--wb-r-sm); background: var(--wb-field); font: inherit; font-size: 18px; letter-spacing: 4px; color: var(--wb-ink); }
+.wbr-gate__msg { margin: 0; font-size: 15px; color: var(--wb-primary-ink); }
+.wbr-btn--block { justify-content: center; width: 100%; }
+.wbr-btn:disabled { opacity: 0.6; cursor: default; }
+.wbr-preview-banner { font-family: var(--wb-font); background: var(--wb-info-bg); color: var(--wb-info-fg); font-size: 14px; text-align: center; padding: 8px 16px; }

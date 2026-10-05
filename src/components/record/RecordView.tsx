@@ -8,6 +8,7 @@ import { krDate, krDateTime, krTime } from '@/lib/format';
 import { SummaryTab } from './SummaryTab';
 import { GuestList } from './GuestList';
 import { IconDownload, IconLock, IconVideo } from './icons';
+import { RecordFooter } from './RecordFrame';
 
 type Tab = 'summary' | 'list';
 
@@ -121,12 +122,7 @@ export function RecordView({ meta, entries }: RecordPayload) {
           <a className="wbr-btn" href={meta.downloadUrl}>엑셀로 보관하기</a>
         </section>
 
-        <footer className="wbr-footer">
-          {/* TODO(운영자): 사업자 정보 확정값으로 교체 */}
-          웨딩버틀러 · 대표 [대표자명] · 사업자등록번호 [000-00-00000] · 통신판매업 [신고번호]
-          <br />
-          기록은 버틀러 2인이 상호 확인한 내용이며, 책임 범위는 운영 구역 내 인계확인서 서명 시점까지예요.
-        </footer>
+        <RecordFooter />
       </main>
     </div>
   );
