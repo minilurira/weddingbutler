@@ -8,9 +8,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/wedding-butler-website-k1qg8w, "claude/project-thread-*"]
   pull_request:
-    branches: [main]
+    branches: [main, claude/wedding-butler-website-k1qg8w]
 
 jobs:
   checks:
