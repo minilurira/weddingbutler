@@ -88,8 +88,10 @@ export async function POST(
       time: reservation.ceremony_time,
       name: reservation.couple_name,
       phone: reservation.phone,
+      email: reservation.email ?? "",
       venue: reservation.venue ?? "",
       guests: reservation.guests,
+      extraButlers: reservation.extra_butlers ?? 0,
       payMethod: reservation.pay_method,
       depositAmount: reservation.deposit_amount,
     });
