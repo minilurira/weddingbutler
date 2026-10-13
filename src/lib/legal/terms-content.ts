@@ -3,7 +3,7 @@ export const TERMS_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">축의대행 서비스 이용약관</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 9월 21일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 10월 13일</p>
 
   <div style="height:1px; background:#EBDCE0; margin-bottom:34px;"></div>
 
@@ -27,7 +27,7 @@ export const TERMS_HTML = `
     <li>"개봉 집계 방식" : 의뢰인의 위임에 따라 회사가 접수 마감 후 봉투를 개봉하여 고유번호별 금액과 신랑측·신부측 합계 및 총액을 집계·기록하고, 현금을 해당 봉투 원본과 함께 인계하는 방식</li>
   </ol>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑧ "총 대금"이란 선택한 요금제의 기본 요금과 사전에 합의한 추가 대금의 합계를 말합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ "선결제금"이란 예약 시 결제하는 총 대금의 50%를, "잔금"이란 총 대금에서 선결제금을 뺀 금액과 예식 당일 발생한 추가 대금의 합계로서 축의금 인계 직전에 현장에서 결제하는 금액을 말합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ "결제금액"이란 예약 시 사이트에서 결제하는 금액으로서 이용자가 선택한 결제 방식에 따라 예약금(100,000원) 또는 총 대금 전액을, "잔금"이란 총 대금에서 결제금액을 뺀 금액과 예식 당일 발생한 추가 대금의 합계로서 축의금 인계 직전에 현장에서 결제하는 금액을 말합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑩ "예약확인서"란 계약 성립 후 회사가 이용자에게 발송하는 계약 내용 확인 문서를 말합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑪ "예식일"이란 이용계약에서 정한 서비스 제공 일자를 말하며, 이 약관의 기간은 예식일로부터 역산합니다(예: "7일 전"은 예식일의 7일 전 날을 말합니다).</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑫ "식권 배부 매수"란 회사가 접수대에서 하객에게 배부한 식권의 수로서, 예식장 또는 의뢰인으로부터 수령한 식권 매수에서 인계 시 반환하는 잔여 식권 매수를 뺀 수를 말합니다.</p>
@@ -46,7 +46,7 @@ export const TERMS_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 이용자는 예약 시 입력한 연락처가 변경된 경우 지체 없이 회사에 알려야 하며, 부정확한 연락처 입력 또는 변경 미통지로 통지가 도달하지 아니하여 발생한 불이익은 이용자가 부담합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제5조 (예약확인서)</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 회사는 계약이 성립하면 지체 없이 예식 일시·장소, 요금제, 기록 방식, 총 대금·선결제금·잔금, 인수자, 취소·환불 기준, 책임 범위를 적은 예약확인서를 이용자에게 발송합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 회사는 계약이 성립하면 지체 없이 예식 일시·장소, 요금제, 기록 방식, 총 대금·결제금액·잔금, 인수자, 취소·환불 기준, 책임 범위를 적은 예약확인서를 이용자에게 발송합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 예약확인서는 「전자상거래 등에서의 소비자보호에 관한 법률」 제13조 제2항의 계약 내용에 관한 서면으로 봅니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 이용자는 예약확인서의 내용이 신청 내용과 다른 경우 즉시 회사에 정정을 요청할 수 있습니다.</p>
 
@@ -79,7 +79,7 @@ export const TERMS_HTML = `
     <li>의뢰인 성명·연락처, 예식 일시·장소, 예상 하객 규모의 입력</li>
     <li>이 약관, 취소·환불 기준, 기록 방식별 책임 범위 및 청약철회가 제한되는 경우의 확인과 동의</li>
     <li>개인정보 수집·이용 및 국외 이전에 관한 사항의 확인과 동의</li>
-    <li>결제수단의 선택 및 선결제금 결제</li>
+    <li>결제 방식(예약금 결제 후 현장결제 또는 전액결제)의 선택 및 결제금액 결제</li>
   </ol>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 인수자는 예약 시 또는 제6조 제1항 제2호의 사전 확인 시까지 지정합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 회사가 제3자에게 이용자의 개인정보를 제공할 필요가 있는 경우, 제공받는 자·이용목적·제공 항목·보유 및 이용기간을 알리고 동의를 받습니다.</p>
@@ -94,7 +94,7 @@ export const TERMS_HTML = `
     <li>예식일 7일 전이 지난 후에 신청한 경우. 회사는 사이트에서 예식일 7일 전까지만 예약을 받습니다.</li>
     <li>기타 승낙이 회사의 기술상·운영상 현저히 지장이 있다고 판단되는 경우</li>
   </ol>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 계약은 이용자가 선결제금을 결제하고 회사의 예약 확정 통지가 이용자에게 도달한 시점에 성립합니다. 제1항에 따라 승낙하지 아니하는 경우 회사는 결제를 즉시 취소합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 계약은 이용자가 결제금액을 결제하고 회사의 예약 확정 통지가 이용자에게 도달한 시점에 성립합니다. 제1항에 따라 승낙하지 아니하는 경우 회사는 결제를 즉시 취소합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제10조 (요금 및 결제)</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">① 요금제별 기본 요금은 다음과 같으며, 표시 금액은 부가가치세를 포함한 총액입니다.</p>
@@ -122,8 +122,8 @@ export const TERMS_HTML = `
     <li>서비스 지역(서울특별시, 경기도) 밖의 출장비 : 예약 전 회사가 금액을 안내하고 의뢰인이 동의한 경우에 한합니다.</li>
   </ol>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 개봉 집계 방식은 추가 대금 없이 제공합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">④ 이용자는 예약 시 총 대금의 50%(선결제금)를 사이트의 결제대행 서비스(KG이니시스)를 통하여 결제합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑤ 잔금은 예식 종료 후 접수 마감 집계로 추가 대금이 확정되면, 축의금 인계 직전에 현장에서 회사가 제시하는 결제 수단(결제 링크를 통한 신용카드 결제 또는 회사 명의 계좌로의 이체)으로 결제합니다. 결제는 의뢰인 또는 의뢰인이 지정한 자(인수자를 포함합니다)가 할 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">④ 이용자는 예약 시 다음 결제 방식 중 하나를 선택하여 결제금액을 사이트의 결제대행 서비스(KG이니시스)를 통하여 결제합니다. 1. 예약금 결제 후 현장결제: 예약금 100,000원을 결제하고, 나머지 대금은 잔금으로 현장에서 결제합니다. 2. 전액결제: 총 대금 전액을 결제하며, 예식 당일 발생한 추가 대금이 없으면 현장에서 결제할 금액은 없습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑤ 잔금은 예식 종료 후 접수 마감 집계로 추가 대금이 확정되면, 축의금 인계 직전에 현장에서 현금으로 결제합니다. 결제는 의뢰인 또는 의뢰인이 지정한 자(인수자를 포함합니다)가 할 수 있습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑥ 제5항의 결제가 이루어지지 아니한 경우, 잔금은 예식일 다음 날까지 납부하여야 하며, 이를 지나면 회사는 납부를 최고한 후 미납 금액에 대하여 법정이율에 따른 지연손해금을 청구할 수 있습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑦ 회사는 결제수단에 따른 어떠한 명목의 수수료도 대금에 추가하여 징수하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑧ 회사는 부가가치세법상 간이과세자로서, 결제 대금에 대하여 현금영수증을 발행합니다(신용카드 결제분은 카드 매출전표로 갈음).</p>
@@ -149,25 +149,24 @@ export const TERMS_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑤ 청약철회 시 회사는 위약금을 청구하지 아니하고 기납부액 전액을 환급합니다. 제13조와 제14조가 함께 적용되는 경우 이용자에게 유리한 조항을 적용합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제14조 (계약 해제 및 환불)</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">① 이용자가 계약을 해제하는 경우, 취소 요청이 회사에 도달한 날을 기준으로 선결제금을 다음과 같이 환불합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">① 이용자가 계약을 해제하는 경우, 취소 요청이 회사에 도달한 날을 기준으로 결제금액을 다음과 같이 환불합니다.</p>
   <div style="overflow-x:auto; margin:0 0 14px;">
     <table style="width:100%; border-collapse:collapse; font-size:13.5px; min-width:420px;">
       <thead>
         <tr>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">취소 요청 시점</th>
-          <th style="text-align:right; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">선결제금 환불</th>
-          <th style="text-align:right; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">총 대금 대비 위약금</th>
+          <th style="text-align:right; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0; white-space:nowrap;">결제금액 환불</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식 7일 전까지</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#A9647E; white-space:nowrap;">전액 환불</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">없음</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식 6일 전 ~ 3일 전</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">50% 환불</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">총 대금의 25%</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">예식 2일 전 ~ 예식 당일</td><td style="padding:11px 14px; text-align:right; color:#4A3B41; white-space:nowrap;">30% 환불</td><td style="padding:11px 14px; text-align:right; color:#4A3B41; white-space:nowrap;">총 대금의 35%</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식 7일 전까지</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#A9647E; white-space:nowrap;">전액 환불</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식 6일 전 ~ 3일 전</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">50% 환불</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">예식 2일 전 ~ 예식 당일</td><td style="padding:11px 14px; text-align:right; color:#4A3B41; white-space:nowrap;">30% 환불</td></tr>
       </tbody>
     </table>
   </div>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 위약금은 기납부액(선결제금)을 초과하여 추가로 청구하지 아니하며, 계약 해제 시 잔금은 청구하지 아니합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 해당 예식일·시간대에 회사가 다른 예약을 받아 버틀러를 재배정한 경우, 회사는 위약금 없이 선결제금 전액을 환불합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 위약금은 기납부액(결제금액)을 초과하여 추가로 청구하지 아니하며, 계약 해제 시 잔금은 청구하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 해당 예식일·시간대에 회사가 다른 예약을 받아 버틀러를 재배정한 경우, 회사는 위약금 없이 결제금액 전액을 환불합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">④ 회사의 귀책사유로 서비스를 제공하지 못한 경우, 회사는 기납부액 전액을 환불하고 총 대금의 10%를 배상합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑤ 이용자가 예식 7일 전까지 예식 연기를 알리고 변경 희망일에 버틀러 배정이 가능한 경우, 1회에 한하여 위약금 없이 일정을 변경합니다. 그 외의 경우에는 제1항을 준용합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑥ 천재지변, 감염병 관련 행정명령(시설 폐쇄·집합 제한 등), 특별재난지역 선포, 신랑·신부 또는 그 직계가족의 사망으로 예식이 취소된 경우에는 위약금 없이 전액 환불합니다.</p>
@@ -276,7 +275,7 @@ export const TERMS_HTML = `
 
   <div style="margin:40px 0 0; padding-top:28px; border-top:1px solid #EBDCE0;">
     <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:0 0 10px;">부칙</h2>
-    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 9월 21일부터 시행합니다.</p>
+    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 10월 13일부터 시행합니다.</p>
     <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0;">② 이 약관 시행 전에 체결된 계약에는 종전 약관을 적용합니다.</p>
   </div>
 
@@ -296,6 +295,8 @@ export const TERMS_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/terms/2026-09" style="color:#A9647E;">2026년 9월 21일 시행 이전 약관 보기</a>
+    &nbsp;·&nbsp;
     <a href="/terms/2026-01" style="color:#A9647E;">2026년 1월 1일 시행 이전 약관 보기</a>
   </p>
 

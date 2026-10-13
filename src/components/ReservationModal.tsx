@@ -3,12 +3,16 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   calcPrice,
+  DEPOSIT_AMOUNT,
   guestsForPlanSwitch,
+  ONSITE_CASH_ONLY_NOTE,
+  PAYMENT_TYPES,
   PLAN_ORDER,
   PLANS,
-  TEST_PRICE,
+  testPrice,
   TIME_SLOTS,
   won,
+  type PaymentType,
   type PayMethod,
   type PlanKey,
 } from "@/lib/plans";
@@ -31,6 +35,7 @@ interface ModalState {
   time: string | null;
   guests: number;
   extraButlers: number;
+  paymentType: PaymentType;
   name: string;
   phone: string;
   email: string;
@@ -55,6 +60,7 @@ function initialState(plan: PlanKey): ModalState {
     time: null,
     guests: 250,
     extraButlers: 0,
+    paymentType: "deposit",
     name: "",
     phone: "",
     email: "",
@@ -163,7 +169,9 @@ export function ReservationModal({
   if (!open) return null;
 
   const P = PLANS[state.plan];
-  const price = test ? TEST_PRICE : calcPrice(state.plan, state.guests, state.extraButlers);
+  const price = test
+    ? testPrice(state.paymentType)
+    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType);
   const filled = !!(
     state.date &&
     state.time &&
@@ -261,6 +269,7 @@ export function ReservationModal({
           guests: state.guests,
           extraButlers: state.extraButlers,
           payMethod: FIXED_PAY_METHOD,
+          paymentType: state.paymentType,
           test,
           testKey,
         }),
@@ -308,14 +317,16 @@ export function ReservationModal({
   }
 
   function reset() {
-    patch((s) => ({ ...initialState(s.plan), guests: s.guests, extraButlers: s.extraButlers }));
+    patch((s) => ({ ...initialState(s.plan), guests: s.guests, extraButlers: s.extraButlers, paymentType: s.paymentType }));
   }
 
   const submitLabel =
     state.phase === "submitting"
       ? "결제 진행 중..."
       : ready
-        ? `서비스 결제 ${won(price.deposit)} 진행하기`
+        ? state.paymentType === "full"
+          ? `전액 ${won(price.deposit)} 결제하기`
+          : `예약금 ${won(price.deposit)} 결제하기`
         : filled
           ? "필수 항목에 동의해 주세요"
           : "날짜 · 시간 · 정보를 입력해 주세요";
@@ -585,8 +596,48 @@ export function ReservationModal({
                   <SummaryRow label="버틀러 추가" value={price.extraButlerAmount ? "+ " + won(price.extraButlerAmount) : "-"} />
                 </div>
 
+                <div style={{ padding: "20px 0 0" }}>
+                  <div style={{ fontSize: 13, color: "#6B5A60", marginBottom: 10 }}>결제 방식</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {(["deposit", "full"] as PaymentType[]).map((t) => {
+                      const on = state.paymentType === t;
+                      return (
+                        <label
+                          key={t}
+                          style={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            gap: 10,
+                            padding: "12px 14px",
+                            borderRadius: 3,
+                            cursor: "pointer",
+                            background: on ? "#FFFFFF" : "rgba(255,255,255,0.45)",
+                            border: "1px solid " + (on ? "#33232A" : "#DCC4CC"),
+                          }}
+                        >
+                          <input
+                            type="radio"
+                            name="paymentType"
+                            checked={on}
+                            onChange={() => patch({ paymentType: t })}
+                            style={{ margin: "3px 0 0", flex: "none", accentColor: "#A9647E", cursor: "pointer" }}
+                          />
+                          <span style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                            <span style={{ fontSize: 14, color: "#33232A", fontWeight: 500 }}>{PAYMENT_TYPES[t].name}</span>
+                            <span style={{ fontSize: 12, color: "#6B5A60", lineHeight: 1.6 }}>
+                              {t === "deposit"
+                                ? `오늘 예약금 ${won(DEPOSIT_AMOUNT)} 결제 · 나머지는 예식 당일 현장 결제`
+                                : "오늘 총 금액을 한 번에 결제 · 현장 결제 0원"}
+                            </span>
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "20px 0 0" }}>
-                  <span style={{ fontSize: 13, color: "#9A8189" }}>총 결제 금액</span>
+                  <span style={{ fontSize: 13, color: "#9A8189" }}>총 금액</span>
                   <span style={{ fontSize: 14, color: "#6B5A60" }}>{won(price.total)}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "8px 0 0" }}>
@@ -597,10 +648,18 @@ export function ReservationModal({
                   <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>오늘 결제 금액</span>
                   <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600, color: "#33232A" }}>{won(price.deposit)}</span>
                 </div>
-                <div style={{ textAlign: "right", fontSize: 12, color: "#9A8189", marginBottom: 20 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12, padding: "0 0 6px" }}>
+                  <span style={{ fontSize: 13, color: "#6B5A60" }}>현장 결제 금액</span>
+                  <span style={{ fontSize: 15, color: "#473A3F", fontWeight: 500 }}>{won(price.balance)}</span>
+                </div>
+                <div style={{ textAlign: "right", fontSize: 12, lineHeight: 1.7, color: "#9A8189", marginBottom: 20 }}>
                   {price.balance > 0
-                    ? `부가세 포함 · 잔여 ${won(price.balance)}은 예식 당일 전달 직전 현장 결제`
+                    ? `부가세 포함 · 현장 결제 금액은 예식 당일 전달 직전에 결제합니다`
                     : "부가세 포함"}
+                  <br />
+                  {price.balance > 0
+                    ? ONSITE_CASH_ONLY_NOTE
+                    : "기준 인원 초과 식권이 생기면 그 금액만 당일 현장에서 현금으로 정산합니다."}
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 16 }}>
@@ -632,7 +691,7 @@ export function ReservationModal({
                     <span>
                       [필수] 취소·환불 기준을 확인했습니다.
                       <br />
-                      <span style={{ color: "#6B5A60" }}>7일 전까지 전액 · 6~3일 전 50% · 2일 전~당일 30% 환불 (서비스 결제 금액 기준)</span>
+                      <span style={{ color: "#6B5A60" }}>7일 전까지 전액 · 6~3일 전 50% · 2일 전~당일 30% 환불 (결제한 금액 기준)</span>
                     </span>
                   </label>
                   <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12.5, lineHeight: 1.7, color: "#473A3F", cursor: "pointer" }}>
@@ -662,8 +721,8 @@ export function ReservationModal({
                 )}
                 <p style={{ fontSize: 12, lineHeight: 1.8, color: "#9A8189", margin: "16px 0 0" }}>
                   {price.balance > 0
-                    ? "오늘은 서비스 결제 10만원만 카드로 진행되며, 남은 서비스 대금은 예식 당일 전달 직전 현장에서 결제합니다."
-                    : "서비스 결제 금액 전액을 오늘 카드로 결제합니다."}
+                    ? `오늘은 예약금 ${won(price.deposit)}만 카드로 결제하고, 남은 ${won(price.balance)}은 예식 당일 전달 직전 현장에서 현금으로 결제합니다.`
+                    : "총 금액을 오늘 카드로 한 번에 결제하며, 현장에서 결제할 금액은 없습니다."}
                 </p>
               </div>
             </div>
@@ -707,7 +766,9 @@ export function ReservationModal({
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
                 <SummaryRow label="요금제" value={P.name} wide />
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
-                <SummaryRow label="서비스 결제 금액" value={won(price.deposit)} wide />
+                <SummaryRow label="결제 방식" value={PAYMENT_TYPES[state.paymentType].name} wide />
+                <SummaryRow label="결제한 금액" value={won(price.deposit)} wide />
+                <SummaryRow label="현장 결제 금액" value={won(price.balance)} wide />
               </div>
               <div style={{ marginTop: 30, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <button onClick={reset} className="round-nav-hover" style={outlineBtnStyle}>

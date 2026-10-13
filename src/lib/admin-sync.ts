@@ -1,5 +1,5 @@
-import type { PlanKey } from "@/lib/plans";
-import { PLANS } from "@/lib/plans";
+import type { PaymentType, PlanKey } from "@/lib/plans";
+import { PAYMENT_TYPES, PLANS } from "@/lib/plans";
 
 export interface AdminSyncInput {
   bookingNo: string;
@@ -14,6 +14,10 @@ export interface AdminSyncInput {
   guests: number;
   payMethod: string;
   depositAmount: number;
+  paymentType: PaymentType;
+  extraButlers: number;
+  totalAmount: number;
+  onsiteAmount: number;
 }
 
 function pad(n: number) {
@@ -52,8 +56,12 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         venue: input.venue?.trim() || "미정",
         guestCount: input.guests,
         plan: PLANS[input.plan].name,
-        memo: `결제 수단: ${input.payMethod}`,
+        memo: `결제 수단: ${input.payMethod} · ${PAYMENT_TYPES[input.paymentType].name}`,
         paidAmount: input.depositAmount,
+        paymentType: input.paymentType,
+        extraButlers: input.extraButlers,
+        totalAmount: input.totalAmount,
+        onsiteAmount: input.onsiteAmount,
       }),
     });
     if (!res.ok) {

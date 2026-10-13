@@ -87,7 +87,9 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     title: "예약 및 결제",
     body: (
       <>
-        <NoticeItem>서비스 결제 금액을 예약 시 카드로 전액 결제하시면 예약이 확정됩니다.</NoticeItem>
+        <NoticeItem>예약할 때 결제 방식을 고르실 수 있습니다. 예약금 결제 후 현장결제는 예약금 10만원을 카드로 결제하고 나머지를 예식 당일 현장에서 결제하며, 전액결제는 총 금액을 카드로 한 번에 결제해 현장에서 결제할 금액이 없습니다.</NoticeItem>
+        <NoticeItem>카드 결제가 끝나면 예약이 확정됩니다.</NoticeItem>
+        <NoticeItem small>현장 결제 금액(잔금, 기준 초과 식권)은 현금으로만 결제할 수 있습니다.</NoticeItem>
         <NoticeItem>예식일 7일 전까지, {BOOKING_OPEN_UNTIL_LABEL} 예식까지 온라인 예약을 받습니다.</NoticeItem>
       </>
     ),
@@ -102,7 +104,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
             <tbody>
               <tr>
                 <th style={{ textAlign: "left", padding: "10px 14px", background: "#FAF3F5", color: "#6B5A60", fontWeight: 500, border: "1px solid #F0E3E6" }}>취소 시점</th>
-                <th style={{ textAlign: "left", padding: "10px 14px", background: "#FAF3F5", color: "#6B5A60", fontWeight: 500, border: "1px solid #F0E3E6" }}>서비스 결제 금액 환불</th>
+                <th style={{ textAlign: "left", padding: "10px 14px", background: "#FAF3F5", color: "#6B5A60", fontWeight: 500, border: "1px solid #F0E3E6" }}>결제한 금액 환불</th>
               </tr>
               <tr>
                 <td style={{ padding: "10px 14px", border: "1px solid #F0E3E6", color: "#4A3B41" }}>예식 7일 전까지</td>
@@ -387,17 +389,27 @@ export default function PricingPage() {
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>PAYMENT</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
-              서비스 결제 금액,
-              <br />예약과 동시에 전액 결제
+              결제 방식은
+              <br />두 가지 중에 고르세요
             </h2>
             <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>
-              요금제별 서비스 결제 금액을 예약 시 카드로 전액 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스).
+              예약할 때 카드로 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스).
             </p>
-            <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
-              <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>서비스 결제</div>
-              <div style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600 }}>전액 온라인 카드 결제</div>
-              <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>결제 즉시 예약 확정</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
+                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예약금 결제 후 현장결제</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600 }}>예약금 10만원 카드 결제</div>
+                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>나머지 금액은 예식 당일 전달 직전 현장 결제</div>
+              </div>
+              <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
+                <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>전액결제</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600 }}>총 금액 한 번에 카드 결제</div>
+                <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>현장 결제 금액 0원</div>
+              </div>
             </div>
+            <p style={{ fontSize: 12, lineHeight: 1.8, color: "#9A8189", margin: "12px 0 0" }}>
+              현장 결제 금액(잔금, 기준 초과 식권)은 현금으로만 결제할 수 있습니다.
+            </p>
           </div>
         </div>
       </section>

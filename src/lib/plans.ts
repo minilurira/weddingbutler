@@ -57,15 +57,28 @@ export interface PriceBreakdown {
  * once the actual 식권 배부 매수 for the day is known. */
 export const DEPOSIT_AMOUNT = 100000;
 
-/** PG(결제대행사) 심사 기간 동안 임시로 예약금이 아닌 패키지 전체 금액을 온라인
- * 결제로 받는다. 심사가 끝나면 false로 되돌려 DEPOSIT_AMOUNT 고정 예약금 방식으로
- * 복원한다 — 그 외 코드는 calcPrice의 deposit 값만 참조하므로 이 플래그만 바꾸면 된다. */
-export const CHARGE_FULL_AMOUNT_TEMP = true;
+/** 고객이 예약할 때 고르는 결제 유형.
+ * - deposit: 예약금(DEPOSIT_AMOUNT)만 온라인 결제, 나머지는 예식 당일 현장 결제
+ * - full: 총 금액을 온라인으로 한 번에 결제, 현장 결제 금액 0원 */
+export type PaymentType = "deposit" | "full";
+
+export const PAYMENT_TYPES: Record<PaymentType, { name: string; short: string }> = {
+  deposit: { name: "예약금 결제 후 현장결제", short: "예약금" },
+  full: { name: "전액결제", short: "전액" },
+};
+
+export function isPaymentType(v: unknown): v is PaymentType {
+  return v === "deposit" || v === "full";
+}
+
+/** 현장 결제는 현금으로만 받는다 — 예약 화면·FAQ에 같은 문구로 안내한다. */
+export const ONSITE_CASH_ONLY_NOTE = "현장 결제 금액은 현금으로만 결제할 수 있습니다.";
 
 export function calcPrice(
   plan: PlanKey,
   guests: number,
-  extraButlers: number
+  extraButlers: number,
+  paymentType: PaymentType
 ): PriceBreakdown {
   const p = PLANS[plan];
   // Estimated only — actual 기준 초과 식권 fee is settled on-site after the
@@ -73,7 +86,7 @@ export function calcPrice(
   const over = Math.max(0, guests - p.incl) * 2000;
   const extraButlerAmount = extraButlers * 100000;
   const total = p.base + extraButlerAmount;
-  const deposit = CHARGE_FULL_AMOUNT_TEMP ? total : DEPOSIT_AMOUNT;
+  const deposit = paymentType === "full" ? total : Math.min(DEPOSIT_AMOUNT, total);
   return {
     base: p.base,
     over,
@@ -87,16 +100,25 @@ export function calcPrice(
 
 /** Flat 1,000원 charge used only by the header's hidden test-payment button
  * (결제/알림톡/카카오워크봇 파이프라인 점검용) — never reachable by a real
- * customer, see TEST_PAYMENT_KEY handling in /api/reservations. */
-export const TEST_PRICE: PriceBreakdown = {
-  base: 1000,
-  over: 0,
-  extraButlerAmount: 0,
-  total: 1000,
-  deposit: 1000,
-  balance: 0,
-  incl: 0,
-};
+ * customer, see TEST_PAYMENT_KEY handling in /api/reservations. 예약금 유형으로
+ * 테스트하면 현장 결제 1,000원이 남도록 해서 어드민에 유형이 구분돼 들어간다. */
+export function testPrice(paymentType: PaymentType): PriceBreakdown {
+  const total = paymentType === "full" ? 1000 : 2000;
+  return {
+    base: total,
+    over: 0,
+    extraButlerAmount: 0,
+    total,
+    deposit: 1000,
+    balance: total - 1000,
+    incl: 0,
+  };
+}
+
+/** 저장된 금액으로 결제 유형을 판별한다 — 현장 결제 금액이 없으면 전액결제. */
+export function paymentTypeOf(balanceAmount: number): PaymentType {
+  return balanceAmount > 0 ? "deposit" : "full";
+}
 
 /** Clamp guest count when switching plans, mirroring the prototype's `pick()` behavior. */
 export function guestsForPlanSwitch(plan: PlanKey, guests: number): number {

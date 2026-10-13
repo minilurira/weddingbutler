@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
-import { calcPrice, PLANS, TEST_PRICE, type PlanKey } from "@/lib/plans";
+import { calcPrice, isPaymentType, PLANS, testPrice, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
   CreateReservationInput,
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod, test, testKey } =
+  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod, paymentType, test, testKey } =
     body;
 
   const isTest = test === true;
@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
     guests < 1 ||
     !Number.isInteger(extraButlers) ||
     extraButlers < 0 ||
-    !payMethod
+    !payMethod ||
+    !isPaymentType(paymentType)
   ) {
     return NextResponse.json({ message: "Missing or invalid fields." }, { status: 400 });
   }
@@ -65,13 +66,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
   }
 
-  const price = isTest ? TEST_PRICE : calcPrice(plan, guests, extraButlers);
+  const price = isTest ? testPrice(paymentType) : calcPrice(plan, guests, extraButlers, paymentType);
   const planInfo = PLANS[plan];
   const bookingNo = `WB${year}${pad(month)}${pad(day)}-${Math.floor(1000 + Math.random() * 8999)}`;
   const paymentId = randomUUID();
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
-    : `웨딩버틀러 ${planInfo.name} 서비스 결제금`;
+    : `웨딩버틀러 ${planInfo.name} ${paymentType === "full" ? "서비스 전액" : "예약금"}`;
 
   try {
     const db = supabaseAdmin();

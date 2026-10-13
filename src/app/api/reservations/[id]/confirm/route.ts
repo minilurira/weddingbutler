@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyPortOnePayment } from "@/lib/portone";
 import { syncReservationToAdmin } from "@/lib/admin-sync";
-import type { PlanKey } from "@/lib/plans";
+import { paymentTypeOf, type PlanKey } from "@/lib/plans";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
 
 export async function POST(
@@ -92,6 +92,10 @@ export async function POST(
       guests: reservation.guests,
       payMethod: reservation.pay_method,
       depositAmount: reservation.deposit_amount,
+      paymentType: paymentTypeOf(reservation.balance_amount),
+      extraButlers: reservation.extra_butlers ?? 0,
+      totalAmount: reservation.total_amount,
+      onsiteAmount: reservation.balance_amount,
     });
 
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };
