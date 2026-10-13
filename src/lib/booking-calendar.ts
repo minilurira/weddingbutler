@@ -1,7 +1,7 @@
 /**
  * 대한민국 법정공휴일(관공서의 공휴일에 관한 규정) — 음력 기준 공휴일(설날·추석·
  * 부처님오신날)과 대체공휴일은 해마다 날짜가 바뀌므로, 이 목록은 연말에 다음 해
- * 날짜를 추가하는 방식으로 수동 갱신해야 한다. 예약 가능 범위(오늘부터 3개월)를
+ * 날짜를 추가하는 방식으로 수동 갱신해야 한다. 예약 가능 범위(BOOKING_OPEN_UNTIL 까지)를
  * 벗어난 연도는 비워 둬도 안전하다 — 목록에 없는 날은 주말이 아닌 한 예약 불가로
  * 처리될 뿐, 잘못 열리지 않는다.
  */
@@ -26,7 +26,22 @@ const HOLIDAYS: ReadonlySet<string> = new Set([
   "2026-10-05", // 개천절 (대체공휴일 10/5)
   "2026-10-09", // 한글날
   "2026-12-25", // 성탄절
+  // 2027 (1~5월 — 우주항공청 2027 월력요항 기준. 6월 이후는 예약을 열 때 추가)
+  "2027-01-01", // 신정
+  "2027-02-06",
+  "2027-02-07",
+  "2027-02-08",
+  "2027-02-09", // 설날 연휴 (대체공휴일 2/9)
+  "2027-03-01", // 삼일절
+  "2027-05-01",
+  "2027-05-03", // 노동절 (대체공휴일 5/3)
+  "2027-05-05", // 어린이날
+  "2027-05-13", // 부처님오신날
 ]);
+
+/** 온라인 예약을 받는 마지막 예식일(이 날까지 포함). 더 늘릴 땐 이 값과 HOLIDAYS 를 함께 갱신한다. */
+export const BOOKING_OPEN_UNTIL = { year: 2027, month: 5, day: 31 } as const;
+export const BOOKING_OPEN_UNTIL_LABEL = "2027년 5월 31일";
 
 function pad2(n: number): string {
   return String(n).padStart(2, "0");
@@ -54,12 +69,9 @@ export function minBookingDate(): Date {
   return d;
 }
 
-/** 예약 가능한 가장 늦은 날짜: 오늘로부터 3개월 이내. */
+/** 예약 가능한 가장 늦은 날짜: BOOKING_OPEN_UNTIL(포함). */
 export function maxBookingDate(): Date {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  d.setMonth(d.getMonth() + 3);
-  return d;
+  return new Date(BOOKING_OPEN_UNTIL.year, BOOKING_OPEN_UNTIL.month - 1, BOOKING_OPEN_UNTIL.day);
 }
 
 /** 오늘 기준으로 예약 가능한 첫 번째 날짜(주말 또는 공휴일). */

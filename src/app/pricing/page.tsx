@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { OpenModalButton } from "@/components/OpenModalButton";
+import { BOOKING_OPEN_UNTIL_LABEL } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
@@ -87,7 +88,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
     body: (
       <>
         <NoticeItem>서비스 결제 금액을 예약 시 카드로 전액 결제하시면 예약이 확정됩니다.</NoticeItem>
-        <NoticeItem>예식일 7일 전까지, 예식일 기준 3개월 이내 날짜만 온라인 예약을 받습니다.</NoticeItem>
+        <NoticeItem>예식일 7일 전까지, {BOOKING_OPEN_UNTIL_LABEL} 예식까지 온라인 예약을 받습니다.</NoticeItem>
       </>
     ),
   },

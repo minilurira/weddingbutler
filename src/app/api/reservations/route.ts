@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
+import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { calcPrice, PLANS, TEST_PRICE, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "예식 7일 전까지만 예약할 수 있습니다." }, { status: 400 });
   }
   if (ceremonyDate > maxBookingDate()) {
-    return NextResponse.json({ message: "예식 3개월 이내 날짜만 예약할 수 있습니다." }, { status: 400 });
+    return NextResponse.json({ message: `${BOOKING_OPEN_UNTIL_LABEL} 예식까지만 예약할 수 있습니다.` }, { status: 400 });
   }
   if (!isBookableDow(ceremonyDate)) {
     return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
