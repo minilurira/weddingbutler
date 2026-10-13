@@ -78,7 +78,7 @@ const INCLUDED = [
   "답례품 전달 안내",
   "2인 교차 검수 정산",
   "엑셀 정산 리포트 당일 전달",
-  "현금영수증 발행 대행",
+  "현금영수증 발행가능",
 ];
 
 const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
