@@ -18,6 +18,7 @@ import {
 } from "@/lib/plans";
 import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
+import { formatPhoneInput } from "@/lib/phone";
 import { requestDepositPayment } from "@/lib/portone-client";
 import type {
   ConfirmReservationResponse,
@@ -503,7 +504,9 @@ export function ReservationModal({
                     연락처
                     <input
                       value={state.phone}
-                      onChange={(e) => patch({ phone: e.target.value })}
+                      onChange={(e) => patch({ phone: formatPhoneInput(e.target.value) })}
+                      inputMode="numeric"
+                      autoComplete="tel"
                       placeholder="010-0000-0000"
                       className="field-focus"
                       style={fieldInputStyle}
