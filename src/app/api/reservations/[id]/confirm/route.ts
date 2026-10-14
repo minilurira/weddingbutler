@@ -87,6 +87,7 @@ export async function POST(
       day: reservation.ceremony_day,
       time: reservation.ceremony_time,
       name: reservation.couple_name,
+      side: reservation.side ?? null,
       phone: reservation.phone,
       venue: reservation.venue ?? "",
       guests: reservation.guests,

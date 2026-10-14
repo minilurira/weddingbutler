@@ -1,7 +1,8 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
-import { calcPrice, isPaymentType, PLANS, testPrice, type PlanKey } from "@/lib/plans";
+import { fetchBlockedSlots } from "@/lib/availability";
+import { calcPrice, isOneSide, isPaymentType, PLANS, sideForPlan, testPrice, type PlanKey } from "@/lib/plans";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
   CreateReservationInput,
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, phone, email, venue, guests, extraButlers, payMethod, paymentType, test, testKey } =
+  const { plan, year, month, day, time, name, side, phone, email, venue, guests, extraButlers, payMethod, paymentType, test, testKey } =
     body;
 
   const isTest = test === true;
@@ -65,6 +66,21 @@ export async function POST(req: NextRequest) {
   if (!isBookableDow(ceremonyDate)) {
     return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
   }
+  if (plan !== "premium" && !isOneSide(side)) {
+    return NextResponse.json({ message: "신랑측 또는 신부측을 선택해 주세요." }, { status: 400 });
+  }
+
+  // 예약 화면에서 막은 시간을 서버에서도 다시 확인한다(두 고객이 거의 동시에 같은 시간대를 고르는 경우).
+  // 파이프라인 점검용 테스트 결제는 실제 시간대와 무관하므로 확인하지 않는다.
+  if (!isTest) {
+    const blocked = await fetchBlockedSlots(`${year}-${pad(month)}-${pad(day)}`);
+    if (blocked?.includes(time)) {
+      return NextResponse.json(
+        { message: "이미 예약된 시간대입니다. 다른 예식 시간을 선택해 주세요." },
+        { status: 409 }
+      );
+    }
+  }
 
   const price = isTest ? testPrice(paymentType) : calcPrice(plan, guests, extraButlers, paymentType);
   const planInfo = PLANS[plan];
@@ -86,6 +102,7 @@ export async function POST(req: NextRequest) {
         ceremony_day: day,
         ceremony_time: time,
         couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
+        side: sideForPlan(plan, isOneSide(side) ? side : null),
         phone: phone.trim(),
         email: email.trim(),
         venue: venue?.trim() || null,

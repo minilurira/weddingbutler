@@ -9,9 +9,12 @@ import {
   PAYMENT_TYPES,
   PLAN_ORDER,
   PLANS,
+  SIDE_LABEL,
+  sideForPlan,
   testPrice,
   TIME_SLOTS,
   won,
+  type OneSide,
   type PaymentType,
   type PayMethod,
   type PlanKey,
@@ -21,6 +24,7 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
 import { requestDepositPayment } from "@/lib/portone-client";
 import type {
+  AvailabilityResponse,
   ConfirmReservationResponse,
   CreateReservationResponse,
 } from "@/lib/reservation-types";
@@ -37,6 +41,7 @@ interface ModalState {
   guests: number;
   extraButlers: number;
   paymentType: PaymentType;
+  side: OneSide | null;
   name: string;
   phone: string;
   email: string;
@@ -62,6 +67,7 @@ function initialState(plan: PlanKey): ModalState {
     guests: 250,
     extraButlers: 0,
     paymentType: "deposit",
+    side: null,
     name: "",
     phone: "",
     email: "",
@@ -76,6 +82,19 @@ function initialState(plan: PlanKey): ModalState {
     error: null,
   };
 }
+
+const disabledChipStyle: CSSProperties = {
+  padding: "12px 6px",
+  textAlign: "center",
+  fontSize: 14,
+  borderRadius: 3,
+  cursor: "not-allowed",
+  userSelect: "none",
+  background: "#F1E7EA",
+  color: "#C3AEB5",
+  border: "1px solid #E9DADF",
+  textDecoration: "line-through",
+};
 
 const chipStyle = (on: boolean): CSSProperties => ({
   padding: "12px 6px",
@@ -107,6 +126,8 @@ export function ReservationModal({
 }) {
   const [state, setState] = useState<ModalState>(() => initialState(plan));
   const prevPlanProp = useRef(plan);
+  // 고른 날짜에 이미 잡힌 예약 앞뒤로 고를 수 없는 시간 칩. key = "YYYY-MM-DD"
+  const [blocked, setBlocked] = useState<{ key: string; slots: string[] }>({ key: "", slots: [] });
 
   const patch = (
     p: Partial<ModalState> | ((s: ModalState) => Partial<ModalState>)
@@ -144,6 +165,27 @@ export function ReservationModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  const dateKey = state.date
+    ? `${state.y}-${String(state.m).padStart(2, "0")}-${String(state.date).padStart(2, "0")}`
+    : "";
+
+  useEffect(() => {
+    if (!open || !dateKey) return;
+    let cancelled = false;
+    fetch(`/api/availability?date=${dateKey}`, { cache: "no-store" })
+      .then((r) => (r.ok ? (r.json() as Promise<AvailabilityResponse>) : { blocked: [] }))
+      .catch((): AvailabilityResponse => ({ blocked: [] }))
+      .then((res) => {
+        if (cancelled) return;
+        setBlocked({ key: dateKey, slots: res.blocked });
+        // 이미 고른 시간이 막힌 시간대면 선택을 풀어 다시 고르게 한다.
+        setState((s) => (s.time && res.blocked.includes(s.time) ? { ...s, time: null } : s));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, dateKey]);
+
   function shiftMonth(d: number) {
     patch((s) => {
       let y = s.y;
@@ -170,12 +212,16 @@ export function ReservationModal({
   if (!open) return null;
 
   const P = PLANS[state.plan];
+  const oneSide = state.plan !== "premium";
+  const side = sideForPlan(state.plan, state.side);
+  const blockedSlots = blocked.key === dateKey ? blocked.slots : [];
   const price = test
     ? testPrice(state.paymentType)
     : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType);
   const filled = !!(
     state.date &&
     state.time &&
+    (!oneSide || state.side) &&
     state.name.trim() &&
     state.phone.trim() &&
     EMAIL_RE.test(state.email.trim()) &&
@@ -234,7 +280,8 @@ export function ReservationModal({
     const miss: string[] = [];
     if (!state.date) miss.push("예식 날짜");
     if (!state.time) miss.push("예식 시간");
-    if (!state.name.trim()) miss.push("신랑 · 신부 성함");
+    if (oneSide && !state.side) miss.push("신랑측 · 신부측 선택");
+    if (!state.name.trim()) miss.push(oneSide ? "예약자 성함" : "신랑 · 신부 성함");
     if (!state.phone.trim()) miss.push("연락처");
     if (!state.email.trim()) miss.push("이메일");
     else if (!EMAIL_RE.test(state.email.trim())) miss.push("이메일 (형식을 확인해 주세요)");
@@ -264,6 +311,7 @@ export function ReservationModal({
           day: state.date,
           time: state.time,
           name: state.name,
+          side: oneSide ? state.side : null,
           phone: state.phone,
           email: state.email,
           venue: state.venue,
@@ -479,23 +527,41 @@ export function ReservationModal({
 
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 3 · 예식 시간</div>
                 <div data-mq="slots" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px,1fr))", gap: 8 }}>
-                  {TIME_SLOTS.map((t) => (
-                    <div key={t} onClick={() => patch({ time: t })} style={chipStyle(state.time === t)}>
-                      {t}
-                    </div>
-                  ))}
+                  {TIME_SLOTS.map((t) =>
+                    blockedSlots.includes(t) ? (
+                      <div key={t} aria-disabled="true" title="예약이 마감된 시간입니다" style={disabledChipStyle}>
+                        {t}
+                      </div>
+                    ) : (
+                      <div key={t} onClick={() => patch({ time: t })} style={chipStyle(state.time === t)}>
+                        {t}
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 4 · 예식 정보</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 14 }}>
+                  {oneSide && (
+                    <div style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                      신랑측 · 신부측
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                        {(["groom", "bride"] as const).map((s) => (
+                          <div key={s} onClick={() => patch({ side: s })} style={chipStyle(state.side === s)}>
+                            {SIDE_LABEL[s]}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <label style={fieldLabelStyle}>
-                    신랑 · 신부 성함
+                    {oneSide ? "예약자 성함" : "신랑 · 신부 성함"}
                     <input
                       value={state.name}
                       onChange={(e) => patch({ name: e.target.value })}
-                      placeholder="김민준 · 이서연"
+                      placeholder={oneSide ? "이서연" : "김민준 · 이서연"}
                       className="field-focus"
                       style={fieldInputStyle}
                     />
@@ -590,6 +656,7 @@ export function ReservationModal({
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "22px 0", borderTop: "1px solid #DCC4CC", borderBottom: "1px solid #DCC4CC" }}>
                   <SummaryRow label="예식 일시" value={whenLabel} />
+                  <SummaryRow label="축의대" value={side ? SIDE_LABEL[side] : "선택해 주세요"} />
                   <SummaryRow label="예식장" value={state.venue.trim() || "미입력"} />
                   <SummaryRow label="배정 버틀러" value={`${P.butlers + state.extraButlers}명`} />
                 </div>
@@ -768,6 +835,7 @@ export function ReservationModal({
               >
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
                 <SummaryRow label="요금제" value={P.name} wide />
+                {side && <SummaryRow label="축의대" value={SIDE_LABEL[side]} wide />}
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
                 <SummaryRow label="결제 방식" value={PAYMENT_TYPES[state.paymentType].name} wide />
                 <SummaryRow label="결제한 금액" value={won(price.deposit)} wide />

@@ -1,4 +1,4 @@
-import type { PaymentType, PlanKey } from "@/lib/plans";
+import type { OneSide, PaymentType, PlanKey } from "@/lib/plans";
 
 export interface CreateReservationInput {
   plan: PlanKey;
@@ -7,6 +7,8 @@ export interface CreateReservationInput {
   day: number;
   time: string;
   name: string;
+  /** 스몰케어·스탠다드만: 신랑측/신부측. 프리미엄은 서버에서 양가로 저장한다. */
+  side?: OneSide | null;
   phone: string;
   email: string;
   venue: string;
@@ -32,6 +34,11 @@ export interface ConfirmReservationResponse {
   ok: boolean;
   bookingNo?: string;
   message?: string;
+}
+
+export interface AvailabilityResponse {
+  /** 고를 수 없는 시간 칩(TIME_SLOTS 중) */
+  blocked: string[];
 }
 
 export interface ContactInput {

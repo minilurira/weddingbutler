@@ -1,4 +1,4 @@
-import type { PaymentType, PlanKey } from "@/lib/plans";
+import type { PaymentType, PlanKey, Side } from "@/lib/plans";
 import { PAYMENT_TYPES, PLANS } from "@/lib/plans";
 
 export interface AdminSyncInput {
@@ -9,6 +9,7 @@ export interface AdminSyncInput {
   day: number;
   time: string;
   name: string;
+  side: Side | null;
   phone: string;
   venue: string;
   guests: number;
@@ -50,6 +51,7 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         externalId: input.bookingNo,
         customer,
         couple: input.name.trim(),
+        side: input.side ?? undefined,
         phone: input.phone.trim(),
         weddingDate: `${input.year}-${pad(input.month)}-${pad(input.day)}`,
         weddingTime: input.time,

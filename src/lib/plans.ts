@@ -148,5 +148,43 @@ export const TIME_SLOTS: string[] = [
   "19:00",
 ];
 
+/** 축의대 구분. 스몰케어·스탠다드는 한쪽(신랑측/신부측)만 맡고, 프리미엄은 양가를 맡는다. */
+export type Side = "groom" | "bride" | "both";
+export type OneSide = "groom" | "bride";
+
+export const SIDE_LABEL: Record<Side, string> = {
+  groom: "신랑측",
+  bride: "신부측",
+  both: "양가",
+};
+
+export function isOneSide(v: unknown): v is OneSide {
+  return v === "groom" || v === "bride";
+}
+
+/** 요금제별 축의대 구분: 프리미엄은 항상 양가, 나머지는 고객이 고른 쪽. */
+export function sideForPlan(plan: PlanKey, side: OneSide | null | undefined): Side | null {
+  if (plan === "premium") return "both";
+  return side ?? null;
+}
+
+/** 이미 잡힌 예식 시각 기준으로 앞 1시간 ~ 뒤 2시간(양 끝 포함)은 다른 예약을 받지 않는다. */
+export const BLOCK_BEFORE_MIN = 60;
+export const BLOCK_AFTER_MIN = 120;
+
+function toMinutes(t: string): number | null {
+  const m = /^(\d{2}):(\d{2})$/.exec(t);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+/** 예약된 시각 목록 → 고를 수 없는 TIME_SLOTS 목록. */
+export function blockedSlots(bookedTimes: string[]): string[] {
+  const booked = bookedTimes.map(toMinutes).filter((n): n is number => n !== null);
+  return TIME_SLOTS.filter((slot) => {
+    const s = toMinutes(slot)!;
+    return booked.some((b) => s >= b - BLOCK_BEFORE_MIN && s <= b + BLOCK_AFTER_MIN);
+  });
+}
+
 export const PAY_METHODS = ["신용카드", "계좌이체", "카카오페이"] as const;
 export type PayMethod = (typeof PAY_METHODS)[number];
