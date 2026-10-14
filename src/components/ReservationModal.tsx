@@ -543,11 +543,11 @@ export function ReservationModal({
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 4 · 예식 정보</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,150px),1fr))", gap: 14 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 14 }}>
                   {oneSide && (
                     <div style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                       신랑측 · 신부측
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                         {(["groom", "bride"] as const).map((s) => (
                           <div key={s} onClick={() => patch({ side: s })} style={chipStyle(state.side === s)}>
                             {SIDE_LABEL[s]}
@@ -578,7 +578,7 @@ export function ReservationModal({
                       style={fieldInputStyle}
                     />
                   </label>
-                  <label data-mq="span2" style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                     <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
                       이메일 <span style={{ fontSize: 12, color: "#9A8189" }}>결제 영수증이 발송됩니다.</span>
                     </span>
@@ -591,7 +591,7 @@ export function ReservationModal({
                       style={fieldInputStyle}
                     />
                   </label>
-                  <label data-mq="span2" style={{ ...fieldLabelStyle, gridColumn: "span 2" }}>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                     예식장 · 홀 이름
                     <input
                       value={state.venue}
