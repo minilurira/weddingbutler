@@ -23,7 +23,7 @@ export async function POST(req: Request, { params }: { params: { token: string }
       httpOnly: true,
       secure: true,
       sameSite: "lax",
-      path: sessionCookiePath(params.token),
+      path: sessionCookiePath(params.token, req.headers.get("host")),
       maxAge: SESSION_HOURS * 60 * 60,
     });
   }

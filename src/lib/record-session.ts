@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { recordSecret } from "@/lib/record-api";
+import { recordBasePath } from "@/lib/record-host";
 
 // 고객 열람 세션(문자 인증 후 12시간)과 관리자 미리보기 서명을 같은 키(HMAC)로 검증한다.
 
@@ -34,4 +35,5 @@ export const hasCustomerSession = (token: string, cookieValue: string | undefine
 /** 어드민 "고객 화면으로 보기" 링크의 ?admin=<exp>.<sig> */
 export const isAdminPreview = (token: string, adminParam: string | undefined) => checkSigned("admin", token, adminParam);
 
-export const sessionCookiePath = (token: string) => `/r/${token}`;
+/** 열람 쿠키는 그 기록 주소에서만 보낸다 (report 도메인이면 /<토큰>) */
+export const sessionCookiePath = (token: string, host: string | null) => recordBasePath(token, host);

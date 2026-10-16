@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { recordBasePath } from "@/lib/record-host";
 import { NextResponse } from "next/server";
 import { getRecordPayload, isRecordToken } from "@/lib/record-api";
 import { SESSION_COOKIE, hasCustomerSession, isAdminPreview } from "@/lib/record-session";
@@ -17,7 +18,7 @@ export async function GET(req: Request, { params }: { params: { token: string } 
 
   const admin = isAdminPreview(token, new URL(req.url).searchParams.get("admin") ?? undefined);
   if (!admin && !hasCustomerSession(token, cookies().get(SESSION_COOKIE)?.value)) {
-    return NextResponse.redirect(new URL(`/r/${token}`, req.url));
+    return NextResponse.redirect(new URL(recordBasePath(token, req.headers.get("host")), req.url));
   }
 
   const payload = await getRecordPayload(token, admin ? "admin" : "customer", { log: false });

@@ -1,7 +1,7 @@
 // 고객 축의 기록 페이지 (02 기획안 S14~S18). 기록은 어드민 DB에 있고 서버에서만 불러온다.
 // 토큰 조회 → 관리자 서명 or 문자 인증 세션 확인(S14) → 만료(S18) → 스몰(S17) → 요약·리스트(S15·S16)
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import "@/styles/wb-tokens.css";
 import "@/styles/wb-record.css";
@@ -11,6 +11,7 @@ import { RecordFrame, SUPPORT_PHONE } from "@/components/record/RecordFrame";
 import { sampleRecord, sampleSealed, sampleStandard } from "@/mocks/record-sample";
 import { getRecordInfo, getRecordPayload, isRecordToken } from "@/lib/record-api";
 import { SESSION_COOKIE, hasCustomerSession, isAdminPreview } from "@/lib/record-session";
+import { recordBasePath } from "@/lib/record-host";
 import { krDate } from "@/lib/format";
 import type { RecordPayload } from "@/types/record";
 
@@ -88,7 +89,7 @@ export default async function RecordPage({
     );
   }
 
-  const downloadUrl = `/r/${token}/download${admin && adminParam ? `?admin=${encodeURIComponent(adminParam)}` : ""}`;
+  const downloadUrl = `${recordBasePath(token, headers().get("host"))}/download${admin && adminParam ? `?admin=${encodeURIComponent(adminParam)}` : ""}`;
   const banner = admin && (
     <div className="wbr-preview-banner" role="note">
       관리자 미리보기{info.status === "published" ? "" : " · 아직 게시 전이라 고객은 볼 수 없어요"}
