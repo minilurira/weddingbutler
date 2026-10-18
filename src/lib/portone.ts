@@ -48,13 +48,15 @@ export type PortOneCancelResult =
   | { ok: false; code: string; message: string };
 
 /**
- * Full cancel (refund) of a PortOne V2 payment. PortOne relays the cancel to
- * the PG (KG이니시스). A payment that is already cancelled is reported as
- * ok with alreadyCancelled so a retried request stays idempotent.
+ * Cancel (refund) of a PortOne V2 payment. PortOne relays the cancel to
+ * the PG (KG이니시스). Without `amount` the whole payment is cancelled; with
+ * it, only that amount (부분취소). A payment that is already cancelled is
+ * reported as ok with alreadyCancelled so a retried request stays idempotent.
  */
 export async function cancelPortOnePayment(
   paymentId: string,
-  reason: string
+  reason: string,
+  opts: { amount?: number; requester?: "ADMIN" | "CUSTOMER" } = {}
 ): Promise<PortOneCancelResult> {
   const secret = process.env.PORTONE_API_SECRET;
   if (!secret) {
@@ -71,7 +73,7 @@ export async function cancelPortOnePayment(
         Authorization: `PortOne ${secret}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ reason, requester: "ADMIN" }),
+      body: JSON.stringify({ reason, requester: opts.requester ?? "ADMIN", ...(opts.amount ? { amount: opts.amount } : {}) }),
       cache: "no-store",
     }
   );

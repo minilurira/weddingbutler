@@ -6,12 +6,13 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 
 const NAV = [
-  { href: "/service", label: "서비스" },
-  { href: "/pricing", label: "가격안내" },
-  { href: "/contact", label: "문의하기" },
+  { href: "/service", label: "서비스", key: "service" },
+  { href: "/pricing", label: "가격안내", key: "pricing" },
+  { href: "/contact", label: "문의하기", key: "contact" },
+  { href: "/reservation/lookup", label: "예약조회", key: "lookup" },
 ] as const;
 
-export function Header({ active }: { active?: "service" | "pricing" | "contact" }) {
+export function Header({ active }: { active?: (typeof NAV)[number]["key"] }) {
   const { openModal } = useReservation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [testKey, setTestKey] = useState<string | null>(null);
@@ -81,7 +82,7 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
               <Link
                 key={item.href}
                 href={item.href}
-                style={{ color: active === item.href.slice(1) ? "#A9647E" : "#473A3F" }}
+                style={{ color: active === item.key ? "#A9647E" : "#473A3F" }}
               >
                 {item.label}
               </Link>
@@ -164,7 +165,7 @@ export function Header({ active }: { active?: "service" | "pricing" | "contact" 
               style={{
                 padding: "16px 4px",
                 fontSize: 16,
-                color: active === item.href.slice(1) ? "#A9647E" : "#473A3F",
+                color: active === item.key ? "#A9647E" : "#473A3F",
                 borderBottom: "1px solid #EBDCE0",
               }}
             >

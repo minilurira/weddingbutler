@@ -4,10 +4,13 @@ import { cancelPortOnePayment } from "@/lib/portone";
 
 export const dynamic = "force-dynamic";
 
-// 어드민 전용: 예약번호로 포트원 결제를 찾아 전액 취소(이니시스 환불)한다.
+// 어드민 전용: 예약번호로 포트원 결제를 찾아 취소(이니시스 환불)한다.
 // 어드민이 RESERVATION_API_KEY(= 여기의 ADMIN_API_KEY)를 Bearer로 보낸다.
+// amount(원)가 결제금액보다 적으면 그만큼만 부분취소, 없거나 같거나 크면 전액 취소.
+// requester: 포트원에 남길 취소 요청자 ("ADMIN" 기본, 홈페이지 예약 조회에서 고객이 취소하면 "CUSTOMER").
 //
 // 응답 code: "cancelled" | "already_cancelled" | "not_found" | "not_paid" | "pg_error"
+// 같은 예약에 취소 요청이 겹치지 않게 막는 것은 어드민 쪽이 맡는다.
 export async function POST(req: NextRequest) {
   const apiKey = process.env.ADMIN_API_KEY;
   if (!apiKey) {
@@ -19,7 +22,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ code: "unauthorized" }, { status: 401 });
   }
 
-  let body: { bookingNo?: string; reason?: string };
+  let body: { bookingNo?: string; reason?: string; amount?: unknown; requester?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -30,6 +33,8 @@ export async function POST(req: NextRequest) {
   if (!bookingNo || !reason) {
     return NextResponse.json({ code: "bad_request", message: "bookingNo and reason are required." }, { status: 400 });
   }
+  const requestedAmount = typeof body.amount === "number" && body.amount > 0 ? Math.floor(body.amount) : undefined;
+  const requester = body.requester === "CUSTOMER" ? "CUSTOMER" : "ADMIN";
 
   try {
     const db = supabaseAdmin();
@@ -52,18 +57,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const result = await cancelPortOnePayment(reservation.portone_payment_id, reason);
+    const partial = requestedAmount !== undefined && requestedAmount < reservation.deposit_amount;
+    const result = await cancelPortOnePayment(reservation.portone_payment_id, reason, {
+      amount: partial ? requestedAmount : undefined,
+      requester,
+    });
     if (!result.ok) {
       console.error(`[reservations/cancel] PortOne cancel failed for ${bookingNo}: ${result.code} ${result.message}`);
       return NextResponse.json({ code: "pg_error", message: result.message, pgCode: result.code }, { status: 502 });
     }
 
     await db.from("reservations").update({ payment_status: "cancelled" }).eq("id", reservation.id);
-    console.log(`[reservations/cancel] ${bookingNo} cancelled (status=${result.status}, amount=${result.cancelledAmount})`);
+    console.log(
+      `[reservations/cancel] ${bookingNo} cancelled by ${requester} (status=${result.status}, amount=${result.cancelledAmount}, partial=${partial})`
+    );
 
+    const expected = partial ? requestedAmount : reservation.deposit_amount;
     return NextResponse.json({
       code: result.alreadyCancelled ? "already_cancelled" : "cancelled",
-      refundAmount: result.cancelledAmount || reservation.deposit_amount,
+      refundAmount: result.cancelledAmount || expected,
       pgStatus: result.status,
     });
   } catch (err) {
