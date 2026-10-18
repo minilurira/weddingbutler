@@ -11,8 +11,10 @@ export interface AdminSyncInput {
   name: string;
   side: Side | null;
   phone: string;
+  email: string;
   venue: string;
   guests: number;
+  extraButlers: number;
   payMethod: string;
   depositAmount: number;
   paymentType: PaymentType;
@@ -53,10 +55,12 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         couple: input.name.trim(),
         side: input.side ?? undefined,
         phone: input.phone.trim(),
+        email: input.email?.trim() ?? "",
         weddingDate: `${input.year}-${pad(input.month)}-${pad(input.day)}`,
         weddingTime: input.time,
         venue: input.venue?.trim() || "미정",
         guestCount: input.guests,
+        extraButlers: input.extraButlers ?? 0,
         plan: PLANS[input.plan].name,
         memo: `결제 수단: ${input.payMethod} · ${PAYMENT_TYPES[input.paymentType].name}`,
         paidAmount: input.depositAmount,
