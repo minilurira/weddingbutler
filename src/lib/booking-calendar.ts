@@ -61,11 +61,11 @@ export function isBookableDow(d: Date): boolean {
   return dow === 0 || dow === 6 || isKoreanHoliday(d);
 }
 
-/** 예약 가능한 가장 이른 날짜: 오늘로부터 7일 이후. */
+/** 예약 가능한 가장 이른 날짜: 오늘로부터 3일 이후. */
 export function minBookingDate(): Date {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() + 7);
+  d.setDate(d.getDate() + 3);
   return d;
 }
 

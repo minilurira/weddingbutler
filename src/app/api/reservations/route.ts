@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   const ceremonyDate = new Date(year, month - 1, day);
   if (ceremonyDate < minBookingDate()) {
-    return NextResponse.json({ message: "예식 7일 전까지만 예약할 수 있습니다." }, { status: 400 });
+    return NextResponse.json({ message: "예식 3일 전까지만 예약할 수 있습니다." }, { status: 400 });
   }
   if (ceremonyDate > maxBookingDate()) {
     return NextResponse.json({ message: `${BOOKING_OPEN_UNTIL_LABEL} 예식까지만 예약할 수 있습니다.` }, { status: 400 });

@@ -90,7 +90,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
         <NoticeItem>예약할 때 결제 방식을 고르실 수 있습니다. 예약금 결제 후 현장결제는 예약금 10만원을 카드로 결제하고 나머지를 예식 당일 현장에서 결제하며, 전액결제는 총 금액을 카드로 한 번에 결제해 현장에서 결제할 금액이 없습니다.</NoticeItem>
         <NoticeItem>카드 결제가 끝나면 예약이 확정됩니다.</NoticeItem>
         <NoticeItem small>현장 결제 금액(잔금, 기준 초과 식권)은 현금으로만 결제할 수 있습니다.</NoticeItem>
-        <NoticeItem>예식일 7일 전까지, {BOOKING_OPEN_UNTIL_LABEL} 예식까지 온라인 예약을 받습니다.</NoticeItem>
+        <NoticeItem>예식일 3일 전까지, {BOOKING_OPEN_UNTIL_LABEL} 예식까지 온라인 예약을 받습니다.</NoticeItem>
       </>
     ),
   },
