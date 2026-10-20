@@ -3,7 +3,7 @@ export const PRIVACY_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">개인정보처리방침</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 28px;">시행일 2026년 9월 21일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 28px;">시행일 2026년 10월 20일</p>
 
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">웨딩버틀러(이하 "회사")는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 8px;">회사는 결혼식 축의금 접수·기록·인계 대행 서비스를 제공하는 과정에서, 서비스를 신청한 의뢰인뿐만 아니라 예식에 참석한 하객의 개인정보를 처리합니다. 하객이 낸 금액은 의뢰인이 개봉 집계 방식을 선택한 경우에만 기록하며, 밀봉 방식에서는 수집하지 아니합니다.</p>
@@ -43,6 +43,8 @@ export const PRIVACY_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">접수·인계 과정의 사실관계 확인(운영 구역 영상)을 목적으로 개인정보를 처리합니다.</p>
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(5) 마케팅 및 광고</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">이벤트·광고성 정보 제공을 목적으로 개인정보를 처리합니다. 정보주체가 별도로 동의한 경우에 한합니다.</p>
+  <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(6) 서비스 이용 통계 및 개선</h3>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">사이트 방문·이용 현황의 통계 분석과 서비스 개선을 목적으로 행태정보를 처리합니다(제13항).</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">2. 개인정보의 처리 및 보유 기간</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(1) 회사는 동의받은 보유·이용기간 내에서 개인정보를 처리·보유하며, 목적이 달성되거나 정보주체의 삭제 요청이 있으면 지체 없이 파기합니다.</p>
@@ -61,6 +63,7 @@ export const PRIVACY_HTML = `
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">하객 성명, 봉투 고유번호, 봉투별 금액(개봉 집계 시)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식일로부터 30일까지<br />(정산 리포트 인계 후 회사 보관본 파기)</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">운영 구역 촬영 영상</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예식일로부터 30일까지</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">환불 계좌 정보</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">환불 완료 시까지</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">행태정보 (Google Analytics)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">수집일로부터 14개월</td></tr>
         <tr><td style="padding:11px 14px; color:#4A3B41;">마케팅 수신 동의 정보</td><td style="padding:11px 14px; color:#4A3B41;">동의 철회 시까지 (2년마다 수신 동의 여부 재확인)</td></tr>
       </tbody>
     </table>
@@ -112,7 +115,7 @@ export const PRIVACY_HTML = `
   </div>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">카드번호·유효기간 등 결제 인증정보는 결제대행사(KG이니시스)가 자사 결제창에서 직접 수집하며, 회사는 이를 수집·보유하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 14px;">밀봉 방식에서는 하객이 낸 금액을 수집·기록하지 아니합니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 자동 생성·수집 정보 — 접속 로그, 접속 IP, 쿠키, 서비스 이용 기록, 결제 기록, 운영 구역 촬영 영상</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 자동 생성·수집 정보 — 접속 로그, 접속 IP, 쿠키, 서비스 이용 기록, 결제 기록, 운영 구역 촬영 영상, 행태정보(방문 페이지, 유입 경로, 체류 시간, 기기·브라우저 종류 등. 제13항)</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 수집 방법 — 사이트 예약·문의 양식, 전화·문자·카카오톡 채널 상담, 예약 사전 확인 통화, 현장 접수 기록 및 인계확인서</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">4. 하객의 개인정보 처리에 관한 사항</h2>
@@ -153,6 +156,7 @@ export const PRIVACY_HTML = `
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">Vercel Inc.</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">웹사이트 호스팅 및 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">해당 (제9항)</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">Supabase Inc.</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약·문의 데이터베이스의 운영 및 보관</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">해당 (제9항)</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">(주)KG이니시스</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신용카드 등 결제 처리 및 에스크로</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">해당 없음</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">Google LLC</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">웹사이트 이용 통계 분석(Google Analytics, Google 태그 관리자)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">해당 (제9항)</td></tr>
         <tr><td style="padding:11px 14px; color:#4A3B41;">솔라피(주)</td><td style="padding:11px 14px; color:#4A3B41;">예약 확인·안내 메시지(알림톡·문자) 발송</td><td style="padding:11px 14px; color:#9A8189;">해당 없음</td></tr>
       </tbody>
     </table>
@@ -164,25 +168,26 @@ export const PRIVACY_HTML = `
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">9. 개인정보의 국외 이전에 관한 사항</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(1) 회사는 서비스 제공을 위해 아래와 같이 개인정보의 처리를 국외에 위탁·보관합니다. 이는 「개인정보 보호법」 제28조의8 제1항 제3호에 따른 계약의 체결·이행을 위한 처리위탁·보관으로서, 본 방침을 통해 이전에 관한 사항을 공개합니다.</p>
   <div style="overflow-x:auto; margin:0 0 14px;">
-    <table style="width:100%; border-collapse:collapse; font-size:13.5px; min-width:520px;">
+    <table style="width:100%; border-collapse:collapse; font-size:13.5px; min-width:680px;">
       <thead>
         <tr>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">구분</th>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">Vercel Inc.</th>
           <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">Supabase Inc.</th>
+          <th style="text-align:left; padding:11px 14px; background:#FAF3F5; color:#6B5A60; font-weight:500; border-bottom:1px solid #EBDCE0;">Google LLC</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">연락처</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">privacy@vercel.com</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">privacy@supabase.io</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 국가</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">미국</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">미국(운영 법인 소재지) 및 대한민국 서울(데이터 저장 리전, ap-northeast-2)</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 일시·방법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">사이트 이용 시 정보통신망을 통해 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약·문의 제출 시 정보통신망을 통해 전송</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 항목</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약·문의 입력 정보, 접속 로그, IP</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">문의 정보, 예약 정보, 인수자·확인 담당자 정보, 결제 승인 결과</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이용 목적</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">웹사이트 호스팅 및 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">데이터베이스 운영 및 보관</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">보유 기간</td><td style="padding:11px 14px; color:#4A3B41;">위탁계약 종료 시 또는 제2항 보유기간 만료 시까지</td><td style="padding:11px 14px; color:#4A3B41;">위탁계약 종료 시 또는 제2항 보유기간 만료 시까지</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">연락처</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">privacy@vercel.com</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">privacy@supabase.io</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">policies.google.com/privacy (개인정보 문의 양식)</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 국가</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">미국</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">미국(운영 법인 소재지) 및 대한민국 서울(데이터 저장 리전, ap-northeast-2)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">미국</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 일시·방법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">사이트 이용 시 정보통신망을 통해 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약·문의 제출 시 정보통신망을 통해 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">사이트 방문 시 정보통신망을 통해 전송</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이전 항목</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약·문의 입력 정보, 접속 로그, IP</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">문의 정보, 예약 정보, 인수자·확인 담당자 정보, 결제 승인 결과</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">행태정보(방문 페이지, 유입 경로, 체류 시간, 기기·브라우저 종류), 쿠키 식별자, 접속 IP(국가·지역 추정에만 사용)</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이용 목적</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">웹사이트 호스팅 및 전송</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">데이터베이스 운영 및 보관</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">웹사이트 이용 통계 분석</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">보유 기간</td><td style="padding:11px 14px; color:#4A3B41;">위탁계약 종료 시 또는 제2항 보유기간 만료 시까지</td><td style="padding:11px 14px; color:#4A3B41;">위탁계약 종료 시 또는 제2항 보유기간 만료 시까지</td><td style="padding:11px 14px; color:#4A3B41;">수집일로부터 14개월</td></tr>
       </tbody>
     </table>
   </div>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 정보주체는 국외 이전을 거부할 수 있습니다. 다만 위 이전은 사이트를 통한 예약·문의에 필수적이므로, 거부하는 경우 사이트 대신 전화로 예약·문의하실 수 있습니다. 거부 의사는 제14항의 개인정보 보호책임자에게 표시할 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 정보주체는 국외 이전을 거부할 수 있습니다. 다만 위 이전은 사이트를 통한 예약·문의에 필수적이므로, 거부하는 경우 사이트 대신 전화로 예약·문의하실 수 있습니다. 거부 의사는 제14항의 개인정보 보호책임자에게 표시할 수 있습니다. Google LLC로의 이전(이용 통계 분석)은 제13항의 방법으로 거부할 수 있으며, 거부하더라도 예약·문의 등 서비스 이용에는 영향이 없습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 회사는 「개인정보 보호법」 제28조의8 제4항에 따라 국외 이전 시 필요한 보호조치를 이행합니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">10. 개인정보의 파기 절차 및 방법</h2>
@@ -203,8 +208,26 @@ export const PRIVACY_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(4) 현장 조치 — 버틀러 2인 상호 확인, 업무 종료 후 기기 내 기록 사본 파기</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">13. 개인정보 자동 수집 장치의 설치·운영 및 거부</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 사이트 운영 및 보안, 예약 진행 상태 유지를 위해 쿠키를 사용할 수 있습니다. 회사는 쿠키로 개인을 식별하거나 이용자별 행태정보를 축적하지 않습니다.</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 이용자는 웹브라우저 설정에서 쿠키 저장을 거부할 수 있으며, 이 경우 예약 진행에 어려움이 있을 수 있습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 사이트 운영 및 보안, 예약 진행 상태 유지, 이용 통계 분석을 위해 쿠키를 사용합니다. 쿠키는 사이트가 이용자의 브라우저에 보내는 작은 텍스트 파일로, 이용자의 기기에 저장됩니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 회사는 Google LLC의 Google Analytics(Google 태그 관리자를 통해 설치)를 이용하여 다음과 같이 행태정보를 수집·이용합니다. 회사는 행태정보로 이용자 개인을 식별하지 않으며, 맞춤형 광고에 이용하거나 제3자에게 제공하지 않습니다.</p>
+  <div style="overflow-x:auto; margin:0 0 14px;">
+    <table style="width:100%; border-collapse:collapse; font-size:13.5px; min-width:460px;">
+      <tbody>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41; white-space:nowrap;">수집 항목</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">방문 페이지, 유입 경로, 체류 시간, 클릭 등 이용 기록, 기기·브라우저·운영체제 종류, 쿠키 식별자, 접속 IP(국가·지역 추정에만 사용되며 Google Analytics에 저장되지 않음)</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41; white-space:nowrap;">수집 방법</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">이용자가 사이트를 방문하거나 이용할 때 자동 수집</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41; white-space:nowrap;">수집 목적</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">방문자 수·이용 경로 등 이용 통계 분석 및 서비스 개선</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41; white-space:nowrap;">보유 기간</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">수집일로부터 14개월</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41; white-space:nowrap;">수집하지 않는 화면</td><td style="padding:11px 14px; color:#4A3B41;">고객 축의 기록 화면(report.weddingbutler.co.kr)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 이용자는 다음 방법으로 쿠키 저장과 행태정보 수집을 거부할 수 있습니다. 쿠키 저장을 모두 거부하는 경우 예약 진행에 어려움이 있을 수 있으나, 이용 통계 분석만 거부하는 경우에는 서비스 이용에 영향이 없습니다.</p>
+  <ul style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px; padding-left:20px;">
+    <li>Chrome: 설정 &gt; 개인정보 보호 및 보안 &gt; 서드 파티 쿠키</li>
+    <li>Edge: 설정 &gt; 쿠키 및 사이트 권한 &gt; 쿠키 및 사이트 데이터 관리 및 삭제</li>
+    <li>Safari: 설정 &gt; 개인정보 보호 &gt; 크로스 사이트 추적 방지</li>
+    <li>Google Analytics 수집만 거부: Google Analytics 차단 브라우저 부가기능(tools.google.com/dlpage/gaoptout) 설치</li>
+  </ul>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">14. 개인정보 보호책임자</h2>
   <div style="display:grid; grid-template-columns:140px 1fr; gap:10px 16px; font-size:13.5px; line-height:1.7; background:#FAF3F5; border-radius:4px; padding:20px 22px; margin:0 0 14px;">
@@ -235,7 +258,7 @@ export const PRIVACY_HTML = `
   </div>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">16. 개인정보처리방침의 변경</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 이 방침은 2026년 9월 21일부터 적용됩니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 이 방침은 2026년 10월 20일부터 적용됩니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(2) 방침을 변경하는 경우 시행 7일 전부터 사이트에 공지합니다. 수집 항목, 이용 목적, 제3자 제공 등 정보주체의 권리에 중요한 변경은 30일 전부터 공지합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(3) 이전 방침은 사이트에서 열람할 수 있도록 게시합니다.</p>
   <div style="overflow-x:auto; margin:0 0 14px;">
@@ -250,7 +273,8 @@ export const PRIVACY_HTML = `
       <tbody>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 1월 1일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">최초 수립</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제1차 개정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 9월 17일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">회원제 운영 중단에 따른 개정. 회원 가입·관리 및 회원 탈퇴 관련 조항을 삭제하고, 비회원 예약 조회 및 게시판 이용에 관한 처리 항목을 신설</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">제2차 개정</td><td style="padding:11px 14px; color:#4A3B41;">2026년 9월 21일</td><td style="padding:11px 14px; color:#4A3B41;">기록 방식(밀봉/개봉 집계) 선택제 도입에 따라 개봉 집계 시 봉투별 금액 처리 근거 신설. 위탁업체에 Vercel·Supabase 추가 및 개인정보 국외 이전 조항(제9항) 신설. 인수자·잔금 결제자, 환불 계좌, 현금영수증 등 실제 수집 항목 정비</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제2차 개정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 9월 21일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">기록 방식(밀봉/개봉 집계) 선택제 도입에 따라 개봉 집계 시 봉투별 금액 처리 근거 신설. 위탁업체에 Vercel·Supabase 추가 및 개인정보 국외 이전 조항(제9항) 신설. 인수자·잔금 결제자, 환불 계좌, 현금영수증 등 실제 수집 항목 정비</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">제3차 개정</td><td style="padding:11px 14px; color:#4A3B41;">2026년 10월 20일</td><td style="padding:11px 14px; color:#4A3B41;">Google Analytics 도입에 따라 행태정보 수집·이용 및 거부 방법(제13항) 신설. 위탁업체 및 국외 이전(제8항·제9항)에 Google LLC 추가. 처리 목적에 이용 통계 분석 추가</td></tr>
       </tbody>
     </table>
   </div>
@@ -266,6 +290,7 @@ export const PRIVACY_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/privacy/2026-09" style="color:#A9647E;">2026년 9월 21일 시행 이전 방침 보기</a><br />
     <a href="/privacy/2026-01" style="color:#A9647E;">2026년 1월 1일 시행 이전 방침 보기</a>
   </p>
 
