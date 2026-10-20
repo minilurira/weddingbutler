@@ -3,7 +3,8 @@ import { cormorant, notoSansKr, notoSerifKr } from "@/lib/fonts";
 import { fontSans } from "@/lib/style";
 import { ReservationProvider } from "@/components/ReservationProvider";
 import { LocalBusinessJsonLd } from "@/components/LocalBusinessJsonLd";
-import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
+import { GTM_ID, OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -57,6 +58,15 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${notoSansKr.variable} ${notoSerifKr.variable} ${cormorant.variable}`}>
       <body style={{ fontFamily: fontSans }}>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        <GoogleTagManager />
         <LocalBusinessJsonLd />
         <ReservationProvider>{children}</ReservationProvider>
       </body>
