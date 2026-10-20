@@ -12,6 +12,8 @@ export interface CreateReservationInput {
   phone: string;
   email: string;
   venue: string;
+  /** 고객이 남기는 요청 사항(선택, 최대 500자) */
+  memo?: string;
   guests: number;
   extraButlers: number;
   payMethod: string;

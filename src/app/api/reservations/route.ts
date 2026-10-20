@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, side, phone, email, venue, guests, extraButlers, payMethod, paymentType, test, testKey } =
+  const { plan, year, month, day, time, name, side, phone, email, venue, memo, guests, extraButlers, payMethod, paymentType, test, testKey } =
     body;
 
   const isTest = test === true;
@@ -106,6 +106,7 @@ export async function POST(req: NextRequest) {
         phone: phone.trim(),
         email: email.trim(),
         venue: venue?.trim() || null,
+        memo: typeof memo === "string" ? memo.trim().slice(0, 500) || null : null,
         guests,
         extra_butlers: extraButlers,
         pay_method: payMethod,

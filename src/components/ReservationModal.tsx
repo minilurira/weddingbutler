@@ -46,6 +46,7 @@ interface ModalState {
   phone: string;
   email: string;
   venue: string;
+  memo: string;
   agreeTerms: boolean;
   agreeRefund: boolean;
   agreePrivacy: boolean;
@@ -72,6 +73,7 @@ function initialState(plan: PlanKey): ModalState {
     phone: "",
     email: "",
     venue: "",
+    memo: "",
     agreeTerms: false,
     agreeRefund: false,
     agreePrivacy: false,
@@ -315,6 +317,7 @@ export function ReservationModal({
           phone: state.phone,
           email: state.email,
           venue: state.venue,
+          memo: state.memo,
           guests: state.guests,
           extraButlers: state.extraButlers,
           payMethod: FIXED_PAY_METHOD,
@@ -599,6 +602,20 @@ export function ReservationModal({
                       placeholder="서울 · 그랜드컨벤션 3층 그레이스홀"
                       className="field-focus"
                       style={fieldInputStyle}
+                    />
+                  </label>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      요청 사항 <span style={{ fontSize: 12, color: "#9A8189" }}>(선택)</span>
+                    </span>
+                    <textarea
+                      value={state.memo}
+                      onChange={(e) => patch({ memo: e.target.value })}
+                      maxLength={500}
+                      rows={3}
+                      placeholder="전달하실 내용이 있으면 남겨 주세요. (예: 축의대 위치, 연락 가능한 시간)"
+                      className="field-focus"
+                      style={{ ...fieldInputStyle, resize: "vertical", fontFamily: "inherit", lineHeight: 1.6 }}
                     />
                   </label>
                 </div>

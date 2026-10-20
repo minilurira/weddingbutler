@@ -42,6 +42,9 @@ alter table reservations add column if not exists email text not null default ''
 -- Migration (2026-10-14): 축의대 구분. 'groom' | 'bride' | 'both'(프리미엄). 이전 예약은 null.
 alter table reservations add column if not exists side text;
 
+-- Migration (2026-10-20): 고객이 예약 때 남기는 요청 사항(선택). 없으면 null.
+alter table reservations add column if not exists memo text;
+
 create table if not exists contact_messages (
   id uuid primary key default gen_random_uuid(),
   name text not null,
