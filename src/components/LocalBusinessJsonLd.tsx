@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export function LocalBusinessJsonLd() {
   const data = {
@@ -8,6 +8,7 @@ export function LocalBusinessJsonLd() {
     alternateName: "Wedding Butler",
     url: SITE_URL,
     description: SITE_DESCRIPTION,
+    keywords: SITE_KEYWORDS.join(", "),
     email: "cs@weddingbutler.co.kr",
     telephone: "010-5918-9203",
     image: `${SITE_URL}/img/hero-desk.jpeg`,

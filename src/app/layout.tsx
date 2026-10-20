@@ -4,17 +4,17 @@ import { fontSans } from "@/lib/style";
 import { ReservationProvider } from "@/components/ReservationProvider";
 import { LocalBusinessJsonLd } from "@/components/LocalBusinessJsonLd";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
-import { GTM_ID, OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { GTM_ID, OG_IMAGE, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} | 축의대 대행 서비스`,
+    default: SITE_TITLE,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  keywords: ["웨딩버틀러", "축의대", "축의대 대행", "축의금 접수", "결혼식 축의대", "웨딩 하객 접수"],
+  keywords: SITE_KEYWORDS,
   alternates: {
     canonical: "/",
   },
@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | 축의대 대행 서비스`,
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     images: [{ url: OG_IMAGE, width: 1376, height: 768, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} | 축의대 대행 서비스`,
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     images: [OG_IMAGE],
   },

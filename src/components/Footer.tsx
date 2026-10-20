@@ -124,7 +124,7 @@ export function Footer({ full = false }: { full?: boolean }) {
               WEDDING BUTLER
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.9, color: "#9A8189", margin: "16px 0 0" }}>
-              축의대 대행 전문 서비스
+              축의대행 · 축의금 대행 전문 서비스
               <br />
               두 분의 하루를 지킵니다.
             </p>

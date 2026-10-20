@@ -7,7 +7,7 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
   title: "서비스 소개",
-  description: "전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.",
+  description: "축의대행·축의금 대행 웨딩버틀러. 전문 교육을 받은 버틀러가 축의금 접수부터 정산까지 책임집니다.",
   alternates: { canonical: "/service" },
 };
 
