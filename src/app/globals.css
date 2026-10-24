@@ -249,3 +249,32 @@ button {
     grid-column: 1 / -1 !important;
   }
 }
+
+/* 홈 후기: 오른쪽 → 왼쪽으로 흐르는 카드 (ReviewMarquee). 한 묶음 너비만큼 이동하면 처음과 같아 끊김이 없다. */
+.review-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.review-track {
+  display: flex;
+  width: max-content;
+  animation: review-marquee var(--review-dur, 60s) linear infinite;
+}
+.review-half {
+  display: flex;
+  gap: var(--review-gap, 22px);
+  padding-right: var(--review-gap, 22px);
+}
+.review-marquee:hover .review-track,
+.review-marquee:focus-within .review-track {
+  animation-play-state: paused;
+}
+@keyframes review-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .review-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .review-track { animation: none; }
+}

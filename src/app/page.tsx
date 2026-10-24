@@ -5,6 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import { OpenModalButton } from "@/components/OpenModalButton";
 import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { PriceTeaserCards } from "@/components/home/PriceTeaserCards";
+import { ReviewMarquee } from "@/components/home/ReviewMarquee";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 const SERVICE_STEPS = [
@@ -272,27 +273,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="review" style={{ padding: "clamp(64px,11vw,120px) clamp(18px,5vw,24px)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <section id="review" style={{ padding: "clamp(64px,11vw,120px) 0" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 clamp(18px,5vw,24px)" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>REAL REVIEWS</p>
             <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예식을 마친 부부들의 이야기</h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px,1fr))", gap: 22 }}>
-            {REVIEWS.map((r, i) => (
-              <Reveal key={r.who} delay={50 + i * 100}>
-                <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "38px 32px" }}>
-                  <div style={{ fontFamily: fontDisplay, fontSize: 44, color: "#E9CAD1", lineHeight: 0.6, marginBottom: 22 }}>&ldquo;</div>
-                  <p style={{ fontSize: 15, lineHeight: 2, color: "#473A3F", margin: "0 0 26px" }}>{r.quote}</p>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 20, borderTop: "1px solid #E7D5DA" }}>
-                    <span style={{ fontSize: 14, color: "#33232A" }}>{r.who}</span>
-                    <span style={{ fontSize: 13, color: "#9A8189" }}>{r.tag}</span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
+        <ReviewMarquee reviews={REVIEWS} />
       </section>
 
       <section id="faq" style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px) clamp(70px,11vw,120px)", backgroundColor: "#FFFFFFBE" }}>
