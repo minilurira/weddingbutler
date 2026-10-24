@@ -93,3 +93,8 @@ create table if not exists approval_requests (
 create index if not exists approval_requests_status_idx on approval_requests (status);
 
 alter table approval_requests enable row level security;
+
+-- Migration (2026-10-24): 스페셜 예약 링크. 자세한 적용 방법은 supabase/special.sql 참고.
+--   alter table reservations drop constraint if exists reservations_plan_check;
+--   alter table reservations add constraint reservations_plan_check check (plan in ('small','standard','premium','special'));
+--   alter table reservations add column if not exists special_token text;

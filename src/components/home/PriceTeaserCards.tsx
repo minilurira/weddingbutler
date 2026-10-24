@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, type CSSProperties } from "react";
-import { PLAN_ORDER, PLANS, type PlanKey } from "@/lib/plans";
+import { PLAN_ORDER, PLANS, type PublicPlanKey } from "@/lib/plans";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { Reveal } from "@/components/Reveal";
 
-const BULLETS: Record<PlanKey, { text: string; muted?: boolean }[]> = {
+const BULLETS: Record<PublicPlanKey, { text: string; muted?: boolean }[]> = {
   small: [
     { text: "하객 200명 이하 예식" },
     { text: "웨딩버틀러 2명 배정" },
@@ -23,16 +23,16 @@ const BULLETS: Record<PlanKey, { text: string; muted?: boolean }[]> = {
   ],
 };
 
-const EYEBROW: Record<PlanKey, string> = {
+const EYEBROW: Record<PublicPlanKey, string> = {
   small: "01 SMALL CARE",
   standard: "02 STANDARD",
   premium: "03 PREMIUM",
 };
 
-const DELAY: Record<PlanKey, number> = { small: 50, standard: 150, premium: 250 };
+const DELAY: Record<PublicPlanKey, number> = { small: 50, standard: 150, premium: 250 };
 
 export function PriceTeaserCards() {
-  const [selected, setSelected] = useState<PlanKey>("standard");
+  const [selected, setSelected] = useState<PublicPlanKey>("standard");
 
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 22, alignItems: "start" }}>

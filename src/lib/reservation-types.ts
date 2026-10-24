@@ -1,4 +1,4 @@
-import type { OneSide, PaymentType, PlanKey } from "@/lib/plans";
+import type { PaymentType, PlanKey, Side } from "@/lib/plans";
 
 export interface CreateReservationInput {
   plan: PlanKey;
@@ -8,7 +8,7 @@ export interface CreateReservationInput {
   time: string;
   name: string;
   /** 스몰케어·스탠다드만: 신랑측/신부측. 프리미엄은 서버에서 양가로 저장한다. */
-  side?: OneSide | null;
+  side?: Side | null;
   phone: string;
   email: string;
   venue: string;
@@ -22,6 +22,8 @@ export interface CreateReservationInput {
    * TEST_PAYMENT_KEY와 일치할 때만 1,000원 결제로 처리된다. */
   test?: boolean;
   testKey?: string;
+  /** 스페셜 예약 링크의 토큰(plan이 "special"일 때만). 금액은 서버가 링크에서 가져온다. */
+  specialToken?: string;
 }
 
 export interface CreateReservationResponse {

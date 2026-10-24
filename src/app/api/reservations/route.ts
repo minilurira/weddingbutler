@@ -2,7 +2,8 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fetchBlockedSlots } from "@/lib/availability";
-import { calcPrice, isOneSide, isPaymentType, PLANS, sideForPlan, testPrice, type PlanKey } from "@/lib/plans";
+import { calcPrice, isOneSide, isPaymentType, PLANS, sideForPlan, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
+import { fetchSpecialOffer, holdSpecialOffer, releaseSpecialOffer, SPECIAL_STATE_MESSAGE, SPECIAL_TOKEN_RE } from "@/lib/special-offer";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
   CreateReservationInput,
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, side, phone, email, venue, memo, guests, extraButlers, payMethod, paymentType, test, testKey } =
+  const { plan, year, month, day, time, name, side, phone, email, venue, memo, guests, extraButlers, payMethod, paymentType, test, testKey, specialToken } =
     body;
 
   const isTest = test === true;
@@ -35,6 +36,11 @@ export async function POST(req: NextRequest) {
 
   if (!isPlanKey(plan)) {
     return NextResponse.json({ message: "Unknown plan." }, { status: 400 });
+  }
+  // 스페셜은 어드민이 만든 링크로만 예약할 수 있고, 금액은 링크에서 가져온다 (고객이 보낸 금액은 쓰지 않는다).
+  const isSpecial = plan === "special";
+  if (isSpecial && (isTest || typeof specialToken !== "string" || !SPECIAL_TOKEN_RE.test(specialToken))) {
+    return NextResponse.json({ message: "유효하지 않은 예약 링크입니다." }, { status: 400 });
   }
   if (
     !Number.isInteger(year) ||
@@ -51,7 +57,8 @@ export async function POST(req: NextRequest) {
     !Number.isInteger(extraButlers) ||
     extraButlers < 0 ||
     !payMethod ||
-    !isPaymentType(paymentType)
+    !isPaymentType(paymentType) ||
+    (isSpecial && paymentType !== "full")
   ) {
     return NextResponse.json({ message: "Missing or invalid fields." }, { status: 400 });
   }
@@ -66,7 +73,11 @@ export async function POST(req: NextRequest) {
   if (!isBookableDow(ceremonyDate)) {
     return NextResponse.json({ message: "주말 또는 공휴일만 예약 가능합니다." }, { status: 400 });
   }
-  if (plan !== "premium" && !isOneSide(side)) {
+  if (isSpecial) {
+    if (!isOneSide(side) && side !== "both") {
+      return NextResponse.json({ message: "신랑측, 신부측 또는 양가를 선택해 주세요." }, { status: 400 });
+    }
+  } else if (plan !== "premium" && !isOneSide(side)) {
     return NextResponse.json({ message: "신랑측 또는 신부측을 선택해 주세요." }, { status: 400 });
   }
 
@@ -82,10 +93,27 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const price = isTest ? testPrice(paymentType) : calcPrice(plan, guests, extraButlers, paymentType);
-  const planInfo = PLANS[plan];
   const bookingNo = `WB${year}${pad(month)}${pad(day)}-${Math.floor(1000 + Math.random() * 8999)}`;
   const paymentId = randomUUID();
+
+  let specialAmount = 0;
+  if (isSpecial) {
+    const offer = await fetchSpecialOffer(specialToken!);
+    if (!offer) {
+      return NextResponse.json({ message: "예약 링크를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요." }, { status: 503 });
+    }
+    if (offer.state !== "open") {
+      return NextResponse.json({ message: SPECIAL_STATE_MESSAGE[offer.state] }, { status: 409 });
+    }
+    // 결제를 시작하는 순간 링크를 점유해, 같은 링크로 두 사람이 동시에 결제하지 못하게 한다.
+    if (!(await holdSpecialOffer(specialToken!, bookingNo))) {
+      return NextResponse.json({ message: SPECIAL_STATE_MESSAGE.held }, { status: 409 });
+    }
+    specialAmount = offer.amount;
+  }
+
+  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType);
+  const planInfo = PLANS[plan];
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
     : `웨딩버틀러 ${planInfo.name} ${paymentType === "full" ? "서비스 전액" : "예약금"}`;
@@ -102,7 +130,7 @@ export async function POST(req: NextRequest) {
         ceremony_day: day,
         ceremony_time: time,
         couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
-        side: sideForPlan(plan, isOneSide(side) ? side : null),
+        side: sideForPlan(plan, isSpecial ? side : isOneSide(side) ? side : null),
         phone: phone.trim(),
         email: email.trim(),
         venue: venue?.trim() || null,
@@ -118,6 +146,7 @@ export async function POST(req: NextRequest) {
         balance_amount: price.balance,
         payment_status: "pending",
         portone_payment_id: paymentId,
+        ...(isSpecial ? { special_token: specialToken } : {}),
       })
       .select("id")
       .single();
@@ -134,6 +163,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response);
   } catch (err) {
     console.error("[reservations] insert failed", err);
+    if (isSpecial) {
+      await releaseSpecialOffer(specialToken!, bookingNo);
+      // 스페셜용 DB 변경(supabase/special.sql)이 아직 적용되지 않은 경우
+      const code = (err as { code?: string } | null)?.code;
+      if (code === "23514" || code === "42703" || code === "PGRST204") {
+        return NextResponse.json({ message: "스페셜 예약 준비가 아직 끝나지 않았습니다. 담당자에게 문의해 주세요." }, { status: 503 });
+      }
+    }
     return NextResponse.json(
       { message: "예약을 생성하지 못했습니다. 잠시 후 다시 시도해 주세요." },
       { status: 500 }

@@ -1,4 +1,4 @@
-export type PlanKey = "small" | "standard" | "premium";
+export type PlanKey = "small" | "standard" | "premium" | "special";
 
 export interface Plan {
   key: PlanKey;
@@ -9,7 +9,10 @@ export interface Plan {
   desc: string;
 }
 
-export const PLAN_ORDER: PlanKey[] = ["small", "standard", "premium"];
+/** 일반 예약 화면에 보이는 요금제 (스페셜 제외) */
+export type PublicPlanKey = Exclude<PlanKey, "special">;
+
+export const PLAN_ORDER: PublicPlanKey[] = ["small", "standard", "premium"];
 
 export const PLANS: Record<PlanKey, Plan> = {
   small: {
@@ -35,6 +38,15 @@ export const PLANS: Record<PlanKey, Plan> = {
     incl: 400,
     butlers: 4,
     desc: "양가 합계 식권 400매 기준 · 웨딩버틀러 4명",
+  },
+  // 스페셜: 관리자가 예약 링크마다 금액을 정한다. PLAN_ORDER에는 넣지 않아 일반 예약 화면에는 나오지 않는다.
+  special: {
+    key: "special",
+    name: "스페셜",
+    base: 0,
+    incl: 0,
+    butlers: 2,
+    desc: "맞춤 금액 · 웨딩버틀러 2명",
   },
 };
 
@@ -96,6 +108,11 @@ export function calcPrice(
     balance: total - deposit,
     incl: p.incl,
   };
+}
+
+/** 스페셜 예약: 링크에 정해진 금액을 한 번에 전액 결제한다 (추가 요금·현장 결제 없음). */
+export function specialPrice(amount: number): PriceBreakdown {
+  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit: amount, balance: 0, incl: 0 };
 }
 
 /** Flat 1,000원 charge used only by the header's hidden test-payment button
@@ -163,7 +180,7 @@ export function isOneSide(v: unknown): v is OneSide {
 }
 
 /** 요금제별 축의대 구분: 프리미엄은 항상 양가, 나머지는 고객이 고른 쪽. */
-export function sideForPlan(plan: PlanKey, side: OneSide | null | undefined): Side | null {
+export function sideForPlan(plan: PlanKey, side: Side | null | undefined): Side | null {
   if (plan === "premium") return "both";
   return side ?? null;
 }

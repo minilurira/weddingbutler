@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { verifyPortOnePayment } from "@/lib/portone";
 import { syncReservationToAdmin } from "@/lib/admin-sync";
+import { releaseSpecialOffer, markSpecialOfferUsed } from "@/lib/special-offer";
 import { paymentTypeOf, type PlanKey } from "@/lib/plans";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
 
@@ -56,6 +57,8 @@ export async function POST(
         .from("reservations")
         .update({ payment_status: "failed" })
         .eq("id", params.id);
+      // 결제에 실패한 스페셜 예약은 링크 점유를 풀어 다시 시도할 수 있게 한다.
+      if (reservation.special_token) await releaseSpecialOffer(reservation.special_token, reservation.booking_no);
       const res: ConfirmReservationResponse = {
         ok: false,
         message: "결제가 확인되지 않았습니다. 결제 내역을 확인 후 다시 시도해 주세요.",
@@ -71,6 +74,11 @@ export async function POST(
         paid_at: new Date().toISOString(),
       })
       .eq("id", params.id);
+
+    // 스페셜 링크는 결제가 확인되면 사용 완료로 바꾼다. 실패해도 결제·예약은 이미 확정됐으므로 기록만 남긴다.
+    if (reservation.special_token && !(await markSpecialOfferUsed(reservation.special_token, reservation.booking_no))) {
+      console.error(`[reservations/confirm] could not mark special offer used for ${reservation.booking_no}`);
+    }
 
     // Awaited (not fire-and-forget): this Next.js version has no after()/
     // waitUntil() to keep a serverless function alive past its response, so
