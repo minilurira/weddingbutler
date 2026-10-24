@@ -2,11 +2,12 @@ export const SITE_URL = "https://weddingbutler.co.kr";
 export const SITE_NAME = "웨딩버틀러";
 export const SITE_TITLE = `${SITE_NAME} | 축의대행 · 축의금 대행 · 즉시예약 · 온라인예약`;
 export const SITE_DESCRIPTION =
-  "축의대행·축의금 대행 웨딩버틀러. 온라인예약·즉시예약, 신용카드 결제로 3분이면 끝. 접수부터 정산까지 책임집니다.";
+  "축의대행·축의대대행·축의금 대행 웨딩버틀러. 온라인예약·즉시예약, 신용카드 결제로 3분이면 끝. 접수부터 정산까지 책임집니다.";
 export const SITE_KEYWORDS = [
   "웨딩버틀러",
   "축의대행",
   "축의대 대행",
+  "축의대대행",
   "축의금 대행",
   "축의금대행",
   "축의 대행",
