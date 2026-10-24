@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import type { ContactInput } from "@/lib/reservation-types";
 
@@ -125,12 +126,6 @@ export function ContactSection() {
     }
   }
 
-  function reset() {
-    setForm(initial);
-    setSent(false);
-    setError(null);
-  }
-
   return (
     <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(64px,10vw,100px)" }}>
       <div
@@ -232,9 +227,9 @@ export function ContactSection() {
               </div>
               <h2 style={{ fontFamily: "var(--font-serif), serif", fontSize: 24, fontWeight: 600, margin: "0 0 12px" }}>문의가 접수되었습니다</h2>
               <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>영업일 기준 24시간 내에 남겨주신 연락처로 답변드리겠습니다.</p>
-              <button onClick={reset} className="round-nav-hover" style={{ border: "1px solid #E2CDD4", background: "transparent", color: "#6B5A60", padding: "13px 28px", borderRadius: 999, fontSize: 14, cursor: "pointer" }}>
-                새 문의 작성
-              </button>
+              <Link href="/" className="round-nav-hover" style={{ display: "inline-block", border: "1px solid #E2CDD4", background: "transparent", color: "#6B5A60", padding: "13px 28px", borderRadius: 999, fontSize: 14, cursor: "pointer", textDecoration: "none" }}>
+                확인
+              </Link>
             </div>
           )}
         </div>
