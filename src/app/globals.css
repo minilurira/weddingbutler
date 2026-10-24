@@ -126,6 +126,18 @@ button {
   border-color: #e9cad1 !important;
 }
 
+/* WHY WEDDING BUTLER 소개 카드: 테두리가 분홍색으로 숨 쉬듯 반짝인다. 크기·여백·배치는 건드리지 않고 테두리 색과 바깥 그림자만 바꾼다. */
+.card-glow {
+  animation: card-glow 3.4s ease-in-out infinite;
+}
+@keyframes card-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(169, 100, 126, 0), 0 2px 10px rgba(169, 100, 126, 0.08); border-color: #d7a9bb; }
+  50% { box-shadow: 0 0 0 3px rgba(169, 100, 126, 0.14), 0 8px 26px rgba(169, 100, 126, 0.26); border-color: #a9647e; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-glow { animation: none; border-color: #d7a9bb !important; }
+}
+
 .modal-close-hover:hover {
   background: rgba(255, 255, 255, 0.15) !important;
 }

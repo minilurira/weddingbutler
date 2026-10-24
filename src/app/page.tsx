@@ -165,7 +165,7 @@ export default function HomePage() {
               { n: "03", title: "첫인상은 축의대에서", body: "호텔 서비스 기준의 응대 교육을 이수한 매니저가 정장·화이트 글러브 차림으로 하객을 맞이합니다.", delay: 250 },
             ].map((c) => (
               <Reveal key={c.n} delay={c.delay}>
-                <div className="card-hover-border" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "40px 34px" }}>
+                <div className="card-hover-border card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "40px 34px", animationDelay: `${(c.delay - 50) * 5}ms` }}>
                   <div style={{ fontFamily: fontDisplay, fontSize: 34, color: "#E9CAD1", lineHeight: 1 }}>{c.n}</div>
                   <h3 style={{ fontFamily: fontSerif, fontSize: 21, fontWeight: 600, margin: "20px 0 14px" }}>{c.title}</h3>
                   <p style={{ fontSize: 15, lineHeight: 1.95, color: "#6B5A60", margin: 0 }}>{c.body}</p>
