@@ -75,3 +75,40 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
     console.error(`[admin-sync] failed to reach admin API for ${input.bookingNo}`, err);
   }
 }
+
+export interface InquiryNoticeInput {
+  name: string;
+  phone: string;
+  ceremonyDate: string | null;
+  area: string | null;
+  topic: string;
+  message: string;
+}
+
+/**
+ * Ask the 어드민 to post a 신규 문의 notice to the same KakaoWork room as new
+ * reservations (the bot key lives only in the admin). Never throws - the
+ * inquiry is already saved, so a failed notice only logs.
+ */
+export async function notifyAdminOfInquiry(input: InquiryNoticeInput): Promise<void> {
+  const url = process.env.ADMIN_API_URL;
+  const apiKey = process.env.ADMIN_API_KEY;
+  if (!url || !apiKey) {
+    console.warn("[admin-sync] ADMIN_API_URL/ADMIN_API_KEY not set - skipping inquiry notice.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${new URL(url).origin}/api/public/inquiries`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify(input),
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      console.error(`[admin-sync] inquiry notice responded ${res.status}`, await res.text());
+    }
+  } catch (err) {
+    console.error("[admin-sync] failed to send inquiry notice", err);
+  }
+}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { notifyAdminOfInquiry } from "@/lib/admin-sync";
 import type { ContactInput } from "@/lib/reservation-types";
 
 export async function POST(req: NextRequest) {
@@ -20,18 +21,29 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const db = supabaseAdmin();
-    const { error } = await db.from("contact_messages").insert({
+    const row = {
       name: name.trim(),
       phone: phone.trim(),
       ceremony_date: date?.trim() || null,
       area: area?.trim() || null,
       topic: topic || "기타",
       message: message.trim(),
-      agreed: true,
-    });
+    };
+    const db = supabaseAdmin();
+    const { error } = await db.from("contact_messages").insert({ ...row, agreed: true });
 
     if (error) throw error;
+
+    // Awaited for the same reason as syncReservationToAdmin in the confirm
+    // route (no waitUntil here); it never throws, so the inquiry still succeeds.
+    await notifyAdminOfInquiry({
+      name: row.name,
+      phone: row.phone,
+      ceremonyDate: row.ceremony_date,
+      area: row.area,
+      topic: row.topic,
+      message: row.message,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (err) {
