@@ -101,3 +101,33 @@ export async function cancelPortOnePayment(
     alreadyCancelled: false,
   };
 }
+
+export interface PortOneSnapshot {
+  status: string;
+  amount: number;
+  cancelledAmount: number | null;
+}
+
+/**
+ * 결제 건 대사용 단건 조회. 결제 기록이 없으면(404) status "NOT_FOUND"로 돌려주고,
+ * 그 밖의 오류는 던진다 (대사 결과에 "조회 실패"로 따로 표시하기 위해).
+ */
+export async function snapshotPortOnePayment(paymentId: string): Promise<PortOneSnapshot> {
+  const secret = process.env.PORTONE_API_SECRET;
+  if (!secret) throw new Error("PORTONE_API_SECRET is not configured (see .env.example).");
+
+  const res = await fetch(`https://api.portone.io/payments/${encodeURIComponent(paymentId)}`, {
+    headers: { Authorization: `PortOne ${secret}` },
+    cache: "no-store",
+  });
+  if (res.status === 404) return { status: "NOT_FOUND", amount: 0, cancelledAmount: null };
+  if (!res.ok) throw new Error(`PortOne payment lookup failed (${res.status})`);
+
+  const data = await res.json();
+  const cancelled = data.amount?.cancelled;
+  return {
+    status: String(data.status ?? "UNKNOWN"),
+    amount: Number(data.amount?.total ?? 0),
+    cancelledAmount: typeof cancelled === "number" ? cancelled : null,
+  };
+}
