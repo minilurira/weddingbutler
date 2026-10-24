@@ -24,6 +24,7 @@ export function LocalBusinessJsonLd() {
       { "@type": "State", name: "경기도" },
     ],
     priceRange: "390,000원 ~ 800,000원",
+    paymentAccepted: "신용카드",
   };
 
   return (
