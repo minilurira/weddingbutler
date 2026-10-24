@@ -106,6 +106,8 @@ export interface PortOneSnapshot {
   status: string;
   amount: number;
   cancelledAmount: number | null;
+  /** 결제 실패(FAILED)일 때 포트원·PG가 알려 준 사유. 없으면 null */
+  failureReason: string | null;
 }
 
 /**
@@ -120,7 +122,7 @@ export async function snapshotPortOnePayment(paymentId: string): Promise<PortOne
     headers: { Authorization: `PortOne ${secret}` },
     cache: "no-store",
   });
-  if (res.status === 404) return { status: "NOT_FOUND", amount: 0, cancelledAmount: null };
+  if (res.status === 404) return { status: "NOT_FOUND", amount: 0, cancelledAmount: null, failureReason: null };
   if (!res.ok) throw new Error(`PortOne payment lookup failed (${res.status})`);
 
   const data = await res.json();
@@ -129,5 +131,6 @@ export async function snapshotPortOnePayment(paymentId: string): Promise<PortOne
     status: String(data.status ?? "UNKNOWN"),
     amount: Number(data.amount?.total ?? 0),
     cancelledAmount: typeof cancelled === "number" ? cancelled : null,
+    failureReason: data.failure ? String(data.failure.reason ?? data.failure.pgMessage ?? "") || null : null,
   };
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { snapshotPortOnePayment } from "@/lib/portone";
-import { isPgPaid, judge, type DbPaymentStatus, type ReconcileRow } from "@/lib/payment-reconciliation";
+import { isPgPaid, isTestTransaction, judge, type DbPaymentStatus, type ReconcileRow } from "@/lib/payment-reconciliation";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
   try {
     const { data, error } = await supabaseAdmin()
       .from("reservations")
-      .select("booking_no, payment_status, portone_payment_id, deposit_amount, created_at, paid_at")
+      .select("booking_no, couple_name, payment_status, portone_payment_id, deposit_amount, created_at, paid_at")
       .gte("created_at", new Date(startMs).toISOString())
       .lt("created_at", new Date(endMs).toISOString())
       .order("created_at", { ascending: true })
@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
             rows.push({
               bookingNo: r.booking_no, dbStatus, dbAmount: r.deposit_amount, paidAt: r.paid_at, createdAt: r.created_at,
               pgStatus: pg.status, pgAmount: pg.amount, pgCancelledAmount: pg.cancelledAmount,
+              isTest: isTestTransaction(r.couple_name, r.deposit_amount),
               ...judge(dbStatus, r.deposit_amount, pg),
             });
           } catch (e) {
