@@ -12,7 +12,8 @@ const tidy = () => {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
     n.nodeValue = n.nodeValue
-      .replace("[예식장명] [홀 이름]", "○○웨딩홀 그랜드홀")
+      .replace("[예식장명]", "○○웨딩홀")
+      .replace("[홀 이름]", "그랜드홀")
       .replace("[대표번호]", "010-5918-9203")
       .replace(/2027년 10월 20일\([^)]*\)/, "2027년 1월 23일(토)");
   }
@@ -34,6 +35,9 @@ for (const s of shots) {
   await page.click("#tab-list");
   await page.waitForTimeout(300);
   await page.evaluate(tidy);
+  // 하객 카드가 보이도록 탭 위치까지 내려서 찍는다
+  await page.evaluate(() => window.scrollTo(0, document.querySelector(".wbr-bar").getBoundingClientRect().top + window.scrollY - 12));
+  await page.waitForTimeout(200);
   await page.screenshot({ path: `${OUT}/${s.name}-list.png` });
   await ctx.close();
 }
