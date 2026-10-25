@@ -6,6 +6,7 @@ import { OpenModalButton } from "@/components/OpenModalButton";
 import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { PriceTeaserCards } from "@/components/home/PriceTeaserCards";
 import { ReviewMarquee } from "@/components/home/ReviewMarquee";
+import { RecordShowcase } from "@/components/home/RecordShowcase";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 const SERVICE_STEPS = [
@@ -238,6 +239,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <RecordShowcase />
 
       <section
         id="price"
