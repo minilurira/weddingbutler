@@ -19,17 +19,17 @@ export const PLANS: Record<PlanKey, Plan> = {
     key: "small",
     name: "스몰케어",
     base: 390000,
-    incl: 200,
+    incl: 100,
     butlers: 2,
-    desc: "식권 200매 이하 · 웨딩버틀러 2명",
+    desc: "식권 100매 이하 · 웨딩버틀러 2명",
   },
   standard: {
     key: "standard",
     name: "스탠다드",
     base: 450000,
-    incl: 300,
+    incl: 200,
     butlers: 2,
-    desc: "식권 201~300매 · 웨딩버틀러 2명",
+    desc: "식권 101~200매 · 웨딩버틀러 2명",
   },
   premium: {
     key: "premium",
@@ -139,9 +139,8 @@ export function paymentTypeOf(balanceAmount: number): PaymentType {
 
 /** Clamp guest count when switching plans, mirroring the prototype's `pick()` behavior. */
 export function guestsForPlanSwitch(plan: PlanKey, guests: number): number {
-  if (plan === "small" && guests > 200) return 200;
+  if (plan === "small" && guests > 100) return 100;
   if (plan === "premium" && guests < 400) return 400;
-  if (plan === "standard" && guests > 300) return 300;
   return guests;
 }
 

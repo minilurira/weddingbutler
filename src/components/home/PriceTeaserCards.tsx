@@ -7,14 +7,15 @@ import { Reveal } from "@/components/Reveal";
 
 const BULLETS: Record<PublicPlanKey, { text: string; muted?: boolean }[]> = {
   small: [
-    { text: "하객 200명 이하 예식" },
+    { text: "하객 100명 이하 예식" },
     { text: "웨딩버틀러 2명 배정" },
-    { text: "정산 리포트 · 운영 영상 제공" },
+    { text: "봉투 · 식대 집계 엑셀 파일 제공" },
   ],
   standard: [
-    { text: "하객 200명 초과 ~ 300명 이하" },
+    { text: "하객 101~200명 예식" },
+    { text: "200명 초과 시 1명당 2,000원 추가", muted: true },
     { text: "웨딩버틀러 2명 배정" },
-    { text: "정산 리포트 · 운영 영상 제공" },
+    { text: "정산 리포트 제공" },
   ],
   premium: [
     { text: "양가 하객 각 200명 기준" },

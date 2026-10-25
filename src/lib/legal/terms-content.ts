@@ -3,7 +3,7 @@ export const TERMS_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">축의대행 서비스 이용약관</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 10월 13일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 10월 25일</p>
 
   <div style="height:1px; background:#EBDCE0; margin-bottom:34px;"></div>
 
@@ -109,8 +109,8 @@ export const TERMS_HTML = `
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스몰케어</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">200명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">390,000원</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스탠다드</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">201명 이상 300명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">450,000원</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스몰케어</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">100명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">390,000원</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스탠다드</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">101명 이상 200명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">450,000원</td></tr>
         <tr><td style="padding:11px 14px; color:#4A3B41;">프리미엄</td><td style="padding:11px 14px; color:#4A3B41;">양가 각 200명(합계 400명)</td><td style="padding:11px 14px; color:#4A3B41;">4명(양가 각 2명)</td><td style="padding:11px 14px; text-align:right; color:#4A3B41; white-space:nowrap;">800,000원</td></tr>
       </tbody>
     </table>
@@ -275,7 +275,7 @@ export const TERMS_HTML = `
 
   <div style="margin:40px 0 0; padding-top:28px; border-top:1px solid #EBDCE0;">
     <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:0 0 10px;">부칙</h2>
-    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 10월 13일부터 시행합니다.</p>
+    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 10월 25일부터 시행합니다.</p>
     <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0;">② 이 약관 시행 전에 체결된 계약에는 종전 약관을 적용합니다.</p>
   </div>
 
@@ -295,6 +295,8 @@ export const TERMS_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/terms/2026-10" style="color:#A9647E;">2026년 10월 13일 시행 이전 약관 보기</a>
+    &nbsp;·&nbsp;
     <a href="/terms/2026-09" style="color:#A9647E;">2026년 9월 21일 시행 이전 약관 보기</a>
     &nbsp;·&nbsp;
     <a href="/terms/2026-01" style="color:#A9647E;">2026년 1월 1일 시행 이전 약관 보기</a>

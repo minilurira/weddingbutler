@@ -65,7 +65,7 @@ function initialState(plan: PlanKey): ModalState {
     m: first.getMonth() + 1,
     date: null,
     time: null,
-    guests: 250,
+    guests: guestsForPlanSwitch(plan, 250),
     extraButlers: 0,
     paymentType: "deposit",
     side: null,

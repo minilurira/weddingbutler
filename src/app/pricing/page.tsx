@@ -18,7 +18,7 @@ const CARDS = [
     name: "스몰케어",
     priceWhole: "39",
     dark: false,
-    bullets: ["하객 200명 이하 예식", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "정산 리포트 · 운영 영상 제공"],
+    bullets: ["하객 100명 이하 예식", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "봉투 · 식대 집계 엑셀 파일 제공"],
   },
   {
     plan: "standard" as const,
@@ -26,7 +26,7 @@ const CARDS = [
     name: "스탠다드",
     priceWhole: "45",
     dark: true,
-    bullets: ["하객 201~300명 예식", "웨딩버틀러 2명 배정", "스몰케어 구성 전부 포함", "버틀러 추가 가능 (1명당 100,000원)"],
+    bullets: ["하객 101~200명 예식 (200명 초과 시 1명당 2,000원 추가)", "웨딩버틀러 2명 배정", "스몰케어 구성 포함 · 정산 리포트 제공", "버틀러 추가 가능 (1명당 100,000원)"],
   },
   {
     plan: "premium" as const,
@@ -40,8 +40,9 @@ const CARDS = [
 
 const COMPARE_ROWS: [string, string, string, string][] = [
   ["기본 요금", "39만원", "45만원", "80만원"],
-  ["기준 하객", "200명 이하", "201~300명", "양가 합계 400명"],
+  ["기준 하객", "100명 이하", "101~200명", "양가 합계 400명"],
   ["배정 버틀러", "2명", "2명", "4명"],
+  ["제공 자료", "봉투·식대 집계 엑셀", "정산 리포트", "정산 리포트"],
   ["기준 초과 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
   ["버틀러 추가", "해당 없음", "1명 10만원", "1명 10만원"],
   ["개봉 집계", "무료", "무료", "무료"],
@@ -145,8 +146,8 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
       <>
         <NoticeLabel>기준 하객 수</NoticeLabel>
         <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
-          <NoticeItem>스몰케어 — 버틀러 2명, 하객 200명 이하</NoticeItem>
-          <NoticeItem>스탠다드 — 버틀러 2명, 하객 201 ~ 300명</NoticeItem>
+          <NoticeItem>스몰케어 — 버틀러 2명, 하객 100명 이하</NoticeItem>
+          <NoticeItem>스탠다드 — 버틀러 2명, 하객 101 ~ 200명</NoticeItem>
           <NoticeItem>프리미엄 — 버틀러 4명, 양가 합계 400명</NoticeItem>
         </div>
         <NoticeLabel>기준 초과 시</NoticeLabel>
@@ -158,8 +159,8 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
         <div style={{ background: "#FAF4F5", borderRadius: 6, padding: "18px 20px" }}>
           <NoticeLabel muted>예시</NoticeLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            <NoticeItem small>스몰케어 하객 230명 → 30명 초과, 6만원 추가</NoticeItem>
-            <NoticeItem small>스탠다드 하객 320명 → 20명 초과, 4만원 추가</NoticeItem>
+            <NoticeItem small>스몰케어 하객 130명 → 30명 초과, 6만원 추가</NoticeItem>
+            <NoticeItem small>스탠다드 하객 220명 → 20명 초과, 4만원 추가</NoticeItem>
             <NoticeItem small>프리미엄 양가 합계 460명 → 60명 초과, 12만원 추가</NoticeItem>
           </div>
         </div>
