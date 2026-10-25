@@ -55,7 +55,9 @@ export function RecordView({ meta, entries }: RecordPayload) {
             {meta.hallName ? ` ${meta.hallName}` : ''}
           </div>
           <div className="wbr-hero__meta">
-            기록 게시 {krDateTime(meta.publishedAt)} · 인계확인서 서명 {krTime(meta.handoverAt)} · 버전 {meta.version}
+            {meta.live
+              ? <>실시간 집계 중 · 화면은 자동으로 갱신돼요 · 버전 {meta.version}</>
+              : <>기록 게시 {krDateTime(meta.publishedAt)} · 인계확인서 서명 {krTime(meta.handoverAt)} · 버전 {meta.version}</>}
           </div>
         </section>
 
@@ -97,7 +99,7 @@ export function RecordView({ meta, entries }: RecordPayload) {
               handoverEnvelopeCount={meta.handoverEnvelopeCount}
               facts={[
                 { label: '축의금 인수자', value: meta.receiverLabel },
-                { label: '인계 시각', value: krDateTime(meta.handoverAt) },
+                { label: '인계 시각', value: meta.live ? '인계 전' : krDateTime(meta.handoverAt) },
                 { label: '담당 버틀러', value: `버틀러 ${meta.staffCount}명 (2인 상호확인)` },
                 {
                   label: '추가 하객 정산',

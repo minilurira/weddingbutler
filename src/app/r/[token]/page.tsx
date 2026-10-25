@@ -7,6 +7,7 @@ import "@/styles/wb-tokens.css";
 import "@/styles/wb-record.css";
 import { RecordView } from "@/components/record/RecordView";
 import { RecordGate } from "@/components/record/RecordGate";
+import { LiveRefresh } from "@/components/record/LiveRefresh";
 import { RecordFrame, SUPPORT_PHONE } from "@/components/record/RecordFrame";
 import { sampleRecord, sampleSealed, sampleStandard } from "@/mocks/record-sample";
 import { getRecordInfo, getRecordPayload, isRecordToken } from "@/lib/record-api";
@@ -92,7 +93,7 @@ export default async function RecordPage({
   const downloadUrl = `${recordBasePath(token, headers().get("host"))}/download${admin && adminParam ? `?admin=${encodeURIComponent(adminParam)}` : ""}`;
   const banner = admin && (
     <div className="wbr-preview-banner" role="note">
-      관리자 미리보기{info.status === "published" ? "" : " · 아직 게시 전이라 고객은 볼 수 없어요"}
+      관리자 미리보기{info.status === "published" ? "" : info.status === "live" ? " · 실시간 공유 중 (게시 전)" : " · 아직 게시 전이라 고객은 볼 수 없어요"}
     </div>
   );
 
@@ -115,7 +116,9 @@ export default async function RecordPage({
     );
   }
 
-  const payload = await getRecordPayload(token, viewer);
+  // 실시간 공유 중에는 화면이 자동으로 새로고침되므로 열람 기록은 남기지 않는다 (새로고침마다 쌓이는 것을 막음)
+  const live = info.status === "live";
+  const payload = await getRecordPayload(token, viewer, { log: !live });
   if (!payload) {
     return (
       <RecordFrame>
@@ -130,6 +133,7 @@ export default async function RecordPage({
   return (
     <>
       {banner}
+      {live && <LiveRefresh />}
       <RecordView meta={{ ...payload.meta, downloadUrl, supportPhone: SUPPORT_PHONE }} entries={payload.entries} />
     </>
   );

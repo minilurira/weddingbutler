@@ -24,6 +24,8 @@ export interface RecordMeta {
   hallName?: string;
   plan: PlanCode;
   recordMode: RecordMode;
+  /** true면 게시 전 실시간 공유 중 (publishedAt·handoverAt은 의미 없음) */
+  live?: boolean;
   publishedAt: string;         // ISO
   handoverAt: string;          // 인계확인서 서명 시각 ISO
   handoverEnvelopeCount: number; // 인계확인서 봉투 매수
