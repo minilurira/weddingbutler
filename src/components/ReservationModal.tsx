@@ -67,7 +67,7 @@ function initialState(plan: PlanKey): ModalState {
     time: null,
     guests: guestsForPlanSwitch(plan, 250),
     extraButlers: 0,
-    paymentType: "deposit",
+    paymentType: "full",
     side: null,
     name: "",
     phone: "",
@@ -686,7 +686,7 @@ export function ReservationModal({
                 <div style={{ padding: "20px 0 0" }}>
                   <div style={{ fontSize: 13, color: "#6B5A60", marginBottom: 10 }}>결제 방식</div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {(["deposit", "full"] as PaymentType[]).map((t) => {
+                    {(["full", "deposit"] as PaymentType[]).map((t) => {
                       const on = state.paymentType === t;
                       return (
                         <label

@@ -263,7 +263,7 @@ export default function HomePage() {
           <PriceTeaserCards />
 
           <p style={{ textAlign: "center", fontSize: 13, color: "#9A8189", margin: "32px 0 0", lineHeight: 1.8 }}>
-            추가 하객 요금은 예식 후 실제 접수 인원 기준으로 정산되며, 차액은 예식 다음 영업일에 청구·환불됩니다.
+            추가 하객 요금은 예식 후 실제 접수 인원 기준으로 정산되며, 차액은 예식 다음 영업일에 청구됩니다.
           </p>
           <div style={{ textAlign: "center", marginTop: 38 }}>
             <a
