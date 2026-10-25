@@ -8,10 +8,13 @@ export type RecordInfo =
   | { state: "ok"; status: string; plan: PlanCode; coupleName: string; phoneMasked: string; expiresAt: string | null }
   | { state: "expired"; expiresAt?: string }
   | { state: "not_found" }
+  /** 예약번호로 연 주소인데 기록이 아직 열리지 않음(작성 전·작성 중) */
+  | { state: "preparing" }
   | { state: "unavailable" };
 
 /** 어드민이 만드는 토큰은 base64url 24자 */
-export const isRecordToken = (token: string) => /^[A-Za-z0-9_-]{16,64}$/.test(token);
+/** 주소 코드: 어드민 토큰(24자) 또는 예약번호(WB-YYYYMMDD-XXXX, WBYYYYMMDD-NNNN) */
+export const isRecordToken = (token: string) => /^(?:[A-Za-z0-9_-]{16,64}|WB\d{8}-\d{4})$/.test(token);
 
 export function recordSecret() {
   return process.env.RECORD_API_KEY || process.env.ADMIN_API_KEY || "";
@@ -52,6 +55,7 @@ export async function getRecordInfo(token: string, viewer: Viewer): Promise<Reco
   const res = await adminFetch(`${encodeURIComponent(token)}${q(viewer)}`);
   if (!res) return { state: "unavailable" };
   if (res.status === 404) return { state: "not_found" };
+  if (res.status === 409) return { state: "preparing" };
   if (res.status === 410) return { state: "expired", ...(await res.json().catch(() => ({}))) };
   if (!res.ok) {
     console.error(`[record-api] info responded ${res.status}`);

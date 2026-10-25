@@ -37,7 +37,7 @@ export function RecordGate({ token, coupleName, phoneMasked }: { token: string; 
     if (!ok) { setMessage(ERRORS[data.error ?? ''] ?? '잠시 후 다시 시도해 주세요.'); return; }
     setSent(true);
     setCode('');
-    setMessage(`${phoneMasked}로 인증번호를 보냈어요. 5분 안에 입력해 주세요.`);
+    setMessage(`${phoneMasked ? `${phoneMasked}로` : '예약하신 휴대폰으로'} 인증번호를 보냈어요. 5분 안에 입력해 주세요.`);
   }
 
   async function verify(e: React.FormEvent) {
@@ -58,9 +58,9 @@ export function RecordGate({ token, coupleName, phoneMasked }: { token: string; 
 
   return (
     <section className="wbr-card wbr-gate">
-      <h1>{coupleName} 님의 축의 기록</h1>
+      <h1>{coupleName ? `${coupleName} 님의 축의 기록` : '축의 기록'}</h1>
       <p className="wbr-gate__lead">
-        하객 개인정보 보호를 위해 예약하신 휴대폰 번호({phoneMasked})로 본인 확인을 해 주세요.
+        하객 개인정보 보호를 위해 예약하신 휴대폰 번호{phoneMasked ? `(${phoneMasked})` : ''}로 본인 확인을 해 주세요.
       </p>
       {!sent ? (
         <button type="button" className="wbr-btn wbr-btn--primary wbr-btn--block" onClick={sendCode} disabled={busy}>

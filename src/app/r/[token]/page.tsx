@@ -68,6 +68,18 @@ export default async function RecordPage({
       </RecordFrame>
     );
   }
+  if (info.state === "preparing") {
+    return (
+      <RecordFrame>
+        <div className="wbr-empty">
+          축의 기록이 아직 준비 중이에요
+          <span className="wbr-muted">
+            예식 당일 접수가 시작되면 이 주소에서 실시간으로 볼 수 있어요. 잠시 후 다시 열어 주세요. 궁금하신 점은 고객센터 {SUPPORT_PHONE}로 연락 주세요.
+          </span>
+        </div>
+      </RecordFrame>
+    );
+  }
   if (info.state === "expired") {
     return (
       <RecordFrame>
