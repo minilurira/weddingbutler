@@ -66,7 +66,7 @@ export async function cancelPortOnePayment(
   }
 
   const res = await fetch(
-    `https://api.portone.io/payments/${encodeURIComponent(paymentId)}/cancel`,
+    `${process.env.PORTONE_API_BASE || "https://api.portone.io"}/payments/${encodeURIComponent(paymentId)}/cancel`,
     {
       method: "POST",
       headers: {

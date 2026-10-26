@@ -214,7 +214,7 @@ export const isPaid = (row: Pick<InvitationRow, "paid_at">) => Boolean(row.paid_
 /** 결제 주문을 만든다. 금액은 서버가 정한다(브라우저가 보낸 값은 쓰지 않는다). */
 export async function createOrder(row: InvitationRow): Promise<{ paymentId: string; amount: number }> {
   const paymentId = `inv-${row.id.replace(/-/g, "").slice(0, 12)}-${Date.now().toString(36)}-${crypto.randomBytes(3).toString("hex")}`;
-  const { error } = await supabaseAdmin().from("invitation_orders").insert({ invitation_id: row.id, payment_id: paymentId, amount: PREMIUM_PRICE, template: row.template });
+  const { error } = await supabaseAdmin().from("invitation_orders").insert({ invitation_id: row.id, payment_id: paymentId, amount: PREMIUM_PRICE, template: row.template, phone: row.phone, groom: row.content.groom, bride: row.content.bride, slug: row.slug });
   if (error) throw error;
   return { paymentId, amount: PREMIUM_PRICE };
 }
@@ -288,4 +288,90 @@ export async function getStats(invitationId: string, now = Date.now()): Promise<
     actions,
     guestbook: count ?? 0,
   };
+}
+
+// --- 어드민: 결제내역과 취소 ---
+
+export interface AdminOrder {
+  paymentId: string;
+  invitationId: string | null;
+  amount: number;
+  status: string;
+  template: string;
+  phone: string;
+  groom: string;
+  bride: string;
+  slug: string;
+  createdAt: string;
+  paidAt: string | null;
+  cancelledAt: string | null;
+  cancelledAmount: number | null;
+  cancelReason: string;
+  /** 청첩장의 지금 상태 (지워졌으면 null) */
+  invitationStatus: string | null;
+  invitationTemplate: string | null;
+}
+
+const ORDER_COLS = "payment_id, invitation_id, amount, status, template, phone, groom, bride, slug, created_at, paid_at, cancelled_at, cancelled_amount, cancel_reason";
+
+export async function listOrders(fromIso: string, untilIso: string): Promise<AdminOrder[]> {
+  const db = supabaseAdmin();
+  const { data, error } = await db.from("invitation_orders").select(ORDER_COLS).gte("created_at", fromIso).lt("created_at", untilIso).order("created_at", { ascending: false }).limit(500);
+  if (error) throw error;
+  const rows = data ?? [];
+  const ids = Array.from(new Set(rows.map((r) => r.invitation_id).filter(Boolean))) as string[];
+  const inv = new Map<string, { status: string; template: string }>();
+  if (ids.length) {
+    const { data: invs, error: e2 } = await db.from("invitations").select("id, status, template").in("id", ids);
+    if (e2) throw e2;
+    for (const i of invs ?? []) inv.set(i.id, { status: i.status, template: i.template });
+  }
+  return rows.map((r) => ({
+    paymentId: r.payment_id,
+    invitationId: r.invitation_id,
+    amount: r.amount,
+    status: r.status,
+    template: r.template,
+    phone: r.phone,
+    groom: r.groom,
+    bride: r.bride,
+    slug: r.slug,
+    createdAt: r.created_at,
+    paidAt: r.paid_at,
+    cancelledAt: r.cancelled_at,
+    cancelledAmount: r.cancelled_amount,
+    cancelReason: r.cancel_reason,
+    invitationStatus: r.invitation_id ? inv.get(r.invitation_id)?.status ?? null : null,
+    invitationTemplate: r.invitation_id ? inv.get(r.invitation_id)?.template ?? null : null,
+  }));
+}
+
+export async function getOrderByPayment(paymentId: string): Promise<{ id: string; invitationId: string | null; amount: number; status: string } | null> {
+  const { data, error } = await supabaseAdmin().from("invitation_orders").select("id, invitation_id, amount, status").eq("payment_id", paymentId).maybeSingle();
+  if (error) throw error;
+  return data ? { id: data.id, invitationId: data.invitation_id, amount: data.amount, status: data.status } : null;
+}
+
+/**
+ * 결제 취소가 PG에서 끝난 뒤의 정리: 주문을 취소로 바꾸고, 청첩장의 결제 완료 표시를 지운다.
+ * after = "free": 무료 템플릿으로 바꾸고 공개 상태는 그대로 · "hide": 비공개로 바꾼다.
+ */
+export async function applyCancellation(order: { id: string; invitationId: string | null }, amount: number, reason: string, after: "free" | "hide"): Promise<void> {
+  const db = supabaseAdmin();
+  const now = new Date().toISOString();
+  const { error: e1 } = await db.from("invitation_orders").update({ status: "cancelled", cancelled_at: now, cancelled_amount: amount, cancel_reason: reason }).eq("id", order.id);
+  if (e1) throw e1;
+  if (!order.invitationId) return;
+  const patch: Record<string, unknown> = { paid_at: null, pay_id: null, pay_amount: null, updated_at: now };
+  if (after === "hide") patch.status = "hidden";
+  else {
+    const { data } = await db.from("invitations").select("id, phone, content").eq("id", order.invitationId).maybeSingle();
+    if (data) {
+      const content = sanitizeContent(data.id, data.content, "classic");
+      patch.template = "classic";
+      patch.content = content; // 무료 템플릿 갤러리 한도(12장)로 정리
+    }
+  }
+  const { error: e2 } = await db.from("invitations").update(patch).eq("id", order.invitationId);
+  if (e2) throw e2;
 }
