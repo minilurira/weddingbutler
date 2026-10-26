@@ -21,7 +21,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     }
     const updated = await setStatus(row.id, phone, action);
     if (!updated) return notFound();
-    return NextResponse.json({ ok: true, status: updated.status, url: publicUrl(updated.slug) });
+    return NextResponse.json({ ok: true, status: updated.status, url: publicUrl(updated.slug), publishedAt: updated.published_at });
   } catch (err) {
     return serverError("publish", err);
   }

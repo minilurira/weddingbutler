@@ -12,7 +12,7 @@ function ExpiredNotice() {
     <main style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24, background: "#F6F1EA", textAlign: "center", color: "#473A3F" }}>
       <div style={{ maxWidth: 360 }}>
         <h1 style={{ margin: "0 0 12px", fontSize: 20, fontWeight: 600 }}>보관 기간이 끝난 청첩장이에요</h1>
-        <p style={{ margin: "0 0 24px", fontSize: 14, lineHeight: 1.8, color: "#6B5A60" }}>모바일 청첩장은 예식일로부터 6개월 동안 열려 있어요.</p>
+        <p style={{ margin: "0 0 24px", fontSize: 14, lineHeight: 1.8, color: "#6B5A60" }}>모바일 청첩장은 발행일부터 6개월(예식일이 더 늦으면 예식일 다음날)까지 열려 있어요.</p>
         <a href="https://weddingbutler.co.kr/invitation" style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 22px", borderRadius: 22, background: "#A9647E", color: "#FFFFFF", fontSize: 14, textDecoration: "none" }}>웨딩버틀러에서 청첩장 만들기</a>
       </div>
     </main>

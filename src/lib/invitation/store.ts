@@ -80,7 +80,7 @@ export async function getOwned(id: string, phone: string): Promise<InvitationRow
 
 /** 하객에게 열려 있는 청첩장: 공개 중이고 보관 기간(6개월)이 지나지 않았다 */
 export function isLive(row: InvitationRow): boolean {
-  return row.status === "published" && !isExpired(row.content.date, row.created_at);
+  return row.status === "published" && !isExpired(row.content.date, row.published_at);
 }
 
 export async function getBySlug(slug: string): Promise<InvitationRow | null> {
@@ -107,7 +107,11 @@ export async function saveContent(id: string, phone: string, raw: unknown): Prom
 
 export async function setStatus(id: string, phone: string, status: "published" | "hidden" | "draft"): Promise<InvitationRow | null> {
   const patch: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
-  if (status === "published") patch.published_at = new Date().toISOString();
+  if (status === "published") {
+    // 보관 기간(6개월)은 처음 발행한 날부터 센다. 다시 발행해도 처음 날짜를 지킨다.
+    const { data: cur } = await supabaseAdmin().from("invitations").select("published_at").eq("id", id).eq("phone", phone).maybeSingle();
+    patch.published_at = cur?.published_at ?? new Date().toISOString();
+  }
   const { data, error } = await supabaseAdmin().from("invitations").update(patch).eq("id", id).eq("phone", phone).select(COLS).maybeSingle();
   if (error) throw error;
   return data ? normalize(data) : null;

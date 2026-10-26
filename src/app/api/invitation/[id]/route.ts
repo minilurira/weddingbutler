@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   try {
     const row = await getOwned(params.id, phone);
     if (!row) return notFound();
-    return NextResponse.json({ id: row.id, status: row.status, url: publicUrl(row.slug), template: row.template, paid: Boolean(row.paid_at), content: row.content });
+    return NextResponse.json({ id: row.id, status: row.status, url: publicUrl(row.slug), template: row.template, paid: Boolean(row.paid_at), publishedAt: row.published_at, content: row.content });
   } catch (err) {
     return serverError("get", err);
   }

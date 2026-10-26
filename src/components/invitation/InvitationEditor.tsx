@@ -12,7 +12,7 @@ import {
   TEMPLATE_INFO,
   TITLES,
   dateLabel,
-  expiryDate,
+  endDate,
   galleryMax,
   isPremium,
   missingForPublish,
@@ -68,6 +68,7 @@ function Switch({ on, label, onChange }: { on: boolean; label: string; onChange:
 export function InvitationEditor({ id }: { id: string }) {
   const [content, setContent] = useState<InvitationContent | null>(null);
   const [status, setStatus] = useState<Status>("draft");
+  const [publishedAt, setPublishedAt] = useState<string | null>(null);
   const [template, setTemplateState] = useState<InvitationTemplate>("classic");
   const [paid, setPaid] = useState(false);
   const [paying, setPaying] = useState(false);
@@ -97,10 +98,11 @@ export function InvitationEditor({ id }: { id: string }) {
       if (!r) return setLoadErr("불러오지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
       if (r.status === 401) return void (window.location.href = "/invitation/new");
       if (!r.ok) return setLoadErr("이 청첩장을 찾을 수 없어요.");
-      const d = (await r.json()) as { status: Status; url: string; template: InvitationTemplate; paid: boolean; content: InvitationContent };
+      const d = (await r.json()) as { status: Status; url: string; template: InvitationTemplate; paid: boolean; publishedAt: string | null; content: InvitationContent };
       latest.current = d.content;
       setContent(d.content);
       setStatus(d.status);
+      setPublishedAt(d.publishedAt ?? null);
       setUrl(d.url);
       setTemplateState(d.template);
       setPaid(d.paid);
@@ -219,11 +221,12 @@ export function InvitationEditor({ id }: { id: string }) {
 
   async function doPublish() {
     const r = await fetch(`/api/invitation/${id}/publish`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "publish" }) });
-    const d = (await r.json().catch(() => ({}))) as { error?: string; missing?: string[]; url?: string };
+    const d = (await r.json().catch(() => ({}))) as { error?: string; missing?: string[]; url?: string; publishedAt?: string | null };
     if (r.status === 400 && d.missing) return setMsg(`발행하려면 ${d.missing.join(", ")}을(를) 먼저 입력해 주세요.`);
     if (r.status === 402) return setMsg("프리미엄 템플릿은 결제 후에 발행할 수 있어요.");
     if (!r.ok) return setMsg("발행하지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
     setStatus("published");
+    if (d.publishedAt) setPublishedAt(d.publishedAt);
     if (d.url) setUrl(d.url);
     setCopied(false);
     setDone(true);
@@ -358,7 +361,7 @@ export function InvitationEditor({ id }: { id: string }) {
               <Field id="eHall" label="홀 이름 · 층"><input id="eHall" style={input} value={c.hall} placeholder="예: 그랜드홀 3층" onChange={(e) => update({ hall: e.target.value })} /></Field>
             </div>
             {c.date && <p style={{ margin: "14px 0 0", padding: "10px 14px", borderRadius: 10, background: "#FBF6F7", fontSize: 13 }}>청첩장에는 <b>{dateLabel(c)}</b>로 보여요.</p>}
-            <p style={{ margin: "10px 0 0", padding: "10px 14px", borderRadius: 10, background: "#FBF6F7", fontSize: 13, lineHeight: 1.7 }}>모바일 청첩장은 <b>예식일로부터 6개월</b> 동안 열려 있고, 그 뒤에는 보관 기간이 끝났다는 안내가 나와요.{c.date && expiryDate(c.date) ? <> 이 청첩장은 <b>{expiryDate(c.date)}</b>까지 볼 수 있어요.</> : " 예식 날짜를 정하지 않으면 만든 날부터 6개월이에요."} 하단에는 웨딩버틀러 표시가 들어가요.</p>
+            <p style={{ margin: "10px 0 0", padding: "10px 14px", borderRadius: 10, background: "#FBF6F7", fontSize: 13, lineHeight: 1.7 }}>모바일 청첩장은 <b>발행일부터 6개월</b> 동안 열려 있어요. 예식일이 6개월보다 더 남았다면 <b>예식일 다음날</b>에 끝나요. {status === "published" ? "이 청첩장은" : "지금 발행하면"} <b>{endDate(c.date, publishedAt)}</b>까지 볼 수 있어요. 끝난 뒤에는 보관 기간이 끝났다는 안내가 나오고, 하단에는 웨딩버틀러 표시가 들어가요.</p>
             <div style={{ display: "flex", gap: 18, marginTop: 10, flexWrap: "wrap", fontSize: 14, alignItems: "center" }}>
               <span style={{ display: "flex", alignItems: "center" }}>달력 보이기 <Switch on={c.showCalendar} label="달력 보이기" onChange={(v) => update({ showCalendar: v })} /></span>
               <span style={{ display: "flex", alignItems: "center" }}>D-day 보이기 <Switch on={c.showDday} label="D-day 보이기" onChange={(v) => update({ showDday: v })} /></span>

@@ -205,22 +205,25 @@ export function missingForPublish(c: InvitationContent): string[] {
   return miss;
 }
 
-// --- 보관 기간: 예식일(없으면 만든 날)로부터 6개월 ---
+// --- 보관 기간: 발행일부터 6개월. 예식일이 그보다 늦으면 예식일 다음날까지 ---
 
 export const KEEP_MONTHS = 6;
 
-/** 보관 만료일 YYYY-MM-DD. 예식일이 없으면 fallbackIso(만든 시각)를 기준으로 한다 */
-export function expiryDate(date: string, fallbackIso?: string): string | null {
-  const base = date || (fallbackIso ? new Date(new Date(fallbackIso).getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10) : "");
-  if (!base) return null;
-  const [y, m, d] = base.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1 + KEEP_MONTHS, d)).toISOString().slice(0, 10);
+const kstDay = (ms: number) => new Date(ms + 9 * 3600 * 1000).toISOString().slice(0, 10);
+
+/** 종료일 YYYY-MM-DD: 이 날부터 열리지 않는다. 발행 전이면 publishedIso 대신 지금을 기준으로 미리 계산한다 */
+export function endDate(date: string, publishedIso?: string | null, now = Date.now()): string {
+  const [y, m, d] = kstDay(publishedIso ? new Date(publishedIso).getTime() : now).split("-").map(Number);
+  const sixMonths = new Date(Date.UTC(y, m - 1 + KEEP_MONTHS, d)).toISOString().slice(0, 10);
+  if (!date) return sixMonths;
+  const [wy, wm, wd] = date.split("-").map(Number);
+  const dayAfter = new Date(Date.UTC(wy, wm - 1, wd + 1)).toISOString().slice(0, 10);
+  return dayAfter > sixMonths ? dayAfter : sixMonths;
 }
 
-/** 만료일이 지났는지(한국 시간 기준, 만료일 당일까지는 열린다) */
-export function isExpired(date: string, fallbackIso?: string, now = Date.now()): boolean {
-  const e = expiryDate(date, fallbackIso);
-  return !!e && e < new Date(now + 9 * 3600 * 1000).toISOString().slice(0, 10);
+/** 종료일이 되었거나 지났는지(한국 시간) */
+export function isExpired(date: string, publishedIso?: string | null, now = Date.now()): boolean {
+  return endDate(date, publishedIso, now) <= kstDay(now);
 }
 
 // --- 화면 표시용 계산 ---
