@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
-import { defaultContent, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
+import { PREMIUM_PRICE, defaultContent, galleryMax, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
 import { newSlug } from "@/lib/invitation/guard";
 
 // 모바일 청첩장 DB 접근 (Supabase, 서버 전용). 테이블은 supabase/invitation.sql.
@@ -15,6 +15,8 @@ export interface InvitationRow {
   template: string;
   status: "draft" | "published" | "hidden";
   content: InvitationContent;
+  paid_at: string | null;
+  pay_id: string | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -27,11 +29,11 @@ export interface GuestbookRow {
   created_at: string;
 }
 
-const COLS = "id, slug, phone, template, status, content, published_at, created_at, updated_at";
+const COLS = "id, slug, phone, template, status, content, paid_at, pay_id, published_at, created_at, updated_at";
 
 function normalize(row: Record<string, unknown>): InvitationRow {
   const r = row as unknown as InvitationRow;
-  return { ...r, content: sanitizeContent(r.id, r.content) };
+  return { ...r, content: sanitizeContent(r.id, r.content, r.template) };
 }
 
 /** 사진 주소의 앞부분 (뒤에 저장소 경로를 붙인다). 서버 컴포넌트가 문자열로 넘길 수 있게 함수가 아닌 값으로 둔다 */
@@ -84,7 +86,9 @@ export async function getBySlug(slug: string): Promise<InvitationRow | null> {
 }
 
 export async function saveContent(id: string, phone: string, raw: unknown): Promise<InvitationRow | null> {
-  const content = sanitizeContent(id, raw);
+  const cur = await getOwned(id, phone);
+  if (!cur) return null;
+  const content = sanitizeContent(id, raw, cur.template);
   const { data, error } = await supabaseAdmin()
     .from("invitations")
     .update({ content, updated_at: new Date().toISOString() })
@@ -185,4 +189,103 @@ export async function getGuestbookHash(invitationId: string, entryId: string): P
 export async function deleteGuestbook(invitationId: string, entryId: string): Promise<void> {
   const { error } = await supabaseAdmin().from("invitation_guestbook").delete().eq("id", entryId).eq("invitation_id", invitationId);
   if (error) throw error;
+}
+
+// --- 템플릿 · 결제 (프리미엄) ---
+
+/** 템플릿을 바꾼다. 무료 템플릿으로 바꾸면 갤러리를 12장까지만 남긴다. */
+export async function setTemplate(id: string, phone: string, template: string): Promise<InvitationRow | null> {
+  const cur = await getOwned(id, phone);
+  if (!cur) return null;
+  const content = { ...cur.content, gallery: cur.content.gallery.slice(0, galleryMax(template)) };
+  const { data, error } = await supabaseAdmin()
+    .from("invitations")
+    .update({ template, content, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("phone", phone)
+    .select(COLS)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? normalize(data) : null;
+}
+
+export const isPaid = (row: Pick<InvitationRow, "paid_at">) => Boolean(row.paid_at);
+
+/** 결제 주문을 만든다. 금액은 서버가 정한다(브라우저가 보낸 값은 쓰지 않는다). */
+export async function createOrder(row: InvitationRow): Promise<{ paymentId: string; amount: number }> {
+  const paymentId = `inv-${row.id.replace(/-/g, "").slice(0, 12)}-${Date.now().toString(36)}-${crypto.randomBytes(3).toString("hex")}`;
+  const { error } = await supabaseAdmin().from("invitation_orders").insert({ invitation_id: row.id, payment_id: paymentId, amount: PREMIUM_PRICE, template: row.template });
+  if (error) throw error;
+  return { paymentId, amount: PREMIUM_PRICE };
+}
+
+export async function getOrder(invitationId: string, paymentId: string): Promise<{ id: string; amount: number; status: string } | null> {
+  const { data, error } = await supabaseAdmin().from("invitation_orders").select("id, amount, status").eq("invitation_id", invitationId).eq("payment_id", paymentId).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+/** 결제가 확인된 주문을 처리한다: 주문을 paid로 바꾸고 청첩장에 결제 완료를 기록한다 (다시 불러도 같은 결과). */
+export async function markPaid(invitationId: string, paymentId: string, amount: number): Promise<void> {
+  const db = supabaseAdmin();
+  const now = new Date().toISOString();
+  const { error: e1 } = await db.from("invitation_orders").update({ status: "paid", paid_at: now }).eq("invitation_id", invitationId).eq("payment_id", paymentId);
+  if (e1) throw e1;
+  const { error: e2 } = await db.from("invitations").update({ paid_at: now, pay_id: paymentId, pay_amount: amount }).eq("id", invitationId).is("paid_at", null);
+  if (e2) throw e2;
+}
+
+// --- 이용 통계 (프리미엄 대시보드) ---
+
+export const EVENT_KINDS = ["view", "map", "copy_account", "copy_address", "call", "sms", "copy_url"] as const;
+export type EventKind = (typeof EVENT_KINDS)[number];
+
+export async function addEvent(invitationId: string, kind: EventKind, source: string): Promise<void> {
+  const { error } = await supabaseAdmin().from("invitation_events").insert({ invitation_id: invitationId, kind, source });
+  if (error) throw error;
+}
+
+export interface InvitationStats {
+  total: number;
+  today: number;
+  week: { date: string; count: number }[];
+  sources: { source: string; count: number }[];
+  actions: Record<string, number>;
+  guestbook: number;
+}
+
+const kst = (ms: number) => new Date(ms + 9 * 3600 * 1000).toISOString().slice(0, 10);
+
+export async function getStats(invitationId: string, now = Date.now()): Promise<InvitationStats> {
+  const db = supabaseAdmin();
+  const since = new Date(now - 30 * 86400000).toISOString();
+  // ponytail: 최근 30일 이벤트를 한 번에 가져와 서버에서 센다(2만 건 상한). 방문이 아주 많아지면 SQL 집계로 바꾼다.
+  const { data, error } = await db.from("invitation_events").select("kind, source, created_at").eq("invitation_id", invitationId).gte("created_at", since).order("created_at", { ascending: false }).limit(20000);
+  if (error) throw error;
+  const rows = data ?? [];
+  const today = kst(now);
+  const days = Array.from({ length: 7 }, (_, i) => kst(now - (6 - i) * 86400000));
+  const byDay = new Map(days.map((d) => [d, 0]));
+  const sources = new Map<string, number>();
+  const actions: Record<string, number> = {};
+  let total = 0;
+  for (const r of rows) {
+    if (r.kind === "view") {
+      total++;
+      const d = kst(new Date(r.created_at).getTime());
+      if (byDay.has(d)) byDay.set(d, (byDay.get(d) ?? 0) + 1);
+      sources.set(r.source, (sources.get(r.source) ?? 0) + 1);
+    } else {
+      actions[r.kind] = (actions[r.kind] ?? 0) + 1;
+    }
+  }
+  const { count } = await db.from("invitation_guestbook").select("id", { count: "exact", head: true }).eq("invitation_id", invitationId);
+  return {
+    total,
+    today: byDay.get(today) ?? 0,
+    week: days.map((date) => ({ date, count: byDay.get(date) ?? 0 })),
+    sources: Array.from(sources, ([source, c]) => ({ source, count: c })).sort((a, b) => b.count - a.count),
+    actions,
+    guestbook: count ?? 0,
+  };
 }

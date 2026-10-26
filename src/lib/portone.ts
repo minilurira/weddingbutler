@@ -22,7 +22,7 @@ export async function verifyPortOnePayment(
   }
 
   const res = await fetch(
-    `https://api.portone.io/payments/${encodeURIComponent(paymentId)}`,
+    `${process.env.PORTONE_API_BASE || "https://api.portone.io"}/payments/${encodeURIComponent(paymentId)}`,
     {
       headers: { Authorization: `PortOne ${secret}` },
       cache: "no-store",

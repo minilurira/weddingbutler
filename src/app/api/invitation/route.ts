@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const rows = await listByPhone(phone);
     return NextResponse.json({
-      invitations: rows.map((r) => ({ id: r.id, status: r.status, url: publicUrl(r.slug), groom: r.content.groom, bride: r.content.bride, date: r.content.date, updatedAt: r.updated_at })),
+      invitations: rows.map((r) => ({ id: r.id, template: r.template, paid: Boolean(r.paid_at), status: r.status, url: publicUrl(r.slug), groom: r.content.groom, bride: r.content.bride, date: r.content.date, updatedAt: r.updated_at })),
     });
   } catch (err) {
     return serverError("list", err);

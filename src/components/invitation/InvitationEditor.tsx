@@ -5,16 +5,22 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Drag
 import { InvitationView } from "@/components/invitation/InvitationView";
 import {
   ACCOUNT_MAX,
-  GALLERY_MAX,
   GREETINGS,
   RECEPT_LABELS,
+  INVITATION_TEMPLATES,
+  PREMIUM_PRICE,
+  TEMPLATE_INFO,
   TITLES,
   dateLabel,
+  galleryMax,
+  isPremium,
   missingForPublish,
+  type InvitationTemplate,
   type InvitationAccount,
   type InvitationContent,
 } from "@/lib/invitation/content";
 import { resizeToJpeg } from "@/lib/invitation/resize";
+import { requestDepositPayment } from "@/lib/portone-client";
 import { fontSerif } from "@/lib/style";
 
 type Status = "draft" | "published" | "hidden";
@@ -61,6 +67,9 @@ function Switch({ on, label, onChange }: { on: boolean; label: string; onChange:
 export function InvitationEditor({ id }: { id: string }) {
   const [content, setContent] = useState<InvitationContent | null>(null);
   const [status, setStatus] = useState<Status>("draft");
+  const [template, setTemplateState] = useState<InvitationTemplate>("classic");
+  const [paid, setPaid] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [url, setUrl] = useState("");
   const [loadErr, setLoadErr] = useState("");
   const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
@@ -87,12 +96,23 @@ export function InvitationEditor({ id }: { id: string }) {
       if (!r) return setLoadErr("불러오지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
       if (r.status === 401) return void (window.location.href = "/invitation/new");
       if (!r.ok) return setLoadErr("이 청첩장을 찾을 수 없어요.");
-      const d = (await r.json()) as { status: Status; url: string; content: InvitationContent };
+      const d = (await r.json()) as { status: Status; url: string; template: InvitationTemplate; paid: boolean; content: InvitationContent };
       latest.current = d.content;
       setContent(d.content);
       setStatus(d.status);
       setUrl(d.url);
+      setTemplateState(d.template);
+      setPaid(d.paid);
+      // 모바일 결제창에서 돌아온 경우: 주소의 paymentId로 결제를 확인하고 이어서 발행한다
+      const q = new URLSearchParams(window.location.search);
+      const pid = q.get("paymentId");
+      if (pid) {
+        window.history.replaceState(null, "", window.location.pathname);
+        if (q.get("code")) setMsg(q.get("message") || "결제가 완료되지 않았어요. 다시 시도해 주세요.");
+        else void confirmAndPublish(pid);
+      }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // 자동 저장: 마지막 입력 뒤 0.8초 (저장이 끝나기 전에 또 바뀌면 다시 저장)
@@ -144,10 +164,11 @@ export function InvitationEditor({ id }: { id: string }) {
   async function uploadFiles(files: File[], target: "cover" | "gallery") {
     if (!content || files.length === 0) return;
     setMsg("");
-    const room = target === "cover" ? 1 : GALLERY_MAX - content.gallery.length;
-    if (room <= 0) return setMsg(`갤러리 사진은 ${GALLERY_MAX}장까지 올릴 수 있어요. (프리미엄 템플릿은 더 많이 올릴 수 있어요)`);
+    const max = galleryMax(template);
+    const room = target === "cover" ? 1 : max - content.gallery.length;
+    if (room <= 0) return setMsg(isPremium(template) ? `갤러리 사진은 ${max}장까지 올릴 수 있어요.` : `무료 템플릿은 갤러리 사진을 ${max}장까지 올릴 수 있어요. 프리미엄 템플릿은 ${galleryMax("modern")}장까지 올릴 수 있어요.`);
     const picked = files.slice(0, room);
-    if (files.length > room) setMsg(`${GALLERY_MAX}장까지만 올릴 수 있어서 ${picked.length}장만 올렸어요.`);
+    if (files.length > room) setMsg(`${max}장까지만 올릴 수 있어서 ${picked.length}장만 올렸어요.`);
     const added: string[] = [];
     for (const f of picked) {
       setUploading((n) => n + 1);
@@ -169,7 +190,7 @@ export function InvitationEditor({ id }: { id: string }) {
     if (added.length === 0) return;
     const cur = latest.current ?? content;
     if (target === "cover") update({ cover: added[0] });
-    else update({ gallery: [...cur.gallery, ...added].slice(0, GALLERY_MAX) });
+    else update({ gallery: [...cur.gallery, ...added].slice(0, max) });
   }
 
   const onDrop = (target: "cover" | "gallery") => (e: DragEvent) => {
@@ -183,17 +204,75 @@ export function InvitationEditor({ id }: { id: string }) {
     onDrop: onDrop(target),
   });
 
+  // 발행: 프리미엄은 결제를 먼저 한다. 빠진 항목이 있으면 결제하기 전에 알려 준다.
   async function publish() {
     setMsg("");
     if (!(await flush())) return setMsg("저장하지 못했어요. 인터넷 연결을 확인해 주세요.");
+    if (isPremium(template) && !paid) {
+      const miss = missingForPublish(latest.current ?? content!);
+      if (miss.length) return setMsg(`발행하려면 ${miss.join(", ")}을(를) 먼저 입력해 주세요.`);
+      return startPayment();
+    }
+    await doPublish();
+  }
+
+  async function doPublish() {
     const r = await fetch(`/api/invitation/${id}/publish`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "publish" }) });
     const d = (await r.json().catch(() => ({}))) as { error?: string; missing?: string[]; url?: string };
     if (r.status === 400 && d.missing) return setMsg(`발행하려면 ${d.missing.join(", ")}을(를) 먼저 입력해 주세요.`);
+    if (r.status === 402) return setMsg("프리미엄 템플릿은 결제 후에 발행할 수 있어요.");
     if (!r.ok) return setMsg("발행하지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
     setStatus("published");
     if (d.url) setUrl(d.url);
     setCopied(false);
     setDone(true);
+  }
+
+  async function startPayment() {
+    setPaying(true);
+    try {
+      const r = await fetch(`/api/invitation/${id}/order`, { method: "POST" });
+      const d = (await r.json().catch(() => ({}))) as { paid?: boolean; paymentId?: string; amount?: number; orderName?: string; phone?: string };
+      if (d.paid) {
+        setPaid(true);
+        return await doPublish();
+      }
+      if (!r.ok || !d.paymentId || !d.amount) return setMsg("결제를 시작하지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
+      const res = await requestDepositPayment({
+        paymentId: d.paymentId,
+        orderName: d.orderName ?? "모바일 청첩장 프리미엄",
+        amount: d.amount,
+        payMethod: "신용카드",
+        customerName: [latest.current?.groom, latest.current?.bride].filter(Boolean).join(" ") || "청첩장",
+        customerPhone: d.phone ?? "",
+        customerEmail: "",
+        redirectUrl: `${window.location.origin}/invitation/edit/${id}`,
+      });
+      if (!res.ok) return setMsg(res.message ?? "결제가 취소되었어요.");
+      await confirmAndPublish(d.paymentId);
+    } finally {
+      setPaying(false);
+    }
+  }
+
+  // 서버가 포트원에 직접 확인한 뒤에만 결제 완료로 처리한다
+  async function confirmAndPublish(paymentId: string) {
+    const r = await fetch(`/api/invitation/${id}/pay`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ paymentId }) });
+    if (!r.ok) return setMsg("결제 확인에 실패했어요. 결제가 되었다면 잠시 뒤 '발행하기'를 다시 눌러 주세요. 중복 결제는 되지 않아요.");
+    setPaid(true);
+    await doPublish();
+  }
+
+  async function changeTemplate(next: InvitationTemplate) {
+    if (next === template) return;
+    if (!(await flush())) return setMsg("저장하지 못했어요. 인터넷 연결을 확인해 주세요.");
+    const r = await fetch(`/api/invitation/${id}/template`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ template: next }) });
+    const d = (await r.json().catch(() => ({}))) as { content?: InvitationContent };
+    if (!r.ok || !d.content) return setMsg("템플릿을 바꾸지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
+    latest.current = d.content;
+    setContent(d.content);
+    setTemplateState(next);
+    setMsg(isPremium(template) && !isPremium(next) && d.content.gallery.length < (content?.gallery.length ?? 0) ? "무료 템플릿은 갤러리 사진이 12장까지라 나머지는 뺐어요." : "");
   }
 
   async function hide() {
@@ -236,7 +315,7 @@ export function InvitationEditor({ id }: { id: string }) {
   const photoBox = (over: boolean): CSSProperties => ({ border: `2px dashed ${over ? ACCENT : "#DCC4CC"}`, borderRadius: 14, background: over ? "#F9EFF2" : "#FBF6F7", padding: 16, textAlign: "center" });
   const saveLabel = saveState === "saving" ? "저장 중…" : saveState === "error" ? "저장 실패 · 다시 시도 중" : "자동 저장됨";
 
-  const preview = <InvitationView content={c} photoBase={photoBase} slug={null} preview />;
+  const preview = <InvitationView content={c} photoBase={photoBase} slug={null} template={template} preview />;
 
   return (
     <div style={{ background: "#F3E9EB", minHeight: "100vh", color: DARK }}>
@@ -246,8 +325,9 @@ export function InvitationEditor({ id }: { id: string }) {
           <Link href="/invitation/new" style={{ fontSize: 14, color: "#6B5A60", minHeight: 44, display: "inline-flex", alignItems: "center" }}>← 내 청첩장</Link>
           <span style={{ fontSize: 12, color: saveState === "error" ? "#B03A52" : "#9A8189" }}>{saveLabel}</span>
           <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: status === "published" ? "#2F6B45" : "#8E4E68" }}>{status === "published" ? "공개 중" : status === "hidden" ? "비공개" : "작성 중"}</span>
+          {isPremium(template) && paid && <Link href={`/invitation/dashboard/${id}`} style={{ ...ghost, display: "inline-flex", alignItems: "center", textDecoration: "none" }}>대시보드</Link>}
           <button type="button" className="inv-only-narrow" onClick={() => setShowPreview(true)} style={ghost}>미리보기</button>
-          <button type="button" onClick={publish} style={{ minHeight: 44, padding: "0 22px", borderRadius: 22, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{status === "published" ? "변경 내용 반영하기" : "발행하기"}</button>
+          <button type="button" onClick={publish} style={{ minHeight: 44, padding: "0 22px", borderRadius: 22, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{paying ? "결제 진행 중…" : status === "published" ? "변경 내용 반영하기" : isPremium(template) && !paid ? `${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하고 발행` : "발행하기"}</button>
         </div>
       </header>
 
@@ -255,6 +335,17 @@ export function InvitationEditor({ id }: { id: string }) {
         <main style={{ flex: "1 1 560px", minWidth: 0 }}>
           {msg && <div role="alert" style={{ marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FBE9E9", color: "#8A2F3D", fontSize: 14 }}>{msg}</div>}
           {missing.length > 0 && status !== "published" && <div style={{ marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FFFFFF", border: "1px dashed #C07E96", fontSize: 13, color: "#473A3F" }}>발행하려면 <b>{missing.join(", ")}</b>이(가) 필요해요.</div>}
+
+          <Card title="템플릿" hint={`프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드가 있고 하단 웨딩버틀러 표시가 없어요. 고르고 꾸미는 것은 무료이고, 결제는 발행할 때 한 번만 해요.`}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
+              {INVITATION_TEMPLATES.map((t) => (
+                <button key={t} type="button" aria-pressed={template === t} onClick={() => changeTemplate(t)} style={{ ...chip(template === t), borderRadius: 14, padding: "10px 12px", textAlign: "left", height: "auto" }}>
+                  <span style={{ display: "block", fontSize: 14, fontWeight: 700 }}>{TEMPLATE_INFO[t].name}</span>
+                  <span style={{ display: "block", fontSize: 12, color: TEMPLATE_INFO[t].premium ? "#8E4E68" : "#2F6B45", fontWeight: 600 }}>{TEMPLATE_INFO[t].premium ? (paid ? "결제 완료" : `${PREMIUM_PRICE.toLocaleString("ko-KR")}원`) : "무료"}</span>
+                </button>
+              ))}
+            </div>
+          </Card>
 
           <Card title="기본 정보" hint="청첩장 표지와 예식 안내에 들어가요.">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 14 }}>
@@ -317,7 +408,7 @@ export function InvitationEditor({ id }: { id: string }) {
             </div>
           </Card>
 
-          <Card title={`갤러리 (${c.gallery.length}/${GALLERY_MAX}장)`} hint="사진을 끌어다 놓거나 눌러서 고르세요. 여러 장을 한 번에 올릴 수 있어요.">
+          <Card title={`갤러리 (${c.gallery.length}/${galleryMax(template)}장)`} hint="사진을 끌어다 놓거나 눌러서 고르세요. 여러 장을 한 번에 올릴 수 있어요.">
             <div {...dragProps("gallery")} style={photoBox(dragging)}>
               <p style={{ margin: "4px 0 12px", fontSize: 14, color: "#6B5A60" }}>{dragging ? "놓으면 올라가요" : "여기로 사진을 끌어다 놓으세요"}</p>
               <button type="button" style={ghost} onClick={() => galleryInput.current?.click()}>파일 불러오기</button>
@@ -355,6 +446,19 @@ export function InvitationEditor({ id }: { id: string }) {
               ))}
             </div>
             {c.accounts.length < ACCOUNT_MAX && <button type="button" style={{ ...ghost, marginTop: 10 }} onClick={() => update({ accounts: [...c.accounts, { who: "", bank: "", number: "", holder: "" }] })}>+ 계좌 추가 ({c.accounts.length}/{ACCOUNT_MAX})</button>}
+          </Card>
+
+          <Card title="주차 안내 · 예식장 메모" hint={isPremium(template) ? "하객에게 보여요. 비워 둔 칸은 보이지 않아요." : "프리미엄 템플릿에서 하객에게 보여요. 미리 적어 두면 템플릿을 바꿀 때 바로 쓸 수 있어요."}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 12 }}>
+              <Field id="pk1" label="주차장 위치"><input id="pk1" style={input} value={c.parkingPlace} placeholder="예: 건물 지하 1~3층" onChange={(e) => update({ parkingPlace: e.target.value })} /></Field>
+              <Field id="pk2" label="들어오는 길"><input id="pk2" style={input} value={c.parkingEntrance} placeholder="예: ○○로에서 우회전 후 지하 입구" onChange={(e) => update({ parkingEntrance: e.target.value })} /></Field>
+              <Field id="pk3" label="무료 시간"><input id="pk3" style={input} value={c.parkingFree} placeholder="예: 2시간 무료, 축의대에서 등록" onChange={(e) => update({ parkingFree: e.target.value })} /></Field>
+              <Field id="pk4" label="만차 시"><input id="pk4" style={input} value={c.parkingFull} placeholder="예: ○○ 공영주차장 (도보 5분)" onChange={(e) => update({ parkingFull: e.target.value })} /></Field>
+              <Field id="mm1" label="식사"><input id="mm1" style={input} value={c.memoMeal} placeholder="예: 2층 연회장 뷔페, 예식 30분 전부터" onChange={(e) => update({ memoMeal: e.target.value })} /></Field>
+              <Field id="mm2" label="셔틀버스"><input id="mm2" style={input} value={c.memoShuttle} placeholder="예: ○○역 2번 출구, 15분 간격" onChange={(e) => update({ memoShuttle: e.target.value })} /></Field>
+              <Field id="mm3" label="포토부스"><input id="mm3" style={input} value={c.memoPhoto} placeholder="예: 1층 로비" onChange={(e) => update({ memoPhoto: e.target.value })} /></Field>
+              <Field id="mm4" label="화환"><input id="mm4" style={input} value={c.memoWreath} placeholder="예: 화환은 정중히 사양합니다" onChange={(e) => update({ memoWreath: e.target.value })} /></Field>
+            </div>
           </Card>
 
           <Card title="연락처" hint="켜면 하객 화면에 전화·문자 버튼이 생겨요. 번호는 버튼 안에만 들어가고 화면에 숫자로 보이지 않아요.">
@@ -423,6 +527,7 @@ export function InvitationEditor({ id }: { id: string }) {
           <div style={{ width: "100%", maxWidth: 460, background: "#FFFFFF", borderRadius: 22, padding: 28, boxSizing: "border-box" }}>
             <h2 style={{ margin: 0, fontFamily: fontSerif, fontSize: 21, fontWeight: 600 }}>청첩장이 만들어졌어요</h2>
             <p style={{ margin: "8px 0 18px", fontSize: 14, lineHeight: 1.7, color: "#6B5A60" }}>아래 주소를 복사해 카카오톡이나 문자로 보내 주세요. 고쳐도 주소는 그대로예요.</p>
+            {isPremium(template) && paid && <p style={{ margin: "-6px 0 16px", padding: "12px 14px", borderRadius: 12, background: "#F9EFF2", fontSize: 13, lineHeight: 1.6, color: "#473A3F" }}>방문 수·길찾기·계좌 복사 횟수는 <Link href={`/invitation/dashboard/${id}`} style={{ color: ACCENT, fontWeight: 700 }}>제작자 대시보드</Link>에서 볼 수 있어요.</p>}
             <div style={{ display: "flex", gap: 8 }}>
               <input readOnly aria-label="청첩장 주소" value={url} onFocus={(e) => e.target.select()} style={{ ...input, background: "#FBF6F7" }} />
               <button type="button" onClick={copyUrl} style={{ minHeight: 48, padding: "0 18px", border: 0, borderRadius: 12, background: ACCENT, color: "#FFF", fontSize: 14, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>{copied ? "복사했어요" : "URL 복사"}</button>

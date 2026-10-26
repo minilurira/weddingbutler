@@ -3,18 +3,20 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SamplePreviewButton } from "@/components/invitation/SamplePreviewButton";
+import type { InvitationTemplate } from "@/lib/invitation/content";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
   title: "무료 모바일 청첩장 만들기",
-  description: "웨딩버틀러에서 모바일 청첩장을 무료로 만들고, 미리 본 뒤 링크 하나로 보내세요. 지도·방명록·배경음악·계좌 복사까지 담았습니다.",
+  description: "웨딩버틀러에서 모바일 청첩장을 무료로 만들고, 미리 본 뒤 링크 하나로 보내세요. 지도·방명록·계좌 복사까지 담았습니다.",
   alternates: { canonical: "/invitation" },
 };
 
 // 청첩장 에디터를 오픈하면 true로 바꾼다. false인 동안 "만들기" 버튼은 오픈 준비 중으로 보인다.
 const INVITATION_OPEN = true;
 // 프리미엄(유료) 템플릿·제작자 대시보드는 아직 만드는 중이라 "준비 중"으로 표시한다. 오픈하면 true로 바꾼다.
-const PREMIUM_OPEN = false;
+const PREMIUM_OPEN = true;
 const EDITOR_PATH = "/invitation/new";
 
 const STEPS = [
@@ -26,7 +28,7 @@ const STEPS = [
 const FEATURES = [
   { title: "지도와 길 안내", body: "예식장을 찾으면 지도에 핀이 찍히고, 네이버 지도·카카오맵·티맵으로 바로 길 안내가 열립니다." },
   { title: "방명록", body: "하객이 축하 글을 남기고 비밀번호로 자기 글을 지울 수 있어요. 욕설과 광고는 자동으로 막습니다." },
-  { title: "배경음악", body: "샘플 음악 중에서 고르면 하객 화면에 재생 버튼이 생깁니다. 자동으로 시작되지는 않아요." },
+  { title: "카카오톡 공유 썸네일", body: "주소를 카카오톡에 보내면 표지 사진과 신랑·신부 이름, 예식 일시가 카드로 보여요." },
   { title: "계좌 복사", body: "마음 전하실 곳의 계좌번호를 버튼 한 번으로 복사할 수 있습니다." },
   { title: "PC와 모바일 에디터", body: "PC에서도 휴대폰에서도 같은 청첩장을 이어서 고칠 수 있고, 고쳐도 주소는 그대로입니다." },
   { title: "축의 접수 안내", body: "예식 당일 축의대를 웨딩버틀러가 함께한다는 안내가 청첩장 아래에 들어갑니다." },
@@ -36,20 +38,19 @@ const SAMPLE_STRIP = ["p79", "p74", "p70", "p83", "p84", "p86", "p71", "p75", "p
 
 // 샘플 사진: public/img/invitation/ — 모두 AI로 생성한 이미지라 페이지에 그렇게 표시한다
 const TEMPLATES = [
-  { name: "클래식 아이보리", price: "무료", img: "/img/invitation/p85.jpg", pos: "center 25%", weight: 300, gray: false, thumbs: ["p76", "p82", "p84"] },
-  { name: "모던 미니멀", price: "10,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
-  { name: "보태니컬 그린", price: "10,000원", img: "/img/invitation/p78.jpg", pos: "center 30%", weight: 400, gray: false, thumbs: ["p72", "p75", "p81"] },
-  { name: "로즈 에디토리얼", price: "10,000원", img: "/img/invitation/p73.jpg", pos: "center 20%", weight: 400, gray: false, thumbs: ["p80", "p86", "p77"] },
+  { key: "classic" as InvitationTemplate, name: "클래식 아이보리", price: "무료", img: "/img/invitation/p85.jpg", pos: "center 25%", weight: 300, gray: false, thumbs: ["p76", "p82", "p84"] },
+  { key: "modern" as InvitationTemplate, name: "모던 미니멀", price: "10,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
+  { key: "botanical" as InvitationTemplate, name: "보태니컬 그린", price: "10,000원", img: "/img/invitation/p78.jpg", pos: "center 30%", weight: 400, gray: false, thumbs: ["p72", "p75", "p81"] },
+  { key: "rose" as InvitationTemplate, name: "로즈 에디토리얼", price: "10,000원", img: "/img/invitation/p73.jpg", pos: "center 20%", weight: 400, gray: false, thumbs: ["p80", "p86", "p77"] },
 ];
 
-const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "샘플 배경음악", "사진 12장"];
-const FREE_LACKS = ["주차 안내", "예식장 메모", "내 음악 올리기", "제작자 대시보드", "하단에 웨딩버틀러 표시"];
+const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "사진 12장"];
+const FREE_LACKS = ["주차 안내", "예식장 메모", "제작자 대시보드", "하단에 웨딩버틀러 표시"];
 const PREMIUM_PLUS = [
   { title: "프리미엄 템플릿 3종", body: "모던 미니멀, 보태니컬 그린, 로즈 에디토리얼 중 선택" },
   { title: "주차 안내", body: "주차장 위치, 들어오는 길, 무료 시간, 만차 시 안내" },
   { title: "예식장 메모", body: "식사 장소, 셔틀버스, 포토부스, 화환 안내" },
   { title: "제작자 대시보드", body: "방문 수, 방명록 관리, 공개·비공개 전환" },
-  { title: "내 음악 올리기", body: "가지고 있는 음악 파일을 배경음악으로" },
   { title: "사진 30장", body: "무료 12장보다 2.5배 많이" },
   { title: "웨딩버틀러 표시 없음", body: "청첩장 하단이 깔끔하게" },
 ];
@@ -310,6 +311,7 @@ export default function InvitationPage() {
                   <div style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{t.name}</div>
                   <div style={{ marginTop: 6, display: "inline-block", padding: "4px 12px", borderRadius: 999, fontSize: 13, fontWeight: 600, background: t.price === "무료" ? "#E5F0E8" : "#F9EFF2", color: t.price === "무료" ? "#2F6B45" : "#8E4E68" }}>{t.price === "무료" || PREMIUM_OPEN ? t.price : `${t.price} · 준비 중`}</div>
                 </div>
+                <SamplePreviewButton template={t.key} />
               </div>
             ))}
           </div>

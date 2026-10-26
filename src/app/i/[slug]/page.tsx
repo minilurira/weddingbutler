@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { InvitationView } from "@/components/invitation/InvitationView";
+import { TEMPLATE_OUTER_BG } from "@/lib/invitation/theme";
+import { isTemplate } from "@/lib/invitation/content";
 import { dateLabel } from "@/lib/invitation/content";
 import { getBySlug, photoBase } from "@/lib/invitation/store";
 import { SITE_URL } from "@/lib/seo";
@@ -33,8 +35,8 @@ export default async function InvitationPublicPage({ params }: { params: { slug:
   const row = await load(params.slug);
   if (!row) notFound();
   return (
-    <div style={{ background: "#E9E2D6", minHeight: "100vh" }}>
-      <InvitationView content={row.content} photoBase={photoBase()} slug={row.slug} />
+    <div style={{ background: isTemplate(row.template) ? TEMPLATE_OUTER_BG[row.template] : "#E9E2D6", minHeight: "100vh" }}>
+      <InvitationView content={row.content} photoBase={photoBase()} slug={row.slug} template={row.template} />
     </div>
   );
 }

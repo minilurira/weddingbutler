@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { notFound, publicUrl, serverError, sessionPhone, unauthorized } from "@/lib/invitation/api";
-import { missingForPublish } from "@/lib/invitation/content";
-import { getOwned, setStatus } from "@/lib/invitation/store";
+import { isPremium, missingForPublish } from "@/lib/invitation/content";
+import { getOwned, isPaid, setStatus } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +17,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     if (action === "published") {
       const missing = missingForPublish(row.content);
       if (missing.length) return NextResponse.json({ error: "missing", missing }, { status: 400 });
+      if (isPremium(row.template) && !isPaid(row)) return NextResponse.json({ error: "payment_required" }, { status: 402 });
     }
     const updated = await setStatus(row.id, phone, action);
     if (!updated) return notFound();
