@@ -7,7 +7,7 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
   title: "가격안내",
-  description: "축의대행·축의금 대행 가격안내. 하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.",
+  description: "축의대행·축의금 대행 가격안내. 하객 규모에 맞춘 세 가지 요금, 부가세 포함.",
   alternates: { canonical: "/pricing" },
 };
 
