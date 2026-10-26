@@ -29,6 +29,7 @@ type Status = "draft" | "published" | "hidden";
 interface GuestEntry { id: string; name: string; message: string; created_at: string }
 
 const ACCENT = "#A9647E";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const DARK = "#33232A";
 const BORDER = "#E7D5DA";
 const input: CSSProperties = { width: "100%", height: 48, boxSizing: "border-box", border: "1px solid #DCC4CC", borderRadius: 12, padding: "0 14px", fontSize: 15, color: DARK, background: "#FFFFFF", fontFamily: "inherit" };
@@ -76,6 +77,10 @@ export function InvitationEditor({ id }: { id: string }) {
   const [template, setTemplateState] = useState<InvitationTemplate>("classic");
   const [paid, setPaid] = useState(false);
   const [paying, setPaying] = useState(false);
+  // 이니시스 결제는 구매자 이메일이 필수라서 결제 직전에 한 번 받는다 (브라우저에서 포트원으로만 보내고 우리 DB에는 저장하지 않는다)
+  const [payEmail, setPayEmail] = useState("");
+  const [emailAsk, setEmailAsk] = useState(false);
+  const [emailErr, setEmailErr] = useState("");
   const [url, setUrl] = useState("");
   const [loadErr, setLoadErr] = useState("");
   const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
@@ -237,6 +242,11 @@ export function InvitationEditor({ id }: { id: string }) {
         focusMissing(miss);
         return setMsg(`발행하려면 ${miss.join(", ")}을(를) 먼저 입력해 주세요.`);
       }
+      if (!EMAIL_RE.test(payEmail.trim())) {
+        setEmailErr("");
+        setEmailAsk(true);
+        return;
+      }
       return startPayment();
     }
     await doPublish();
@@ -275,7 +285,7 @@ export function InvitationEditor({ id }: { id: string }) {
         payMethod: "신용카드",
         customerName: [latest.current?.groom, latest.current?.bride].filter(Boolean).join(" ") || "청첩장",
         customerPhone: d.phone ?? "",
-        customerEmail: "",
+        customerEmail: payEmail.trim(),
         redirectUrl: `${window.location.origin}/invitation/edit/${id}`,
       });
       if (!res.ok) return setMsg(res.message ?? "결제가 취소되었어요.");
@@ -598,6 +608,31 @@ export function InvitationEditor({ id }: { id: string }) {
             <button type="button" onClick={publish} style={{ flex: "2 1 0", justifyContent: "center", minHeight: 48, borderRadius: 24, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{publishLabel}</button>
           </div>
         </>
+      )}
+
+      {/* 결제 전 이메일 확인 (이니시스 필수 항목) */}
+      {emailAsk && (
+        <div role="dialog" aria-modal="true" aria-label="결제 이메일" style={{ position: "fixed", inset: 0, zIndex: 70, background: "rgba(51,35,42,0.5)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!EMAIL_RE.test(payEmail.trim())) return setEmailErr("이메일 주소를 확인해 주세요. 예: name@example.com");
+              setEmailAsk(false);
+              void startPayment();
+            }}
+            style={{ width: "100%", maxWidth: 420, background: "#FFFFFF", borderRadius: 22, padding: 28, boxSizing: "border-box" }}
+          >
+            <h2 style={{ margin: 0, fontFamily: fontSerif, fontSize: 20, fontWeight: 600 }}>결제 영수증을 받을 이메일</h2>
+            <p style={{ margin: "8px 0 16px", fontSize: 13.5, lineHeight: 1.7, color: "#6B5A60" }}>카드 결제에 필요한 정보예요. 결제 확인과 영수증에만 쓰이고, 웨딩버틀러에는 저장하지 않아요.</p>
+            <label htmlFor="payEmail" style={{ display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6 }}>이메일 <span style={{ fontSize: 11, fontWeight: 700, padding: "1px 7px", borderRadius: 999, color: "#B03A52", background: "#FBEAEE" }}>필수</span></label>
+            <input id="payEmail" type="email" inputMode="email" autoComplete="email" autoFocus value={payEmail} onChange={(e) => { setPayEmail(e.target.value); setEmailErr(""); }} placeholder="name@example.com" style={input} />
+            {emailErr && <p role="alert" style={{ margin: "8px 0 0", fontSize: 12.5, color: "#B03A52" }}>{emailErr}</p>}
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 20 }}>
+              <button type="button" onClick={() => setEmailAsk(false)} style={ghost}>닫기</button>
+              <button type="submit" style={{ minHeight: 44, padding: "0 22px", borderRadius: 22, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{`${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하기`}</button>
+            </div>
+          </form>
+        </div>
       )}
 
       {/* 발행 완료 */}
