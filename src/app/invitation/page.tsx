@@ -16,7 +16,7 @@ const INVITATION_OPEN = false;
 const EDITOR_PATH = "/invitation/new";
 
 const STEPS = [
-  { n: "1", title: "템플릿 고르기", body: "무료 템플릿 1종과 5,000원 템플릿 3종 중 마음에 드는 디자인을 고릅니다." },
+  { n: "1", title: "템플릿 고르기", body: "무료 템플릿 1종과 프리미엄 템플릿 3종(10,000원) 중 마음에 드는 디자인을 고릅니다." },
   { n: "2", title: "사진과 정보 넣기", body: "사진을 끌어다 놓고 이름, 예식 일시, 예식장을 입력합니다. 입력은 자동으로 저장돼요." },
   { n: "3", title: "미리 보고 보내기", body: "하객이 볼 화면 그대로 미리 본 뒤 발행하고, 주소를 복사해 카카오톡이나 문자로 보냅니다." },
 ];
@@ -32,25 +32,27 @@ const FEATURES = [
 
 const TEMPLATES = [
   { name: "클래식 아이보리", price: "무료", bg: "linear-gradient(180deg,#D9C9B2 0%,#8E7656 100%)", fg: "#FFFDF8", weight: 300 },
-  { name: "모던 미니멀", price: "5,000원", bg: "linear-gradient(180deg,#EDEDED 0%,#9A9A9A 100%)", fg: "#111111", weight: 800 },
-  { name: "보태니컬 그린", price: "5,000원", bg: "linear-gradient(180deg,#B7C9B5 0%,#6F8F76 100%)", fg: "#1F3A2C", weight: 400 },
-  { name: "로즈 에디토리얼", price: "5,000원", bg: "linear-gradient(180deg,#F1D3D8 0%,#C98A9C 100%)", fg: "#4A1F2E", weight: 400 },
+  { name: "모던 미니멀", price: "10,000원", bg: "linear-gradient(180deg,#EDEDED 0%,#9A9A9A 100%)", fg: "#111111", weight: 800 },
+  { name: "보태니컬 그린", price: "10,000원", bg: "linear-gradient(180deg,#B7C9B5 0%,#6F8F76 100%)", fg: "#1F3A2C", weight: 400 },
+  { name: "로즈 에디토리얼", price: "10,000원", bg: "linear-gradient(180deg,#F1D3D8 0%,#C98A9C 100%)", fg: "#4A1F2E", weight: 400 },
 ];
 
-const COMPARE: { label: string; free: string; paid: string }[] = [
-  { label: "지도·방명록·계좌 복사·축의 접수 안내", free: "포함", paid: "포함" },
-  { label: "배경음악", free: "샘플 음악", paid: "샘플 음악 + 내 음악 파일 올리기" },
-  { label: "사진", free: "12장", paid: "30장" },
-  { label: "주차 안내", free: "-", paid: "주차장 위치, 무료 시간, 만차 시 안내" },
-  { label: "예식장 메모", free: "-", paid: "식사, 셔틀버스, 포토부스, 화환 안내" },
-  { label: "제작자 대시보드", free: "-", paid: "방문 수, 방명록 관리, 공개·비공개 전환" },
-  { label: "하단 웨딩버틀러 표시", free: "있음", paid: "없음" },
+const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "샘플 배경음악", "사진 12장"];
+const FREE_LACKS = ["주차 안내", "예식장 메모", "내 음악 올리기", "제작자 대시보드", "하단에 웨딩버틀러 표시"];
+const PREMIUM_PLUS = [
+  { title: "프리미엄 템플릿 3종", body: "모던 미니멀, 보태니컬 그린, 로즈 에디토리얼 중 선택" },
+  { title: "주차 안내", body: "주차장 위치, 들어오는 길, 무료 시간, 만차 시 안내" },
+  { title: "예식장 메모", body: "식사 장소, 셔틀버스, 포토부스, 화환 안내" },
+  { title: "제작자 대시보드", body: "방문 수, 방명록 관리, 공개·비공개 전환" },
+  { title: "내 음악 올리기", body: "가지고 있는 음악 파일을 배경음악으로" },
+  { title: "사진 30장", body: "무료 12장보다 2.5배 많이" },
+  { title: "웨딩버틀러 표시 없음", body: "청첩장 하단이 깔끔하게" },
 ];
 
 const FAQ = [
   { q: "무료 템플릿은 정말 비용이 없나요?", a: "네. 클래식 아이보리 템플릿은 만들고 발행하고 고치는 데 비용이 들지 않습니다." },
-  { q: "유료 템플릿은 언제 결제하나요?", a: "만드는 동안에는 결제하지 않고, 발행할 때 5,000원을 카드로 한 번 결제합니다. 이후 고쳐도 다시 결제하지 않아요." },
-  { q: "제작자 대시보드는 무엇인가요?", a: "유료 템플릿으로 발행하면 만든 분만 볼 수 있는 대시보드 주소를 문자로 보내 드립니다. 청첩장을 몇 명이 열어 봤는지, 길찾기·계좌 복사를 몇 번 눌렀는지 확인하고 방명록을 관리할 수 있어요." },
+  { q: "프리미엄 템플릿은 언제 결제하나요?", a: "만드는 동안에는 결제하지 않고, 발행할 때 10,000원을 카드로 한 번 결제합니다. 이후 고쳐도 다시 결제하지 않아요." },
+  { q: "제작자 대시보드는 무엇인가요?", a: "프리미엄 템플릿으로 발행하면 만든 분만 볼 수 있는 대시보드 주소를 문자로 보내 드립니다. 청첩장을 몇 명이 열어 봤는지, 길찾기·계좌 복사를 몇 번 눌렀는지 확인하고 방명록을 관리할 수 있어요." },
   { q: "보낸 뒤에 고칠 수 있나요?", a: "언제든 고칠 수 있고, 고친 내용은 같은 주소에 바로 반영됩니다. 다시 보낼 필요가 없어요." },
   { q: "축의대 대행도 함께 맡길 수 있나요?", a: "네. 청첩장과 별도로 웨딩버틀러 축의대 대행을 예약하실 수 있습니다." },
 ];
@@ -108,7 +110,7 @@ function DashboardMock() {
     <div role="img" aria-label="제작자 대시보드 예시: 방문 수, 최근 7일 방문 그래프, 방명록 목록" style={{ width: "100%", maxWidth: 340, margin: "0 auto", borderRadius: 28, border: "8px solid #170E12", background: "#F3E9EB", padding: 14, boxSizing: "border-box", boxShadow: "0 18px 40px rgba(51,35,42,0.18)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
         <span style={{ fontSize: 14, fontWeight: 700, color: "#33232A" }}>내 청첩장 대시보드</span>
-        <span style={{ padding: "3px 9px", borderRadius: 10, background: "#F9EFF2", color: "#8E4E68", fontSize: 10, fontWeight: 700 }}>유료</span>
+        <span style={{ padding: "3px 9px", borderRadius: 10, background: "#F9EFF2", color: "#8E4E68", fontSize: 10, fontWeight: 700 }}>프리미엄</span>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 8 }}>
         {[["총 방문", "412"], ["오늘 방문", "24"], ["길찾기 누름", "54"], ["계좌 복사", "31"]].map(([l, v]) => (
@@ -194,7 +196,7 @@ export default function InvitationPage() {
               <br />
               미리 본 뒤 링크 하나로 하객에게 보내세요.
             </p>
-            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>유료 템플릿은 누가 봤는지 알 수 있는 제작자 대시보드까지 드려요.</p>
+            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>프리미엄 템플릿(10,000원)은 주차 안내·예식장 메모와 제작자 대시보드까지 드려요.</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
               <MakeButton big />
               <a href="#templates" style={{ display: "inline-flex", alignItems: "center", padding: "16px 26px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 15, fontWeight: 500, background: "#FFFFFF" }}>
@@ -276,7 +278,68 @@ export default function InvitationPage() {
         </div>
       </section>
 
-      {/* 유료: 제작자 대시보드 (강조) */}
+      {/* 무료와 프리미엄 비교 */}
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 1040, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <p style={eyebrow}>FREE &amp; PREMIUM</p>
+            <h2 style={h2}>
+              무료로도 충분하고,
+              <br />
+              프리미엄은 하객 안내까지 챙겨요
+            </h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,340px),1fr))", gap: 20, alignItems: "stretch" }}>
+            {/* 무료 */}
+            <div style={{ background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "1px solid #E7D5DA" }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#2F6B45" }}>무료</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>0원</div>
+              <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>클래식 아이보리 템플릿 1종</div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                {FREE_HAS.map((x) => (
+                  <li key={x} style={{ display: "flex", gap: 10, fontSize: 15, color: "#473A3F" }}>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style={{ flex: "0 0 auto", marginTop: 3 }}><path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="#5F8F6E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    {x}
+                  </li>
+                ))}
+                {FREE_LACKS.map((x) => (
+                  <li key={x} style={{ display: "flex", gap: 10, fontSize: 15, color: "#9A8189" }}>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style={{ flex: "0 0 auto", marginTop: 3 }}><path d="M5 9h8" stroke="#C4B2B8" strokeWidth="1.8" strokeLinecap="round" /></svg>
+                    <span>
+                      {x}
+                      {x !== "하단에 웨딩버틀러 표시" && (
+                        <span style={{ marginLeft: 8, padding: "2px 8px", borderRadius: 999, background: "#F9EFF2", color: "#8E4E68", fontSize: 11, fontWeight: 600, verticalAlign: "2px" }}>프리미엄 전용</span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 프리미엄 */}
+            <div style={{ position: "relative", background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "2px solid #A9647E", boxShadow: "0 18px 40px rgba(169,100,126,0.18)" }}>
+              <span style={{ position: "absolute", top: -14, right: 24, padding: "6px 14px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 13, fontWeight: 700 }}>추천</span>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#8E4E68" }}>프리미엄</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>10,000원</div>
+              <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>발행할 때 한 번 결제 · 고쳐도 추가 비용 없음</div>
+              <div style={{ padding: "12px 14px", borderRadius: 8, background: "#FBF6F7", fontSize: 14, color: "#473A3F", marginBottom: 16 }}>무료의 모든 기능, 그리고</div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
+                {PREMIUM_PLUS.map((x) => (
+                  <li key={x.title} style={{ display: "flex", gap: 10 }}>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style={{ flex: "0 0 auto", marginTop: 3 }}><circle cx="9" cy="9" r="8" fill="#A9647E" /><path d="M9 5.5v7M5.5 9h7" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" /></svg>
+                    <span>
+                      <span style={{ display: "block", fontSize: 15, fontWeight: 600, color: "#33232A" }}>{x.title}</span>
+                      <span style={{ display: "block", fontSize: 13, lineHeight: 1.6, color: "#6B5A60" }}>{x.body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 프리미엄: 제작자 대시보드 (강조) */}
       <section style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px)", background: "#33232A", color: "#F3E9EB" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div
@@ -295,9 +358,9 @@ export default function InvitationPage() {
                 누가 봤는지 확인하세요
               </h2>
               <p style={{ fontSize: 16, lineHeight: 1.9, color: "#E9D6DC", margin: "0 0 26px" }}>
-                5,000원 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
+                10,000원 프리미엄 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
               </p>
-              <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>유료 템플릿 3종에 모두 포함</span>
+              <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>프리미엄 템플릿 3종에 모두 포함</span>
             </div>
             <div>
               <DashboardMock />
@@ -313,36 +376,6 @@ export default function InvitationPage() {
                 <p style={{ fontSize: 14, lineHeight: 1.8, color: "#E9D6DC", margin: 0 }}>{d.body}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 무료와 유료 비교 */}
-      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", backgroundColor: "#FFFFFF9F" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <p style={eyebrow}>FREE &amp; PREMIUM</p>
-            <h2 style={h2}>무료로 충분하고, 유료는 더 친절해요</h2>
-          </div>
-          <div style={{ overflowX: "auto", background: "#FFFFFF", borderRadius: 4 }}>
-            <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", fontSize: 14 }}>
-              <thead>
-                <tr style={{ background: "#FBF6F7" }}>
-                  <th scope="col" style={{ textAlign: "left", padding: "16px 20px", fontWeight: 600, color: "#473A3F" }}>기능</th>
-                  <th scope="col" style={{ textAlign: "left", padding: "16px 20px", fontWeight: 600, color: "#2F6B45", width: "24%" }}>무료</th>
-                  <th scope="col" style={{ textAlign: "left", padding: "16px 20px", fontWeight: 600, color: "#8E4E68", width: "38%" }}>유료 5,000원</th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARE.map((r) => (
-                  <tr key={r.label} style={{ borderTop: "1px solid #F0E3E6" }}>
-                    <th scope="row" style={{ textAlign: "left", padding: "16px 20px", fontWeight: 500, color: "#33232A" }}>{r.label}</th>
-                    <td style={{ padding: "16px 20px", color: "#6B5A60" }}>{r.free}</td>
-                    <td style={{ padding: "16px 20px", color: "#473A3F" }}>{r.paid}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </section>
