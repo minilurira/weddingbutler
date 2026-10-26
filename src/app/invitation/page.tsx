@@ -31,7 +31,7 @@ function jsonLd() {
       inLanguage: "ko-KR",
       offers: [
         { "@type": "Offer", name: "클래식 아이보리 (무료)", price: "0", priceCurrency: "KRW" },
-        { "@type": "Offer", name: "프리미엄 템플릿", price: "10000", priceCurrency: "KRW" },
+        { "@type": "Offer", name: "프리미엄 템플릿", price: "20000", priceCurrency: "KRW" },
       ],
       publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
     },
@@ -50,7 +50,7 @@ const PREMIUM_OPEN = true;
 const EDITOR_PATH = "/invitation/new";
 
 const STEPS = [
-  { n: "1", title: "템플릿 고르기", body: "무료 템플릿 1종과 프리미엄 템플릿 3종(10,000원) 중 마음에 드는 디자인을 고릅니다." },
+  { n: "1", title: "템플릿 고르기", body: "무료 템플릿 1종과 프리미엄 템플릿 3종(20,000원) 중 마음에 드는 디자인을 고릅니다." },
   { n: "2", title: "사진과 정보 넣기", body: "사진을 끌어다 놓고 이름, 예식 일시, 예식장을 입력합니다. 입력은 자동으로 저장돼요." },
   { n: "3", title: "미리 보고 보내기", body: "하객이 볼 화면 그대로 미리 본 뒤 발행하고, 주소를 복사해 카카오톡이나 문자로 보냅니다." },
 ];
@@ -69,9 +69,9 @@ const SAMPLE_STRIP = ["p79", "p74", "p70", "p83", "p84", "p86", "p71", "p75", "p
 // 샘플 사진: public/img/invitation/ — 모두 AI로 생성한 이미지라 페이지에 그렇게 표시한다
 const TEMPLATES = [
   { key: "classic" as InvitationTemplate, name: "클래식 아이보리", price: "무료", img: "/img/invitation/p85.jpg", pos: "center 25%", weight: 300, gray: false, thumbs: ["p76", "p82", "p84"] },
-  { key: "modern" as InvitationTemplate, name: "모던 미니멀", price: "10,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
-  { key: "botanical" as InvitationTemplate, name: "보태니컬 그린", price: "10,000원", img: "/img/invitation/p78.jpg", pos: "center 30%", weight: 400, gray: false, thumbs: ["p72", "p75", "p81"] },
-  { key: "rose" as InvitationTemplate, name: "로즈 에디토리얼", price: "10,000원", img: "/img/invitation/p73.jpg", pos: "center 20%", weight: 400, gray: false, thumbs: ["p80", "p86", "p77"] },
+  { key: "modern" as InvitationTemplate, name: "모던 미니멀", price: "20,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
+  { key: "botanical" as InvitationTemplate, name: "보태니컬 그린", price: "20,000원", img: "/img/invitation/p78.jpg", pos: "center 30%", weight: 400, gray: false, thumbs: ["p72", "p75", "p81"] },
+  { key: "rose" as InvitationTemplate, name: "로즈 에디토리얼", price: "20,000원", img: "/img/invitation/p73.jpg", pos: "center 20%", weight: 400, gray: false, thumbs: ["p80", "p86", "p77"] },
 ];
 
 const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "사진 12장"];
@@ -86,7 +86,7 @@ const PREMIUM_PLUS = [
 
 const FAQ = [
   { q: "무료 템플릿은 정말 비용이 없나요?", a: "네. 클래식 아이보리 템플릿은 만들고 발행하고 고치는 데 비용이 들지 않습니다." },
-  { q: "프리미엄 템플릿은 언제 결제하나요?", a: "만드는 동안에는 결제하지 않고, 발행할 때 10,000원을 카드로 한 번 결제합니다. 이후 고쳐도 다시 결제하지 않아요." },
+  { q: "프리미엄 템플릿은 언제 결제하나요?", a: "만드는 동안에는 결제하지 않고, 발행할 때 20,000원을 카드로 한 번 결제합니다. 이후 고쳐도 다시 결제하지 않아요." },
   { q: "제작자 대시보드는 무엇인가요?", a: "프리미엄 템플릿으로 발행하면 만든 분만 볼 수 있는 대시보드 주소를 문자로 보내 드립니다. 청첩장을 몇 명이 열어 봤는지, 길찾기·계좌 복사를 몇 번 눌렀는지 확인하고 방명록을 관리할 수 있어요." },
   { q: "보낸 뒤에 고칠 수 있나요?", a: "언제든 고칠 수 있고, 고친 내용은 같은 주소에 바로 반영됩니다. 다시 보낼 필요가 없어요." },
   { q: "모바일 청첩장은 얼마나 오래 볼 수 있나요?", a: "발행일부터 6개월 동안 열려 있습니다. 예식일이 발행 후 6개월보다 더 남았다면 예식일 다음날까지 열려 있어요. 그 뒤에는 주소로 들어와도 보관 기간이 끝났다는 안내가 나옵니다. 무료와 프리미엄 모두 같습니다." },
@@ -241,7 +241,7 @@ export default function InvitationPage() {
               <br />
               미리 본 뒤 링크 하나로 하객에게 보내세요.
             </p>
-            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>프리미엄 템플릿(10,000원)은 주차 안내·예식장 메모와 제작자 대시보드까지 드려요{PREMIUM_OPEN ? "." : " (준비 중)."}</p>
+            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>프리미엄 템플릿(20,000원)은 주차 안내·예식장 메모와 제작자 대시보드까지 드려요{PREMIUM_OPEN ? "." : " (준비 중)."}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
               <MakeButton big />
               <a href="#templates" style={{ display: "inline-flex", alignItems: "center", padding: "16px 26px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 15, fontWeight: 500, background: "#FFFFFF" }}>
@@ -393,7 +393,7 @@ export default function InvitationPage() {
             <div style={{ position: "relative", background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "2px solid #A9647E", boxShadow: "0 18px 40px rgba(169,100,126,0.18)" }}>
               <span style={{ position: "absolute", top: -14, right: 24, padding: "6px 14px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 13, fontWeight: 700 }}>{PREMIUM_OPEN ? "추천" : "준비 중"}</span>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#8E4E68" }}>프리미엄</div>
-              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>10,000원</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>20,000원</div>
               <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>발행할 때 한 번 결제 · 고쳐도 추가 비용 없음</div>
               <div style={{ padding: "12px 14px", borderRadius: 8, background: "#FBF6F7", fontSize: 14, color: "#473A3F", marginBottom: 16 }}>무료의 모든 기능, 그리고</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
@@ -431,7 +431,7 @@ export default function InvitationPage() {
                 누가 봤는지 확인하세요
               </h2>
               <p style={{ fontSize: 16, lineHeight: 1.9, color: "#E9D6DC", margin: "0 0 26px" }}>
-                10,000원 프리미엄 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
+                20,000원 프리미엄 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
               </p>
               <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>프리미엄 템플릿 3종에 모두 포함{PREMIUM_OPEN ? "" : " · 준비 중"}</span>
             </div>

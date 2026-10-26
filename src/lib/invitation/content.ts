@@ -11,7 +11,7 @@ export const TEMPLATE_INFO: Record<InvitationTemplate, { name: string; premium: 
 };
 export const isTemplate = (v: unknown): v is InvitationTemplate => typeof v === "string" && (INVITATION_TEMPLATES as readonly string[]).includes(v);
 export const isPremium = (t: string) => isTemplate(t) && TEMPLATE_INFO[t].premium;
-export const PREMIUM_PRICE = 10000;
+export const PREMIUM_PRICE = 20000;
 
 export const GALLERY_MAX = 12; // 무료 템플릿
 export const GALLERY_MAX_PREMIUM = 30;
