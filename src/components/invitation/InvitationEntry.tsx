@@ -109,9 +109,19 @@ export function InvitationEntry() {
           <label htmlFor="invPhone" style={{ display: "block", fontSize: 14, fontWeight: 600, marginBottom: 8 }}>휴대폰 번호</label>
           <input id="invPhone" type="tel" inputMode="numeric" autoComplete="tel" placeholder="010-0000-0000" value={phone} onChange={(e) => setPhone(formatPhoneInput(e.target.value))} disabled={sent} style={field} />
           {!sent ? (
+            <>
+              <p style={{ margin: "12px 0 0", fontSize: 13, lineHeight: 1.7, color: "#6B5A60" }}>
+                <span aria-hidden="true" style={{ display: "inline-block", padding: "1px 8px", marginRight: 6, borderRadius: 999, background: "#FEE500", color: "#3A1D1D", fontSize: 11.5, fontWeight: 700 }}>알림톡</span>
+                인증번호는 <b>카카오톡 알림톡</b>으로 보내 드려요.
+              </p>
             <button type="button" onClick={sendCode} disabled={busy || phone.replace(/\D/g, "").length < 10} style={{ ...primary, marginTop: 14, opacity: busy || phone.replace(/\D/g, "").length < 10 ? 0.5 : 1 }}>인증번호 받기</button>
+            </>
           ) : (
             <>
+              <div role="status" style={{ margin: "16px 0 4px", padding: "14px 16px", borderRadius: 12, background: "#FFF9D6", border: "1px solid #F1E27A", color: "#3A1D1D", fontSize: 14, lineHeight: 1.7 }}>
+                <b>카카오톡 알림톡</b>으로 인증번호를 보냈어요. 카카오톡 알림을 확인해 주세요.
+                <div style={{ marginTop: 4, fontSize: 12.5, color: "#6B5A3A" }}>카카오톡을 쓰지 않는 번호는 문자로 도착해요. 1~2분이 지나도 오지 않으면 아래에서 다시 받아 보세요.</div>
+              </div>
               <label htmlFor="invCode" style={{ display: "block", fontSize: 14, fontWeight: 600, margin: "18px 0 8px" }}>인증번호 6자리</label>
               <input id="invCode" inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="000000" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))} style={{ ...field, letterSpacing: "0.3em", textAlign: "center" }} />
               <button type="button" onClick={verify} disabled={busy || code.length !== 6} style={{ ...primary, marginTop: 14, opacity: busy || code.length !== 6 ? 0.5 : 1 }}>확인하고 시작하기</button>
@@ -119,7 +129,7 @@ export function InvitationEntry() {
             </>
           )}
           {err && <p role="alert" style={{ margin: "14px 0 0", fontSize: 14, color: "#B03A52" }}>{err}</p>}
-          <p style={{ margin: "18px 0 0", fontSize: 12, lineHeight: 1.7, color: "#9A8189" }}>입력한 번호는 인증과 청첩장 관리에만 쓰입니다. 인증번호는 알림톡(또는 문자)으로 보내 드려요.</p>
+          <p style={{ margin: "18px 0 0", fontSize: 12, lineHeight: 1.7, color: "#9A8189" }}>입력한 번호는 인증과 청첩장 관리에만 쓰입니다. 인증번호는 카카오톡 알림톡(카카오톡을 쓰지 않으면 문자)으로 보내 드려요.</p>
         </div>
       )}
 
