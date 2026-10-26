@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InvitationView } from "@/components/invitation/InvitationView";
 import { TEMPLATE_OUTER_BG } from "@/lib/invitation/theme";
-import { isTemplate } from "@/lib/invitation/content";
+import { isPremium, isTemplate } from "@/lib/invitation/content";
+import { sessionPhone } from "@/lib/invitation/api";
 import { dateLabel } from "@/lib/invitation/content";
-import { getBySlug, isLive, photoBase } from "@/lib/invitation/store";
+import { getBySlug, isLive, isPaid, photoBase } from "@/lib/invitation/store";
 import { SITE_URL } from "@/lib/seo";
 
 function ExpiredNotice() {
@@ -50,8 +52,17 @@ export default async function InvitationPublicPage({ params }: { params: { slug:
     if (old && old.status === "published") return <ExpiredNotice />; // 공개였지만 보관 기간이 지난 청첩장
     notFound();
   }
+  // 만든 사람 본인이 자기 청첩장을 열었을 때만 관리로 돌아가는 길을 위에 띄운다 (하객에게는 보이지 않는다)
+  const owner = sessionPhone() === row.phone;
+  const pill: React.CSSProperties = { display: "inline-flex", alignItems: "center", minHeight: 40, padding: "0 16px", borderRadius: 20, background: "rgba(51,35,42,0.9)", color: "#FFFFFF", fontSize: 13, fontWeight: 600, textDecoration: "none", pointerEvents: "auto", boxShadow: "0 4px 14px rgba(0,0,0,0.25)" };
   return (
     <div style={{ background: isTemplate(row.template) ? TEMPLATE_OUTER_BG[row.template] : "#E9E2D6", minHeight: "100vh" }}>
+      {owner && (
+        <div style={{ position: "fixed", top: 10, left: 0, right: 0, zIndex: 60, display: "flex", justifyContent: "center", gap: 8, pointerEvents: "none" }}>
+          <Link href={`/invitation/edit/${row.id}`} style={pill}>← 내 청첩장 고치기</Link>
+          {isPremium(row.template) && isPaid(row) && <Link href={`/invitation/dashboard/${row.id}`} style={pill}>대시보드</Link>}
+        </div>
+      )}
       <InvitationView content={row.content} photoBase={photoBase()} slug={row.slug} template={row.template} />
     </div>
   );

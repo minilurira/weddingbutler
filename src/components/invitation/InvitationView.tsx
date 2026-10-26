@@ -421,6 +421,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
           <div style={{ fontFamily: fontDisplay, letterSpacing: "0.2em", color: "#A9647E" }}>WEDDING BUTLER</div>
           <div>웨딩버틀러 모바일 청첩장 · {names}</div>
           <div style={{ marginTop: 6 }}>축의대행과 모바일 청첩장은 <a href="https://weddingbutler.co.kr" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>웨딩버틀러</a>에 맡겨 보세요.</div>
+          {slug && !preview && <div style={{ marginTop: 14 }}><a href="/invitation/new" style={{ color: "inherit", opacity: 0.75, textDecoration: "underline" }}>청첩장을 만드셨나요? 내 청첩장 관리</a></div>}
         </div>
       </footer>
 
