@@ -79,7 +79,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
 
   const eyebrow: CSSProperties = { textAlign: tpl === "modern" ? "left" : "center", fontFamily: tpl === "rose" ? fontDisplay : SANS, fontSize: tpl === "rose" ? 15 : 11, fontStyle: tpl === "rose" ? "italic" : "normal", letterSpacing: tpl === "rose" ? "0.02em" : "0.3em", color: T.gold, marginBottom: 14, fontWeight: tpl === "modern" ? 500 : 400 };
   const sectionTitle: CSSProperties = { margin: "0 0 22px", textAlign: tpl === "modern" ? "left" : "center", fontSize: 20, fontWeight: tpl === "modern" ? 700 : 400, fontFamily: T.heading };
-  const outlineBtn: CSSProperties = { minHeight: 44, border: `1px solid ${tpl === "modern" ? T.ink : T.line}`, borderRadius: tpl === "botanical" ? 22 : T.radius, background: "transparent", color: T.accent, fontSize: 13, cursor: "pointer", fontFamily: "inherit" };
+  const outlineBtn: CSSProperties = { minHeight: 46, border: `1px solid ${tpl === "modern" ? "#D2D2D2" : T.line}`, borderRadius: tpl === "botanical" ? 23 : T.radius, background: T.card, color: tpl === "modern" ? T.ink : T.accent, fontSize: 13, fontWeight: 500, letterSpacing: "0.01em", cursor: "pointer", fontFamily: "inherit" };
   const pad = 28;
 
   const [toast, setToast] = useState("");
@@ -175,7 +175,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     }
   }
 
-  const input: CSSProperties = { height: 46, border: `1px solid ${tpl === "modern" ? T.ink : tpl === "classic" ? "#D9CDB8" : T.line}`, borderRadius: T.radius === 0 ? 0 : Math.min(T.radius, 12), padding: "0 14px", fontSize: 15, background: T.card, color: T.ink, boxSizing: "border-box", width: "100%", fontFamily: "inherit" };
+  const input: CSSProperties = { height: 46, border: `1px solid ${tpl === "modern" ? "#D8D8D8" : tpl === "classic" ? "#D9CDB8" : T.line}`, borderRadius: T.radius === 0 ? 0 : Math.min(T.radius, 12), padding: "0 14px", fontSize: 15, background: T.card, color: T.ink, boxSizing: "border-box", width: "100%", fontFamily: "inherit" };
 
   // 표지: 템플릿마다 사진 위에 글자를 올리는 방식이 다르다
   const coverImg = c.cover ? photoUrl(c.cover) : "";
@@ -234,9 +234,9 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     <section style={{ padding: `8px ${pad}px 56px` }}>
       <div style={eyebrow}>{eyebrowText}</div>
       <h2 style={sectionTitle}>{title}</h2>
-      <div style={{ border: `1px solid ${tpl === "modern" ? T.ink : T.line}`, borderRadius: T.radius, background: T.card, fontFamily: SANS, fontSize: 13, lineHeight: 1.75 }}>
+      <div style={{ border: `1px solid ${tpl === "modern" ? "#E2E2E2" : T.line}`, borderRadius: T.radius, background: T.card, fontFamily: SANS, fontSize: 13, lineHeight: 1.75, overflow: "hidden" }}>
         {rows.map(([k, v], i) => (
-          <div key={k} style={{ display: "flex", gap: 14, padding: "14px 16px", borderTop: i ? `1px solid ${tpl === "modern" ? T.ink : T.line}` : "none" }}>
+          <div key={k} style={{ display: "flex", gap: 14, padding: "14px 16px", borderTop: i ? `1px solid ${tpl === "modern" ? "#EDEDED" : T.line}` : "none" }}>
             <div style={{ flex: "0 0 74px", fontWeight: 700, color: T.accent }}>{k}</div>
             <div style={{ flex: 1, minWidth: 0, color: T.soft, wordBreak: "keep-all" }}>{v}</div>
           </div>
@@ -298,7 +298,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
           {links.length > 0 && (
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${links.length}, minmax(0,1fr))`, gap: 8 }}>
               {links.map((l) => (
-                <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" onClick={() => track("map")} style={{ ...outlineBtn, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>{l.label}</a>
+                <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" onClick={() => track("map")} style={{ ...outlineBtn, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>{l.label}<span aria-hidden="true" style={{ marginLeft: 4, fontSize: 11, opacity: 0.5 }}>↗</span></a>
               ))}
             </div>
           )}
