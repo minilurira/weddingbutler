@@ -333,3 +333,11 @@ button {
   .g-table td:not(:first-child)::before { content: attr(data-label) "  "; color: #A9647E; font-size: 12.5px; font-weight: 600; }
 }
 
+/* 상단 메뉴의 하위 메뉴(무료 청첩장 > 내 청첩장): 마우스를 올리거나 키보드로 들어가면 열린다 */
+.nav-dd { position: relative; }
+.nav-dd-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 14px; min-width: 150px; }
+.nav-dd:hover .nav-dd-menu, .nav-dd:focus-within .nav-dd-menu { display: block; }
+.nav-dd-box { display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E7D5DA; border-radius: 12px; padding: 8px; box-shadow: 0 10px 28px rgba(51, 35, 42, 0.12); }
+.nav-dd-box a { padding: 10px 14px; border-radius: 8px; white-space: nowrap; font-size: 14px; }
+.nav-dd-box a:hover { background: #F9EFF2; }
+

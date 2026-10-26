@@ -5,16 +5,27 @@ import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 
-const NAV = [
+type NavKey = "service" | "pricing" | "invitation" | "myinvitation" | "contact" | "lookup";
+interface NavItem { href: string; label: string; key: NavKey; children?: { href: string; label: string; key: NavKey }[] }
+
+// "무료 청첩장" 아래에 "내 청첩장"(만든 청첩장 관리·대시보드)을 하위 메뉴로 둔다
+const NAV: NavItem[] = [
   { href: "/service", label: "서비스", key: "service" },
   { href: "/pricing", label: "가격안내", key: "pricing" },
-  { href: "/invitation", label: "무료 청첩장", key: "invitation" },
-  { href: "/invitation/new", label: "내 청첩장", key: "myinvitation" },
+  {
+    href: "/invitation",
+    label: "무료 청첩장",
+    key: "invitation",
+    children: [
+      { href: "/invitation", label: "무료 청첩장 소개", key: "invitation" },
+      { href: "/invitation/new", label: "내 청첩장", key: "myinvitation" },
+    ],
+  },
   { href: "/contact", label: "문의하기", key: "contact" },
   { href: "/reservation/lookup", label: "예약조회", key: "lookup" },
-] as const;
+];
 
-export function Header({ active }: { active?: (typeof NAV)[number]["key"] }) {
+export function Header({ active }: { active?: NavKey }) {
   const { openModal } = useReservation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [testKey, setTestKey] = useState<string | null>(null);
@@ -80,15 +91,36 @@ export function Header({ active }: { active?: (typeof NAV)[number]["key"] }) {
         </Link>
         <div data-mq="nav-menu" style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <div style={{ display: "flex", gap: 26, fontSize: 14, fontWeight: 500 }}>
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{ color: active === item.key ? "#A9647E" : "#473A3F" }}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV.map((item) =>
+              item.children ? (
+                <div key={item.href} className="nav-dd">
+                  <Link
+                    href={item.href}
+                    aria-haspopup="true"
+                    style={{ color: active === item.key || active === "myinvitation" ? "#A9647E" : "#473A3F" }}
+                  >
+                    {item.label} <span aria-hidden="true" style={{ fontSize: 10, opacity: 0.6 }}>▾</span>
+                  </Link>
+                  <div className="nav-dd-menu">
+                    <div className="nav-dd-box">
+                      {item.children.map((c) => (
+                        <Link key={c.href} href={c.href} style={{ color: active === c.key ? "#A9647E" : "#473A3F" }}>
+                          {c.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{ color: active === item.key ? "#A9647E" : "#473A3F" }}
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </div>
           <button
             onClick={() => openModal()}
@@ -160,19 +192,37 @@ export function Header({ active }: { active?: (typeof NAV)[number]["key"] }) {
           }}
         >
           {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                padding: "16px 4px",
-                fontSize: 16,
-                color: active === item.key ? "#A9647E" : "#473A3F",
-                borderBottom: "1px solid #EBDCE0",
-              }}
-            >
-              {item.label}
-            </Link>
+            <div key={item.href} style={{ display: "flex", flexDirection: "column" }}>
+              <Link
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  padding: "16px 4px",
+                  fontSize: 16,
+                  color: active === item.key ? "#A9647E" : "#473A3F",
+                  borderBottom: item.children ? "none" : "1px solid #EBDCE0",
+                }}
+              >
+                {item.label}
+              </Link>
+              {item.children && (
+                <div style={{ display: "flex", flexDirection: "column", paddingBottom: 6, borderBottom: "1px solid #EBDCE0" }}>
+                  {item.children
+                    .filter((c) => c.href !== item.href)
+                    .map((c) => (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        onClick={() => setMenuOpen(false)}
+                        style={{ padding: "10px 4px 10px 20px", fontSize: 15, color: active === c.key ? "#A9647E" : "#6B5A60" }}
+                      >
+                        <span aria-hidden="true" style={{ color: "#C9AEB8", marginRight: 8 }}>└</span>
+                        {c.label}
+                      </Link>
+                    ))}
+                </div>
+              )}
+            </div>
           ))}
           <button
             onClick={openBookingFromMenu}
