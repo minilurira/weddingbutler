@@ -290,3 +290,10 @@ button {
   .review-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
   .review-track { animation: none; }
 }
+
+/* 무료 청첩장 소개: 좁은 화면에서는 히어로의 양옆 휴대폰을 숨긴다 */
+@media (max-width: 560px) {
+  [data-mq="inv-side"] {
+    display: none !important;
+  }
+}
