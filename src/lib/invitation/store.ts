@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
-import { PREMIUM_PRICE, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
+import { AUDIO_BUCKET, PREMIUM_PRICE, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
 import { newSlug } from "@/lib/invitation/guard";
 
 // 모바일 청첩장 DB 접근 (Supabase, 서버 전용). 테이블은 supabase/invitation.sql.
@@ -123,9 +123,34 @@ export async function deleteInvitation(id: string, phone: string): Promise<boole
   if (!row) return false;
   const { data: files } = await db.storage.from(PHOTO_BUCKET).list(id, { limit: 100 });
   if (files?.length) await db.storage.from(PHOTO_BUCKET).remove(files.map((f) => `${id}/${f.name}`));
+  const { data: songs } = await db.storage.from(AUDIO_BUCKET).list(id, { limit: 20 });
+  if (songs?.length) await db.storage.from(AUDIO_BUCKET).remove(songs.map((f) => `${id}/${f.name}`));
   const { error } = await db.from("invitations").delete().eq("id", id).eq("phone", phone);
   if (error) throw error;
   return true;
+}
+
+/** 직접 올린 배경음악(3MB 이하 mp3/m4a)을 저장소에 올리고 경로를 돌려준다. 저장소 설정(invitation_audio.sql)에서도 같은 형식·크기를 다시 막는다. */
+export async function uploadAudio(id: string, bytes: ArrayBuffer, type: "audio/mpeg" | "audio/mp4"): Promise<string> {
+  const path = `${id}/${crypto.randomBytes(9).toString("base64url")}.${type === "audio/mp4" ? "m4a" : "mp3"}`;
+  const { error } = await supabaseAdmin().storage.from(AUDIO_BUCKET).upload(path, bytes, { contentType: type, cacheControl: "31536000", upsert: false });
+  if (error) throw error;
+  return path;
+}
+
+export async function countAudio(id: string): Promise<number> {
+  const { data, error } = await supabaseAdmin().storage.from(AUDIO_BUCKET).list(id, { limit: 20 });
+  if (error) throw error;
+  return data?.length ?? 0;
+}
+
+/** 쓰지 않는 음악 파일 정리 (방금 올리고 아직 저장 전인 것은 10분 지난 뒤에 지운다) */
+export async function pruneUnusedAudio(id: string, content: InvitationContent): Promise<void> {
+  const db = supabaseAdmin();
+  const { data } = await db.storage.from(AUDIO_BUCKET).list(id, { limit: 20 });
+  const cutoff = Date.now() - 10 * 60 * 1000;
+  const stale = (data ?? []).filter((f) => `${id}/${f.name}` !== content.musicFile && f.created_at && new Date(f.created_at).getTime() < cutoff);
+  if (stale.length) await db.storage.from(AUDIO_BUCKET).remove(stale.map((f) => `${id}/${f.name}`));
 }
 
 /** 사진 한 장을 저장소에 올리고 경로를 돌려준다 */

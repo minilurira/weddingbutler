@@ -49,7 +49,9 @@ export interface InvitationContent {
   showContacts: boolean;
   contacts: InvitationContact[];
   receptStyle: number; // 0 정중하게 · 1 다정하게 · 2 간결하게
-  music: string; // 배경음악 곡 키(MUSIC_TRACKS) 또는 "" (없음)
+  music: string; // 배경음악: 곡 키(MUSIC_TRACKS) / "custom"(직접 올린 음악) / "" (없음)
+  musicFile: string; // 직접 올린 음악의 저장소 경로 (music이 "custom"일 때)
+  musicName: string; // 직접 올린 음악에 표시할 이름
   guestbook: boolean;
   // 프리미엄 전용 안내 (프리미엄 템플릿에서만 하객에게 보인다)
   parkingPlace: string;
@@ -118,6 +120,8 @@ export function defaultContent(): InvitationContent {
     ],
     receptStyle: 0,
     music: "",
+    musicFile: "",
+    musicName: "",
     guestbook: true,
     parkingPlace: "",
     parkingEntrance: "",
@@ -142,6 +146,12 @@ export function isOwnPhotoPath(id: string, v: unknown): v is string {
   return typeof v === "string" && new RegExp(`^${id}/[A-Za-z0-9_-]{6,64}\\.(jpg|webp)$`).test(v);
 }
 
+export const AUDIO_BUCKET = "invitation-audio";
+export const AUDIO_MAX_BYTES = 3 * 1024 * 1024;
+export function isOwnAudioPath(id: string, v: unknown): v is string {
+  return typeof v === "string" && new RegExp(`^${id}/[A-Za-z0-9_-]{6,64}\\.(mp3|m4a)$`).test(v);
+}
+
 export function sanitizeContent(id: string, raw: unknown, template = "classic"): InvitationContent {
   const d = defaultContent();
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
@@ -157,6 +167,8 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
   });
   const gallery = (Array.isArray(r.gallery) ? r.gallery : []).filter((p) => isOwnPhotoPath(id, p)).slice(0, galleryMax(template)) as string[];
   const recept = Number(r.receptStyle);
+  // 직접 올린 음악: 내 청첩장 폴더의 mp3/m4a 경로만 인정한다. "custom"으로 고르지 않았으면 쓰지 않는다.
+  const musicFile = r.music === "custom" && isOwnAudioPath(id, r.musicFile) ? r.musicFile : "";
   return {
     v: 1,
     groom: line(r.groom, 20),
@@ -185,7 +197,9 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
     showContacts: bool(r.showContacts, d.showContacts),
     contacts,
     receptStyle: recept === 1 || recept === 2 ? recept : 0,
-    music: typeof r.music === "string" && MUSIC_TRACKS.some((t) => t.key === r.music) ? r.music : "",
+    music: musicFile ? "custom" : typeof r.music === "string" && MUSIC_TRACKS.some((t) => t.key === r.music) ? r.music : "",
+    musicFile,
+    musicName: musicFile ? line(r.musicName, 40) : "",
     guestbook: bool(r.guestbook, d.guestbook),
     parkingPlace: line(r.parkingPlace, 60),
     parkingEntrance: line(r.parkingEntrance, 60),

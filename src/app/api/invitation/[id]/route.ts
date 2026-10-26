@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { notFound, publicUrl, serverError, sessionPhone, unauthorized } from "@/lib/invitation/api";
-import { deleteInvitation, getOwned, pruneUnusedPhotos, saveContent } from "@/lib/invitation/store";
+import { deleteInvitation, getOwned, pruneUnusedAudio, pruneUnusedPhotos, saveContent } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export async function PATCH(req: Request, { params }: Ctx) {
     const row = await saveContent(params.id, phone, body.content);
     if (!row) return notFound();
     await pruneUnusedPhotos(row.id, row.content).catch((err) => console.warn("[invitation] prune failed", err));
+    await pruneUnusedAudio(row.id, row.content).catch((err) => console.warn("[invitation] audio prune failed", err));
     return NextResponse.json({ ok: true, content: row.content, savedAt: row.updated_at });
   } catch (err) {
     return serverError("save", err);

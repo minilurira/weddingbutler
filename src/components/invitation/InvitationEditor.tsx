@@ -12,6 +12,7 @@ import {
   TEMPLATE_INFO,
   TITLES,
   dateLabel,
+  AUDIO_MAX_BYTES,
   MUSIC_TRACKS,
   endDate,
   formatPhoneDash,
@@ -83,6 +84,9 @@ export function InvitationEditor({ id }: { id: string }) {
   // 배경음악 미리듣기 (에디터에서 곡을 들어 보고 고른다)
   const previewAudio = useRef<HTMLAudioElement | null>(null);
   const [previewKey, setPreviewKey] = useState("");
+  const [musicOk, setMusicOk] = useState(false);
+  const [musicBusy, setMusicBusy] = useState(false);
+  const musicInput = useRef<HTMLInputElement>(null);
   useEffect(() => () => { previewAudio.current?.pause(); }, []);
   const [payEmail, setPayEmail] = useState("");
   const [emailAsk, setEmailAsk] = useState(false);
@@ -367,12 +371,32 @@ export function InvitationEditor({ id }: { id: string }) {
   function previewTrack(key: string) {
     previewAudio.current?.pause();
     if (previewKey === key) return setPreviewKey("");
-    const t = getMusic(key);
-    if (!t) return;
+    const custom = key === "custom" && latest.current?.musicFile ? `${photoBase.replace("/invitation-photos/", "/invitation-audio/")}${latest.current.musicFile}` : "";
+    const t = key === "custom" ? { src: custom } : getMusic(key);
+    if (!t || !t.src) return;
     const a = new Audio(t.src);
     a.onended = () => setPreviewKey("");
     previewAudio.current = a;
     a.play().then(() => setPreviewKey(key)).catch(() => { setPreviewKey(""); setMsg("음악을 재생하지 못했어요. 기기의 무음 설정을 확인해 주세요."); });
+  }
+
+  // 직접 올린 배경음악: 3MB 이하 mp3/m4a. 용량이 크면 올리기 전에 알려 준다.
+  async function uploadMusic(file: File) {
+    setMsg("");
+    if (file.size > AUDIO_MAX_BYTES) return setMsg("음악 파일이 너무 커요. 3MB 이하(3분 안팎의 MP3)만 올릴 수 있어요. 용량을 줄인 파일로 다시 올려 주세요.");
+    setMusicBusy(true);
+    try {
+      const r = await fetch(`/api/invitation/${id}/music`, { method: "POST", headers: { "Content-Type": file.type || "audio/mpeg" }, body: file });
+      const d = (await r.json().catch(() => ({}))) as { path?: string; error?: string };
+      if (!r.ok || !d.path) return setMsg(d.error === "bad_type" ? "mp3 또는 m4a 파일만 올릴 수 있어요." : d.error === "too_large" ? "음악 파일이 너무 커요. 3MB 이하만 올릴 수 있어요." : "음악을 올리지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
+      previewAudio.current?.pause();
+      setPreviewKey("");
+      update({ music: "custom", musicFile: d.path, musicName: file.name.replace(/\.[^.]+$/, "").slice(0, 40) });
+    } catch {
+      setMsg("음악을 올리지 못했어요. 인터넷 연결을 확인해 주세요.");
+    } finally {
+      setMusicBusy(false);
+    }
   }
 
   const publishLabel = paying ? "결제 진행 중…" : status === "published" ? "변경 내용 반영하기" : isPremium(template) && !paid ? `${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하고 발행` : "발행하기";
@@ -580,7 +604,29 @@ export function InvitationEditor({ id }: { id: string }) {
                 </div>
               ))}
             </div>
-            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>음악은 공유마당(한국저작권위원회)의 CC BY 곡이에요. 곡명·작곡가·출처는 청첩장 맨 아래에 자동으로 표시돼요.</p>
+            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>위 두 곡은 공유마당(한국저작권위원회)의 CC BY 곡이에요. 곡명·작곡가·출처는 청첩장 맨 아래에 자동으로 표시돼요.</p>
+
+            <div style={{ marginTop: 16, padding: "14px 16px", border: `1px dashed ${c.music === "custom" ? ACCENT : "#DCC4CC"}`, borderRadius: 14, background: c.music === "custom" ? "#F9EFF2" : "#FDFAFB" }}>
+              <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>내 음악 올리기</div>
+              <p style={{ margin: "0 0 10px", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>mp3 · m4a, <b>3MB 이하</b> (3분 안팎의 노래). 용량이 큰 파일은 음질을 낮춰 줄인 뒤 올려 주세요.</p>
+              {c.music === "custom" && c.musicFile ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <Field id="musicName" label="청첩장에 표시할 곡 이름"><input id="musicName" style={input} value={c.musicName} maxLength={40} placeholder="예: 우리의 노래" onChange={(e) => update({ musicName: e.target.value })} /></Field>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <button type="button" onClick={() => previewTrack("custom")} style={{ ...ghost, color: ACCENT, borderColor: ACCENT, fontWeight: 600 }}>{previewKey === "custom" ? "■ 멈춤" : "▶ 듣기"}</button>
+                    <button type="button" onClick={() => { previewAudio.current?.pause(); setPreviewKey(""); update({ music: "", musicFile: "", musicName: "" }); }} style={{ ...ghost, color: "#B25B4B" }}>삭제</button>
+                    <button type="button" disabled={!musicOk || musicBusy} onClick={() => musicInput.current?.click()} style={{ ...ghost, opacity: !musicOk || musicBusy ? 0.5 : 1 }}>다른 파일로 바꾸기</button>
+                  </div>
+                </div>
+              ) : (
+                <button type="button" disabled={!musicOk || musicBusy} onClick={() => musicInput.current?.click()} style={{ ...ghost, borderColor: ACCENT, color: ACCENT, fontWeight: 600, opacity: !musicOk || musicBusy ? 0.5 : 1 }}>{musicBusy ? "올리는 중…" : "음악 파일 올리기"}</button>
+              )}
+              <input ref={musicInput} type="file" accept="audio/mpeg,audio/mp4,audio/x-m4a,.mp3,.m4a" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void uploadMusic(f); }} />
+              <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 12, fontSize: 12.5, lineHeight: 1.7, color: "#6B5A60", cursor: "pointer" }}>
+                <input type="checkbox" checked={musicOk} onChange={(e) => setMusicOk(e.target.checked)} style={{ marginTop: 4, width: 18, height: 18, accentColor: ACCENT }} />
+                <span>이 음악을 청첩장에 쓸 수 있는 권리(직접 만든 곡이거나 사용 허락·라이선스)가 있음을 확인합니다. 저작권 문제가 확인되면 음악이 삭제될 수 있어요.</span>
+              </label>
+            </div>
           </Card>
 
           <Card title="축의 접수 안내" hint="모든 청첩장에 항상 들어가는 섹션이라 끌 수 없어요. 문구 분위기만 고를 수 있어요.">

@@ -85,7 +85,10 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
 
   const rootRef = useRef<HTMLDivElement>(null);
   // 배경음악: 하객이 직접 누를 때만 재생한다(자동 재생하지 않음). 곡이 바뀌거나 화면이 닫히면 멈춘다.
-  const song = getMusic(c.music);
+  const audioBase = photoBase.replace("/invitation-photos/", "/invitation-audio/");
+  const song = c.music === "custom" && c.musicFile
+    ? { title: c.musicName || "배경음악", artist: "직접 올린 음악", src: `${audioBase}${c.musicFile}`, sourceUrl: "", license: "" }
+    : getMusic(c.music);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
@@ -93,7 +96,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     audioRef.current = null;
     setPlaying(false);
     return () => { audioRef.current?.pause(); audioRef.current = null; };
-  }, [c.music]);
+  }, [c.music, c.musicFile]);
   function toggleMusic() {
     if (!song) return;
     if (!audioRef.current) { const a = new Audio(song.src); a.loop = true; a.preload = "auto"; audioRef.current = a; }
@@ -504,7 +507,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
             <div style={{ marginTop: 14 }}>
               {preview && musicButton(false)}
               <div style={{ marginTop: preview ? 10 : 0, fontSize: 11, lineHeight: 1.7, opacity: 0.8 }}>
-                ♪ <a href={song.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>{song.title}</a> · {song.artist} · 공유마당 · {song.license}
+                ♪ {song.sourceUrl ? <a href={song.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>{song.title}</a> : song.title} · {song.artist}{song.license ? ` · 공유마당 · ${song.license}` : ""}
               </div>
             </div>
           )}
