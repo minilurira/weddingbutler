@@ -30,11 +30,14 @@ const FEATURES = [
   { title: "축의 접수 안내", body: "예식 당일 축의대를 웨딩버틀러가 함께한다는 안내가 청첩장 아래에 들어갑니다." },
 ];
 
+const SAMPLE_STRIP = ["p79", "p74", "p70", "p83", "p84", "p86", "p71", "p75", "p72", "p76"];
+
+// 샘플 사진: public/img/invitation/ (예시용)
 const TEMPLATES = [
-  { name: "클래식 아이보리", price: "무료", bg: "linear-gradient(180deg,#D9C9B2 0%,#8E7656 100%)", fg: "#FFFDF8", weight: 300 },
-  { name: "모던 미니멀", price: "10,000원", bg: "linear-gradient(180deg,#EDEDED 0%,#9A9A9A 100%)", fg: "#111111", weight: 800 },
-  { name: "보태니컬 그린", price: "10,000원", bg: "linear-gradient(180deg,#B7C9B5 0%,#6F8F76 100%)", fg: "#1F3A2C", weight: 400 },
-  { name: "로즈 에디토리얼", price: "10,000원", bg: "linear-gradient(180deg,#F1D3D8 0%,#C98A9C 100%)", fg: "#4A1F2E", weight: 400 },
+  { name: "클래식 아이보리", price: "무료", img: "/img/invitation/p85.jpg", pos: "center 25%", weight: 300, gray: false, thumbs: ["p76", "p82", "p84"] },
+  { name: "모던 미니멀", price: "10,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
+  { name: "보태니컬 그린", price: "10,000원", img: "/img/invitation/p78.jpg", pos: "center 30%", weight: 400, gray: false, thumbs: ["p72", "p75", "p81"] },
+  { name: "로즈 에디토리얼", price: "10,000원", img: "/img/invitation/p73.jpg", pos: "center 20%", weight: 400, gray: false, thumbs: ["p80", "p86", "p77"] },
 ];
 
 const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "샘플 배경음악", "사진 12장"];
@@ -69,7 +72,11 @@ function Phone({ t, width, tilt = 0 }: { t: (typeof TEMPLATES)[number]; width: n
         aspectRatio: "9 / 18.5",
         borderRadius: width * 0.14,
         border: `${Math.max(5, Math.round(width * 0.035))}px solid #33232A`,
-        background: t.bg,
+        backgroundColor: "#6B5A60",
+        backgroundImage: `linear-gradient(180deg, rgba(30,20,24,0) 42%, rgba(30,20,24,0.72) 100%), url(${t.img})`,
+        backgroundSize: "cover",
+        backgroundPosition: t.pos,
+        filter: t.gray ? "grayscale(1)" : undefined,
         boxShadow: "0 18px 40px rgba(51,35,42,0.18)",
         transform: tilt ? `rotate(${tilt}deg)` : undefined,
         display: "flex",
@@ -78,14 +85,14 @@ function Phone({ t, width, tilt = 0 }: { t: (typeof TEMPLATES)[number]; width: n
         alignItems: "center",
         padding: `0 10px ${Math.round(width * 0.2)}px`,
         boxSizing: "border-box",
-        color: t.fg,
+        color: "#FFFFFF",
         textAlign: "center",
         flex: "0 0 auto",
       }}
     >
       <span style={{ fontSize: Math.max(7, width * 0.035), letterSpacing: "0.28em", marginBottom: width * 0.05 }}>WEDDING INVITATION</span>
       <span style={{ fontFamily: fontSerif, fontSize: width * 0.1, fontWeight: t.weight, letterSpacing: "0.06em" }}>민준 &amp; 서연</span>
-      <span style={{ width: width * 0.1, height: 1, background: t.fg, opacity: 0.7, margin: `${width * 0.05}px 0` }} />
+      <span style={{ width: width * 0.1, height: 1, background: "#FFFFFF", opacity: 0.7, margin: `${width * 0.05}px 0` }} />
       <span style={{ fontSize: Math.max(7, width * 0.042), lineHeight: 1.7 }}>2027. 5. 8 SAT 1PM</span>
     </div>
   );
@@ -217,6 +224,21 @@ export default function InvitationPage() {
         </div>
       </section>
 
+      {/* 샘플 사진 띠 */}
+      <section aria-label="샘플 청첩장 사진" style={{ padding: "0 0 clamp(48px,8vw,72px)" }}>
+        <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "4px clamp(18px,5vw,24px) 8px", scrollSnapType: "x mandatory" }}>
+          {SAMPLE_STRIP.map((n) => (
+            <span
+              key={n}
+              role="img"
+              aria-label="샘플 웨딩 사진"
+              style={{ flex: "0 0 auto", width: "clamp(150px,22vw,220px)", aspectRatio: "3 / 4", borderRadius: 6, backgroundImage: `url(/img/invitation/${n}.jpg)`, backgroundSize: "cover", backgroundPosition: "center 30%", scrollSnapAlign: "start" }}
+            />
+          ))}
+        </div>
+        <p style={{ textAlign: "center", fontSize: 13, color: "#9A8189", margin: "14px 0 0" }}>대표 사진 한 장과 갤러리 사진만 올리면, 템플릿이 알아서 어울리게 배치해요. (샘플 사진)</p>
+      </section>
+
       {/* 만드는 방법 */}
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", backgroundColor: "#FFFFFF9F" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
@@ -268,6 +290,11 @@ export default function InvitationPage() {
             {TEMPLATES.map((t) => (
               <div key={t.name} style={{ background: "#FFFFFF", borderRadius: 4, padding: "24px 12px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
                 <Phone t={t} width={120} />
+                <div aria-hidden="true" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 4, width: "100%", maxWidth: 170 }}>
+                  {t.thumbs.map((th) => (
+                    <span key={th} style={{ display: "block", aspectRatio: "1 / 1", borderRadius: 4, backgroundImage: `url(/img/invitation/${th}.jpg)`, backgroundSize: "cover", backgroundPosition: "center 30%", filter: t.gray ? "grayscale(1)" : undefined }} />
+                  ))}
+                </div>
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{t.name}</div>
                   <div style={{ marginTop: 6, display: "inline-block", padding: "4px 12px", borderRadius: 999, fontSize: 13, fontWeight: 600, background: t.price === "무료" ? "#E5F0E8" : "#F9EFF2", color: t.price === "무료" ? "#2F6B45" : "#8E4E68" }}>{t.price}</div>
