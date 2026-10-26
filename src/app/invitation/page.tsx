@@ -227,15 +227,22 @@ export default function InvitationPage() {
 
       {/* 샘플 사진 띠 */}
       <section aria-label="샘플 청첩장 사진" style={{ padding: "0 0 clamp(48px,8vw,72px)" }}>
-        <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "4px clamp(18px,5vw,24px) 8px", scrollSnapType: "x mandatory" }}>
-          {SAMPLE_STRIP.map((n) => (
-            <span
-              key={n}
-              role="img"
-              aria-label="AI로 생성한 샘플 웨딩 사진"
-              style={{ flex: "0 0 auto", width: "clamp(150px,22vw,220px)", aspectRatio: "3 / 4", borderRadius: 6, backgroundImage: `url(/img/invitation/${n}.jpg)`, backgroundSize: "cover", backgroundPosition: "center 30%", scrollSnapAlign: "start" }}
-            />
-          ))}
+        {/* 오른쪽 → 왼쪽으로 흐르는 띠: 홈 후기 띠(review-marquee)와 같은 CSS. 마우스를 올리면 멈춘다 */}
+        <div className="review-marquee" style={{ ["--review-gap" as string]: "12px", ["--review-dur" as string]: "60s", padding: "4px 0 8px" }}>
+          <div className="review-track">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="review-half" aria-hidden={copy === 1 ? true : undefined}>
+                {SAMPLE_STRIP.map((n) => (
+                  <span
+                    key={n}
+                    role="img"
+                    aria-label="AI로 생성한 샘플 웨딩 사진"
+                    style={{ flex: "0 0 auto", width: "clamp(150px,22vw,220px)", aspectRatio: "3 / 4", borderRadius: 6, backgroundImage: `url(/img/invitation/${n}.jpg)`, backgroundSize: "cover", backgroundPosition: "center 30%" }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
         <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.7, color: "#9A8189", margin: "14px 0 0", padding: "0 clamp(18px,5vw,24px)" }}>대표 사진 한 장과 갤러리 사진만 올리면, 템플릿이 알아서 어울리게 배치해요.<br />이 페이지의 웨딩 사진은 모두 AI로 생성한 샘플 이미지입니다.</p>
       </section>
