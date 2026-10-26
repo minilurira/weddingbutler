@@ -323,3 +323,13 @@ button {
   .inv-js .inv-reveal { opacity: 1; transform: none; transition: none; }
 }
 
+/* 안내 글(가이드)의 표: 좁은 화면에서는 가로로 밀지 않고 한 행씩 카드처럼 위아래로 보여 준다 */
+@media (max-width: 640px) {
+  .g-table { min-width: 0 !important; }
+  .g-table thead { display: none; }
+  .g-table tr { display: block; padding: 12px 0; border-bottom: 1px solid #F0E3E6; }
+  .g-table td { display: block; border: 0 !important; padding: 3px 2px !important; white-space: normal !important; min-width: 0 !important; }
+  .g-table td:first-child { font-size: 16px; padding-bottom: 6px !important; }
+  .g-table td:not(:first-child)::before { content: attr(data-label) "  "; color: #A9647E; font-size: 12.5px; font-weight: 600; }
+}
+

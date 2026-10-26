@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { OpenModalButton } from "@/components/OpenModalButton";
+import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 export const metadata: Metadata = {
-  title: "서비스 소개",
+  title: "축의대대행 · 축의대행 서비스 소개",
   description: "축의대행·축의금 대행 웨딩버틀러. 교육받은 버틀러가 접수부터 정산까지 책임집니다.",
   alternates: { canonical: "/service" },
 };
@@ -33,7 +34,7 @@ export default function ServicePage() {
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>OUR SERVICE</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대 대행 서비스</h1>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대대행 · 축의대행 서비스</h1>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.</p>
       </section>
 
@@ -96,6 +97,24 @@ export default function ServicePage() {
                 <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 820, margin: "0 auto" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>축의대대행이란 무엇인가요?</h2>
+          <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.95, color: "#473A3F" }}>
+            축의대대행(축의대행, 축의금 대행)은 결혼식 당일 축의대에서 하는 일, 즉 축의금 접수와 식권 배부, 답례품 전달, 정산과 인계를 전문 인력이 대신 맡는 서비스입니다. 가족과 지인에게 부탁하지 않아도 되고, 두 분과 양가 가족이 예식에 온전히 집중하실 수 있습니다.
+          </p>
+          <p style={{ margin: "0 0 18px", fontSize: 16, lineHeight: 1.95, color: "#473A3F" }}>
+            웨딩버틀러는 서울·경기 지역의 결혼식에서 축의대행을 운영하며, 결혼 준비 중이신 분들을 위해 무료 모바일청첩장(모바일 무료청첩장)도 함께 제공합니다.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 22px", fontSize: 15 }}>
+            <Link href="/guide/what-is-chuiuldaehaeng" style={{ color: "#8E4E68", textDecoration: "underline" }}>축의대행이란?</Link>
+            <Link href="/guide/cost" style={{ color: "#8E4E68", textDecoration: "underline" }}>축의대행 가격 비교</Link>
+            <Link href="/guide/settlement" style={{ color: "#8E4E68", textDecoration: "underline" }}>축의금 정산 방법</Link>
+            <Link href="/invitation" style={{ color: "#8E4E68", textDecoration: "underline" }}>무료 모바일청첩장 만들기</Link>
           </div>
         </div>
       </section>

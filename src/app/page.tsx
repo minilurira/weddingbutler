@@ -7,6 +7,7 @@ import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { PriceTeaserCards } from "@/components/home/PriceTeaserCards";
 import { ReviewMarquee } from "@/components/home/ReviewMarquee";
 import { RecordShowcase } from "@/components/home/RecordShowcase";
+import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 const SERVICE_STEPS = [
@@ -309,6 +310,29 @@ export default function HomePage() {
           </Reveal>
         </div>
         <ReviewMarquee reviews={REVIEWS} />
+      </section>
+
+      <section id="guide" style={{ padding: "clamp(60px,9vw,100px) clamp(18px,5vw,24px)" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <Reveal style={{ textAlign: "center", marginBottom: 36 }}>
+            <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>GUIDE</p>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 600, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.45 }}>축의대대행 · 축의대행,<br />무료 모바일청첩장까지 안내해 드려요</h2>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.9, color: "#6B5A60" }}>축의대행이 무엇인지, 비용과 인원은 어떻게 정해지는지, 무료 모바일청첩장은 어떻게 만드는지 모았습니다.</p>
+          </Reveal>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,270px),1fr))", gap: 12 }}>
+            {[
+              ["/guide/what-is-chuiuldaehaeng", "축의대행이란? 축의대대행이 하는 일"],
+              ["/guide/cost", "축의대행 가격 비교와 비용 계산"],
+              ["/guide/how-many-staff", "하객 수별 축의대 인원"],
+              ["/guide/vs-friend", "축의대행 vs 지인에게 부탁"],
+              ["/guide/free-mobile-invitation", "무료 모바일청첩장 만들기"],
+              ["/guide/invitation-greeting-examples", "모바일 청첩장 문구 예시"],
+            ].map(([href, label]) => (
+              <Link key={href} href={href} style={{ display: "block", background: "#FFFFFF", border: "1px solid #EFE0E4", borderRadius: 4, padding: "18px 20px", fontSize: 15.5, color: "#33232A", fontWeight: 500 }}>{label} <span aria-hidden="true" style={{ color: "#A9647E" }}>→</span></Link>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", margin: "22px 0 0", fontSize: 14 }}><Link href="/guide" style={{ color: "#8E4E68", textDecoration: "underline" }}>가이드 전체 보기</Link></p>
+        </div>
       </section>
 
       <section id="faq" style={{ padding: "clamp(64px,10vw,110px) clamp(18px,5vw,24px) clamp(70px,11vw,120px)", backgroundColor: "#FFFFFFBE" }}>
