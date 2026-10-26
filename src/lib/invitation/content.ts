@@ -1,9 +1,21 @@
 // 모바일 청첩장 내용(JSON)의 형태, 기본값, 입력값 정리. 서버와 브라우저가 함께 쓰는 순수 함수만 둔다.
 
-export const INVITATION_TEMPLATES = ["classic"] as const; // 1차는 무료 템플릿만
+export const INVITATION_TEMPLATES = ["classic", "modern", "botanical", "rose"] as const;
 export type InvitationTemplate = (typeof INVITATION_TEMPLATES)[number];
 
+export const TEMPLATE_INFO: Record<InvitationTemplate, { name: string; premium: boolean; blurb: string }> = {
+  classic: { name: "클래식 아이보리", premium: false, blurb: "따뜻한 아이보리와 세리프 글꼴" },
+  modern: { name: "모던 미니멀", premium: true, blurb: "흑백 대비와 큰 날짜 타이포" },
+  botanical: { name: "보태니컬 그린", premium: true, blurb: "세이지 그린과 부드러운 곡선" },
+  rose: { name: "로즈 에디토리얼", premium: true, blurb: "와인색과 이탤릭 영문 제목" },
+};
+export const isTemplate = (v: unknown): v is InvitationTemplate => typeof v === "string" && (INVITATION_TEMPLATES as readonly string[]).includes(v);
+export const isPremium = (t: string) => isTemplate(t) && TEMPLATE_INFO[t].premium;
+export const PREMIUM_PRICE = 10000;
+
 export const GALLERY_MAX = 12; // 무료 템플릿
+export const GALLERY_MAX_PREMIUM = 30;
+export const galleryMax = (template: string) => (isPremium(template) ? GALLERY_MAX_PREMIUM : GALLERY_MAX);
 export const ACCOUNT_MAX = 4;
 
 export interface InvitationAccount { who: string; bank: string; number: string; holder: string }
@@ -38,6 +50,15 @@ export interface InvitationContent {
   contacts: InvitationContact[];
   receptStyle: number; // 0 정중하게 · 1 다정하게 · 2 간결하게
   guestbook: boolean;
+  // 프리미엄 전용 안내 (프리미엄 템플릿에서만 하객에게 보인다)
+  parkingPlace: string;
+  parkingEntrance: string;
+  parkingFree: string;
+  parkingFull: string;
+  memoMeal: string;
+  memoShuttle: string;
+  memoPhoto: string;
+  memoWreath: string;
 }
 
 export const GREETINGS: [string, string][] = [
@@ -96,6 +117,14 @@ export function defaultContent(): InvitationContent {
     ],
     receptStyle: 0,
     guestbook: true,
+    parkingPlace: "",
+    parkingEntrance: "",
+    parkingFree: "",
+    parkingFull: "",
+    memoMeal: "",
+    memoShuttle: "",
+    memoPhoto: "",
+    memoWreath: "",
   };
 }
 
@@ -111,7 +140,7 @@ export function isOwnPhotoPath(id: string, v: unknown): v is string {
   return typeof v === "string" && new RegExp(`^${id}/[A-Za-z0-9_-]{6,64}\\.(jpg|webp)$`).test(v);
 }
 
-export function sanitizeContent(id: string, raw: unknown): InvitationContent {
+export function sanitizeContent(id: string, raw: unknown, template = "classic"): InvitationContent {
   const d = defaultContent();
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const date = typeof r.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.date) ? r.date : "";
@@ -124,7 +153,7 @@ export function sanitizeContent(id: string, raw: unknown): InvitationContent {
     const x = (c && typeof c === "object" ? c : {}) as Record<string, unknown>;
     return { label: line(x.label, 20), phone: digitsDash(x.phone, 15) };
   });
-  const gallery = (Array.isArray(r.gallery) ? r.gallery : []).filter((p) => isOwnPhotoPath(id, p)).slice(0, GALLERY_MAX) as string[];
+  const gallery = (Array.isArray(r.gallery) ? r.gallery : []).filter((p) => isOwnPhotoPath(id, p)).slice(0, galleryMax(template)) as string[];
   const recept = Number(r.receptStyle);
   return {
     v: 1,
@@ -155,6 +184,14 @@ export function sanitizeContent(id: string, raw: unknown): InvitationContent {
     contacts,
     receptStyle: recept === 1 || recept === 2 ? recept : 0,
     guestbook: bool(r.guestbook, d.guestbook),
+    parkingPlace: line(r.parkingPlace, 60),
+    parkingEntrance: line(r.parkingEntrance, 60),
+    parkingFree: line(r.parkingFree, 60),
+    parkingFull: line(r.parkingFull, 60),
+    memoMeal: line(r.memoMeal, 60),
+    memoShuttle: line(r.memoShuttle, 60),
+    memoPhoto: line(r.memoPhoto, 60),
+    memoWreath: line(r.memoWreath, 60),
   };
 }
 
