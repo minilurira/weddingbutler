@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { sessionPhone } from "@/lib/invitation/api";
-import { EVENT_KINDS, addEvent, getBySlug, type EventKind } from "@/lib/invitation/store";
+import { EVENT_KINDS, addEvent, getBySlug, isLive, type EventKind } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +20,7 @@ export async function POST(req: Request, { params }: { params: { slug: string } 
   if (typeof kind !== "string" || !(EVENT_KINDS as readonly string[]).includes(kind)) return NextResponse.json({ error: "invalid" }, { status: 400 });
   try {
     const row = await getBySlug(params.slug);
-    if (!row || row.status !== "published") return NextResponse.json({ ok: true }); // 없는 주소여도 조용히 넘긴다
+    if (!row || !isLive(row)) return NextResponse.json({ ok: true }); // 없는 주소여도 조용히 넘긴다
     if (sessionPhone() === row.phone) return NextResponse.json({ ok: true, skipped: "owner" });
     await addEvent(row.id, kind as EventKind, sourceOf(headers().get("user-agent") || ""));
     return NextResponse.json({ ok: true });

@@ -12,6 +12,7 @@ import {
   TEMPLATE_INFO,
   TITLES,
   dateLabel,
+  expiryDate,
   galleryMax,
   isPremium,
   missingForPublish,
@@ -336,7 +337,7 @@ export function InvitationEditor({ id }: { id: string }) {
           {msg && <div role="alert" style={{ marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FBE9E9", color: "#8A2F3D", fontSize: 14 }}>{msg}</div>}
           {missing.length > 0 && status !== "published" && <div style={{ marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FFFFFF", border: "1px dashed #C07E96", fontSize: 13, color: "#473A3F" }}>발행하려면 <b>{missing.join(", ")}</b>이(가) 필요해요.</div>}
 
-          <Card title="템플릿" hint={`프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드가 있고 하단 웨딩버틀러 표시가 없어요. 고르고 꾸미는 것은 무료이고, 결제는 발행할 때 한 번만 해요.`}>
+          <Card title="템플릿" hint={`프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드가 있어요. 고르고 꾸미는 것은 무료이고, 결제는 발행할 때 한 번만 해요.`}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
               {INVITATION_TEMPLATES.map((t) => (
                 <button key={t} type="button" aria-pressed={template === t} onClick={() => changeTemplate(t)} style={{ ...chip(template === t), borderRadius: 14, padding: "10px 12px", textAlign: "left", height: "auto" }}>
@@ -357,6 +358,7 @@ export function InvitationEditor({ id }: { id: string }) {
               <Field id="eHall" label="홀 이름 · 층"><input id="eHall" style={input} value={c.hall} placeholder="예: 그랜드홀 3층" onChange={(e) => update({ hall: e.target.value })} /></Field>
             </div>
             {c.date && <p style={{ margin: "14px 0 0", padding: "10px 14px", borderRadius: 10, background: "#FBF6F7", fontSize: 13 }}>청첩장에는 <b>{dateLabel(c)}</b>로 보여요.</p>}
+            <p style={{ margin: "10px 0 0", padding: "10px 14px", borderRadius: 10, background: "#FBF6F7", fontSize: 13, lineHeight: 1.7 }}>모바일 청첩장은 <b>예식일로부터 6개월</b> 동안 열려 있고, 그 뒤에는 보관 기간이 끝났다는 안내가 나와요.{c.date && expiryDate(c.date) ? <> 이 청첩장은 <b>{expiryDate(c.date)}</b>까지 볼 수 있어요.</> : " 예식 날짜를 정하지 않으면 만든 날부터 6개월이에요."} 하단에는 웨딩버틀러 표시가 들어가요.</p>
             <div style={{ display: "flex", gap: 18, marginTop: 10, flexWrap: "wrap", fontSize: 14, alignItems: "center" }}>
               <span style={{ display: "flex", alignItems: "center" }}>달력 보이기 <Switch on={c.showCalendar} label="달력 보이기" onChange={(v) => update({ showCalendar: v })} /></span>
               <span style={{ display: "flex", alignItems: "center" }}>D-day 보이기 <Switch on={c.showDday} label="D-day 보이기" onChange={(v) => update({ showDday: v })} /></span>

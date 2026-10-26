@@ -205,6 +205,24 @@ export function missingForPublish(c: InvitationContent): string[] {
   return miss;
 }
 
+// --- 보관 기간: 예식일(없으면 만든 날)로부터 6개월 ---
+
+export const KEEP_MONTHS = 6;
+
+/** 보관 만료일 YYYY-MM-DD. 예식일이 없으면 fallbackIso(만든 시각)를 기준으로 한다 */
+export function expiryDate(date: string, fallbackIso?: string): string | null {
+  const base = date || (fallbackIso ? new Date(new Date(fallbackIso).getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10) : "");
+  if (!base) return null;
+  const [y, m, d] = base.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1 + KEEP_MONTHS, d)).toISOString().slice(0, 10);
+}
+
+/** 만료일이 지났는지(한국 시간 기준, 만료일 당일까지는 열린다) */
+export function isExpired(date: string, fallbackIso?: string, now = Date.now()): boolean {
+  const e = expiryDate(date, fallbackIso);
+  return !!e && e < new Date(now + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
 // --- 화면 표시용 계산 ---
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];

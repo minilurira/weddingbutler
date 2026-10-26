@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
-import { PREMIUM_PRICE, defaultContent, galleryMax, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
+import { PREMIUM_PRICE, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
 import { newSlug } from "@/lib/invitation/guard";
 
 // 모바일 청첩장 DB 접근 (Supabase, 서버 전용). 테이블은 supabase/invitation.sql.
@@ -76,6 +76,11 @@ export async function getOwned(id: string, phone: string): Promise<InvitationRow
   const { data, error } = await supabaseAdmin().from("invitations").select(COLS).eq("id", id).eq("phone", phone).maybeSingle();
   if (error) throw error;
   return data ? normalize(data) : null;
+}
+
+/** 하객에게 열려 있는 청첩장: 공개 중이고 보관 기간(6개월)이 지나지 않았다 */
+export function isLive(row: InvitationRow): boolean {
+  return row.status === "published" && !isExpired(row.content.date, row.created_at);
 }
 
 export async function getBySlug(slug: string): Promise<InvitationRow | null> {

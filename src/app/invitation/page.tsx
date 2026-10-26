@@ -6,12 +6,42 @@ import { Footer } from "@/components/Footer";
 import { SamplePreviewButton } from "@/components/invitation/SamplePreviewButton";
 import type { InvitationTemplate } from "@/lib/invitation/content";
 import { fontDisplay, fontSerif } from "@/lib/style";
+import { INVITATION_DESCRIPTION, INVITATION_TITLE, OG_IMAGE, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "무료 모바일 청첩장 만들기",
-  description: "웨딩버틀러에서 모바일 청첩장을 무료로 만들고, 미리 본 뒤 링크 하나로 보내세요. 지도·방명록·계좌 복사까지 담았습니다.",
+  title: INVITATION_TITLE,
+  description: INVITATION_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
   alternates: { canonical: "/invitation" },
+  openGraph: { type: "website", locale: "ko_KR", url: `${SITE_URL}/invitation`, siteName: SITE_NAME, title: INVITATION_TITLE, description: INVITATION_DESCRIPTION, images: [{ url: OG_IMAGE, width: 1376, height: 768, alt: SITE_NAME }] },
 };
+
+// 검색 결과에 서비스 설명과 자주 묻는 질문이 잘 보이도록 구조화 데이터(JSON-LD)를 넣는다
+function jsonLd() {
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "웨딩버틀러 무료 모바일 청첩장",
+      alternateName: ["무료청첩장", "무료 모바일 청첩장", "모바일청첩장 만들기"],
+      url: `${SITE_URL}/invitation`,
+      description: INVITATION_DESCRIPTION,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      inLanguage: "ko-KR",
+      offers: [
+        { "@type": "Offer", name: "클래식 아이보리 (무료)", price: "0", priceCurrency: "KRW" },
+        { "@type": "Offer", name: "프리미엄 템플릿", price: "10000", priceCurrency: "KRW" },
+      ],
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+  ];
+}
 
 // 청첩장 에디터를 오픈하면 true로 바꾼다. false인 동안 "만들기" 버튼은 오픈 준비 중으로 보인다.
 const INVITATION_OPEN = true;
@@ -45,14 +75,13 @@ const TEMPLATES = [
 ];
 
 const FREE_HAS = ["클래식 아이보리 템플릿", "지도와 길 안내", "방명록 (욕설·광고 차단)", "계좌 복사", "사진 12장"];
-const FREE_LACKS = ["주차 안내", "예식장 메모", "제작자 대시보드", "하단에 웨딩버틀러 표시"];
+const FREE_LACKS = ["주차 안내", "예식장 메모", "제작자 대시보드"];
 const PREMIUM_PLUS = [
   { title: "프리미엄 템플릿 3종", body: "모던 미니멀, 보태니컬 그린, 로즈 에디토리얼 중 선택" },
   { title: "주차 안내", body: "주차장 위치, 들어오는 길, 무료 시간, 만차 시 안내" },
   { title: "예식장 메모", body: "식사 장소, 셔틀버스, 포토부스, 화환 안내" },
   { title: "제작자 대시보드", body: "방문 수, 방명록 관리, 공개·비공개 전환" },
   { title: "사진 30장", body: "무료 12장보다 2.5배 많이" },
-  { title: "웨딩버틀러 표시 없음", body: "청첩장 하단이 깔끔하게" },
 ];
 
 const FAQ = [
@@ -60,6 +89,8 @@ const FAQ = [
   { q: "프리미엄 템플릿은 언제 결제하나요?", a: "만드는 동안에는 결제하지 않고, 발행할 때 10,000원을 카드로 한 번 결제합니다. 이후 고쳐도 다시 결제하지 않아요." },
   { q: "제작자 대시보드는 무엇인가요?", a: "프리미엄 템플릿으로 발행하면 만든 분만 볼 수 있는 대시보드 주소를 문자로 보내 드립니다. 청첩장을 몇 명이 열어 봤는지, 길찾기·계좌 복사를 몇 번 눌렀는지 확인하고 방명록을 관리할 수 있어요." },
   { q: "보낸 뒤에 고칠 수 있나요?", a: "언제든 고칠 수 있고, 고친 내용은 같은 주소에 바로 반영됩니다. 다시 보낼 필요가 없어요." },
+  { q: "모바일 청첩장은 얼마나 오래 볼 수 있나요?", a: "예식일로부터 6개월 동안 열려 있습니다. 그 뒤에는 주소로 들어와도 보관 기간이 끝났다는 안내가 나옵니다. 예식일을 정하지 않았다면 만든 날부터 6개월이에요. 무료와 프리미엄 모두 같습니다." },
+  { q: "무료 모바일 청첩장에 웨딩버틀러 표시가 들어가나요?", a: "무료와 프리미엄 모두 청첩장 하단에 웨딩버틀러 표시와 축의 접수 안내가 들어갑니다. 축의대행과 모바일 청첩장을 함께 웨딩버틀러에 맡기실 수 있어요." },
   { q: "축의대 대행도 함께 맡길 수 있나요?", a: "네. 청첩장과 별도로 웨딩버틀러 축의대 대행을 예약하실 수 있습니다." },
 ];
 
@@ -180,6 +211,10 @@ function MakeButton({ big = false }: { big?: boolean }) {
 export default function InvitationPage() {
   return (
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB" }}>
+      {jsonLd().map((d, i) => (
+        // eslint-disable-next-line react/no-danger
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }} />
+      ))}
       <Header active="invitation" />
 
       {/* 히어로 */}
@@ -197,9 +232,9 @@ export default function InvitationPage() {
           <div>
             <p style={eyebrow}>MOBILE INVITATION</p>
             <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(28px,6.4vw,44px)", fontWeight: 600, margin: "0 0 20px", letterSpacing: "-0.02em", lineHeight: 1.35 }}>
-              모바일 청첩장,
+              무료 모바일 청첩장,
               <br />
-              무료로 만드세요
+              지금 만드세요
             </h1>
             <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 30px" }}>
               템플릿을 고르고 사진과 정보만 넣으면 완성됩니다.
@@ -347,9 +382,7 @@ export default function InvitationPage() {
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" style={{ flex: "0 0 auto", marginTop: 3 }}><path d="M5 9h8" stroke="#C4B2B8" strokeWidth="1.8" strokeLinecap="round" /></svg>
                     <span>
                       {x}
-                      {x !== "하단에 웨딩버틀러 표시" && (
-                        <span style={{ marginLeft: 8, padding: "2px 8px", borderRadius: 999, background: "#F9EFF2", color: "#8E4E68", fontSize: 11, fontWeight: 600, verticalAlign: "2px" }}>프리미엄 전용</span>
-                      )}
+                      <span style={{ marginLeft: 8, padding: "2px 8px", borderRadius: 999, background: "#F9EFF2", color: "#8E4E68", fontSize: 11, fontWeight: 600, verticalAlign: "2px" }}>프리미엄 전용</span>
                     </span>
                   </li>
                 ))}

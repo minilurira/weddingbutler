@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getBySlug, photoUrl } from "@/lib/invitation/store";
+import { getBySlug, isLive, photoUrl } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
 export const alt = "모바일 청첩장";
@@ -11,7 +11,7 @@ export const contentType = "image/png";
 // 글자는 넣지 않는다(한글 글꼴을 따로 싣지 않기 위해). 제목·날짜는 카카오톡이 og:title/description으로 보여 준다.
 export default async function Image({ params }: { params: { slug: string } }) {
   const row = await getBySlug(params.slug).catch(() => null);
-  const cover = row && row.status === "published" && row.content.cover ? photoUrl(row.content.cover) : "";
+  const cover = row && isLive(row) && row.content.cover ? photoUrl(row.content.cover) : "";
 
   return new ImageResponse(
     cover ? (

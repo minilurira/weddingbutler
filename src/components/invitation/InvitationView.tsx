@@ -415,13 +415,12 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
         {slug && !preview && (
           <button type="button" onClick={() => copyAndSay(window.location.href, "청첩장 주소를 복사했어요.", "copy_url")} style={{ ...outlineBtn, padding: "0 22px", borderRadius: tpl === "modern" ? 0 : 22 }}>청첩장 주소 복사</button>
         )}
-        {/* 프리미엄 템플릿에는 웨딩버틀러 표시가 없다 */}
-        {!premium && (
-          <div style={{ marginTop: 22 }}>
-            <div style={{ fontFamily: fontDisplay, letterSpacing: "0.2em", color: "#A9647E" }}>WEDDING BUTLER</div>
-            <div>웨딩버틀러 모바일 청첩장 · {names}</div>
-          </div>
-        )}
+        {/* 무료·프리미엄 모두 웨딩버틀러를 표시한다: 축의대행과 모바일 청첩장은 웨딩버틀러에 */}
+        <div style={{ marginTop: 22 }}>
+          <div style={{ fontFamily: fontDisplay, letterSpacing: "0.2em", color: "#A9647E" }}>WEDDING BUTLER</div>
+          <div>웨딩버틀러 모바일 청첩장 · {names}</div>
+          <div style={{ marginTop: 6 }}>축의대행과 모바일 청첩장은 <a href="https://weddingbutler.co.kr" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>웨딩버틀러</a>에 맡겨 보세요.</div>
+        </div>
       </footer>
 
       {toast && (

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { clientIp, notFound, serverError } from "@/lib/invitation/api";
 import { checkPassword, guestbookProblem, hashIp, hashPassword } from "@/lib/invitation/guard";
-import { addGuestbook, deleteGuestbook, getBySlug, getGuestbookHash, listGuestbook, recentGuestbookCount } from "@/lib/invitation/store";
+import { addGuestbook, deleteGuestbook, getBySlug, getGuestbookHash, isLive, listGuestbook, recentGuestbookCount } from "@/lib/invitation/store";
 import { recordSecret } from "@/lib/record-api";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,7 @@ type Ctx = { params: { slug: string } };
 
 async function openInvitation(slug: string) {
   const row = await getBySlug(slug);
-  return row && row.status === "published" && row.content.guestbook ? row : null;
+  return row && isLive(row) && row.content.guestbook ? row : null;
 }
 
 // 하객: 방명록 보기 (공개된 청첩장만)
@@ -52,7 +52,7 @@ export async function DELETE(req: Request, { params }: Ctx) {
   if (typeof body.entryId !== "string" || typeof body.password !== "string") return NextResponse.json({ error: "invalid" }, { status: 400 });
   try {
     const row = await getBySlug(params.slug);
-    if (!row || row.status !== "published") return notFound();
+    if (!row || !isLive(row)) return notFound();
     const hash = await getGuestbookHash(row.id, body.entryId);
     if (!hash) return notFound();
     if (!checkPassword(body.password, hash)) return NextResponse.json({ error: "wrong_password" }, { status: 403 });
