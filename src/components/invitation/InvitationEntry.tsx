@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
 
-interface Item { id: string; status: "draft" | "published" | "hidden"; url: string; groom: string; bride: string; date: string; updatedAt: string }
+interface Item { id: string; template: string; paid: boolean; status: "draft" | "published" | "hidden"; url: string; groom: string; bride: string; date: string; updatedAt: string }
 
 const STATUS: Record<Item["status"], string> = { draft: "작성 중", published: "공개 중", hidden: "비공개" };
 const card: CSSProperties = { maxWidth: 520, margin: "0 auto", background: "#FFFFFF", borderRadius: 6, padding: "clamp(24px,5vw,40px)", boxSizing: "border-box" };
@@ -135,7 +135,10 @@ export function InvitationEntry() {
                   <div style={{ fontSize: 16, fontWeight: 600 }}>{[it.groom, it.bride].filter(Boolean).join(" · ") || "이름을 입력해 주세요"}</div>
                   <div style={{ fontSize: 13, color: "#9A8189", marginTop: 2 }}>{it.date || "날짜 미정"} · <span style={{ color: it.status === "published" ? "#2F6B45" : "#8E4E68", fontWeight: 600 }}>{STATUS[it.status]}</span></div>
                 </div>
-                <Link href={`/invitation/edit/${it.id}`} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 18px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 14, fontWeight: 500 }}>고치기</Link>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  {it.paid && it.template !== "classic" && <Link href={`/invitation/dashboard/${it.id}`} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 18px", borderRadius: 999, border: "1px solid #A9647E", background: "#F9EFF2", color: "#8E4E68", fontSize: 14, fontWeight: 700 }}>대시보드</Link>}
+                  <Link href={`/invitation/edit/${it.id}`} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, padding: "0 18px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 14, fontWeight: 500 }}>고치기</Link>
+                </div>
               </div>
             ))}
           </div>

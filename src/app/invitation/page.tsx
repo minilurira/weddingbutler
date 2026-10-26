@@ -433,6 +433,10 @@ export default function InvitationPage() {
               <p style={{ fontSize: 16, lineHeight: 1.9, color: "#E9D6DC", margin: "0 0 26px" }}>
                 20,000원 프리미엄 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
               </p>
+              <div style={{ margin: "0 0 18px" }}>
+                <Link href="/invitation/dashboard" style={{ display: "inline-flex", alignItems: "center", minHeight: 48, padding: "0 24px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.55)", color: "#FFFFFF", fontSize: 15, fontWeight: 600 }}>내 대시보드 바로가기 →</Link>
+                <span style={{ display: "block", fontSize: 12.5, color: "#C9AEB8", marginTop: 8 }}>이미 프리미엄으로 발행하셨다면, 휴대폰 인증 후 바로 열려요.</span>
+              </div>
               <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>프리미엄 템플릿 3종에 모두 포함{PREMIUM_OPEN ? "" : " · 준비 중"}</span>
             </div>
             <div>
