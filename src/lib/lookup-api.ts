@@ -50,6 +50,11 @@ function adminOrigin() {
 
 /** 어드민 /api/public/lookup/<path> 에 POST. 연결이 안 되면 503 */
 export async function lookupAdmin(path: "otp" | "verify" | "reservations" | "cancel", body: object) {
+  return adminPublicPost(`lookup/${path}`, body);
+}
+
+/** 어드민 /api/public/<path> 에 POST (예약 조회·모바일 청첩장 인증이 함께 쓴다). 연결이 안 되면 503 */
+export async function adminPublicPost(path: string, body: object) {
   const origin = adminOrigin();
   const key = recordSecret();
   if (!origin || !key) {
@@ -57,7 +62,7 @@ export async function lookupAdmin(path: "otp" | "verify" | "reservations" | "can
     return { status: 503, body: { error: "unavailable" } as Record<string, unknown> };
   }
   try {
-    const res = await fetch(`${origin}/api/public/lookup/${path}`, {
+    const res = await fetch(`${origin}/api/public/${path}`, {
       method: "POST",
       cache: "no-store",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
