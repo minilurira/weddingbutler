@@ -36,8 +36,8 @@ export function sampleContent(template: InvitationTemplate): InvitationContent {
     ],
     showContacts: true,
     contacts: [
-      { label: "신랑", phone: "010-0000-0000" },
-      { label: "신부", phone: "010-0000-0000" },
+      { label: "신랑", phone: "010-0000-0000", kakao: "" },
+      { label: "신부", phone: "010-0000-0000", kakao: "" },
     ],
     parkingPlace: "예식장 건물 지하 1~3층",
     parkingEntrance: "○○로 쪽 입구",

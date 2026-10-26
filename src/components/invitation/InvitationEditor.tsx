@@ -13,6 +13,7 @@ import {
   TITLES,
   dateLabel,
   endDate,
+  formatPhoneDash,
   galleryMax,
   isPremium,
   missingForPublish,
@@ -279,6 +280,10 @@ export function InvitationEditor({ id }: { id: string }) {
       });
       if (!res.ok) return setMsg(res.message ?? "결제가 취소되었어요.");
       await confirmAndPublish(d.paymentId);
+    } catch (err) {
+      // 결제창을 열지 못한 경우(팝업 차단, 인터넷 문제 등)도 조용히 지나가지 않고 알린다
+      console.error("[invitation] payment failed to start", err);
+      setMsg("결제창을 열지 못했어요. 팝업 차단이 켜져 있다면 허용한 뒤 다시 눌러 주세요.");
     } finally {
       setPaying(false);
     }
@@ -343,6 +348,7 @@ export function InvitationEditor({ id }: { id: string }) {
   const setAccount = (i: number, patch: Partial<InvitationAccount>) => update({ accounts: c.accounts.map((a, j) => (j === i ? { ...a, ...patch } : a)) });
   const photoBox = (over: boolean): CSSProperties => ({ border: `2px dashed ${over ? ACCENT : "#DCC4CC"}`, borderRadius: 14, background: over ? "#F9EFF2" : "#FBF6F7", padding: 16, textAlign: "center" });
   const saveLabel = saveState === "saving" ? "저장 중…" : saveState === "error" ? "저장 실패 · 다시 시도 중" : savedAt ? `임시저장됨 · ${savedAt}` : "자동 저장됨";
+  const publishLabel = paying ? "결제 진행 중…" : status === "published" ? "변경 내용 반영하기" : isPremium(template) && !paid ? `${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하고 발행` : "발행하기";
   async function saveDraft() {
     setMsg("");
     if (!(await flush())) return setMsg("저장하지 못했어요. 인터넷 연결을 확인해 주세요.");
@@ -358,10 +364,10 @@ export function InvitationEditor({ id }: { id: string }) {
         <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", alignItems: "center", gap: 10, padding: "10px clamp(14px,3vw,24px)", flexWrap: "wrap" }}>
           <Link href="/invitation/new" style={{ fontSize: 14, color: "#6B5A60", minHeight: 44, display: "inline-flex", alignItems: "center" }}>← 내 청첩장</Link>
           <span style={{ fontSize: 12, color: saveState === "error" ? "#B03A52" : "#9A8189" }}>{saveLabel}</span>
-          {status !== "published" && <button type="button" onClick={() => void saveDraft()} style={{ ...ghost, minHeight: 36, padding: "0 14px", fontSize: 13 }}>임시저장</button>}
           <span style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: status === "published" ? "#2F6B45" : "#8E4E68" }}>{status === "published" ? "공개 중" : status === "hidden" ? "비공개" : "작성 중"}</span>
           {isPremium(template) && paid && <Link href={`/invitation/dashboard/${id}`} style={{ ...ghost, display: "inline-flex", alignItems: "center", textDecoration: "none" }}>대시보드</Link>}
           <button type="button" className="inv-only-narrow" onClick={() => setShowPreview(true)} style={ghost}>미리보기</button>
+          {status !== "published" && <button type="button" className="inv-hide-narrow" onClick={() => void saveDraft()} style={{ minHeight: 44, padding: "0 18px", borderRadius: 22, border: `1.5px solid ${ACCENT}`, background: "#FFFFFF", color: ACCENT, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>임시저장</button>}
           <button type="button" onClick={publish} style={{ minHeight: 44, padding: "0 22px", borderRadius: 22, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{paying ? "결제 진행 중…" : status === "published" ? "변경 내용 반영하기" : isPremium(template) && !paid ? `${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하고 발행` : "발행하기"}</button>
         </div>
       </header>
@@ -515,16 +521,21 @@ export function InvitationEditor({ id }: { id: string }) {
             </div>
           </Card>
 
-          <Card title="연락처" hint="켜면 하객 화면에 전화·문자 버튼이 생겨요. 번호는 버튼 안에만 들어가고 화면에 숫자로 보이지 않아요.">
+          <Card title="연락처" hint="켜면 하객 화면에 전화·문자(·카카오톡) 버튼이 생겨요. 번호는 버튼 안에만 들어가고 화면에 숫자로 보이지 않아요.">
             <div style={{ display: "flex", alignItems: "center", marginBottom: 8, fontSize: 14 }}>연락처 보이기 <Switch on={c.showContacts} label="연락처 보이기" onChange={(v) => update({ showContacts: v })} /></div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, opacity: c.showContacts ? 1 : 0.45 }}>
               {c.contacts.map((x, i) => (
-                <div key={i} style={{ display: "flex", gap: 8 }}>
-                  <input aria-label="이름" style={{ ...input, flex: "0 0 110px" }} value={x.label} placeholder="구분" onChange={(e) => update({ contacts: c.contacts.map((y, j) => (j === i ? { ...y, label: e.target.value } : y)) })} />
-                  <input aria-label="전화번호" type="tel" style={input} value={x.phone} placeholder="010-1234-5678" onChange={(e) => update({ contacts: c.contacts.map((y, j) => (j === i ? { ...y, phone: e.target.value } : y)) })} />
+                <div key={i} style={{ display: "flex", flexDirection: "column", gap: 8, padding: "12px 14px", border: `1px solid ${BORDER}`, borderRadius: 14, background: "#FDFAFB" }}>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <input aria-label="구분" style={{ ...input, flex: "0 0 110px" }} value={x.label} placeholder="구분" onChange={(e) => update({ contacts: c.contacts.map((y, j) => (j === i ? { ...y, label: e.target.value } : y)) })} />
+                    <input aria-label="전화번호" type="tel" inputMode="tel" style={input} value={formatPhoneDash(x.phone)} placeholder="010-1234-5678" onChange={(e) => update({ contacts: c.contacts.map((y, j) => (j === i ? { ...y, phone: formatPhoneDash(e.target.value) } : y)) })} />
+                  </div>
+                  <input aria-label="카카오톡 링크" style={input} value={x.kakao} placeholder="카카오톡 오픈채팅 링크 (선택) https://open.kakao.com/o/…" onChange={(e) => update({ contacts: c.contacts.map((y, j) => (j === i ? { ...y, kakao: e.target.value } : y)) })} />
+                  {x.kakao.trim() && !/^(?:https?:\/\/)?(?:open|pf)\.kakao\.com\//.test(x.kakao.trim()) && <p style={{ margin: 0, fontSize: 12, color: "#B03A52" }}>카카오톡 오픈채팅(open.kakao.com) 또는 채널(pf.kakao.com) 링크만 쓸 수 있어요.</p>}
                 </div>
               ))}
             </div>
+            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>카카오톡은 전화번호로 바로 대화를 열 수 없어서, <b>1:1 오픈채팅방 링크</b>를 붙여 넣으면 &lsquo;카카오톡&rsquo; 버튼이 생겨요. (카카오톡 → 채팅 → 오픈채팅 → 새로 만들기 → 1:1 채팅)</p>
           </Card>
 
           <Card title="축의 접수 안내" hint="모든 청첩장에 항상 들어가는 섹션이라 끌 수 없어요. 문구 분위기만 고를 수 있어요.">
@@ -576,6 +587,17 @@ export function InvitationEditor({ id }: { id: string }) {
           <button type="button" onClick={() => setShowPreview(false)} style={{ position: "fixed", top: 12, right: 12, zIndex: 61, minHeight: 44, padding: "0 20px", borderRadius: 22, border: 0, background: DARK, color: "#FFF", fontSize: 14, cursor: "pointer" }}>닫기</button>
           {preview}
         </div>
+      )}
+
+      {/* 좁은 화면(휴대폰): 임시저장·발행을 화면 아래에 고정해 항상 보이게 한다 */}
+      {status !== "published" && (
+        <>
+          <div className="inv-only-narrow" aria-hidden="true" style={{ height: 84 }} />
+          <div className="inv-only-narrow" style={{ position: "fixed", left: 0, right: 0, bottom: 0, zIndex: 45, gap: 10, padding: "10px 14px calc(10px + env(safe-area-inset-bottom))", background: "#FFFFFF", borderTop: `1px solid ${BORDER}`, boxShadow: "0 -6px 20px rgba(51,35,42,0.08)" }}>
+            <button type="button" onClick={() => void saveDraft()} style={{ flex: "1 1 0", justifyContent: "center", minHeight: 48, borderRadius: 24, border: `1.5px solid ${ACCENT}`, background: "#FFFFFF", color: ACCENT, fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>임시저장</button>
+            <button type="button" onClick={publish} style={{ flex: "2 1 0", justifyContent: "center", minHeight: 48, borderRadius: 24, border: 0, background: ACCENT, color: "#FFFFFF", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>{publishLabel}</button>
+          </div>
+        </>
       )}
 
       {/* 발행 완료 */}

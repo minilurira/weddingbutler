@@ -355,6 +355,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
                 <span style={{ flex: 1, textAlign: "left", fontSize: 14 }}>{x.label}</span>
                 <a href={`tel:${x.phone}`} onClick={() => track("call")} style={{ ...outlineBtn, display: "flex", alignItems: "center", padding: "0 14px", textDecoration: "none" }}>전화</a>
                 <a href={`sms:${x.phone}`} onClick={() => track("sms")} style={{ ...outlineBtn, display: "flex", alignItems: "center", padding: "0 14px", textDecoration: "none" }}>문자</a>
+                {x.kakao && <a href={x.kakao} target="_blank" rel="noopener noreferrer" style={{ ...outlineBtn, display: "flex", alignItems: "center", padding: "0 14px", textDecoration: "none" }}>카카오톡</a>}
               </div>
             ))}
           </div>

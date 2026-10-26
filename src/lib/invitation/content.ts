@@ -19,7 +19,7 @@ export const galleryMax = (template: string) => (isPremium(template) ? GALLERY_M
 export const ACCOUNT_MAX = 4;
 
 export interface InvitationAccount { who: string; bank: string; number: string; holder: string }
-export interface InvitationContact { label: string; phone: string }
+export interface InvitationContact { label: string; phone: string; kakao: string }
 
 export interface InvitationContent {
   v: 1;
@@ -112,8 +112,8 @@ export function defaultContent(): InvitationContent {
     ],
     showContacts: false,
     contacts: [
-      { label: "신랑", phone: "" },
-      { label: "신부", phone: "" },
+      { label: "신랑", phone: "", kakao: "" },
+      { label: "신부", phone: "", kakao: "" },
     ],
     receptStyle: 0,
     guestbook: true,
@@ -151,7 +151,7 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
   });
   const contacts = (Array.isArray(r.contacts) ? r.contacts : d.contacts).slice(0, 6).map((c) => {
     const x = (c && typeof c === "object" ? c : {}) as Record<string, unknown>;
-    return { label: line(x.label, 20), phone: digitsDash(x.phone, 15) };
+    return { label: line(x.label, 20), phone: digitsDash(x.phone, 15), kakao: kakaoLink(x.kakao) };
   });
   const gallery = (Array.isArray(r.gallery) ? r.gallery : []).filter((p) => isOwnPhotoPath(id, p)).slice(0, galleryMax(template)) as string[];
   const recept = Number(r.receptStyle);
@@ -203,6 +203,22 @@ export function missingForPublish(c: InvitationContent): string[] {
   if (!c.date) miss.push("예식 날짜");
   if (!c.venue.trim()) miss.push("예식장 이름");
   return miss;
+}
+
+/** 카카오톡 오픈채팅·채널 링크만 허용한다(그 밖의 주소는 버린다). https로 맞춘다. */
+export function kakaoLink(v: unknown): string {
+  if (typeof v !== "string") return "";
+  const t = v.trim().slice(0, 200);
+  const m = /^(?:https?:\/\/)?((?:open|pf)\.kakao\.com\/[A-Za-z0-9_\-\/.?=&%]+)$/.exec(t);
+  return m ? `https://${m[1]}` : "";
+}
+
+/** 입력한 번호를 010-1234-5678 모양으로 (숫자만 11자리까지) */
+export function formatPhoneDash(v: string): string {
+  const d = String(v ?? "").replace(/\D/g, "").slice(0, 11);
+  if (d.length < 4) return d;
+  if (d.length < 8) return `${d.slice(0, 3)}-${d.slice(3)}`;
+  return d.length <= 10 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
 }
 
 // --- 보관 기간: 발행일부터 6개월. 예식일이 그보다 늦으면 예식일 다음날까지 ---
