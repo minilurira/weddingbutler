@@ -23,7 +23,8 @@ export async function POST(req: Request) {
     const res = await cancelPortOnePayment(paymentId, `모바일 청첩장 결제 취소: ${reason}`);
     if (!res.ok) return NextResponse.json({ code: "pg_failed", message: res.message }, { status: 502 });
     await applyCancellation(order, order.amount, reason, after);
-    return NextResponse.json({ code: "ok", alreadyCancelled: res.alreadyCancelled, refunded: order.amount });
+    // 어드민이 고객에게 환불 안내 문자를 보낼 수 있게 연락처를 함께 돌려준다(이미 취소된 건에는 주지 않아 중복 안내를 막는다)
+    return NextResponse.json({ code: "ok", alreadyCancelled: res.alreadyCancelled, refunded: order.amount, notify: { phone: order.phone, groom: order.groom, bride: order.bride } });
   } catch (err) {
     console.error("[admin invitation-orders cancel] failed", err);
     return NextResponse.json({ code: "server_error", message: "취소 처리 중 오류가 났습니다. 포트원에서 취소 여부를 확인해 주세요." }, { status: 500 });

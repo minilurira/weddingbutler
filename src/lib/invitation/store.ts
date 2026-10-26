@@ -355,10 +355,10 @@ export async function listOrders(fromIso: string, untilIso: string): Promise<Adm
   }));
 }
 
-export async function getOrderByPayment(paymentId: string): Promise<{ id: string; invitationId: string | null; amount: number; status: string } | null> {
-  const { data, error } = await supabaseAdmin().from("invitation_orders").select("id, invitation_id, amount, status").eq("payment_id", paymentId).maybeSingle();
+export async function getOrderByPayment(paymentId: string): Promise<{ id: string; invitationId: string | null; amount: number; status: string; phone: string; groom: string; bride: string } | null> {
+  const { data, error } = await supabaseAdmin().from("invitation_orders").select("id, invitation_id, amount, status, phone, groom, bride").eq("payment_id", paymentId).maybeSingle();
   if (error) throw error;
-  return data ? { id: data.id, invitationId: data.invitation_id, amount: data.amount, status: data.status } : null;
+  return data ? { id: data.id, invitationId: data.invitation_id, amount: data.amount, status: data.status, phone: data.phone ?? "", groom: data.groom ?? "", bride: data.bride ?? "" } : null;
 }
 
 /**
