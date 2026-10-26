@@ -12,8 +12,10 @@ import {
   TEMPLATE_INFO,
   TITLES,
   dateLabel,
+  MUSIC_TRACKS,
   endDate,
   formatPhoneDash,
+  getMusic,
   galleryMax,
   isPremium,
   missingForPublish,
@@ -78,6 +80,10 @@ export function InvitationEditor({ id }: { id: string }) {
   const [paid, setPaid] = useState(false);
   const [paying, setPaying] = useState(false);
   // 이니시스 결제는 구매자 이메일이 필수라서 결제 직전에 한 번 받는다 (브라우저에서 포트원으로만 보내고 우리 DB에는 저장하지 않는다)
+  // 배경음악 미리듣기 (에디터에서 곡을 들어 보고 고른다)
+  const previewAudio = useRef<HTMLAudioElement | null>(null);
+  const [previewKey, setPreviewKey] = useState("");
+  useEffect(() => () => { previewAudio.current?.pause(); }, []);
   const [payEmail, setPayEmail] = useState("");
   const [emailAsk, setEmailAsk] = useState(false);
   const [emailErr, setEmailErr] = useState("");
@@ -358,6 +364,17 @@ export function InvitationEditor({ id }: { id: string }) {
   const setAccount = (i: number, patch: Partial<InvitationAccount>) => update({ accounts: c.accounts.map((a, j) => (j === i ? { ...a, ...patch } : a)) });
   const photoBox = (over: boolean): CSSProperties => ({ border: `2px dashed ${over ? ACCENT : "#DCC4CC"}`, borderRadius: 14, background: over ? "#F9EFF2" : "#FBF6F7", padding: 16, textAlign: "center" });
   const saveLabel = saveState === "saving" ? "저장 중…" : saveState === "error" ? "저장 실패 · 다시 시도 중" : savedAt ? `임시저장됨 · ${savedAt}` : "자동 저장됨";
+  function previewTrack(key: string) {
+    previewAudio.current?.pause();
+    if (previewKey === key) return setPreviewKey("");
+    const t = getMusic(key);
+    if (!t) return;
+    const a = new Audio(t.src);
+    a.onended = () => setPreviewKey("");
+    previewAudio.current = a;
+    a.play().then(() => setPreviewKey(key)).catch(() => { setPreviewKey(""); setMsg("음악을 재생하지 못했어요. 기기의 무음 설정을 확인해 주세요."); });
+  }
+
   const publishLabel = paying ? "결제 진행 중…" : status === "published" ? "변경 내용 반영하기" : isPremium(template) && !paid ? `${PREMIUM_PRICE.toLocaleString("ko-KR")}원 결제하고 발행` : "발행하기";
   async function saveDraft() {
     setMsg("");
@@ -546,6 +563,24 @@ export function InvitationEditor({ id }: { id: string }) {
               ))}
             </div>
             <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>카카오톡은 전화번호로 바로 대화를 열 수 없어서, <b>1:1 오픈채팅방 링크</b>를 붙여 넣으면 &lsquo;카카오톡&rsquo; 버튼이 생겨요. (카카오톡 → 채팅 → 오픈채팅 → 새로 만들기 → 1:1 채팅)</p>
+          </Card>
+
+          <Card title="배경음악" hint="하객이 청첩장에서 ‘배경음악’ 버튼을 누르면 재생돼요. 자동으로 재생되지 않아서 조용한 곳에서도 부담이 없어요.">
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <button type="button" aria-pressed={!c.music} style={{ ...chip(!c.music), borderRadius: 14, textAlign: "left", height: "auto", padding: "12px 14px" }} onClick={() => { previewAudio.current?.pause(); setPreviewKey(""); update({ music: "" }); }}>
+                <span style={{ display: "block", fontSize: 14, fontWeight: 700 }}>음악 없음</span>
+              </button>
+              {MUSIC_TRACKS.map((t) => (
+                <div key={t.key} style={{ display: "flex", gap: 8, alignItems: "stretch" }}>
+                  <button type="button" aria-pressed={c.music === t.key} style={{ ...chip(c.music === t.key), flex: 1, borderRadius: 14, textAlign: "left", height: "auto", padding: "12px 14px" }} onClick={() => update({ music: t.key })}>
+                    <span style={{ display: "block", fontSize: 14, fontWeight: 700 }}>{t.title}</span>
+                    <span style={{ display: "block", fontSize: 12, color: "#9A8189", marginTop: 2 }}>{t.artist}</span>
+                  </button>
+                  <button type="button" aria-label={`${t.title} ${previewKey === t.key ? "멈추기" : "미리듣기"}`} onClick={() => previewTrack(t.key)} style={{ ...ghost, minWidth: 88, borderRadius: 14, color: ACCENT, borderColor: ACCENT, fontWeight: 600 }}>{previewKey === t.key ? "■ 멈춤" : "▶ 듣기"}</button>
+                </div>
+              ))}
+            </div>
+            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>음악은 공유마당(한국저작권위원회)의 CC BY 곡이에요. 곡명·작곡가·출처는 청첩장 맨 아래에 자동으로 표시돼요.</p>
           </Card>
 
           <Card title="축의 접수 안내" hint="모든 청첩장에 항상 들어가는 섹션이라 끌 수 없어요. 문구 분위기만 고를 수 있어요.">

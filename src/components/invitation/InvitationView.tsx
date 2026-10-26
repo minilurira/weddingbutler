@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
+  getMusic,
   RECEPT_TEXTS,
   dateLabel,
   daysUntil,
@@ -83,6 +84,23 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
   const pad = 28;
 
   const rootRef = useRef<HTMLDivElement>(null);
+  // 배경음악: 하객이 직접 누를 때만 재생한다(자동 재생하지 않음). 곡이 바뀌거나 화면이 닫히면 멈춘다.
+  const song = getMusic(c.music);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    audioRef.current?.pause();
+    audioRef.current = null;
+    setPlaying(false);
+    return () => { audioRef.current?.pause(); audioRef.current = null; };
+  }, [c.music]);
+  function toggleMusic() {
+    if (!song) return;
+    if (!audioRef.current) { const a = new Audio(song.src); a.loop = true; a.preload = "auto"; audioRef.current = a; }
+    const a = audioRef.current;
+    if (a.paused) a.play().then(() => setPlaying(true)).catch(() => { setPlaying(false); say("음악을 재생하지 못했어요. 기기의 무음 설정을 확인해 주세요."); });
+    else { a.pause(); setPlaying(false); }
+  }
   const touchX = useRef(0);
   const [lb, setLb] = useState<number | null>(null);
   const [toast, setToast] = useState("");
@@ -153,6 +171,15 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     window.addEventListener("keydown", onKey);
     return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
   }, [lb, c.gallery.length]);
+
+  const musicButton = (floating: boolean) => (
+    <button type="button" onClick={toggleMusic} aria-pressed={playing} aria-label={playing ? "배경음악 끄기" : "배경음악 켜기"} style={{ display: "inline-flex", alignItems: "center", gap: 9, minHeight: 44, padding: "0 18px 0 14px", border: 0, borderRadius: 22, cursor: "pointer", fontFamily: SANS, fontSize: 13, fontWeight: 500, background: floating ? "rgba(51,35,42,0.86)" : T.accent, color: floating ? "#FFFFFF" : T.onAccent, boxShadow: floating ? "0 6px 18px rgba(0,0,0,0.25)" : "none" }}>
+      <span aria-hidden="true" style={{ display: "inline-flex", alignItems: "flex-end", gap: 2, height: 14 }}>
+        {[0, 1, 2].map((i) => <i key={i} className={playing ? "inv-eq" : undefined} style={{ display: "block", width: 3, height: playing ? 14 : 5 + i * 3, background: "currentColor", borderRadius: 2, animationDelay: `${i * 0.18}s` }} />)}
+      </span>
+      {playing ? "음악 끄기" : "배경음악"}
+    </button>
+  );
 
   async function copyAndSay(text: string, ok: string, kind?: string) {
     if (kind) track(kind);
@@ -473,9 +500,19 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
           <div style={{ fontFamily: fontDisplay, letterSpacing: "0.2em", color: "#A9647E" }}>WEDDING BUTLER</div>
           <div>웨딩버틀러 모바일 청첩장 · {names}</div>
           <div style={{ marginTop: 6 }}>축의대행과 모바일 청첩장은 <a href="https://weddingbutler.co.kr" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>웨딩버틀러</a>에 맡겨 보세요.</div>
+          {song && (
+            <div style={{ marginTop: 14 }}>
+              {preview && musicButton(false)}
+              <div style={{ marginTop: preview ? 10 : 0, fontSize: 11, lineHeight: 1.7, opacity: 0.8 }}>
+                ♪ <a href={song.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>{song.title}</a> · {song.artist} · 공유마당 · {song.license}
+              </div>
+            </div>
+          )}
           {slug && !preview && <div style={{ marginTop: 14 }}><a href="/invitation/new" style={{ color: "inherit", opacity: 0.75, textDecoration: "underline" }}>청첩장을 만드셨나요? 내 청첩장 관리</a></div>}
         </div>
       </footer>
+
+      {song && !preview && <div style={{ position: "fixed", bottom: 16, left: "max(14px, calc(50vw - 226px))", zIndex: 45 }}>{musicButton(true)}</div>}
 
       {lb !== null && c.gallery[lb] && (
         <div role="dialog" aria-modal="true" aria-label="사진 크게 보기" onClick={() => setLb(null)} onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }} onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - touchX.current; if (Math.abs(dx) > 50) { const n = c.gallery.length; setLb((i) => (i === null ? i : (i + (dx < 0 ? 1 : -1) + n) % n)); } }} style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(10,8,9,0.94)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS }}>

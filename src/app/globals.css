@@ -341,3 +341,8 @@ button {
 .nav-dd-box a { padding: 10px 14px; border-radius: 8px; white-space: nowrap; font-size: 14px; }
 .nav-dd-box a:hover { background: #F9EFF2; }
 
+/* 청첩장 배경음악 버튼의 재생 중 막대 */
+@keyframes invEq { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.inv-eq { transform-origin: bottom; animation: invEq 0.9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .inv-eq { animation: none; } }
+

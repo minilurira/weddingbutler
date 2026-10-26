@@ -49,6 +49,7 @@ export interface InvitationContent {
   showContacts: boolean;
   contacts: InvitationContact[];
   receptStyle: number; // 0 정중하게 · 1 다정하게 · 2 간결하게
+  music: string; // 배경음악 곡 키(MUSIC_TRACKS) 또는 "" (없음)
   guestbook: boolean;
   // 프리미엄 전용 안내 (프리미엄 템플릿에서만 하객에게 보인다)
   parkingPlace: string;
@@ -116,6 +117,7 @@ export function defaultContent(): InvitationContent {
       { label: "신부", phone: "", kakao: "" },
     ],
     receptStyle: 0,
+    music: "",
     guestbook: true,
     parkingPlace: "",
     parkingEntrance: "",
@@ -183,6 +185,7 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
     showContacts: bool(r.showContacts, d.showContacts),
     contacts,
     receptStyle: recept === 1 || recept === 2 ? recept : 0,
+    music: typeof r.music === "string" && MUSIC_TRACKS.some((t) => t.key === r.music) ? r.music : "",
     guestbook: bool(r.guestbook, d.guestbook),
     parkingPlace: line(r.parkingPlace, 60),
     parkingEntrance: line(r.parkingEntrance, 60),
@@ -224,6 +227,14 @@ export function formatPhoneDash(v: string): string {
 // --- 보관 기간: 발행일부터 6개월. 예식일이 그보다 늦으면 예식일 다음날까지 ---
 
 export const KEEP_MONTHS = 6;
+
+// --- 배경음악: 공유마당(한국저작권위원회)의 CC BY 곡. 쓰려면 곡명·작곡가·출처를 화면에 밝혀야 한다 ---
+export interface MusicTrack { key: string; title: string; artist: string; src: string; sourceUrl: string; license: "CC BY" }
+export const MUSIC_TRACKS: MusicTrack[] = [
+  { key: "hongdae", title: "From 홍대 to 강남", artist: "권혁진", src: "/audio/from-hongdae-to-gangnam.m4a", sourceUrl: "https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13048738&menuNo=200020", license: "CC BY" },
+  { key: "minimalism", title: "Minimalism (미니멀리즘)", artist: "권민찬", src: "/audio/minimalism.m4a", sourceUrl: "https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13048736&menuNo=200026", license: "CC BY" },
+];
+export const getMusic = (key: string) => MUSIC_TRACKS.find((t) => t.key === key);
 
 const kstDay = (ms: number) => new Date(ms + 9 * 3600 * 1000).toISOString().slice(0, 10);
 
