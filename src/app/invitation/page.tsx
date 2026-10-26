@@ -257,8 +257,8 @@ export default function InvitationPage() {
             <h2 style={h2}>세 단계면 완성돼요</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,260px),1fr))", gap: 20 }}>
-            {STEPS.map((s) => (
-              <div key={s.n} style={{ background: "#FFFFFF", borderRadius: 4, padding: "32px 28px" }}>
+            {STEPS.map((s, i) => (
+              <div key={s.n} className="card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "32px 28px", animationDelay: `${i * 500}ms` }}>
                 <span style={{ width: 30, height: 30, borderRadius: "50%", background: "#A9647E", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, marginBottom: 18 }}>{s.n}</span>
                 <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 12px" }}>{s.title}</h3>
                 <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
@@ -298,8 +298,8 @@ export default function InvitationPage() {
             <p style={{ fontSize: 13, color: "#9A8189", margin: "12px 0 0" }}>템플릿 화면의 사진은 AI로 생성한 샘플 이미지입니다.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: "clamp(12px,2vw,20px)" }}>
-            {TEMPLATES.map((t) => (
-              <div key={t.name} style={{ background: "#FFFFFF", borderRadius: 4, padding: "24px 12px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+            {TEMPLATES.map((t, i) => (
+              <div key={t.name} className="card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", animationDelay: `${i * 450}ms`, borderRadius: 4, padding: "24px 12px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
                 <Phone t={t} width={120} />
                 <div aria-hidden="true" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 4, width: "100%", maxWidth: 170 }}>
                   {t.thumbs.map((th) => (
