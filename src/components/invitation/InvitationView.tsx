@@ -52,7 +52,8 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
-export function InvitationView({ content: c, photoUrl, slug, preview = false }: { content: InvitationContent; photoUrl: (path: string) => string; slug: string | null; preview?: boolean }) {
+export function InvitationView({ content: c, photoBase, slug, preview = false }: { content: InvitationContent; photoBase: string; slug: string | null; preview?: boolean }) {
+  const photoUrl = (path: string) => (path ? `${photoBase}${path}` : "");
   const label = dateLabel(c);
   const dday = daysUntil(c.date);
   const cal = monthCells(c.date);

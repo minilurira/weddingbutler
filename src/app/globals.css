@@ -297,3 +297,10 @@ button {
     display: none !important;
   }
 }
+
+/* 청첩장 에디터: 넓은 화면에서는 오른쪽에 실시간 미리보기, 좁은 화면에서는 "미리보기" 버튼으로 전체 화면 */
+.inv-only-narrow { display: none !important; }
+@media (max-width: 980px) {
+  .inv-preview-wide { display: none !important; }
+  .inv-only-narrow { display: inline-flex !important; align-items: center; }
+}
