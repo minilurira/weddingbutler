@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   RECEPT_TEXTS,
   dateLabel,
@@ -82,6 +82,9 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
   const outlineBtn: CSSProperties = { minHeight: 46, border: `1px solid ${tpl === "modern" ? "#D2D2D2" : T.line}`, borderRadius: tpl === "botanical" ? 23 : T.radius, background: T.card, color: tpl === "modern" ? T.ink : T.accent, fontSize: 13, fontWeight: 500, letterSpacing: "0.01em", cursor: "pointer", fontFamily: "inherit" };
   const pad = 28;
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const touchX = useRef(0);
+  const [lb, setLb] = useState<number | null>(null);
   const [toast, setToast] = useState("");
   const say = useCallback((m: string) => {
     setToast(m);
@@ -103,6 +106,53 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
   useEffect(() => {
     track("view");
   }, [track]);
+
+  // 하객 화면에서만: 스크롤하면 각 구역이 부드럽게 떠오른다 (움직임 줄이기 설정이면 쓰지 않는다).
+  // 화면 아래쪽 가까이 오거나 이미 지나간 구역은 모두 나타나게 해서, 빠르게 넘겨도 빈 구역이 남지 않는다.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || preview) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const targets = Array.from(root.children).filter((el, i) => i > 0 && (el.tagName === "SECTION" || el.tagName === "FOOTER")) as HTMLElement[];
+    root.classList.add("inv-js");
+    targets.forEach((el) => el.classList.add("inv-reveal"));
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const edge = window.innerHeight * 0.92;
+      targets.forEach((el) => { if (!el.classList.contains("inv-in") && el.getBoundingClientRect().top < edge) el.classList.add("inv-in"); });
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(check); };
+    // 보조: 구역이 화면에 걸치면 바로 나타나게 한다 (스크롤 이벤트가 드문 환경에서도 동작)
+    const io = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("inv-in"); io?.unobserve(e.target); } else if (e.boundingClientRect.top < 0) { e.target.classList.add("inv-in"); io?.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
+    targets.forEach((el) => io?.observe(el));
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      io?.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      root.classList.remove("inv-js");
+      targets.forEach((el) => el.classList.remove("inv-reveal", "inv-in"));
+    };
+  }, [preview]);
+
+  // 사진 크게 보기: 키보드 ← → Esc, 열려 있는 동안 뒤 화면은 스크롤하지 않는다
+  useEffect(() => {
+    if (lb === null) return;
+    const n = c.gallery.length;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLb(null);
+      else if (e.key === "ArrowRight") setLb((i) => (i === null ? i : (i + 1) % n));
+      else if (e.key === "ArrowLeft") setLb((i) => (i === null ? i : (i - 1 + n) % n));
+    };
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  }, [lb, c.gallery.length]);
 
   async function copyAndSay(text: string, ok: string, kind?: string) {
     if (kind) track(kind);
@@ -186,7 +236,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     const nameLine = (<>{c.groom || "신랑"} <span style={{ fontSize: "0.6em", opacity: 0.85 }}>&amp;</span> {c.bride || "신부"}</>);
     if (tpl === "modern") {
       return (
-        <section aria-label="표지" style={{ ...coverBase, minHeight: 780, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "92px 28px 40px", color: "#FFFFFF", textAlign: "left", backgroundColor: "#111111", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 45%,rgba(0,0,0,0.78) 100%),url(${coverImg})` : "linear-gradient(180deg,#2A2A2A,#111111)" }}>
+        <section aria-label="표지" className="inv-cover" style={{ ...coverBase, minHeight: 780, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "92px 28px 40px", color: "#FFFFFF", textAlign: "left", backgroundColor: "#111111", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 45%,rgba(0,0,0,0.78) 100%),url(${coverImg})` : "linear-gradient(180deg,#2A2A2A,#111111)" }}>
           {hint}
           <div style={{ fontFamily: SANS, fontSize: 11, letterSpacing: "0.34em", fontWeight: 500 }}>WE ARE GETTING MARRIED</div>
           <div>
@@ -201,7 +251,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     }
     if (tpl === "botanical") {
       return (
-        <section aria-label="표지" style={{ ...coverBase, minHeight: 800, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 28px 56px", color: T.ink, backgroundColor: T.bg, backgroundPosition: "center 20%", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(238,242,234,0) 0%,rgba(238,242,234,0) 55%,rgba(238,242,234,0.85) 76%,${T.bg} 90%),url(${coverImg})` : "linear-gradient(180deg,#B7C9B5,#EEF2EA)" }}>
+        <section aria-label="표지" className="inv-cover" style={{ ...coverBase, minHeight: 800, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 28px 56px", color: T.ink, backgroundColor: T.bg, backgroundPosition: "center 20%", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(238,242,234,0) 0%,rgba(238,242,234,0) 55%,rgba(238,242,234,0.85) 76%,${T.bg} 90%),url(${coverImg})` : "linear-gradient(180deg,#B7C9B5,#EEF2EA)" }}>
           {hint}
           <div style={{ fontFamily: SANS, fontSize: 11, letterSpacing: "0.34em", color: T.soft }}>SAVE THE DATE</div>
           <h1 style={{ margin: "14px 0 8px", fontFamily: fontSerif, fontSize: 34, fontWeight: 400, letterSpacing: "0.1em" }}>{[c.groom || "신랑", c.bride || "신부"].join(" · ")}</h1>
@@ -211,7 +261,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
     }
     if (tpl === "rose") {
       return (
-        <section aria-label="표지" style={{ ...coverBase, minHeight: 800, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 28px 52px", color: "#FFF6F7", backgroundColor: "#8A3A52", backgroundPosition: "center 18%", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(74,31,46,0) 0%,rgba(74,31,46,0) 45%,rgba(74,31,46,0.72) 82%,rgba(74,31,46,0.86) 100%),url(${coverImg})` : "linear-gradient(180deg,#E7BCC6,#8A3A52)" }}>
+        <section aria-label="표지" className="inv-cover" style={{ ...coverBase, minHeight: 800, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 28px 52px", color: "#FFF6F7", backgroundColor: "#8A3A52", backgroundPosition: "center 18%", backgroundImage: coverImg ? `linear-gradient(180deg,rgba(74,31,46,0) 0%,rgba(74,31,46,0) 45%,rgba(74,31,46,0.72) 82%,rgba(74,31,46,0.86) 100%),url(${coverImg})` : "linear-gradient(180deg,#E7BCC6,#8A3A52)" }}>
           {hint}
           <div style={{ fontFamily: fontDisplay, fontStyle: "italic", fontSize: 16, color: "#F8DCE3" }}>We are getting married</div>
           <h1 style={{ margin: "10px 0 0", fontFamily: fontSerif, fontWeight: 400, fontSize: 40, lineHeight: 1.15, letterSpacing: "0.04em" }}>{nameLine}</h1>
@@ -220,7 +270,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
       );
     }
     return (
-      <section aria-label="표지" style={{ ...coverBase, minHeight: 760, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 32px 72px", color: "#FFFDF8", backgroundColor: "#8E7656", backgroundImage: coverImg ? `linear-gradient(180deg, rgba(40,30,20,0) 38%, rgba(40,30,20,0.72) 100%), url(${coverImg})` : fallback }}>
+      <section aria-label="표지" className="inv-cover" style={{ ...coverBase, minHeight: 760, display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center", padding: "0 32px 72px", color: "#FFFDF8", backgroundColor: "#8E7656", backgroundImage: coverImg ? `linear-gradient(180deg, rgba(40,30,20,0) 38%, rgba(40,30,20,0.72) 100%), url(${coverImg})` : fallback }}>
         {hint}
         <div style={{ fontFamily: SANS, fontSize: 12, letterSpacing: "0.36em", marginBottom: 22 }}>WEDDING INVITATION</div>
         <div style={{ fontSize: 36, fontWeight: 300, letterSpacing: "0.1em", lineHeight: 1.3 }}>{nameLine}</div>
@@ -233,7 +283,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
   const infoCard = (title: string, rows: string[][], eyebrowText: string) => (
     <section style={{ padding: `8px ${pad}px 56px` }}>
       <div style={eyebrow}>{eyebrowText}</div>
-      <h2 style={sectionTitle}>{title}</h2>
+      <h2 className={tpl === "modern" ? "inv-title inv-title-l" : "inv-title"} style={sectionTitle}>{title}</h2>
       <div style={{ border: `1px solid ${tpl === "modern" ? "#E2E2E2" : T.line}`, borderRadius: T.radius, background: T.card, fontFamily: SANS, fontSize: 13, lineHeight: 1.75, overflow: "hidden" }}>
         {rows.map(([k, v], i) => (
           <div key={k} style={{ display: "flex", gap: 14, padding: "14px 16px", borderTop: i ? `1px solid ${tpl === "modern" ? "#EDEDED" : T.line}` : "none" }}>
@@ -246,7 +296,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
   );
 
   return (
-    <div style={{ position: "relative", width: "100%", maxWidth: 480, margin: "0 auto", background: T.bg, color: T.ink, fontFamily: T.heading, overflow: "hidden" }}>
+    <div ref={rootRef} style={{ position: "relative", width: "100%", maxWidth: 480, margin: "0 auto", background: T.bg, color: T.ink, fontFamily: T.heading, overflow: "hidden" }}>
       {cover}
 
       {/* 인사말 */}
@@ -319,8 +369,10 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
           <div style={{ ...eyebrow, padding: tpl === "modern" ? "0 24px" : 0 }}>{tpl === "modern" ? "04 — GALLERY" : tpl === "rose" ? "Gallery" : "GALLERY"}</div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 3, marginTop: 22 }}>
             {c.gallery.map((p, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={p} src={photoUrl(p)} alt={`웨딩 사진 ${i + 1}`} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "1 / 1.2", objectFit: "cover" }} />
+              <button key={p} type="button" onClick={() => setLb(i)} aria-label={`웨딩 사진 ${i + 1} 크게 보기`} style={{ display: "block", padding: 0, border: 0, background: "transparent", cursor: "zoom-in", overflow: "hidden" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photoUrl(p)} alt={`웨딩 사진 ${i + 1}`} loading="lazy" style={{ display: "block", width: "100%", aspectRatio: "1 / 1.2", objectFit: "cover" }} />
+              </button>
             ))}
           </div>
         </section>
@@ -330,7 +382,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
       {c.showAccounts && accounts.length > 0 && (
         <section style={{ padding: "60px 28px 48px", textAlign: tpl === "modern" ? "left" : "center", background: tpl === "botanical" ? T.sand : undefined }}>
           <div style={eyebrow}>{tpl === "modern" ? "05 — GIFT" : tpl === "rose" ? "With love" : "GIFT"}</div>
-          <h2 style={sectionTitle}>마음 전하실 곳</h2>
+          <h2 className={tpl === "modern" ? "inv-title inv-title-l" : "inv-title"} style={sectionTitle}>마음 전하실 곳</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left", fontFamily: SANS }}>
             {accounts.map((a, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 16px", border: `1px solid ${tpl === "modern" ? T.ink : tpl === "classic" ? "#E1D5C0" : T.line}`, borderRadius: T.radius, background: T.card }}>
@@ -374,7 +426,7 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
       {c.guestbook && (
         <section style={{ padding: "64px 24px 40px" }}>
           <div style={eyebrow}>{tpl === "modern" ? "07 — GUESTBOOK" : tpl === "rose" ? "Guestbook" : "GUESTBOOK"}</div>
-          <h2 style={sectionTitle}>축하의 한마디</h2>
+          <h2 className={tpl === "modern" ? "inv-title inv-title-l" : "inv-title"} style={sectionTitle}>축하의 한마디</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: SANS }}>
             <label htmlFor="gbName" style={{ fontSize: 12, color: T.soft }}>이름</label>
             <input id="gbName" value={gName} onChange={(e) => setGName(e.target.value.slice(0, 20))} placeholder="이름" style={input} />
@@ -424,6 +476,23 @@ export function InvitationView({ content: c, photoBase, slug, template = "classi
           {slug && !preview && <div style={{ marginTop: 14 }}><a href="/invitation/new" style={{ color: "inherit", opacity: 0.75, textDecoration: "underline" }}>청첩장을 만드셨나요? 내 청첩장 관리</a></div>}
         </div>
       </footer>
+
+      {lb !== null && c.gallery[lb] && (
+        <div role="dialog" aria-modal="true" aria-label="사진 크게 보기" onClick={() => setLb(null)} onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }} onTouchEnd={(e) => { const dx = e.changedTouches[0].clientX - touchX.current; if (Math.abs(dx) > 50) { const n = c.gallery.length; setLb((i) => (i === null ? i : (i + (dx < 0 ? 1 : -1) + n) % n)); } }} style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(10,8,9,0.94)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: SANS }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photoUrl(c.gallery[lb])} alt={`웨딩 사진 ${lb + 1}`} onClick={(e) => e.stopPropagation()} style={{ maxWidth: "100%", maxHeight: "86vh", objectFit: "contain", display: "block" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", color: "#FFFFFF", fontSize: 14 }}>
+            <span>{lb + 1} / {c.gallery.length}</span>
+            <button type="button" onClick={() => setLb(null)} aria-label="닫기" style={{ minHeight: 44, minWidth: 44, border: 0, background: "transparent", color: "#FFFFFF", fontSize: 26, cursor: "pointer", lineHeight: 1 }}>×</button>
+          </div>
+          {c.gallery.length > 1 && (
+            <>
+              <button type="button" aria-label="이전 사진" onClick={(e) => { e.stopPropagation(); setLb((lb - 1 + c.gallery.length) % c.gallery.length); }} style={{ position: "absolute", left: 6, top: "50%", transform: "translateY(-50%)", minHeight: 52, minWidth: 44, border: 0, background: "rgba(255,255,255,0.12)", color: "#FFFFFF", fontSize: 26, borderRadius: 22, cursor: "pointer" }}>‹</button>
+              <button type="button" aria-label="다음 사진" onClick={(e) => { e.stopPropagation(); setLb((lb + 1) % c.gallery.length); }} style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", minHeight: 52, minWidth: 44, border: 0, background: "rgba(255,255,255,0.12)", color: "#FFFFFF", fontSize: 26, borderRadius: 22, cursor: "pointer" }}>›</button>
+            </>
+          )}
+        </div>
+      )}
 
       {toast && (
         <div role="status" style={{ position: "fixed", left: "50%", bottom: 28, transform: "translateX(-50%)", zIndex: 30, padding: "12px 20px", borderRadius: 22, background: "rgba(51,35,42,0.92)", color: "#FFFFFF", fontSize: 13, fontFamily: SANS, maxWidth: "88vw", textAlign: "center" }}>{toast}</div>

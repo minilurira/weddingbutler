@@ -306,3 +306,20 @@ button {
   .inv-only-narrow { display: inline-flex !important; align-items: center; }
   .inv-hide-narrow { display: none !important; }
 }
+
+/* 모바일 청첩장 하객 화면: 섹션 제목 장식선, 표지 등장, 스크롤 등장 */
+.inv-title::after { content: ""; display: block; width: 26px; height: 1px; margin: 14px auto 0; background: currentColor; opacity: 0.35; }
+.inv-title-l::after { margin-left: 0; }
+@keyframes invRise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.inv-cover > *:not([style*="absolute"]) { animation: invRise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.inv-cover > *:nth-child(3) { animation-delay: 0.12s; }
+.inv-cover > *:nth-child(4) { animation-delay: 0.24s; }
+.inv-cover > *:nth-child(5) { animation-delay: 0.36s; }
+.inv-cover > *:nth-child(6) { animation-delay: 0.48s; }
+.inv-js .inv-reveal { opacity: 0; transform: translateY(26px); transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.inv-js .inv-reveal.inv-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .inv-cover > * { animation: none !important; }
+  .inv-js .inv-reveal { opacity: 1; transform: none; transition: none; }
+}
+
