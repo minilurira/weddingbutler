@@ -1,4 +1,4 @@
-import { blockedSlots } from "@/lib/plans";
+import { TIME_SLOTS, blockedSlots } from "@/lib/plans";
 
 /**
  * 어드민에 이미 잡힌 그날의 예식 시각을 가져와 고를 수 없는 시간 칩 목록을 돌려준다.
@@ -25,9 +25,11 @@ export async function fetchBlockedSlots(date: string): Promise<string[] | null> 
       console.error(`[availability] admin API responded ${res.status} for ${date}`);
       return null;
     }
-    const json = (await res.json()) as { times?: unknown };
+    const json = (await res.json()) as { times?: unknown; blocked?: unknown };
     const times = Array.isArray(json.times) ? json.times.filter((t): t is string => typeof t === "string") : [];
-    return blockedSlots(times);
+    // 어드민 캘린더에서 막아 둔 시간은 이미 고를 수 없는 시간(TIME_SLOTS)으로 오므로 그대로 더한다.
+    const adminBlocked = Array.isArray(json.blocked) ? json.blocked.filter((t): t is string => typeof t === "string" && TIME_SLOTS.includes(t)) : [];
+    return Array.from(new Set([...blockedSlots(times), ...adminBlocked]));
   } catch (err) {
     console.error(`[availability] failed to reach admin API for ${date}`, err);
     return null;
