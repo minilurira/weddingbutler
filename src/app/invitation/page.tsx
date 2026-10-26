@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 };
 
 // 청첩장 에디터를 오픈하면 true로 바꾼다. false인 동안 "만들기" 버튼은 오픈 준비 중으로 보인다.
-const INVITATION_OPEN = false;
+const INVITATION_OPEN = true;
+// 프리미엄(유료) 템플릿·제작자 대시보드는 아직 만드는 중이라 "준비 중"으로 표시한다. 오픈하면 true로 바꾼다.
+const PREMIUM_OPEN = false;
 const EDITOR_PATH = "/invitation/new";
 
 const STEPS = [
@@ -203,7 +205,7 @@ export default function InvitationPage() {
               <br />
               미리 본 뒤 링크 하나로 하객에게 보내세요.
             </p>
-            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>프리미엄 템플릿(10,000원)은 주차 안내·예식장 메모와 제작자 대시보드까지 드려요.</p>
+            <p style={{ fontSize: 14, color: "#8E4E68", fontWeight: 600, margin: "-14px 0 28px" }}>프리미엄 템플릿(10,000원)은 주차 안내·예식장 메모와 제작자 대시보드까지 드려요{PREMIUM_OPEN ? "." : " (준비 중)."}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
               <MakeButton big />
               <a href="#templates" style={{ display: "inline-flex", alignItems: "center", padding: "16px 26px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 15, fontWeight: 500, background: "#FFFFFF" }}>
@@ -255,8 +257,8 @@ export default function InvitationPage() {
             <h2 style={h2}>세 단계면 완성돼요</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,260px),1fr))", gap: 20 }}>
-            {STEPS.map((s) => (
-              <div key={s.n} style={{ background: "#FFFFFF", borderRadius: 4, padding: "32px 28px" }}>
+            {STEPS.map((s, i) => (
+              <div key={s.n} className="card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "32px 28px", animationDelay: `${i * 500}ms` }}>
                 <span style={{ width: 30, height: 30, borderRadius: "50%", background: "#A9647E", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, marginBottom: 18 }}>{s.n}</span>
                 <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 12px" }}>{s.title}</h3>
                 <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
@@ -296,8 +298,8 @@ export default function InvitationPage() {
             <p style={{ fontSize: 13, color: "#9A8189", margin: "12px 0 0" }}>템플릿 화면의 사진은 AI로 생성한 샘플 이미지입니다.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: "clamp(12px,2vw,20px)" }}>
-            {TEMPLATES.map((t) => (
-              <div key={t.name} style={{ background: "#FFFFFF", borderRadius: 4, padding: "24px 12px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+            {TEMPLATES.map((t, i) => (
+              <div key={t.name} className="card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", animationDelay: `${i * 450}ms`, borderRadius: 4, padding: "24px 12px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
                 <Phone t={t} width={120} />
                 <div aria-hidden="true" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 4, width: "100%", maxWidth: 170 }}>
                   {t.thumbs.map((th) => (
@@ -306,7 +308,7 @@ export default function InvitationPage() {
                 </div>
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{t.name}</div>
-                  <div style={{ marginTop: 6, display: "inline-block", padding: "4px 12px", borderRadius: 999, fontSize: 13, fontWeight: 600, background: t.price === "무료" ? "#E5F0E8" : "#F9EFF2", color: t.price === "무료" ? "#2F6B45" : "#8E4E68" }}>{t.price}</div>
+                  <div style={{ marginTop: 6, display: "inline-block", padding: "4px 12px", borderRadius: 999, fontSize: 13, fontWeight: 600, background: t.price === "무료" ? "#E5F0E8" : "#F9EFF2", color: t.price === "무료" ? "#2F6B45" : "#8E4E68" }}>{t.price === "무료" || PREMIUM_OPEN ? t.price : `${t.price} · 준비 중`}</div>
                 </div>
               </div>
             ))}
@@ -354,7 +356,7 @@ export default function InvitationPage() {
 
             {/* 프리미엄 */}
             <div style={{ position: "relative", background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "2px solid #A9647E", boxShadow: "0 18px 40px rgba(169,100,126,0.18)" }}>
-              <span style={{ position: "absolute", top: -14, right: 24, padding: "6px 14px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 13, fontWeight: 700 }}>추천</span>
+              <span style={{ position: "absolute", top: -14, right: 24, padding: "6px 14px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 13, fontWeight: 700 }}>{PREMIUM_OPEN ? "추천" : "준비 중"}</span>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#8E4E68" }}>프리미엄</div>
               <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>10,000원</div>
               <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>발행할 때 한 번 결제 · 고쳐도 추가 비용 없음</div>
@@ -396,7 +398,7 @@ export default function InvitationPage() {
               <p style={{ fontSize: 16, lineHeight: 1.9, color: "#E9D6DC", margin: "0 0 26px" }}>
                 10,000원 프리미엄 템플릿으로 발행하면 <b style={{ color: "#FFFFFF" }}>만든 분만 볼 수 있는 제작자 대시보드</b>를 드립니다. 청첩장을 보낸 뒤의 반응을 확인하고, 방명록과 공개 여부까지 한곳에서 관리하세요.
               </p>
-              <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>프리미엄 템플릿 3종에 모두 포함</span>
+              <span style={{ display: "inline-block", padding: "8px 16px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 14, fontWeight: 600 }}>프리미엄 템플릿 3종에 모두 포함{PREMIUM_OPEN ? "" : " · 준비 중"}</span>
             </div>
             <div>
               <DashboardMock />

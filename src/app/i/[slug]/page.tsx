@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { InvitationView } from "@/components/invitation/InvitationView";
 import { dateLabel } from "@/lib/invitation/content";
-import { getBySlug, photoUrl } from "@/lib/invitation/store";
+import { getBySlug, photoBase } from "@/lib/invitation/store";
 import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -19,14 +19,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const c = row.content;
   const title = `${c.groom} ♥ ${c.bride} 결혼합니다`;
   const description = [dateLabel(c), [c.venue, c.hall].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
-  const image = c.cover ? photoUrl(c.cover) : undefined;
   return {
     title,
     description,
     robots: { index: false, follow: false },
     alternates: { canonical: `${SITE_URL}/i/${row.slug}` },
-    openGraph: { type: "website", title, description, url: `${SITE_URL}/i/${row.slug}`, images: image ? [{ url: image }] : undefined },
-    twitter: { card: image ? "summary_large_image" : "summary", title, description, images: image ? [image] : undefined },
+    openGraph: { type: "website", title, description, url: `${SITE_URL}/i/${row.slug}` },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -35,7 +34,7 @@ export default async function InvitationPublicPage({ params }: { params: { slug:
   if (!row) notFound();
   return (
     <div style={{ background: "#E9E2D6", minHeight: "100vh" }}>
-      <InvitationView content={row.content} photoUrl={photoUrl} slug={row.slug} />
+      <InvitationView content={row.content} photoBase={photoBase()} slug={row.slug} />
     </div>
   );
 }

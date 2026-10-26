@@ -34,10 +34,14 @@ function normalize(row: Record<string, unknown>): InvitationRow {
   return { ...r, content: sanitizeContent(r.id, r.content) };
 }
 
-export function photoUrl(path: string): string {
-  if (!path) return "";
+/** 사진 주소의 앞부분 (뒤에 저장소 경로를 붙인다). 서버 컴포넌트가 문자열로 넘길 수 있게 함수가 아닌 값으로 둔다 */
+export function photoBase(): string {
   const base = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
-  return `${base}/storage/v1/object/public/${PHOTO_BUCKET}/${path}`;
+  return `${base}/storage/v1/object/public/${PHOTO_BUCKET}/`;
+}
+
+export function photoUrl(path: string): string {
+  return path ? `${photoBase()}${path}` : "";
 }
 
 export async function listByPhone(phone: string): Promise<InvitationRow[]> {
