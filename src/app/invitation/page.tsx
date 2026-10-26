@@ -32,7 +32,7 @@ const FEATURES = [
 
 const SAMPLE_STRIP = ["p79", "p74", "p70", "p83", "p84", "p86", "p71", "p75", "p72", "p76"];
 
-// 샘플 사진: public/img/invitation/ (예시용)
+// 샘플 사진: public/img/invitation/ — 모두 AI로 생성한 이미지라 페이지에 그렇게 표시한다
 const TEMPLATES = [
   { name: "클래식 아이보리", price: "무료", img: "/img/invitation/p85.jpg", pos: "center 25%", weight: 300, gray: false, thumbs: ["p76", "p82", "p84"] },
   { name: "모던 미니멀", price: "10,000원", img: "/img/invitation/p68.jpg", pos: "center 30%", weight: 800, gray: true, thumbs: ["p70", "p71", "p69"] },
@@ -216,10 +216,11 @@ export default function InvitationPage() {
               </p>
             )}
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "clamp(10px,2vw,18px)", minHeight: 360 }}>
+          <div style={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", gap: "clamp(10px,2vw,18px)", minHeight: 360, paddingBottom: 24 }}>
             <div data-mq="inv-side"><Phone t={TEMPLATES[2]} width={150} tilt={-6} /></div>
             <Phone t={TEMPLATES[0]} width={190} />
             <div data-mq="inv-side"><Phone t={TEMPLATES[3]} width={150} tilt={6} /></div>
+            <p style={{ position: "absolute", left: 0, right: 0, bottom: -6, margin: 0, textAlign: "center", fontSize: 12, color: "#9A8189" }}>AI로 생성한 샘플 사진</p>
           </div>
         </div>
       </section>
@@ -231,12 +232,12 @@ export default function InvitationPage() {
             <span
               key={n}
               role="img"
-              aria-label="샘플 웨딩 사진"
+              aria-label="AI로 생성한 샘플 웨딩 사진"
               style={{ flex: "0 0 auto", width: "clamp(150px,22vw,220px)", aspectRatio: "3 / 4", borderRadius: 6, backgroundImage: `url(/img/invitation/${n}.jpg)`, backgroundSize: "cover", backgroundPosition: "center 30%", scrollSnapAlign: "start" }}
             />
           ))}
         </div>
-        <p style={{ textAlign: "center", fontSize: 13, color: "#9A8189", margin: "14px 0 0" }}>대표 사진 한 장과 갤러리 사진만 올리면, 템플릿이 알아서 어울리게 배치해요. (샘플 사진)</p>
+        <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.7, color: "#9A8189", margin: "14px 0 0", padding: "0 clamp(18px,5vw,24px)" }}>대표 사진 한 장과 갤러리 사진만 올리면, 템플릿이 알아서 어울리게 배치해요.<br />이 페이지의 웨딩 사진은 모두 AI로 생성한 샘플 이미지입니다.</p>
       </section>
 
       {/* 만드는 방법 */}
@@ -285,6 +286,7 @@ export default function InvitationPage() {
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <p style={eyebrow}>TEMPLATES</p>
             <h2 style={h2}>무료 1종, 프리미엄 3종</h2>
+            <p style={{ fontSize: 13, color: "#9A8189", margin: "12px 0 0" }}>템플릿 화면의 사진은 AI로 생성한 샘플 이미지입니다.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))", gap: "clamp(12px,2vw,20px)" }}>
             {TEMPLATES.map((t) => (
