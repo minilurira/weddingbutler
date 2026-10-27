@@ -108,6 +108,7 @@ export function InvitationEditor({ id }: { id: string }) {
   const coverInput = useRef<HTMLInputElement>(null);
   const galleryInput = useRef<HTMLInputElement>(null);
   const thumbInput = useRef<HTMLInputElement>(null);
+  const [thumbNote, setThumbNote] = useState("");
 
   const photoBase = `${(process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "")}/storage/v1/object/public/invitation-photos/`;
   const photoUrl = useCallback((path: string) => `${photoBase}${path}`, [photoBase]);
@@ -192,6 +193,15 @@ export function InvitationEditor({ id }: { id: string }) {
     const room = target === "cover" || target === "thumb" ? 1 : max - content.gallery.length;
     if (room <= 0) return setMsg(isPremium(template) ? `갤러리 사진은 ${max}장까지 올릴 수 있어요.` : `무료 템플릿은 갤러리 사진을 ${max}장까지 올릴 수 있어요. 프리미엄 템플릿은 ${galleryMax("modern")}장까지 올릴 수 있어요.`);
     const picked = files.slice(0, room);
+    if (target === "thumb") {
+      setThumbNote("");
+      try {
+        const bm = await createImageBitmap(picked[0]);
+        const note = bm.width < 600 ? `사진이 작아요(${bm.width}×${bm.height}). 가로 600px 이상, 가능하면 1200px 이상을 권장해요.` : bm.width / bm.height < 1.3 ? "세로·정사각형에 가까운 사진이라 위아래가 많이 잘려요. 가로로 넓은 사진을 권장해요." : "";
+        bm.close();
+        setThumbNote(note);
+      } catch { /* 크기를 못 읽어도 올리기는 계속한다 */ }
+    }
     if (files.length > room) setMsg(`${max}장까지만 올릴 수 있어서 ${picked.length}장만 올렸어요.`);
     // 3장씩 동시에 올리고, 올린 순서는 고른 순서대로 유지한다
     const results: (string | null)[] = new Array(picked.length).fill(null);
@@ -507,17 +517,32 @@ export function InvitationEditor({ id }: { id: string }) {
             <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
               {c.thumb ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={photoUrl(c.thumb)} alt="공유 썸네일" style={{ width: 230, aspectRatio: "1200 / 630", objectFit: "cover", borderRadius: 10, border: `1px solid ${BORDER}`, background: "#F1E8EA" }} />
+                <span style={{ position: "relative", display: "block", width: 230, aspectRatio: "1200 / 630", borderRadius: 10, overflow: "hidden", border: `1px solid ${BORDER}`, background: "#F1E8EA" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photoUrl(c.thumb)} alt="공유 썸네일" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  <span aria-hidden="true" style={{ position: "absolute", left: "15%", right: "15%", top: "10%", bottom: "10%", border: "1.5px dashed rgba(255,255,255,0.95)", boxShadow: "0 0 0 1px rgba(0,0,0,0.25)", borderRadius: 4 }} />
+                </span>
               ) : (
                 <div style={{ width: 230, aspectRatio: "1200 / 630", borderRadius: 10, border: "1px dashed #DCC4CC", background: "#FBF6F7", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12.5, color: "#9A8189", textAlign: "center", padding: 8 }}>가로 사진을 올려 주세요</div>
               )}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <button type="button" style={{ ...ghost, borderColor: ACCENT, color: ACCENT, fontWeight: 600 }} onClick={() => thumbInput.current?.click()}>{c.thumb ? "다른 사진으로 바꾸기" : "가로 사진 올리기"}</button>
-                {c.thumb && <button type="button" style={{ ...ghost, color: "#B25B4B" }} onClick={() => update({ thumb: "" })}>빼기 (표지 사진으로 대체)</button>}
+                {c.thumb && <button type="button" style={{ ...ghost, color: "#B25B4B" }} onClick={() => { setThumbNote(""); update({ thumb: "" }); }}>빼기 (표지 사진으로 대체)</button>}
               </div>
               <input ref={thumbInput} type="file" accept="image/*" hidden onChange={(e) => { void uploadFiles(Array.from(e.target.files ?? []), "thumb"); e.target.value = ""; }} />
             </div>
-            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>사진의 가운데를 중심으로 가로로 넓게 잘려서 보여요. 얼굴이 가운데 오도록 골라 주세요. 카카오톡은 한 번 본 주소의 썸네일을 저장해 두어서, 바꾼 뒤에도 예전 모습이 한동안 보일 수 있어요.</p>
+            {thumbNote && <p role="status" style={{ margin: "12px 0 0", padding: "10px 12px", borderRadius: 10, background: "#FFF7E0", border: "1px solid #F1DFA3", fontSize: 12.5, lineHeight: 1.6, color: "#6B5320" }}>{thumbNote}</p>}
+            <div style={{ marginTop: 14, padding: "14px 16px", borderRadius: 12, background: "#FBF6F7", fontSize: 12.5, lineHeight: 1.85, color: "#6B5A60" }}>
+              <b style={{ color: DARK, fontSize: 13 }}>사이즈 가이드</b>
+              <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                <li><b>권장 크기</b> 가로 1200 × 세로 630px (비율 1.91 : 1). 2 : 1이나 3 : 2 정도의 가로 사진도 괜찮아요.</li>
+                <li><b>최소 크기</b> 가로 600px 이상. 이보다 작으면 흐리게 보여요.</li>
+                <li><b>안전 영역</b> 위 미리보기의 점선 안쪽에 얼굴과 중요한 부분을 두세요. 카톡·문자 앱에 따라 가장자리가 조금 잘려요.</li>
+                <li><b>파일</b> JPG · PNG · WEBP, 올릴 때 자동으로 용량을 줄여요.</li>
+                <li><b>피해 주세요</b> 사진 속 글자(이름·날짜)는 작게 보여서 잘 안 읽혀요. 세로 사진은 위아래가 많이 잘려요.</li>
+              </ul>
+            </div>
+            <p style={{ margin: "10px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>카카오톡은 한 번 본 주소의 썸네일을 저장해 두어서, 바꾼 뒤에도 예전 모습이 한동안 보일 수 있어요.</p>
           </Card>
 
           <Card title={`갤러리 (${c.gallery.length}/${galleryMax(template)}장)`} hint="사진을 끌어다 놓거나 눌러서 고르세요. 여러 장을 한 번에 올릴 수 있어요.">
