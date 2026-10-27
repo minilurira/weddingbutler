@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
+import { TERMS_VERSION } from "@/lib/invitation/content";
+import { INVITATION_NOTICES } from "@/lib/legal/invitation-terms-content";
 
 interface Item { id: string; template: string; paid: boolean; status: "draft" | "published" | "hidden"; url: string; groom: string; bride: string; date: string; updatedAt: string }
 
@@ -44,6 +46,7 @@ export function InvitationEntry() {
     void load();
   }, [load]);
 
+  const [agree, setAgree] = useState(false);
   async function post(url: string, body?: object) {
     return fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body ?? {}) });
   }
@@ -75,10 +78,11 @@ export function InvitationEntry() {
   }
 
   async function create() {
+    if (!agree) return setErr("주의사항과 이용약관에 동의해 주세요.");
     setErr("");
     setBusy(true);
     try {
-      const r = await post("/api/invitation");
+      const r = await post("/api/invitation", { agree: true, termsVersion: TERMS_VERSION });
       const d = (await r.json().catch(() => ({}))) as { id?: string; error?: string };
       if (!r.ok || !d.id) return setErr(d.error === "limit" ? "청첩장은 한 번호에 5개까지 만들 수 있어요. 안 쓰는 청첩장을 지워 주세요." : "만들지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
       window.location.href = `/invitation/edit/${d.id}`;
@@ -135,7 +139,19 @@ export function InvitationEntry() {
 
       {loggedIn && items && (
         <div style={card}>
-          <button type="button" onClick={create} disabled={busy} style={{ ...primary, opacity: busy ? 0.6 : 1 }}>+ 새 청첩장 만들기</button>
+          <div style={{ marginBottom: 16, padding: "16px 18px", borderRadius: 14, background: "#FBF3F5", border: "1px solid #EBDCE0" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#8E4E68", marginBottom: 8 }}>만들기 전에 꼭 확인해 주세요</div>
+            <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 6 }}>
+              {INVITATION_NOTICES.map((n) => (
+                <li key={n.title} style={{ fontSize: 13, lineHeight: 1.7, color: "#4A3B41" }}><b>{n.title}.</b> {n.body}</li>
+              ))}
+            </ol>
+            <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 14, fontSize: 13.5, lineHeight: 1.7, color: "#33232A", cursor: "pointer" }}>
+              <input type="checkbox" checked={agree} onChange={(e) => { setAgree(e.target.checked); setErr(""); }} style={{ marginTop: 4, width: 18, height: 18, accentColor: "#A9647E" }} />
+              <span><b>[필수]</b> 위 주의사항을 확인했고 <a href="/terms/invitation" target="_blank" rel="noopener noreferrer" style={{ color: "#8E4E68", textDecoration: "underline" }}>모바일 청첩장 이용약관</a>에 동의합니다.</span>
+            </label>
+          </div>
+          <button type="button" onClick={create} disabled={busy || !agree} style={{ ...primary, opacity: busy || !agree ? 0.5 : 1 }}>+ 새 청첩장 만들기</button>
           {err && <p role="alert" style={{ margin: "12px 0 0", fontSize: 14, color: "#B03A52" }}>{err}</p>}
           <div style={{ marginTop: 24, borderTop: "1px solid #F0E3E6" }}>
             {items.length === 0 && <p style={{ padding: "24px 0", textAlign: "center", fontSize: 14, color: "#9A8189", margin: 0 }}>아직 만든 청첩장이 없어요.</p>}

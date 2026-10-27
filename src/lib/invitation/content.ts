@@ -49,6 +49,8 @@ export interface InvitationContent {
   showContacts: boolean;
   contacts: InvitationContact[];
   receptStyle: number; // 0 정중하게 · 1 다정하게 · 2 간결하게
+  termsV: string; // 만들기 전에 동의한 이용약관·주의사항 버전 (서버가 기록, 수정 불가)
+  termsAt: string; // 동의한 시각(ISO)
   thumb: string; // 카카오톡·문자 공유 썸네일용 가로 사진 경로 ("" 이면 표지 사진으로 자동 생성)
   music: string; // 배경음악: 곡 키(MUSIC_TRACKS) / "custom"(직접 올린 음악) / "" (없음)
   musicFile: string; // 직접 올린 음악의 저장소 경로 (music이 "custom"일 때)
@@ -121,6 +123,8 @@ export function defaultContent(): InvitationContent {
     ],
     receptStyle: 0,
     thumb: "",
+    termsV: "",
+    termsAt: "",
     music: "",
     musicFile: "",
     musicName: "",
@@ -147,6 +151,9 @@ const digitsDash = (v: unknown, max: number) => line(v, max).replace(/[^0-9-]/g,
 export function isOwnPhotoPath(id: string, v: unknown): v is string {
   return typeof v === "string" && new RegExp(`^${id}/[A-Za-z0-9_-]{6,64}\\.(jpg|webp)$`).test(v);
 }
+
+/** 모바일 청첩장 이용약관·주의사항 버전. 내용을 바꾸면 날짜를 올린다(시행일과 같게). */
+export const TERMS_VERSION = "2026-10-27";
 
 export const AUDIO_BUCKET = "invitation-audio";
 export const AUDIO_MAX_BYTES = 3 * 1024 * 1024;
@@ -194,6 +201,8 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
     showDday: bool(r.showDday, d.showDday),
     cover: isOwnPhotoPath(id, r.cover) ? r.cover : "",
     thumb: isOwnPhotoPath(id, r.thumb) ? r.thumb : "",
+    termsV: line(r.termsV, 20),
+    termsAt: typeof r.termsAt === "string" && /^\d{4}-\d{2}-\d{2}T[\d:.]+Z$/.test(r.termsAt) ? r.termsAt : "",
     gallery,
     showAccounts: bool(r.showAccounts, d.showAccounts),
     accounts,

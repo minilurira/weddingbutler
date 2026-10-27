@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
-import { AUDIO_BUCKET, PREMIUM_PRICE, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
+import { AUDIO_BUCKET, PREMIUM_PRICE, TERMS_VERSION, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
 import { newSlug } from "@/lib/invitation/guard";
 
 // 모바일 청첩장 DB 접근 (Supabase, 서버 전용). 테이블은 supabase/invitation.sql.
@@ -52,6 +52,7 @@ export async function listByPhone(phone: string): Promise<InvitationRow[]> {
   return (data ?? []).map(normalize);
 }
 
+/** 동의 기록(버전·시각)은 만들 때 서버가 남긴다. 이후 저장에서는 고칠 수 없다. */
 export async function createInvitation(phone: string): Promise<InvitationRow | "limit"> {
   const db = supabaseAdmin();
   const { count, error: countErr } = await db.from("invitations").select("id", { count: "exact", head: true }).eq("phone", phone);
@@ -61,7 +62,7 @@ export async function createInvitation(phone: string): Promise<InvitationRow | "
   for (let i = 0; i < 4; i++) {
     const { data, error } = await db
       .from("invitations")
-      .insert({ slug: newSlug(), phone, template: "classic", status: "draft", content: defaultContent() })
+      .insert({ slug: newSlug(), phone, template: "classic", status: "draft", content: { ...defaultContent(), termsV: TERMS_VERSION, termsAt: new Date().toISOString() } })
       .select(COLS)
       .single();
     if (!error && data) return normalize(data);
@@ -93,7 +94,7 @@ export async function getBySlug(slug: string): Promise<InvitationRow | null> {
 export async function saveContent(id: string, phone: string, raw: unknown): Promise<InvitationRow | null> {
   const cur = await getOwned(id, phone);
   if (!cur) return null;
-  const content = sanitizeContent(id, raw, cur.template);
+  const content = { ...sanitizeContent(id, raw, cur.template), termsV: cur.content.termsV, termsAt: cur.content.termsAt };
   const { data, error } = await supabaseAdmin()
     .from("invitations")
     .update({ content, updated_at: new Date().toISOString() })

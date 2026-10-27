@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/seo";
 import { GUIDES, GUIDE_UPDATED } from "@/lib/guide";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/service", "/pricing", "/invitation", "/contact", "/terms", "/privacy"];
+  const routes = ["", "/service", "/pricing", "/invitation", "/contact", "/terms", "/terms/invitation", "/privacy"];
   const now = new Date();
   const pages: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${SITE_URL}${route}`,

@@ -85,6 +85,9 @@ function LegalLinks() {
       <Link href="/terms" style={legalLinkStyle} className="footer-legal-hover">
         서비스 이용약관
       </Link>
+      <Link href="/terms/invitation" style={legalLinkStyle} className="footer-legal-hover">
+        모바일 청첩장 약관
+      </Link>
       <Link href="/privacy" style={{ ...legalLinkStyle, fontWeight: 700 }} className="footer-legal-hover">
         개인정보처리방침
       </Link>
