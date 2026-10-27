@@ -155,6 +155,16 @@ export function isOwnPhotoPath(id: string, v: unknown): v is string {
 /** 모바일 청첩장 이용약관·주의사항 버전. 내용을 바꾸면 날짜를 올린다(시행일과 같게). */
 export const TERMS_VERSION = "2026-10-27";
 
+/** YYYY-MM-DD 모양이면서 실제 달력에 있는 날짜인지 (2027-13-99, 2027-02-30 같은 값은 거절) */
+export function isRealDate(v: string): boolean {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if (!m) return false;
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  if (y < 2000 || y > 2100) return false;
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  return dt.getUTCFullYear() === y && dt.getUTCMonth() === mo - 1 && dt.getUTCDate() === d;
+}
+
 export const AUDIO_BUCKET = "invitation-audio";
 export const AUDIO_MAX_BYTES = 3 * 1024 * 1024;
 export function isOwnAudioPath(id: string, v: unknown): v is string {
@@ -164,7 +174,7 @@ export function isOwnAudioPath(id: string, v: unknown): v is string {
 export function sanitizeContent(id: string, raw: unknown, template = "classic"): InvitationContent {
   const d = defaultContent();
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
-  const date = typeof r.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.date) ? r.date : "";
+  const date = typeof r.date === "string" && isRealDate(r.date) ? r.date : "";
   const time = typeof r.time === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(r.time) ? r.time : d.time;
   const accounts = (Array.isArray(r.accounts) ? r.accounts : d.accounts).slice(0, ACCOUNT_MAX).map((a) => {
     const x = (a && typeof a === "object" ? a : {}) as Record<string, unknown>;

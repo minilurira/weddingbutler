@@ -248,7 +248,7 @@ export default function HomePage() {
         data-mq="parallax"
         style={{
           padding: "clamp(64px,11vw,120px) clamp(18px,5vw,24px)",
-          backgroundImage: "linear-gradient(rgba(243,233,235,0.72), rgba(243,233,235,0.82)), url('/img/hall.png')",
+          backgroundImage: "linear-gradient(rgba(243,233,235,0.72), rgba(243,233,235,0.82)), url('/img/hall.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",

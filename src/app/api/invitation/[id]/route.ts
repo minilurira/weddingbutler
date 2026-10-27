@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { notFound, publicUrl, serverError, sessionPhone, unauthorized } from "@/lib/invitation/api";
+import { healPendingOrders } from "@/lib/invitation/reconcile";
 import { deleteInvitation, getOwned, pruneUnusedAudio, pruneUnusedPhotos, saveContent } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
@@ -10,8 +11,10 @@ export async function GET(_req: Request, { params }: Ctx) {
   const phone = sessionPhone();
   if (!phone) return unauthorized();
   try {
-    const row = await getOwned(params.id, phone);
+    let row = await getOwned(params.id, phone);
     if (!row) return notFound();
+    // 프리미엄인데 아직 결제 완료로 기록되지 않았다면, 결제만 되고 확정이 안 된 경우인지 한 번 확인한다
+    if (!row.paid_at && row.template !== "classic" && (await healPendingOrders(row.id))) row = (await getOwned(params.id, phone)) ?? row;
     return NextResponse.json({ id: row.id, status: row.status, url: publicUrl(row.slug), template: row.template, paid: Boolean(row.paid_at), publishedAt: row.published_at, content: row.content });
   } catch (err) {
     return serverError("get", err);

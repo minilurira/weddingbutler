@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminKey } from "@/lib/invitation/admin-auth";
+import { healRecentPending } from "@/lib/invitation/reconcile";
 import { listOrders } from "@/lib/invitation/store";
 import { SITE_URL } from "@/lib/seo";
 
@@ -17,6 +18,8 @@ export async function GET(req: NextRequest) {
   try {
     const fromIso = new Date(`${from}T00:00:00+09:00`).toISOString();
     const untilIso = new Date(new Date(`${until}T00:00:00+09:00`).getTime() + 86400000).toISOString();
+    // 결제는 됐지만 확정되지 못한 최근 주문이 있으면 먼저 바로잡고 목록을 만든다
+    await healRecentPending().catch((err) => console.warn("[admin invitation-orders] heal failed", err));
     const orders = await listOrders(fromIso, untilIso);
     return NextResponse.json({ code: "ok", orders: orders.map((o) => ({ ...o, url: o.slug ? `${SITE_URL}/i/${o.slug}` : "" })) });
   } catch (err) {
