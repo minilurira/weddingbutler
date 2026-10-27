@@ -1,5 +1,6 @@
 import type { ApprovalButtonValue, ApprovalStatus } from "@/lib/approval-types";
 
+import { logError } from "@/lib/error-log";
 const API = "https://api.kakaowork.com/v1";
 
 function config() {
@@ -103,7 +104,7 @@ export async function sendApprovalResult(
     const who = resolvedBy && status !== "timeout" ? ` (${resolvedBy})` : "";
     await send(appKey, { conversation_id: conversationId, text: `${RESULT_TEXT[status]}${who}\n${title}` });
   } catch (err) {
-    console.error("[kakaowork] failed to post approval result", err);
+    logError("[kakaowork] failed to post approval result", err);
   }
 }
 
@@ -118,7 +119,7 @@ export async function lookupUserName(userId: string | number): Promise<string> {
     const name = json?.user?.name;
     if (typeof name === "string" && name) return name;
   } catch (err) {
-    console.error("[kakaowork] users.info failed", err);
+    logError("[kakaowork] users.info failed", err);
   }
   return String(userId);
 }

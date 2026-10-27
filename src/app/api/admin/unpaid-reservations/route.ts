@@ -4,6 +4,7 @@ import { snapshotPortOnePayment } from "@/lib/portone";
 import { abandonStage, isTestTransaction } from "@/lib/payment-reconciliation";
 import { PLANS, type PlanKey } from "@/lib/plans";
 
+import { logError } from "@/lib/error-log";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
@@ -17,7 +18,7 @@ const RECENT_MIN = 30;
 export async function GET(req: NextRequest) {
   const apiKey = process.env.ADMIN_API_KEY;
   if (!apiKey) {
-    console.error("[unpaid-reservations] ADMIN_API_KEY is not set - refusing all requests.");
+    logError("[unpaid-reservations] ADMIN_API_KEY is not set - refusing all requests.");
     return NextResponse.json({ code: "server_error", message: "server not configured" }, { status: 500 });
   }
   if ((req.headers.get("authorization") ?? "") !== `Bearer ${apiKey}`) {
@@ -67,7 +68,7 @@ export async function GET(req: NextRequest) {
               isTest: isTestTransaction(r.couple_name, r.deposit_amount),
             });
           } catch (e) {
-            console.error(`[unpaid-reservations] lookup failed for ${r.booking_no}`, e);
+            logError(`[unpaid-reservations] lookup failed for ${r.booking_no}`, e);
             failed.push({ bookingNo: r.booking_no, message: e instanceof Error ? e.message : "조회 실패" });
           }
         })
@@ -76,7 +77,7 @@ export async function GET(req: NextRequest) {
     (rows as { createdAt: string }[]).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     return NextResponse.json({ code: "ok", days, rows, failed });
   } catch (err) {
-    console.error("[unpaid-reservations] failed", err);
+    logError("[unpaid-reservations] failed", err);
     return NextResponse.json({ code: "server_error", message: "미결제 예약을 불러오지 못했습니다." }, { status: 500 });
   }
 }

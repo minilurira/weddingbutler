@@ -153,7 +153,7 @@ export function isOwnPhotoPath(id: string, v: unknown): v is string {
 }
 
 /** 모바일 청첩장 이용약관·주의사항 버전. 내용을 바꾸면 날짜를 올린다(시행일과 같게). */
-export const TERMS_VERSION = "2026-10-27";
+export const TERMS_VERSION = "2026-10-28";
 
 /** YYYY-MM-DD 모양이면서 실제 달력에 있는 날짜인지 (2027-13-99, 2027-02-30 같은 값은 거절) */
 export function isRealDate(v: string): boolean {

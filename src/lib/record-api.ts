@@ -1,5 +1,6 @@
 import type { PlanCode, RecordPayload } from "@/types/record";
 
+import { logError } from "@/lib/error-log";
 // 축의 기록은 어드민 DB에 있다. 홈페이지 서버만 이 함수들로 어드민 /api/public/records/* 를 부른다.
 
 export type Viewer = "customer" | "admin";
@@ -44,7 +45,7 @@ async function adminFetch(path: string, init?: RequestInit): Promise<Response | 
       headers: { ...(init?.headers ?? {}), Authorization: `Bearer ${key}` },
     });
   } catch (err) {
-    console.error(`[record-api] failed to reach admin for ${path}`, err);
+    logError(`[record-api] failed to reach admin for ${path}`, err);
     return null;
   }
 }
@@ -58,7 +59,7 @@ export async function getRecordInfo(token: string, viewer: Viewer): Promise<Reco
   if (res.status === 409) return { state: "preparing" };
   if (res.status === 410) return { state: "expired", ...(await res.json().catch(() => ({}))) };
   if (!res.ok) {
-    console.error(`[record-api] info responded ${res.status}`);
+    logError(`[record-api] info responded ${res.status}`);
     return { state: "unavailable" };
   }
   return res.json();
@@ -72,7 +73,7 @@ export async function getRecordPayload(
 ): Promise<{ meta: Omit<RecordPayload["meta"], "downloadUrl" | "supportPhone">; entries: RecordPayload["entries"] } | null> {
   const res = await adminFetch(`${encodeURIComponent(token)}/entries${q(viewer, opts.log === false ? "&log=0" : "")}`);
   if (!res || !res.ok) {
-    if (res) console.error(`[record-api] entries responded ${res.status}`);
+    if (res) logError(`[record-api] entries responded ${res.status}`);
     return null;
   }
   return res.json();

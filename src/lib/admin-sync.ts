@@ -1,6 +1,7 @@
 import type { PaymentType, PlanKey, Side } from "@/lib/plans";
 import { PAYMENT_TYPES, PLANS } from "@/lib/plans";
 
+import { logError } from "@/lib/error-log";
 export interface AdminSyncInput {
   bookingNo: string;
   plan: PlanKey;
@@ -69,10 +70,10 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
       }),
     });
     if (!res.ok) {
-      console.error(`[admin-sync] admin API responded ${res.status} for ${input.bookingNo}`, await res.text());
+      logError(`[admin-sync] admin API responded ${res.status} for ${input.bookingNo}`, await res.text());
     }
   } catch (err) {
-    console.error(`[admin-sync] failed to reach admin API for ${input.bookingNo}`, err);
+    logError(`[admin-sync] failed to reach admin API for ${input.bookingNo}`, err);
   }
 }
 
@@ -106,9 +107,9 @@ export async function notifyAdminOfInquiry(input: InquiryNoticeInput): Promise<v
       cache: "no-store",
     });
     if (!res.ok) {
-      console.error(`[admin-sync] inquiry notice responded ${res.status}`, await res.text());
+      logError(`[admin-sync] inquiry notice responded ${res.status}`, await res.text());
     }
   } catch (err) {
-    console.error("[admin-sync] failed to send inquiry notice", err);
+    logError("[admin-sync] failed to send inquiry notice", err);
   }
 }

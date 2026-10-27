@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { snapshotPortOnePayment } from "@/lib/portone";
 import { isPgPaid, isTestTransaction, judge, type DbPaymentStatus, type ReconcileRow } from "@/lib/payment-reconciliation";
 
+import { logError } from "@/lib/error-log";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
@@ -16,7 +17,7 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 export async function GET(req: NextRequest) {
   const apiKey = process.env.ADMIN_API_KEY;
   if (!apiKey) {
-    console.error("[payment-reconciliation] ADMIN_API_KEY is not set - refusing all requests.");
+    logError("[payment-reconciliation] ADMIN_API_KEY is not set - refusing all requests.");
     return NextResponse.json({ code: "server_error", message: "server not configured" }, { status: 500 });
   }
   if ((req.headers.get("authorization") ?? "") !== `Bearer ${apiKey}`) {
@@ -59,7 +60,7 @@ export async function GET(req: NextRequest) {
               ...judge(dbStatus, r.deposit_amount, pg),
             });
           } catch (e) {
-            console.error(`[payment-reconciliation] lookup failed for ${r.booking_no}`, e);
+            logError(`[payment-reconciliation] lookup failed for ${r.booking_no}`, e);
             failed.push({ bookingNo: r.booking_no, message: e instanceof Error ? e.message : "조회 실패" });
           }
         })
@@ -84,7 +85,7 @@ export async function GET(req: NextRequest) {
       failed,
     });
   } catch (err) {
-    console.error("[payment-reconciliation] failed", err);
+    logError("[payment-reconciliation] failed", err);
     return NextResponse.json({ code: "server_error", message: "대사 중 오류가 발생했습니다." }, { status: 500 });
   }
 }

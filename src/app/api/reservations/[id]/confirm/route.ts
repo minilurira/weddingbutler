@@ -6,6 +6,7 @@ import { releaseSpecialOffer, markSpecialOfferUsed } from "@/lib/special-offer";
 import { paymentTypeOf, type PlanKey } from "@/lib/plans";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
 
+import { logError } from "@/lib/error-log";
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -49,7 +50,7 @@ export async function POST(
     const payment = await verifyPortOnePayment(paymentId);
 
     if (payment.status !== "PAID" || payment.amountTotal !== reservation.deposit_amount) {
-      console.error(
+      logError(
         `[reservations/confirm] payment not accepted for ${reservation.booking_no}: ` +
           `portoneStatus=${payment.status} portoneAmount=${payment.amountTotal} expectedAmount=${reservation.deposit_amount} paymentId=${paymentId}`
       );
@@ -77,7 +78,7 @@ export async function POST(
 
     // 스페셜 링크는 결제가 확인되면 사용 완료로 바꾼다. 실패해도 결제·예약은 이미 확정됐으므로 기록만 남긴다.
     if (reservation.special_token && !(await markSpecialOfferUsed(reservation.special_token, reservation.booking_no))) {
-      console.error(`[reservations/confirm] could not mark special offer used for ${reservation.booking_no}`);
+      logError(`[reservations/confirm] could not mark special offer used for ${reservation.booking_no}`);
     }
 
     // Awaited (not fire-and-forget): this Next.js version has no after()/
@@ -111,7 +112,7 @@ export async function POST(
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };
     return NextResponse.json(res);
   } catch (err) {
-    console.error("[reservations/confirm] verification failed", err);
+    logError("[reservations/confirm] verification failed", err);
     const res: ConfirmReservationResponse = {
       ok: false,
       message: "결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",

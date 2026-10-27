@@ -4,6 +4,7 @@ import { lookupUserName, sendApprovalResult } from "@/lib/kakaowork";
 import { expireIfNeeded, type ApprovalRow } from "@/lib/approvals";
 import type { ApprovalButtonValue } from "@/lib/approval-types";
 
+import { logError } from "@/lib/error-log";
 export const dynamic = "force-dynamic";
 
 interface KakaoWorkCallback {
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
     .select("id")
     .maybeSingle();
   if (updateError) {
-    console.error("[approvals/callback] failed to save decision", updateError);
+    logError("[approvals/callback] failed to save decision", updateError);
   }
 
   if (updated) {

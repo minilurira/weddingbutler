@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { logErrorWait } from "@/lib/error-log";
 import { INVITATION_COOKIE, invitationPhone } from "@/lib/invitation/session";
 import { SITE_URL } from "@/lib/seo";
 
@@ -13,8 +14,9 @@ export function sessionPhone(): string | null {
 export const unauthorized = () => NextResponse.json({ error: "login_required" }, { status: 401 });
 export const notFound = () => NextResponse.json({ error: "not_found" }, { status: 404 });
 
-export function serverError(tag: string, err: unknown) {
-  console.error(`[invitation] ${tag}`, err);
+/** 서버 오류 응답. 오류 기록 저장이 끝난 뒤 응답한다(서버리스에서 응답 직후 저장이 끊기지 않게). 호출은 항상 `return serverError(...)` 형태로 쓴다. */
+export async function serverError(tag: string, err: unknown) {
+  await logErrorWait(`[invitation ${tag}]`, err);
   return NextResponse.json({ error: "server_error" }, { status: 500 });
 }
 

@@ -1,5 +1,6 @@
 import { TIME_SLOTS, blockedSlots } from "@/lib/plans";
 
+import { logError } from "@/lib/error-log";
 /**
  * 어드민에 이미 잡힌 그날의 예식 시각을 가져와 고를 수 없는 시간 칩 목록을 돌려준다.
  * 어드민이 기준인 이유: 어드민에서 바꾼 시간·전화로 받은 수동 예약까지 반영해야 해서.
@@ -22,7 +23,7 @@ export async function fetchBlockedSlots(date: string): Promise<string[] | null> 
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) {
-      console.error(`[availability] admin API responded ${res.status} for ${date}`);
+      logError(`[availability] admin API responded ${res.status} for ${date}`);
       return null;
     }
     const json = (await res.json()) as { times?: unknown; blocked?: unknown };
@@ -31,7 +32,7 @@ export async function fetchBlockedSlots(date: string): Promise<string[] | null> 
     const adminBlocked = Array.isArray(json.blocked) ? json.blocked.filter((t): t is string => typeof t === "string" && TIME_SLOTS.includes(t)) : [];
     return Array.from(new Set([...blockedSlots(times), ...adminBlocked]));
   } catch (err) {
-    console.error(`[availability] failed to reach admin API for ${date}`, err);
+    logError(`[availability] failed to reach admin API for ${date}`, err);
     return null;
   }
 }

@@ -4,6 +4,7 @@ import { sendApprovalMessage } from "@/lib/kakaowork";
 import { APPROVAL_TTL_MS, checkApiKey, toResponse, type ApprovalRow } from "@/lib/approvals";
 import type { ApprovalProject, CreateApprovalInput } from "@/lib/approval-types";
 
+import { logError } from "@/lib/error-log";
 const PROJECT_TAG: Record<ApprovalProject, string> = { homepage: "[홈페이지]", admin: "[어드민]" };
 
 export const dynamic = "force-dynamic";
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error || !row) {
-    console.error("[approvals] insert failed", error);
+    logError("[approvals] insert failed", error);
     return NextResponse.json({ ok: false, message: "승인 요청을 저장하지 못했습니다." }, { status: 500 });
   }
 
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest) {
       .update({ kakaowork_conversation_id: sent.conversationId, kakaowork_message_id: sent.messageId })
       .eq("id", row.id);
   } catch (err) {
-    console.error("[approvals] KakaoWork send failed", err);
+    logError("[approvals] KakaoWork send failed", err);
     await db.from("approval_requests").update({ status: "error" }).eq("id", row.id);
     return NextResponse.json(
       { ok: false, id: row.id, status: "error", message: "카카오워크로 승인 요청을 보내지 못했습니다." },

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { cancelPortOnePayment } from "@/lib/portone";
 
+import { logError } from "@/lib/error-log";
 export const dynamic = "force-dynamic";
 
 // 어드민 전용: 예약번호로 포트원 결제를 찾아 취소(이니시스 환불)한다.
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   const apiKey = process.env.ADMIN_API_KEY;
   if (!apiKey) {
-    console.error("[reservations/cancel] ADMIN_API_KEY is not set - refusing all requests.");
+    logError("[reservations/cancel] ADMIN_API_KEY is not set - refusing all requests.");
     return NextResponse.json({ code: "server_error", message: "server not configured" }, { status: 500 });
   }
   const auth = req.headers.get("authorization") ?? "";
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
       requester,
     });
     if (!result.ok) {
-      console.error(`[reservations/cancel] PortOne cancel failed for ${bookingNo}: ${result.code} ${result.message}`);
+      logError(`[reservations/cancel] PortOne cancel failed for ${bookingNo}: ${result.code} ${result.message}`);
       return NextResponse.json({ code: "pg_error", message: result.message, pgCode: result.code }, { status: 502 });
     }
 
@@ -79,7 +80,7 @@ export async function POST(req: NextRequest) {
       pgStatus: result.status,
     });
   } catch (err) {
-    console.error(`[reservations/cancel] failed for ${bookingNo}`, err);
+    logError(`[reservations/cancel] failed for ${bookingNo}`, err);
     return NextResponse.json({ code: "server_error", message: "결제취소 처리 중 오류가 발생했습니다." }, { status: 500 });
   }
 }

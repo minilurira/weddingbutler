@@ -1,4 +1,5 @@
-// 스페셜 예약 링크는 어드민이 만들고 관리한다. 홈페이지는 어드민 공개 API(/api/public/special/<token>)로
+
+import { logError } from "@/lib/error-log";// 스페셜 예약 링크는 어드민이 만들고 관리한다. 홈페이지는 어드민 공개 API(/api/public/special/<token>)로
 // 링크를 확인하고(금액은 항상 여기서 가져온다), 결제를 시작할 때 점유하고, 결제가 끝나면 사용 처리한다.
 
 export type SpecialOfferState = "open" | "held" | "used" | "cancelled" | "expired" | "not_found";
@@ -32,7 +33,7 @@ export async function fetchSpecialOffer(token: string): Promise<SpecialOffer | n
     const j = (await res.json()) as Partial<SpecialOffer>;
     return { state: j.state ?? "not_found", amount: Number(j.amount ?? 0), label: j.label ?? "", expiresAt: j.expiresAt ?? "" };
   } catch (err) {
-    console.error("[special-offer] fetch failed", err);
+    logError("[special-offer] fetch failed", err);
     return null;
   }
 }
@@ -51,7 +52,7 @@ async function act(token: string, action: "hold" | "use" | "release", bookingNo:
     if (!res.ok) return false;
     return ((await res.json()) as { ok?: boolean }).ok === true;
   } catch (err) {
-    console.error(`[special-offer] ${action} failed`, err);
+    logError(`[special-offer] ${action} failed`, err);
     return false;
   }
 }

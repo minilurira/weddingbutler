@@ -3,6 +3,7 @@ import { notFound, serverError, sessionPhone, unauthorized } from "@/lib/invitat
 import { getOrder, getOwned, isPaid, markPaid } from "@/lib/invitation/store";
 import { verifyPortOnePayment } from "@/lib/portone";
 
+import { logError } from "@/lib/error-log";
 export const dynamic = "force-dynamic";
 
 // 결제 확인: 브라우저가 "결제됐다"고 해도 믿지 않고, 포트원 서버에 직접 물어 PAID이고 금액이 주문과 같을 때만 결제 완료로 기록한다.
@@ -21,12 +22,12 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     try {
       pay = await verifyPortOnePayment(body.paymentId);
     } catch (err) {
-      console.error("[invitation] payment verify failed", err);
+      logError("[invitation] payment verify failed", err);
       return NextResponse.json({ error: "verify_failed" }, { status: 502 });
     }
     if (pay.status !== "PAID") return NextResponse.json({ error: "not_paid", status: pay.status }, { status: 402 });
     if (pay.amountTotal !== order.amount) {
-      console.error(`[invitation] amount mismatch for ${body.paymentId}: paid ${pay.amountTotal}, expected ${order.amount}`);
+      logError(`[invitation] amount mismatch for ${body.paymentId}: paid ${pay.amountTotal}, expected ${order.amount}`);
       return NextResponse.json({ error: "amount_mismatch" }, { status: 409 });
     }
     await markPaid(row.id, body.paymentId, order.amount);

@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { recordSecret } from "@/lib/record-api";
 
+import { logError } from "@/lib/error-log";
 // 홈페이지 "예약 조회". 예약은 어드민 DB에 있으므로 홈페이지 서버가 어드민 /api/public/lookup/* 를 대신 부르고,
 // 문자 인증을 마친 번호는 서명한 쿠키(30분)로 기억한다.
 
@@ -69,10 +70,10 @@ export async function adminPublicPost(path: string, body: object) {
       body: JSON.stringify(body),
     });
     const data = (await res.json().catch(() => ({ error: "unavailable" }))) as Record<string, unknown>;
-    if (res.status >= 500) console.error(`[lookup-api] ${path} responded ${res.status}`, data);
+    if (res.status >= 500) logError(`[lookup-api] ${path} responded ${res.status}`, data);
     return { status: res.status, body: data };
   } catch (err) {
-    console.error(`[lookup-api] failed to reach admin for ${path}`, err);
+    logError(`[lookup-api] failed to reach admin for ${path}`, err);
     return { status: 503, body: { error: "unavailable" } as Record<string, unknown> };
   }
 }
