@@ -107,6 +107,7 @@ export function InvitationEditor({ id }: { id: string }) {
   const latest = useRef<InvitationContent | null>(null);
   const coverInput = useRef<HTMLInputElement>(null);
   const galleryInput = useRef<HTMLInputElement>(null);
+  const thumbInput = useRef<HTMLInputElement>(null);
 
   const photoBase = `${(process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "")}/storage/v1/object/public/invitation-photos/`;
   const photoUrl = useCallback((path: string) => `${photoBase}${path}`, [photoBase]);
@@ -184,11 +185,11 @@ export function InvitationEditor({ id }: { id: string }) {
   }, []);
 
   // 사진 올리기 (브라우저에서 줄인 뒤 한 장씩)
-  async function uploadFiles(files: File[], target: "cover" | "gallery") {
+  async function uploadFiles(files: File[], target: "cover" | "gallery" | "thumb") {
     if (!content || files.length === 0) return;
     setMsg("");
     const max = galleryMax(template);
-    const room = target === "cover" ? 1 : max - content.gallery.length;
+    const room = target === "cover" || target === "thumb" ? 1 : max - content.gallery.length;
     if (room <= 0) return setMsg(isPremium(template) ? `갤러리 사진은 ${max}장까지 올릴 수 있어요.` : `무료 템플릿은 갤러리 사진을 ${max}장까지 올릴 수 있어요. 프리미엄 템플릿은 ${galleryMax("modern")}장까지 올릴 수 있어요.`);
     const picked = files.slice(0, room);
     if (files.length > room) setMsg(`${max}장까지만 올릴 수 있어서 ${picked.length}장만 올렸어요.`);
@@ -218,7 +219,8 @@ export function InvitationEditor({ id }: { id: string }) {
     const added = results.filter((p): p is string => Boolean(p));
     if (added.length === 0) return;
     const cur = latest.current ?? content;
-    if (target === "cover") update({ cover: added[0] });
+    if (target === "thumb") update({ thumb: added[0] });
+    else if (target === "cover") update({ cover: added[0] });
     else update({ gallery: [...cur.gallery, ...added].slice(0, max) });
   }
 
@@ -499,6 +501,23 @@ export function InvitationEditor({ id }: { id: string }) {
             <div style={{ marginTop: 14 }}>
               <Field id="eTraffic" label="교통·주차 안내"><textarea id="eTraffic" rows={3} style={area} value={c.traffic} placeholder="예: 지하철 2호선 ○○역 3번 출구 도보 5분 / 주차 2시간 무료" onChange={(e) => update({ traffic: e.target.value })} /></Field>
             </div>
+          </Card>
+
+          <Card title="카카오톡 공유 썸네일" hint="카카오톡·문자로 주소를 보내면 이름·날짜와 함께 보이는 사진이에요. 가로로 넓은 사진(3:2 또는 16:9 정도)을 올려 주세요. 올리지 않으면 표지 사진으로 자동으로 만들어요.">
+            <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
+              {c.thumb ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={photoUrl(c.thumb)} alt="공유 썸네일" style={{ width: 230, aspectRatio: "1200 / 630", objectFit: "cover", borderRadius: 10, border: `1px solid ${BORDER}`, background: "#F1E8EA" }} />
+              ) : (
+                <div style={{ width: 230, aspectRatio: "1200 / 630", borderRadius: 10, border: "1px dashed #DCC4CC", background: "#FBF6F7", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12.5, color: "#9A8189", textAlign: "center", padding: 8 }}>가로 사진을 올려 주세요</div>
+              )}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <button type="button" style={{ ...ghost, borderColor: ACCENT, color: ACCENT, fontWeight: 600 }} onClick={() => thumbInput.current?.click()}>{c.thumb ? "다른 사진으로 바꾸기" : "가로 사진 올리기"}</button>
+                {c.thumb && <button type="button" style={{ ...ghost, color: "#B25B4B" }} onClick={() => update({ thumb: "" })}>빼기 (표지 사진으로 대체)</button>}
+              </div>
+              <input ref={thumbInput} type="file" accept="image/*" hidden onChange={(e) => { void uploadFiles(Array.from(e.target.files ?? []), "thumb"); e.target.value = ""; }} />
+            </div>
+            <p style={{ margin: "12px 0 0", fontSize: 12.5, lineHeight: 1.7, color: "#9A8189" }}>사진의 가운데를 중심으로 가로로 넓게 잘려서 보여요. 얼굴이 가운데 오도록 골라 주세요. 카카오톡은 한 번 본 주소의 썸네일을 저장해 두어서, 바꾼 뒤에도 예전 모습이 한동안 보일 수 있어요.</p>
           </Card>
 
           <Card title={`갤러리 (${c.gallery.length}/${galleryMax(template)}장)`} hint="사진을 끌어다 놓거나 눌러서 고르세요. 여러 장을 한 번에 올릴 수 있어요.">

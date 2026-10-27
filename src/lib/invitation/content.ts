@@ -49,6 +49,7 @@ export interface InvitationContent {
   showContacts: boolean;
   contacts: InvitationContact[];
   receptStyle: number; // 0 정중하게 · 1 다정하게 · 2 간결하게
+  thumb: string; // 카카오톡·문자 공유 썸네일용 가로 사진 경로 ("" 이면 표지 사진으로 자동 생성)
   music: string; // 배경음악: 곡 키(MUSIC_TRACKS) / "custom"(직접 올린 음악) / "" (없음)
   musicFile: string; // 직접 올린 음악의 저장소 경로 (music이 "custom"일 때)
   musicName: string; // 직접 올린 음악에 표시할 이름
@@ -119,6 +120,7 @@ export function defaultContent(): InvitationContent {
       { label: "신부", phone: "", kakao: "" },
     ],
     receptStyle: 0,
+    thumb: "",
     music: "",
     musicFile: "",
     musicName: "",
@@ -191,6 +193,7 @@ export function sanitizeContent(id: string, raw: unknown, template = "classic"):
     showCalendar: bool(r.showCalendar, d.showCalendar),
     showDday: bool(r.showDday, d.showDday),
     cover: isOwnPhotoPath(id, r.cover) ? r.cover : "",
+    thumb: isOwnPhotoPath(id, r.thumb) ? r.thumb : "",
     gallery,
     showAccounts: bool(r.showAccounts, d.showAccounts),
     accounts,

@@ -14,7 +14,21 @@ export const contentType = "image/png";
 export default async function Image({ params }: { params: { slug: string } }) {
   const row = await getBySlug(params.slug).catch(() => null);
   const cover = row && isLive(row) && row.content.cover ? photoUrl(row.content.cover) : "";
+  // 고객이 가로 사진을 따로 올렸다면 그 사진으로 1200×630을 가득 채운다 (가장 선명하고 자연스럽다)
+  const thumb = row && isLive(row) && row.content.thumb ? photoUrl(row.content.thumb) : "";
   const bg = row && isTemplate(row.template) ? TEMPLATE_OUTER_BG[row.template] : "#EFE6D8";
+
+  if (thumb) {
+    return new ImageResponse(
+      (
+        <div style={{ width: "100%", height: "100%", display: "flex" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={thumb} alt="" width={1200} height={630} style={{ width: 1200, height: 630, objectFit: "cover" }} />
+        </div>
+      ),
+      { ...size },
+    );
+  }
 
   return new ImageResponse(
     cover ? (

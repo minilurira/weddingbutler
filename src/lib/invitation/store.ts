@@ -170,7 +170,7 @@ export async function countPhotos(id: string): Promise<number> {
 /** 내용에서 더 이상 쓰지 않는 사진 파일을 지운다 (저장할 때마다 정리) */
 export async function pruneUnusedPhotos(id: string, content: InvitationContent): Promise<void> {
   const db = supabaseAdmin();
-  const used = new Set([content.cover, ...content.gallery].filter(Boolean));
+  const used = new Set([content.cover, content.thumb, ...content.gallery].filter(Boolean));
   const { data } = await db.storage.from(PHOTO_BUCKET).list(id, { limit: 200, sortBy: { column: "created_at", order: "asc" } });
   // 방금 올리고 아직 저장 전인 사진은 지우지 않도록 10분 지난 파일만 정리한다
   const cutoff = Date.now() - 10 * 60 * 1000;
