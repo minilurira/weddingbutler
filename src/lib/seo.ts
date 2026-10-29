@@ -18,7 +18,9 @@ export const SITE_KEYWORDS = [
 ];
 
 // 네이버 플레이스·블로그·인스타그램 등 공식 채널 주소. 만들면 여기에 넣는다(구조화 데이터 sameAs로 나감).
-export const SITE_SAME_AS: string[] = [];
+export const INSTAGRAM_URL = "https://www.instagram.com/wedding_butler2026";
+export const NAVER_BLOG_URL = "https://blog.naver.com/weddingbutler";
+export const SITE_SAME_AS: string[] = [INSTAGRAM_URL, NAVER_BLOG_URL];
 
 export const INVITATION_TITLE = "무료 모바일청첩장 만들기 · 모바일 무료청첩장 제작";
 export const INVITATION_DESCRIPTION =

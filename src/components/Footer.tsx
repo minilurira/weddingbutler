@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { fontDisplay } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
+import { INSTAGRAM_URL, NAVER_BLOG_URL } from "@/lib/seo";
 
 function openBizInfo() {
   window.open("https://www.ftc.go.kr/bizCommPop.do?wrkr_no=6770803502", "bizCommPop", "width=750,height=700");
@@ -50,6 +51,50 @@ function InicisMark() {
         <br />
         에스크로 가맹점 확인
       </span>
+    </div>
+  );
+}
+
+const socialIconStyle: React.CSSProperties = {
+  width: 36,
+  height: 36,
+  borderRadius: "50%",
+  border: "1px solid rgba(233,202,209,0.35)",
+  color: "#E9CAD1",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+function SocialLinks() {
+  return (
+    <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+      <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="웨딩버틀러 인스타그램"
+        title="인스타그램"
+        style={socialIconStyle}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+      <a
+        href={NAVER_BLOG_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="웨딩버틀러 네이버 블로그"
+        title="네이버 블로그"
+        style={socialIconStyle}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M4 3h5.6l4.8 7.4V3H20v18h-5.6l-4.8-7.4V21H4z" />
+        </svg>
+      </a>
     </div>
   );
 }
@@ -105,6 +150,7 @@ export function Footer({ full = false }: { full?: boolean }) {
           <div style={{ fontFamily: fontDisplay, fontSize: 20, letterSpacing: "0.22em", color: "#E9CAD1" }}>
             WEDDING BUTLER
           </div>
+          <SocialLinks />
           <BusinessInfo style={{ fontSize: 12, lineHeight: 1.9, color: "#B79AA3", margin: "22px 0 0" }} />
           <LegalLinks />
           <InicisMark />
@@ -134,6 +180,7 @@ export function Footer({ full = false }: { full?: boolean }) {
               <br />
               두 분의 하루를 지킵니다.
             </p>
+            <SocialLinks />
           </div>
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#D8C3C9", marginBottom: 16 }}>SERVICE</div>
@@ -173,6 +220,12 @@ export function Footer({ full = false }: { full?: boolean }) {
                 8층 804-S80호
               </span>
               <span>카카오톡 채널 @웨딩버틀러</span>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" style={{ color: "#9A8189" }}>
+                인스타그램 @wedding_butler2026
+              </a>
+              <a href={NAVER_BLOG_URL} target="_blank" rel="noopener noreferrer" style={{ color: "#9A8189" }}>
+                네이버 블로그
+              </a>
             </div>
           </div>
         </div>
