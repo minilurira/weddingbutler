@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { OpenModalButton } from "@/components/OpenModalButton";
 import { BOOKING_OPEN_UNTIL_LABEL } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "가격안내",
@@ -37,6 +38,25 @@ const CARDS = [
     bullets: ["양가 합계 하객 400명 기준", "웨딩버틀러 4명 배정 (양가 2명씩)", "신랑측 · 신부측 축의대 분리 운영", "버틀러 추가 가능 (1명당 100,000원)"],
   },
 ];
+
+// 검색용 요금 구조화 데이터. 요금이 바뀌면 CARDS와 함께 고친다.
+const PRICING_LD = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "축의대행 · 축의대대행",
+  serviceType: "축의대행",
+  provider: { "@type": "LocalBusiness", name: SITE_NAME, url: SITE_URL },
+  areaServed: ["서울특별시", "경기도"],
+  url: `${SITE_URL}/pricing`,
+  offers: CARDS.map((c) => ({
+    "@type": "Offer",
+    name: c.name,
+    description: c.bullets[0],
+    price: String(Number(c.priceWhole) * 10000),
+    priceCurrency: "KRW",
+    url: `${SITE_URL}/pricing`,
+  })),
+};
 
 const COMPARE_ROWS: [string, string, string, string][] = [
   ["기본 요금", "39만원", "45만원", "80만원"],
@@ -206,6 +226,7 @@ function SectionEyebrow({ children }: { children: React.ReactNode }) {
 export default function PricingPage() {
   return (
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB", minHeight: "100vh" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PRICING_LD) }} />
       <Header active="pricing" />
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>

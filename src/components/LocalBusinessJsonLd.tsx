@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_SAME_AS, SITE_URL } from "@/lib/seo";
 
 export function LocalBusinessJsonLd() {
   const data = {
@@ -8,7 +8,7 @@ export function LocalBusinessJsonLd() {
     alternateName: "Wedding Butler",
     url: SITE_URL,
     description: SITE_DESCRIPTION,
-    keywords: SITE_KEYWORDS.join(", "),
+    logo: `${SITE_URL}/brand/wb-logo-512.png`,
     email: "cs@weddingbutler.co.kr",
     telephone: "010-5918-9203",
     image: `${SITE_URL}/img/hero-desk.jpeg`,
@@ -25,6 +25,7 @@ export function LocalBusinessJsonLd() {
     ],
     priceRange: "390,000원 ~ 800,000원",
     paymentAccepted: "신용카드",
+    ...(SITE_SAME_AS.length ? { sameAs: SITE_SAME_AS } : {}),
   };
 
   return (

@@ -9,7 +9,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "축의대행·축의대대행 가이드, 무료 모바일청첩장 안내",
   description: "축의대행(축의대대행) 가격·인원·정산과 무료 모바일청첩장 만드는 법을 한곳에 모았습니다.",
-  alternates: { canonical: "/guide" },
+  alternates: { canonical: "/guide", types: { "application/rss+xml": "/guide/rss.xml" } },
 };
 
 const GROUPS = [
