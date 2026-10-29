@@ -156,9 +156,9 @@ export function Footer({ full = false }: { full?: boolean }) {
               <Link href="/reservation/lookup" style={{ color: "#9A8189" }}>
                 예약 조회 · 취소
               </Link>
-              <a href="#faq" style={{ color: "#9A8189" }}>
+              <Link href="/#faq" style={{ color: "#9A8189" }}>
                 자주 묻는 질문
-              </a>
+              </Link>
             </div>
           </div>
           <div>

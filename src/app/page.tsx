@@ -9,6 +9,7 @@ import { ReviewMarquee } from "@/components/home/ReviewMarquee";
 import { RecordShowcase } from "@/components/home/RecordShowcase";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
+import { HOME_FAQS } from "@/lib/home-faq";
 
 const SERVICE_STEPS = [
   "축의금 접수 및 방명록 안내 · 답례품 전달",
@@ -70,12 +71,19 @@ const REVIEWS = [
   },
 ];
 
+const FAQ_LD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: HOME_FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
+
 const SEOUL_TAGS = ["강남 · 서초", "송파 · 강동", "여의도 · 영등포", "종로 · 중구", "마포 · 서대문", "용산 · 성동", "노원 · 강북", "그 외 전 지역"];
 const GYEONGGI_TAGS = ["성남 · 분당", "수원 · 용인", "고양 · 파주", "부천 · 광명", "안양 · 과천", "하남 · 남양주", "화성 · 평택", "그 외 전 지역"];
 
 export default function HomePage() {
   return (
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_LD) }} />
       <Header />
 
       <section
@@ -98,6 +106,9 @@ export default function HomePage() {
               FOR YOUR MOST PRECIOUS DAY
             </p>
             <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(30px,6.8vw,52px)", lineHeight: 1.34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 24px", letterSpacing: "-0.02em" }}>
+              <span style={{ display: "block", fontSize: "clamp(15px,2.6vw,18px)", fontWeight: 500, letterSpacing: "0.02em", color: "#E9CAD1", margin: "0 0 14px" }}>
+                축의대행 · 축의대대행 웨딩버틀러
+              </span>
               축의대는 맡기고,
               <br />두 분은 웃기만 하세요
             </h1>

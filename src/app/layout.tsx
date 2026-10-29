@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   keywords: SITE_KEYWORDS,
   alternates: {
     canonical: "/",
+    types: { "application/rss+xml": "/guide/rss.xml" },
   },
   icons: {
     icon: "/favicon-wb.png",
