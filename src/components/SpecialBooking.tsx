@@ -7,6 +7,7 @@ import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
 import { requestDepositPayment } from "@/lib/portone-client";
+import { stashPendingPurchase, trackPurchase } from "@/lib/analytics";
 import type { AvailabilityResponse, ConfirmReservationResponse, CreateReservationResponse } from "@/lib/reservation-types";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -112,6 +113,8 @@ export default function SpecialBooking({ token, amount, label }: { token: string
       const returnUrl = new URL("/reservation/return", window.location.origin);
       returnUrl.searchParams.set("rid", created.id);
       returnUrl.searchParams.set("paymentId", created.paymentId);
+      const purchase = { bookingNo: created.bookingNo, amount: created.amount, plan: "special", paymentType: "full" };
+      stashPendingPurchase(created.id, purchase);
       const pay = await requestDepositPayment({
         paymentId: created.paymentId, orderName: created.orderName, amount: created.amount, payMethod: "신용카드",
         customerName: name, customerPhone: phone, customerEmail: email, redirectUrl: returnUrl.toString(),
@@ -123,6 +126,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
       });
       const confirmed = (await confirmRes.json()) as ConfirmReservationResponse;
       if (!confirmed.ok) throw new Error(confirmed.message || "결제 확인에 실패했습니다.");
+      trackPurchase({ ...purchase, bookingNo: confirmed.bookingNo || created.bookingNo });
       setBookingNo(confirmed.bookingNo || created.bookingNo);
       setPhase("done");
     } catch (err) {

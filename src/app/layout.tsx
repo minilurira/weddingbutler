@@ -4,6 +4,7 @@ import { fontSans } from "@/lib/style";
 import { ReservationProvider } from "@/components/ReservationProvider";
 import { LocalBusinessJsonLd } from "@/components/LocalBusinessJsonLd";
 import { GoogleTagManager } from "@/components/GoogleTagManager";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { GTM_ID, OG_IMAGE, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -68,6 +69,7 @@ export default function RootLayout({
           />
         </noscript>
         <GoogleTagManager />
+        <GoogleAnalytics />
         <LocalBusinessJsonLd />
         <ReservationProvider>{children}</ReservationProvider>
       </body>

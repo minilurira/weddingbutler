@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { fontSerif } from "@/lib/style";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
+import { takePendingPurchase, trackPurchase } from "@/lib/analytics";
 
 /** 모바일 결제(이니시스 리다이렉트 방식)가 끝나고 돌아오는 페이지.
  * 예약 생성 시점에 이미 만들어 둔 예약 id·paymentId로 결제를 확정한다 —
@@ -35,6 +36,8 @@ function ReturnContent() {
         });
         const data = (await res.json()) as ConfirmReservationResponse;
         if (data.ok) {
+          const pending = takePendingPurchase(rid);
+          if (pending) trackPurchase({ ...pending, bookingNo: data.bookingNo || pending.bookingNo });
           setBookingNo(data.bookingNo || "");
           setPhase("done");
         } else {

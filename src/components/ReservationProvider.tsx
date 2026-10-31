@@ -11,6 +11,7 @@ import {
 } from "react";
 import type { PlanKey } from "@/lib/plans";
 import { ReservationModal } from "@/components/ReservationModal";
+import { trackReservationOpen } from "@/lib/analytics";
 
 interface ReservationContextValue {
   openModal: (plan?: PlanKey, opts?: { test?: boolean; testKey?: string }) => void;
@@ -55,6 +56,12 @@ export function ReservationProvider({ children }: { children: ReactNode }) {
       // ignore malformed query strings
     }
   }, []);
+
+  // 예약 창이 열릴 때마다 한 번 집계 (테스트 예약 창은 제외)
+  useEffect(() => {
+    if (open && !test) trackReservationOpen(plan);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const value = useMemo(() => ({ openModal, closeModal }), [openModal, closeModal]);
 
