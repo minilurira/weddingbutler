@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
+import { trackKakaoChatClick } from "@/lib/analytics";
+
+const KAKAO_CHAT_URL = "https://pf.kakao.com/_AlhxnX/chat";
 
 type NavKey = "service" | "pricing" | "invitation" | "myinvitation" | "contact" | "lookup";
 interface NavItem { href: string; label: string; key: NavKey; children?: { href: string; label: string; key: NavKey }[] }
@@ -123,8 +126,11 @@ export function Header({ active }: { active?: NavKey }) {
             )}
           </div>
           <div style={{ display: "flex", gap: 8 }}>
-          <Link
-            href="/contact"
+          <a
+            href={KAKAO_CHAT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackKakaoChatClick("gnb")}
             className="btn-line-hover"
             style={{
               border: "1px solid #33232A",
@@ -137,7 +143,7 @@ export function Header({ active }: { active?: NavKey }) {
             }}
           >
             예약문의
-          </Link>
+          </a>
           <button
             onClick={() => openModal()}
             style={{
@@ -257,9 +263,14 @@ export function Header({ active }: { active?: NavKey }) {
           >
             예약하기
           </button>
-          <Link
-            href="/contact"
-            onClick={() => setMenuOpen(false)}
+          <a
+            href={KAKAO_CHAT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              setMenuOpen(false);
+              trackKakaoChatClick("gnb_mobile");
+            }}
             style={{
               marginTop: 10,
               textAlign: "center",
@@ -271,7 +282,7 @@ export function Header({ active }: { active?: NavKey }) {
             }}
           >
             예약문의
-          </Link>
+          </a>
           {testKey && (
             <button
               onClick={() => {

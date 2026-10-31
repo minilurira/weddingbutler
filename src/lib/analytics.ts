@@ -86,3 +86,8 @@ export function trackReservationOpen(plan: string) {
 export function trackContactPageView() {
   gtag("event", "contact_page_view");
 }
+
+/** GNB 예약문의(카카오채널 채팅) 클릭 */
+export function trackKakaoChatClick(location: string) {
+  gtag("event", "kakao_chat_click", { location });
+}
