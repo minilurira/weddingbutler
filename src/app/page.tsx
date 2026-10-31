@@ -86,51 +86,50 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_LD) }} />
       <Header />
 
-      <section
-        id="top"
-        data-mq="hero"
-        style={{
-          position: "relative",
-          minHeight: 640,
-          display: "flex",
-          alignItems: "center",
-          backgroundImage:
-            "linear-gradient(90deg, rgba(18,18,18,0.82) 0%, rgba(28,28,28,0.52) 55%, rgba(40,40,40,0.18) 100%), url('/img/hero-desk.jpeg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center right",
-        }}
-      >
-        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(64px,11vw,110px) clamp(18px,5vw,24px)", width: "100%" }}>
-          <Reveal style={{ maxWidth: 620 }}>
-            <p style={{ fontFamily: fontDisplay, fontSize: 15, letterSpacing: "0.42em", color: "#E9CAD1", margin: "0 0 22px" }}>
+      <section id="top" data-mq="hero" className="hero">
+        <div className="hero-bg" aria-hidden="true" />
+        <div className="hero-inner" style={{ maxWidth: 1180, margin: "0 auto", width: "100%" }}>
+          <Reveal style={{ maxWidth: 580 }}>
+            <p className="hero-eyebrow" style={{ fontFamily: fontDisplay, color: "#E9CAD1", margin: 0 }}>
               FOR YOUR MOST PRECIOUS DAY
             </p>
-            <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(30px,6.8vw,52px)", lineHeight: 1.34, fontWeight: 600, color: "#FFFFFF", margin: "0 0 24px", letterSpacing: "-0.02em" }}>
-              <span style={{ display: "block", fontSize: "clamp(15px,2.6vw,18px)", fontWeight: 500, letterSpacing: "0.02em", color: "#E9CAD1", margin: "0 0 14px" }}>
+            <h1 className="hero-title" style={{ fontFamily: fontSerif, fontWeight: 400, color: "#FFFFFF", margin: 0, letterSpacing: "-0.02em" }}>
+              <span className="hero-kicker" style={{ display: "block", fontWeight: 500, letterSpacing: "0.04em", color: "#E9CAD1" }}>
                 축의대행 · 축의대대행 웨딩버틀러
               </span>
               축의대는 맡기고,
-              <br />두 분은 웃기만 하세요
+              <br />
+              <span style={{ color: "#F2D3DB" }}>두 분은 웃기만 하세요</span>
             </h1>
-            <p style={{ fontSize: 17, lineHeight: 1.9, color: "#F3E9EB", margin: "0 0 38px", maxWidth: 500 }}>
+            <p className="hero-desc" style={{ color: "rgba(255,255,255,0.84)", margin: 0, maxWidth: 470 }}>
               전문 교육을 받은 웨딩버틀러가 축의금 접수부터 정산까지 책임집니다. 가족·친구에게 부탁하지 않아도 되는 가장 깔끔한 방법.
             </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <div className="hero-cta">
               <OpenModalButton
                 className="btn-accent-hover"
-                style={{ background: "#A9647E", color: "#FFFFFF", padding: "17px 36px", border: "none", borderRadius: 999, fontSize: 16, fontWeight: 500, cursor: "pointer" }}
+                style={{ background: "#A9647E", color: "#FFFFFF", padding: "17px 34px", border: "none", borderRadius: 999, fontSize: 16, fontWeight: 500, cursor: "pointer" }}
               >
                 날짜 확인하고 예약하기
               </OpenModalButton>
               <a
                 href="#price"
                 className="btn-outline-hover"
-                style={{ border: "1px solid rgba(255,255,255,0.55)", color: "#FFFFFF", padding: "17px 32px", borderRadius: 999, fontSize: 16, fontWeight: 400 }}
+                style={{ border: "1px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.06)", color: "#FFFFFF", padding: "17px 30px", borderRadius: 999, fontSize: 16, fontWeight: 400, textAlign: "center" }}
               >
                 요금제 보기
               </a>
             </div>
           </Reveal>
+        </div>
+        <div className="hero-trust">
+          <div>
+            {["전문 교육 버틀러", "당일 현장 정산", "서울 · 경기 전 지역"].map((t, i) => (
+              <span key={t}>
+                <b style={{ fontFamily: fontDisplay }}>{String(i + 1).padStart(2, "0")}</b>
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

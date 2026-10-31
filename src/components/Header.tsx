@@ -122,6 +122,22 @@ export function Header({ active }: { active?: NavKey }) {
               ),
             )}
           </div>
+          <div style={{ display: "flex", gap: 8 }}>
+          <Link
+            href="/contact"
+            className="btn-line-hover"
+            style={{
+              border: "1px solid #33232A",
+              color: "#33232A",
+              padding: "11px 20px",
+              borderRadius: 999,
+              fontSize: 14,
+              fontWeight: 500,
+              letterSpacing: "0.02em",
+            }}
+          >
+            예약문의
+          </Link>
           <button
             onClick={() => openModal()}
             style={{
@@ -139,6 +155,7 @@ export function Header({ active }: { active?: NavKey }) {
           >
             예약하기
           </button>
+          </div>
           {testKey && (
             <button
               onClick={openTestPayment}
@@ -240,6 +257,21 @@ export function Header({ active }: { active?: NavKey }) {
           >
             예약하기
           </button>
+          <Link
+            href="/contact"
+            onClick={() => setMenuOpen(false)}
+            style={{
+              marginTop: 10,
+              textAlign: "center",
+              border: "1px solid #33232A",
+              color: "#33232A",
+              padding: 15,
+              borderRadius: 999,
+              fontSize: 15,
+            }}
+          >
+            예약문의
+          </Link>
           {testKey && (
             <button
               onClick={() => {
