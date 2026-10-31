@@ -27,3 +27,4 @@ export const INVITATION_DESCRIPTION =
   "무료청첩장·무료 모바일 청첩장 만들기. 사진·지도·방명록·계좌 복사까지 링크 하나로, 웨딩버틀러에서.";
 export const OG_IMAGE = "/img/og-image.jpg";
 export const GTM_ID = "GTM-N2JR9QSW";
+export const GA_ID = "G-LE8C3DPYHR";

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import type { ContactInput } from "@/lib/reservation-types";
+import { trackContact, trackContactPageView } from "@/lib/analytics";
 
 declare global {
   interface Window {
@@ -93,6 +94,10 @@ export function ContactSection() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    trackContactPageView();
+  }, []);
+
   const ready = form.name.trim() && form.phone.trim() && form.msg.trim() && form.agree;
 
   async function send() {
@@ -118,6 +123,7 @@ export function ContactSection() {
       if (!res.ok || !data.ok) {
         throw new Error(data.message || "문의를 접수하지 못했습니다.");
       }
+      trackContact(form.topic);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.");

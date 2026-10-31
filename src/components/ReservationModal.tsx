@@ -23,6 +23,7 @@ import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
 import { requestDepositPayment } from "@/lib/portone-client";
+import { stashPendingPurchase, trackPurchase } from "@/lib/analytics";
 import type {
   AvailabilityResponse,
   ConfirmReservationResponse,
@@ -335,6 +336,15 @@ export function ReservationModal({
       returnUrl.searchParams.set("rid", created.id);
       returnUrl.searchParams.set("paymentId", created.paymentId);
 
+      const purchase = {
+        bookingNo: created.bookingNo,
+        amount: created.amount,
+        plan: state.plan,
+        paymentType: state.paymentType,
+        test,
+      };
+      stashPendingPurchase(created.id, purchase);
+
       const payResult = await requestDepositPayment({
         paymentId: created.paymentId,
         orderName: created.orderName,
@@ -359,6 +369,7 @@ export function ReservationModal({
         throw new Error(confirmed.message || "결제 확인에 실패했습니다.");
       }
 
+      trackPurchase({ ...purchase, bookingNo: confirmed.bookingNo || created.bookingNo });
       patch({ phase: "done", bookingNo: confirmed.bookingNo || created.bookingNo, error: null });
     } catch (err) {
       patch({
