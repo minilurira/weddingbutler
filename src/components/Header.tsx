@@ -6,7 +6,7 @@ import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 import { trackKakaoChatClick } from "@/lib/analytics";
 
-const KAKAO_CHAT_URL = "https://pf.kakao.com/_AlhxnX/chat";
+const KAKAO_CHAT_URL = "https://pf.kakao.com/_AIhxnX/chat";
 
 type NavKey = "service" | "pricing" | "invitation" | "myinvitation" | "contact" | "lookup";
 interface NavItem { href: string; label: string; key: NavKey; children?: { href: string; label: string; key: NavKey }[] }

@@ -47,7 +47,7 @@ function KakaoChannelButton() {
   return (
     <div
       id="kakao-talk-channel-chat-button"
-      data-channel-public-id="_AlhxnX"
+      data-channel-public-id="_AIhxnX"
       data-title="consult"
       data-size="small"
       data-color="yellow"
