@@ -121,16 +121,6 @@ export default function HomePage() {
             </div>
           </Reveal>
         </div>
-        <div className="hero-trust">
-          <div>
-            {["전문 교육 버틀러", "당일 현장 정산", "서울 · 경기 전 지역"].map((t, i) => (
-              <span key={t}>
-                <b style={{ fontFamily: fontSerif }}>{String(i + 1).padStart(2, "0")}</b>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
       </section>
 
       <section data-mq="strip" style={{ background: "#33232A", padding: "22px 24px", overflow: "hidden" }}>

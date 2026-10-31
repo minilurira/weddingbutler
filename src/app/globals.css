@@ -210,7 +210,7 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .hero-bg { animation: none; }
 }
-.hero-inner { padding: 96px 24px 128px; }
+.hero-inner { padding: 96px 24px 104px; }
 .hero-eyebrow {
   display: flex;
   align-items: center;
@@ -231,28 +231,6 @@ button {
 .hero-kicker { font-size: clamp(15px, 2.2vw, 17px); margin-bottom: 16px; }
 .hero-desc { font-size: 16px; line-height: 1.9; font-weight: 300; margin-bottom: 40px !important; }
 .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero-trust {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(38, 22, 29, 0.28);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.hero-trust > div {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 18px 24px;
-  display: flex;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.86);
-}
-.hero-trust span { flex: 1; display: flex; align-items: center; gap: 10px; }
-.hero-trust span + span { border-left: 1px solid rgba(255, 255, 255, 0.2); padding-left: 24px; }
-.hero-trust b { font-weight: 300; font-size: 17px; color: #e9cad1; }
 
 @media (max-width: 860px) {
   .hero { min-height: calc(100svh - 64px); align-items: flex-end; }
@@ -260,7 +238,7 @@ button {
   .hero::before {
     background: linear-gradient(180deg, rgba(38, 22, 29, 0.05) 0%, rgba(38, 22, 29, 0) 38%, rgba(38, 22, 29, 0.62) 58%, rgba(38, 22, 29, 0.92) 78%, rgba(38, 22, 29, 0.96) 100%);
   }
-  .hero-inner { padding: 0 20px 100px; }
+  .hero-inner { padding: 0 20px 44px; }
   .hero-eyebrow { font-size: 10.5px; letter-spacing: 0.32em; gap: 10px; margin-bottom: 12px !important; }
   .hero-eyebrow::before { width: 24px; }
   .hero-kicker { font-size: 13.5px; margin-bottom: 8px; }
@@ -268,10 +246,6 @@ button {
   .hero-desc { font-size: 14px; line-height: 1.75; margin-bottom: 22px !important; }
   .hero-cta { gap: 8px; }
   .hero-cta > * { padding: 12px 18px !important; font-size: 14px !important; }
-  .hero-trust > div { padding: 12px 8px; font-size: 11.5px; }
-  .hero-trust span { flex-direction: column; gap: 2px; text-align: center; }
-  .hero-trust span + span { padding-left: 0; }
-  .hero-trust b { font-size: 15px; }
 }
 
 /* Responsive: mobile nav burger/drawer + layout collapses below 860px */
