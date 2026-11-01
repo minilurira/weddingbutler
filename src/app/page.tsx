@@ -158,8 +158,8 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 64 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>WHY WEDDING BUTLER</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대에 세울 사람, 아직 못 정하셨나요</h2>
-            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>가장 바쁜 날, 가장 예민한 자리입니다. 웨딩버틀러가 대신 지킵니다.</p>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 400, margin: "0 0 18px", letterSpacing: "-0.025em" }}>축의대에 세울 사람, 아직 못 정하셨나요</h2>
+            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>가장 바쁜 날, 가장 예민한 자리입니다. 웨딩버틀러가 대신 지킵니다.</p>
           </Reveal>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 22 }}>
@@ -171,7 +171,7 @@ export default function HomePage() {
               <Reveal key={c.n} delay={c.delay}>
                 <div className="card-hover-border card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "40px 34px", animationDelay: `${(c.delay - 50) * 5}ms` }}>
                   <div style={{ fontFamily: fontDisplay, fontSize: 34, color: "#E9CAD1", lineHeight: 1 }}>{c.n}</div>
-                  <h3 style={{ fontFamily: fontSerif, fontSize: 21, fontWeight: 600, margin: "20px 0 14px" }}>{c.title}</h3>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 21, fontWeight: 500, margin: "20px 0 14px" }}>{c.title}</h3>
                   <p style={{ fontSize: 15, lineHeight: 1.95, color: "#6B5A60", margin: 0 }}>{c.body}</p>
                 </div>
               </Reveal>
@@ -192,7 +192,7 @@ export default function HomePage() {
             </div>
             <div>
               <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 18px" }}>SERVICE SCOPE</p>
-              <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,4.8vw,34px)", fontWeight: 600, margin: "0 0 30px", lineHeight: 1.4, letterSpacing: "-0.02em" }}>
+              <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,4.8vw,34px)", fontWeight: 400, margin: "0 0 30px", lineHeight: 1.4, letterSpacing: "-0.025em" }}>
                 예식 당일, 이 모든 것을
                 <br />대신 해드립니다
               </h2>
@@ -222,7 +222,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 60 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>HOW IT WORKS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 400, margin: 0, letterSpacing: "-0.025em" }}>예약부터 정산까지, 네 단계</h2>
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 20 }}>
             {HOW_IT_WORKS.map((s, i) => (
@@ -234,7 +234,7 @@ export default function HomePage() {
                     </span>
                     <span style={{ fontSize: 12, letterSpacing: "0.2em", color: "#9A8189" }}>{s.tag}</span>
                   </div>
-                  <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 12px" }}>{s.title}</h3>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 500, margin: "0 0 12px" }}>{s.title}</h3>
                   <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
                 </div>
               </Reveal>
@@ -259,8 +259,8 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>하객 규모에 맞춰 고르세요</h2>
-            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>모든 금액은 부가세 포함입니다. 자세한 금액과 비교표는 가격 안내 페이지에서 확인하세요.</p>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 400, margin: "0 0 16px", letterSpacing: "-0.025em" }}>하객 규모에 맞춰 고르세요</h2>
+            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>모든 금액은 부가세 포함입니다. 자세한 금액과 비교표는 가격 안내 페이지에서 확인하세요.</p>
           </Reveal>
 
           <PriceTeaserCards />
@@ -284,8 +284,8 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>SERVICE AREA</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: "0 0 16px", letterSpacing: "-0.02em" }}>서울 전역 · 경기 전역 출장</h2>
-            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>수도권 어느 예식장이든 웨딩버틀러가 찾아갑니다.</p>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 400, margin: "0 0 16px", letterSpacing: "-0.025em" }}>서울 전역 · 경기 전역 출장</h2>
+            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>수도권 어느 예식장이든 웨딩버틀러가 찾아갑니다.</p>
           </Reveal>
 
           <Reveal delay={100} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px,1fr))", gap: 22 }}>
@@ -308,7 +308,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 clamp(18px,5vw,24px)" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>REAL REVIEWS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예식을 마친 부부들의 이야기</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5vw,38px)", fontWeight: 400, margin: 0, letterSpacing: "-0.025em" }}>예식을 마친 부부들의 이야기</h2>
           </Reveal>
         </div>
         <ReviewMarquee reviews={REVIEWS} />
@@ -318,8 +318,8 @@ export default function HomePage() {
         <div style={{ maxWidth: 1000, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 36 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>GUIDE</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 600, margin: "0 0 14px", letterSpacing: "-0.02em", lineHeight: 1.45 }}>축의대대행 · 축의대행,<br />무료 모바일청첩장까지 안내해 드려요</h2>
-            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.9, color: "#6B5A60" }}>축의대행이 무엇인지, 비용과 인원은 어떻게 정해지는지, 무료 모바일청첩장은 어떻게 만드는지 모았습니다.</p>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 400, margin: "0 0 14px", letterSpacing: "-0.025em", lineHeight: 1.45 }}>축의대대행 · 축의대행,<br />무료 모바일청첩장까지 안내해 드려요</h2>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300 }}>축의대행이 무엇인지, 비용과 인원은 어떻게 정해지는지, 무료 모바일청첩장은 어떻게 만드는지 모았습니다.</p>
           </Reveal>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,270px),1fr))", gap: 12 }}>
             {[
@@ -341,7 +341,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>FAQ</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>자주 묻는 질문</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,34px)", fontWeight: 400, margin: 0, letterSpacing: "-0.025em" }}>자주 묻는 질문</h2>
           </Reveal>
           <FaqAccordion />
         </div>
@@ -357,7 +357,7 @@ export default function HomePage() {
         }}
       >
         <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.4vw,38px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 20px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.4vw,38px)", fontWeight: 400, color: "#FFFFFF", margin: "0 0 20px", lineHeight: 1.5, letterSpacing: "-0.025em" }}>
             가장 행복한 날의 걱정 하나,
             <br />저희가 덜어드릴게요
           </h2>
@@ -380,7 +380,7 @@ function AreaCard({ title, tag, body, tags }: { title: string; tag: string; body
   return (
     <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "40px 34px" }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 8 }}>
-        <h3 style={{ fontFamily: fontSerif, fontSize: 24, fontWeight: 600, margin: 0 }}>{title}</h3>
+        <h3 style={{ fontFamily: fontSerif, fontSize: 24, fontWeight: 500, margin: 0 }}>{title}</h3>
         <span style={{ fontSize: 13, color: "#A9647E" }}>{tag}</span>
       </div>
       <p style={{ fontSize: 14, lineHeight: 1.8, color: "#6B5A60", margin: "0 0 24px" }}>{body}</p>

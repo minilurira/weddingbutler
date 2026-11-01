@@ -25,11 +25,11 @@ export function RecordShowcase() {
       >
         <Reveal>
           <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 18px" }}>GUEST RECORD</p>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,4.8vw,34px)", fontWeight: 600, margin: "0 0 18px", lineHeight: 1.4, letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,4.8vw,34px)", fontWeight: 400, margin: "0 0 18px", lineHeight: 1.4, letterSpacing: "-0.025em" }}>
             축의 기록, 예식이 끝나면
             <br />휴대폰으로 바로 확인하세요
           </h2>
-          <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 30px" }}>
+          <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: "0 0 30px" }}>
             인계가 끝나면 고객 전용 기록 화면 주소를 보내 드려요. 앱 설치 없이 휴대폰과 PC 어디서나 열 수 있어요.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>

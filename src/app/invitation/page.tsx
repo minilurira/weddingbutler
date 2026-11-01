@@ -96,7 +96,7 @@ const FAQ = [
 ];
 
 const eyebrow: CSSProperties = { fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" };
-const h2: CSSProperties = { fontFamily: fontSerif, fontSize: "clamp(24px,5vw,32px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.45 };
+const h2: CSSProperties = { fontFamily: fontSerif, fontSize: "clamp(24px,5vw,32px)", fontWeight: 400, margin: 0, letterSpacing: "-0.025em", lineHeight: 1.45 };
 
 function Phone({ t, width, tilt = 0 }: { t: (typeof TEMPLATES)[number]; width: number; tilt?: number }) {
   return (
@@ -232,12 +232,12 @@ export default function InvitationPage() {
         >
           <div>
             <p style={eyebrow}>MOBILE INVITATION</p>
-            <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(28px,6.4vw,44px)", fontWeight: 600, margin: "0 0 20px", letterSpacing: "-0.02em", lineHeight: 1.35 }}>
+            <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(28px,6.4vw,44px)", fontWeight: 400, margin: "0 0 20px", letterSpacing: "-0.025em", lineHeight: 1.35 }}>
               무료 모바일 청첩장,
               <br />
               지금 만드세요
             </h1>
-            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 30px" }}>
+            <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: "0 0 30px" }}>
               템플릿을 고르고 사진과 정보만 넣으면 완성됩니다.
               <br />
               미리 본 뒤 링크 하나로 하객에게 보내세요.
@@ -297,7 +297,7 @@ export default function InvitationPage() {
             {STEPS.map((s, i) => (
               <div key={s.n} className="card-glow" style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "32px 28px", animationDelay: `${i * 500}ms` }}>
                 <span style={{ width: 30, height: 30, borderRadius: "50%", background: "#A9647E", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, marginBottom: 18 }}>{s.n}</span>
-                <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 12px" }}>{s.title}</h3>
+                <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 500, margin: "0 0 12px" }}>{s.title}</h3>
                 <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
               </div>
             ))}
@@ -344,7 +344,7 @@ export default function InvitationPage() {
                   ))}
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{t.name}</div>
+                  <div style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 500 }}>{t.name}</div>
                   <div style={{ marginTop: 6, display: "inline-block", padding: "4px 12px", borderRadius: 999, fontSize: 13, fontWeight: 600, background: t.price === "무료" ? "#E5F0E8" : "#F9EFF2", color: t.price === "무료" ? "#2F6B45" : "#8E4E68" }}>{t.price === "무료" || PREMIUM_OPEN ? t.price : `${t.price} · 준비 중`}</div>
                 </div>
                 <SamplePreviewButton template={t.key} />
@@ -369,7 +369,7 @@ export default function InvitationPage() {
             {/* 무료 */}
             <div style={{ background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "1px solid #E7D5DA" }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#2F6B45" }}>무료</div>
-              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>0원</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 500, margin: "6px 0 4px", color: "#33232A" }}>0원</div>
               <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>클래식 아이보리 템플릿 1종</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
                 {FREE_HAS.map((x) => (
@@ -394,7 +394,7 @@ export default function InvitationPage() {
             <div style={{ position: "relative", background: "#FFFFFF", borderRadius: 6, padding: "32px 28px", border: "2px solid #A9647E", boxShadow: "0 18px 40px rgba(169,100,126,0.18)" }}>
               <span style={{ position: "absolute", top: -14, right: 24, padding: "6px 14px", borderRadius: 999, background: "#A9647E", color: "#FFFFFF", fontSize: 13, fontWeight: 700 }}>{PREMIUM_OPEN ? "추천" : "준비 중"}</span>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#8E4E68" }}>프리미엄</div>
-              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 600, margin: "6px 0 4px", color: "#33232A" }}>20,000원</div>
+              <div style={{ fontFamily: fontSerif, fontSize: 34, fontWeight: 500, margin: "6px 0 4px", color: "#33232A" }}>20,000원</div>
               <div style={{ fontSize: 13, color: "#9A8189", marginBottom: 22 }}>발행할 때 한 번 결제 · 고쳐도 추가 비용 없음</div>
               <div style={{ padding: "12px 14px", borderRadius: 8, background: "#FBF6F7", fontSize: 14, color: "#473A3F", marginBottom: 16 }}>무료의 모든 기능, 그리고</div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
@@ -479,7 +479,7 @@ export default function InvitationPage() {
       {/* 마무리 */}
       <section style={{ padding: "clamp(64px,10vw,100px) clamp(18px,5vw,24px)", textAlign: "center", backgroundColor: "#FFFFFF9F" }}>
         <h2 style={{ ...h2, marginBottom: 14 }}>청첩장은 무료로, 축의대는 웨딩버틀러에게</h2>
-        <p style={{ fontSize: 15, lineHeight: 1.85, color: "#6B5A60", margin: "0 0 28px" }}>예식 당일 축의금 접수부터 정산까지 맡기실 수도 있어요.</p>
+        <p style={{ fontSize: 15, lineHeight: 1.85, color: "#5E4D53", fontWeight: 300, margin: "0 0 28px" }}>예식 당일 축의금 접수부터 정산까지 맡기실 수도 있어요.</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
           <MakeButton />
           <Link href="/service" style={{ display: "inline-flex", alignItems: "center", padding: "16px 28px", borderRadius: 999, border: "1px solid #DCC4CC", color: "#473A3F", fontSize: 15, fontWeight: 500, background: "#FFFFFF" }}>

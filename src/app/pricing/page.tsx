@@ -255,8 +255,8 @@ export default function PricingPage() {
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE PLANS</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>가격안내</h1>
-        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모와 축의대 유형에 맞춰 네 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 400, margin: "0 0 18px", letterSpacing: "-0.025em" }}>가격안내</h1>
+        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>하객 규모와 축의대 유형에 맞춰 네 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
         {eventOn && (
           <div style={{ marginTop: 30 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.36em", color: "#A9647E", margin: "0 0 8px", display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
@@ -292,7 +292,7 @@ export default function PricingPage() {
                 </div>
               )}
               <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: c.dark ? "#E9CAD1" : "#A9647E", margin: "0 0 10px" }}>{c.eyebrow}</p>
-              <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 12px", color: c.dark ? "#FFFFFF" : undefined }}>{c.name}</h2>
+              <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 400, margin: "0 0 12px", color: c.dark ? "#FFFFFF" : undefined }}>{c.name}</h2>
               <span
                 style={{
                   display: "inline-block",
@@ -323,7 +323,7 @@ export default function PricingPage() {
                   borderBottom: "1px solid " + (c.dark ? "rgba(255,255,255,0.16)" : "#E7D5DA"),
                 }}
               >
-                <span style={{ fontFamily: fontSerif, fontSize: 46, fontWeight: 600, color: c.dark ? "#FFFFFF" : undefined, letterSpacing: "-0.02em" }}>{eventPrice ?? c.priceWhole}</span>
+                <span style={{ fontFamily: fontSerif, fontSize: 46, fontWeight: 500, color: c.dark ? "#FFFFFF" : undefined, letterSpacing: "-0.02em" }}>{eventPrice ?? c.priceWhole}</span>
                 <span style={{ fontSize: 18, color: c.dark ? "#F3E9EB" : "#473A3F" }}>만원</span>
                 <span style={{ fontSize: 13, color: c.dark ? "#B79AA3" : "#9A8189", marginLeft: 6 }}>VAT 포함</span>
               </div>
@@ -366,7 +366,7 @@ export default function PricingPage() {
 
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.75)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 34px", letterSpacing: "-0.02em" }}>한 눈에 비교하기</h2>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 400, margin: "0 0 34px", letterSpacing: "-0.025em" }}>한 눈에 비교하기</h2>
           <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
             <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, overflow: "hidden", minWidth: 760 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1.15fr 1fr 1fr 1fr 1fr", background: "#33232A" }}>
@@ -412,7 +412,7 @@ export default function PricingPage() {
             </div>
           </div>
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "clamp(22px,4vw,30px) clamp(20px,4vw,32px)", marginTop: 22 }}>
-            <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 600, margin: "0 0 18px" }}>추가 비용</h3>
+            <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 500, margin: "0 0 18px" }}>추가 비용</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {EXTRA_COSTS.map((c) => (
                 <div key={c.label} style={{ display: "flex", flexWrap: "wrap", gap: "4px 14px", alignItems: "baseline" }}>
@@ -429,17 +429,17 @@ export default function PricingPage() {
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
           <SectionEyebrow>RECORDING</SectionEyebrow>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 14px", letterSpacing: "-0.02em", textAlign: "center" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 400, margin: "0 0 14px", letterSpacing: "-0.025em", textAlign: "center" }}>
             기록 방식
           </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 34px", textAlign: "center" }}>
+          <p style={{ fontSize: 15, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: "0 0 34px", textAlign: "center" }}>
             두 가지 중 고르실 수 있습니다. 둘 다 추가 요금이 없습니다.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 18 }}>
             {RECORDING.map((r) => (
               <div key={r.name} style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(26px,4vw,34px) clamp(22px,4vw,32px)" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 16 }}>
-                  <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: 0 }}>{r.name}</h3>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 500, margin: 0 }}>{r.name}</h3>
                   <span style={{ fontSize: 12, color: "#A9647E", letterSpacing: "0.1em" }}>{r.tag}</span>
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.9, color: "#4A3B41", margin: "0 0 14px" }}>{r.body}</p>
@@ -466,7 +466,7 @@ export default function PricingPage() {
             <div style={{ display: "inline-block", background: "#A9647E", color: "#FFFFFF", fontSize: 12, letterSpacing: "0.14em", padding: "6px 14px", borderRadius: 999, marginBottom: 22 }}>
               EVENT
             </div>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, color: "#FFFFFF", margin: "0 0 16px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 400, color: "#FFFFFF", margin: "0 0 16px", lineHeight: 1.45, letterSpacing: "-0.025em" }}>
               블로그 후기 작성하면
               <br />결제 금액의 10% 페이백
             </h2>
@@ -494,22 +494,22 @@ export default function PricingPage() {
 
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 6, padding: "clamp(28px,5vw,44px) clamp(22px,5vw,40px)" }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>PAYMENT</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 400, margin: "0 0 18px", lineHeight: 1.45, letterSpacing: "-0.025em" }}>
               결제 방식은
               <br />두 가지 중에 고르세요
             </h2>
-            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 28px" }}>
+            <p style={{ fontSize: 15, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: "0 0 28px" }}>
               예약할 때 카드로 결제하시면 예약이 확정됩니다 (KG이니시스 구매안전서비스).
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
                 <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>예약금 결제 후 현장결제</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600 }}>예약금 10만원 카드 결제</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 500 }}>예약금 10만원 카드 결제</div>
                 <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>나머지 금액은 예식 당일 전달 직전 현장 결제</div>
               </div>
               <div style={{ background: "#F7F3EA", borderRadius: 4, padding: 20 }}>
                 <div style={{ fontSize: 12, color: "#9A8189", marginBottom: 8 }}>전액결제</div>
-                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600 }}>총 금액 한 번에 카드 결제</div>
+                <div style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 500 }}>총 금액 한 번에 카드 결제</div>
                 <div style={{ fontSize: 13, color: "#6B5A60", marginTop: 6 }}>현장 결제 금액 0원</div>
               </div>
             </div>
@@ -523,7 +523,7 @@ export default function PricingPage() {
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.55)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
           <SectionEyebrow>INCLUDED</SectionEyebrow>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 400, margin: "0 0 40px", letterSpacing: "-0.025em", textAlign: "center" }}>
             모든 패키지 공통 포함
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 14 }}>
@@ -540,7 +540,7 @@ export default function PricingPage() {
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <SectionEyebrow>NOTICE</SectionEyebrow>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 600, margin: "0 0 40px", letterSpacing: "-0.02em", textAlign: "center" }}>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.2vw,33px)", fontWeight: 400, margin: "0 0 40px", letterSpacing: "-0.025em", textAlign: "center" }}>
             예약 전 확인사항
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -548,7 +548,7 @@ export default function PricingPage() {
               <div key={n.title} style={{ background: "#FFFFFF", border: "1px solid #EEDDE2", borderRadius: 8, padding: "clamp(22px,4vw,30px) clamp(20px,4vw,32px)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
                   <span style={{ fontSize: 16, color: "#A9647E" }}>{n.icon}</span>
-                  <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 600, margin: 0 }}>{n.title}</h3>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 17, fontWeight: 500, margin: 0 }}>{n.title}</h3>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>{n.body}</div>
               </div>
@@ -566,7 +566,7 @@ export default function PricingPage() {
           backgroundPosition: "center 30%",
         }}
       >
-        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>날짜만 정하시면 됩니다</h2>
+        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 400, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.025em" }}>날짜만 정하시면 됩니다</h2>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#F3E9EB", margin: "0 0 34px" }}>온라인에서 예약과 결제까지 3분이면 끝납니다.</p>
         <OpenModalButton
           plan="standard"

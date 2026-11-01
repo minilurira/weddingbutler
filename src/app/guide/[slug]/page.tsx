@@ -24,7 +24,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-const h2: React.CSSProperties = { fontFamily: fontSerif, fontSize: "clamp(20px,4.2vw,24px)", fontWeight: 600, margin: "0 0 14px", lineHeight: 1.5, letterSpacing: "-0.01em", color: "#33232A" };
+const h2: React.CSSProperties = { fontFamily: fontSerif, fontSize: "clamp(20px,4.2vw,24px)", fontWeight: 500, margin: "0 0 14px", lineHeight: 1.5, letterSpacing: "-0.01em", color: "#33232A" };
 const p: React.CSSProperties = { margin: "0 0 14px", fontSize: 16, lineHeight: 1.95, color: "#473A3F" };
 
 export default function GuideArticlePage({ params }: { params: { slug: string } }) {
@@ -74,8 +74,8 @@ export default function GuideArticlePage({ params }: { params: { slug: string } 
             <Link href="/guide" style={{ color: "#9A8189" }}>가이드</Link> <span aria-hidden="true">›</span> <span>{g.eyebrow}</span>
           </nav>
           <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>{g.eyebrow}</p>
-          <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 600, margin: "0 0 22px", lineHeight: 1.4, letterSpacing: "-0.02em", color: "#33232A" }}>{g.title}</h1>
-          <p style={{ margin: 0, fontSize: 17, lineHeight: 1.95, color: "#6B5A60" }}>{g.lead}</p>
+          <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 400, margin: "0 0 22px", lineHeight: 1.4, letterSpacing: "-0.025em", color: "#33232A" }}>{g.title}</h1>
+          <p style={{ margin: 0, fontSize: 17, lineHeight: 1.95, color: "#5E4D53", fontWeight: 300 }}>{g.lead}</p>
         </div>
       </section>
 
@@ -142,11 +142,11 @@ export default function GuideArticlePage({ params }: { params: { slug: string } 
 
         {related.length > 0 && (
           <aside style={{ maxWidth: 820, margin: "40px auto 0" }} aria-label="함께 보면 좋은 글">
-            <h2 style={{ fontFamily: fontSerif, fontSize: 20, fontWeight: 600, margin: "0 0 14px" }}>함께 보면 좋은 글</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: 20, fontWeight: 400, margin: "0 0 14px" }}>함께 보면 좋은 글</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,230px),1fr))", gap: 12 }}>
               {related.map((r) => (
                 <Link key={r.slug} href={`/guide/${r.slug}`} style={{ display: "block", background: "#FFFFFF", borderRadius: 4, padding: "18px 18px 16px", border: "1px solid #EFE0E4" }}>
-                  <h3 style={{ fontFamily: fontSerif, fontSize: 16, fontWeight: 600, margin: "0 0 6px", lineHeight: 1.5, color: "#33232A" }}>{r.title}</h3>
+                  <h3 style={{ fontFamily: fontSerif, fontSize: 16, fontWeight: 500, margin: "0 0 6px", lineHeight: 1.5, color: "#33232A" }}>{r.title}</h3>
                   <p style={{ margin: 0, fontSize: 13, lineHeight: 1.7, color: "#6B5A60" }}>{r.description}</p>
                 </Link>
               ))}
