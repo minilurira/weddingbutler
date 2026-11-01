@@ -14,7 +14,7 @@ import { fontDisplay, fontSerif } from "@/lib/style";
  */
 
 const HIDE_KEY = "wb_home_popup_hidden_on";
-const ROTATE_MS = 5000;
+const ROTATE_MS = 3500;
 
 interface Slide {
   id: string;
