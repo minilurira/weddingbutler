@@ -26,20 +26,20 @@ const CARDS = [
     bullets: ["하객 100명 이하 예식 (신랑측 또는 신부측)", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "봉투 · 식대 집계 엑셀 파일 제공"],
   },
   {
-    plan: "smallboth" as const,
-    eyebrow: "02 SMALL BOTH",
-    name: "스몰양가",
-    priceWhole: "40",
-    dark: false,
-    bullets: ["양가 각 하객 60명 이하 예식", "웨딩버틀러 2명 배정", "양가 통합 축의대 1곳 운영 · 통합 기록", "봉투 · 식대 집계 엑셀 파일 제공"],
-  },
-  {
     plan: "standard" as const,
-    eyebrow: "03 STANDARD",
+    eyebrow: "02 STANDARD",
     name: "스탠다드",
     priceWhole: "45",
     dark: true,
     bullets: ["하객 101~200명 예식 (신랑측 또는 신부측, 200명 초과 시 1명당 2,000원 추가)", "웨딩버틀러 2명 배정", "스몰케어 구성 포함 · 정산 리포트 제공", "버틀러 추가 가능 (1명당 100,000원)"],
+  },
+  {
+    plan: "smallboth" as const,
+    eyebrow: "03 SMALL BOTH",
+    name: "스몰양가",
+    priceWhole: "40",
+    dark: false,
+    bullets: ["양가 각 하객 60명 이하 예식", "웨딩버틀러 2명 배정", "양가 통합 축의대 1곳 운영 · 통합 기록", "봉투 · 식대 집계 엑셀 파일 제공"],
   },
   {
     plan: "premium" as const,
@@ -70,22 +70,22 @@ const PRICING_LD = {
   })),
 };
 
-const COMPARE_HEAD = ["스몰케어", "스몰양가", "스탠다드", "프리미엄"];
+const COMPARE_HEAD = ["스몰케어", "스탠다드", "스몰양가", "프리미엄"];
 
 const COMPARE_ROWS: [string, string, string, string, string][] = [
-  ["기본 요금", "39만원", "40만원", "45만원", "80만원"],
-  ["축의대 유형", "한측 축의대", "양가 통합 (1곳)", "한측 축의대", "양가 분리 (2곳)"],
-  ["기준 하객", "100명 이하", "양가 각 60명 이하", "101~200명", "양가 합계 400명"],
+  ["기본 요금", "39만원", "45만원", "40만원", "80만원"],
+  ["축의대 유형", "한측 축의대", "한측 축의대", "양가 통합 (1곳)", "양가 분리 (2곳)"],
+  ["기준 하객", "100명 이하", "101~200명", "양가 각 60명 이하", "양가 합계 400명"],
   ["배정 버틀러", "2명", "2명", "2명", "4명"],
-  ["제공 자료", "봉투·식대 집계 엑셀", "봉투·식대 집계 엑셀", "정산 리포트", "정산 리포트"],
+  ["제공 자료", "봉투·식대 집계 엑셀", "정산 리포트", "봉투·식대 집계 엑셀", "정산 리포트"],
   ["기준 초과 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
-  ["버틀러 추가", "해당 없음", "해당 없음", "1명 10만원", "1명 10만원"],
+  ["버틀러 추가", "해당 없음", "1명 10만원", "해당 없음", "1명 10만원"],
   ["개봉 집계", "무료", "무료", "무료", "무료"],
 ];
 
 const EVENT_ROW: [string, string, string, string, string] = [
   "연말 이벤트가",
-  ...(["small", "smallboth", "standard", "premium"] as const).map((k) => EVENT.prices[k] / 10000 + "만원"),
+  ...(["small", "standard", "smallboth", "premium"] as const).map((k) => EVENT.prices[k] / 10000 + "만원"),
 ] as [string, string, string, string, string];
 
 const EXTRA_COSTS = [
@@ -258,11 +258,15 @@ export default function PricingPage() {
         <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>가격안내</h1>
         <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모와 축의대 유형에 맞춰 네 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
         {eventOn && (
-          <div style={{ display: "inline-flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "6px 12px", marginTop: 24, padding: "12px 22px", borderRadius: 999, background: "#33232A", color: "#F3E9EB", fontSize: 14, lineHeight: 1.6 }}>
-            <span style={{ background: "#A9647E", color: "#FFFFFF", fontSize: 11.5, letterSpacing: "0.12em", padding: "3px 10px", borderRadius: 999 }}>EVENT</span>
-            <span>
-              {EVENT.name} · <b style={{ fontWeight: 500, color: "#FFFFFF" }}>{EVENT.label}</b> 이벤트가 적용 (밀봉 · 개봉 집계 모두)
-            </span>
+          <div style={{ marginTop: 30 }}>
+            <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.36em", color: "#A9647E", margin: "0 0 8px", display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
+              <span style={{ width: 28, height: 1, background: "#C99AAB" }} />
+              YEAR-END EVENT
+              <span style={{ width: 28, height: 1, background: "#C99AAB" }} />
+            </p>
+            <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#8E3F5F", margin: 0 }}>
+              {EVENT.name} · <b style={{ fontWeight: 600 }}>{EVENT.label}</b> 이벤트가 적용 <span style={{ color: "#9A8189" }}>(밀봉 · 개봉 집계 모두)</span>
+            </p>
           </div>
         )}
       </section>
@@ -306,7 +310,7 @@ export default function PricingPage() {
               </span>
               {eventPrice !== null && (
                 <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
-                  <span style={{ background: "#A9647E", color: "#FFFFFF", fontSize: 11.5, padding: "3px 9px", borderRadius: 999 }}>연말 이벤트가</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: "0.02em", color: c.dark ? "#E9CAD1" : "#A9647E" }}>✦ 연말 이벤트가</span>
                   <span style={{ color: c.dark ? "#B79AA3" : "#A8959B", textDecoration: "line-through" }}>{c.priceWhole}만원</span>
                 </div>
               )}
