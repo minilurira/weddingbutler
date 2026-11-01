@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useReservation } from "@/components/ReservationProvider";
 import { trackKakaoChatClick } from "@/lib/analytics";
@@ -33,21 +34,41 @@ function CalendarIcon({ size = 15 }: { size?: number }) {
 export function FloatingCta() {
   const pathname = usePathname() ?? "";
   const { openModal } = useReservation();
+  // 첫 화면의 예약 버튼과 겹치지 않도록, 화면 높이의 70% 이상 내려가면 보여준다
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const update = () => setVisible(window.scrollY > window.innerHeight * 0.7);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   if (HIDDEN_PREFIXES.some((p) => pathname.startsWith(p))) return null;
 
   return (
-    <div className="floating-cta" role="group" aria-label="예약 바로가기">
+    <div
+      className={visible ? "floating-cta is-visible" : "floating-cta"}
+      role="group"
+      aria-label="예약 바로가기"
+      aria-hidden={!visible}
+    >
       <a
         href={KAKAO_CHAT_URL}
         target="_blank"
         rel="noopener noreferrer"
+        tabIndex={visible ? undefined : -1}
         onClick={() => trackKakaoChatClick("floating")}
         className="floating-cta-btn floating-cta-kakao"
       >
         <KakaoIcon />
         예약문의
       </a>
-      <button type="button" onClick={() => openModal()} className="floating-cta-btn floating-cta-book">
+      <button type="button" tabIndex={visible ? undefined : -1} onClick={() => openModal()} className="floating-cta-btn floating-cta-book">
         <CalendarIcon />
         예약하기
       </button>
