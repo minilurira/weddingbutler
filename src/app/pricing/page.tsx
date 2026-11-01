@@ -91,7 +91,7 @@ const EVENT_ROW: [string, string, string, string, string] = [
 const EXTRA_COSTS = [
   { label: "기준 초과 하객", value: "1명당 2,000원", note: "접수대에서 접수한 하객 기준 · 혼주·예식장이 직접 안내한 하객은 세지 않습니다" },
   { label: "버틀러 추가", value: "1명당 100,000원", note: "스탠다드 · 프리미엄" },
-  { label: "서비스 지역 외", value: "사전 견적", note: "서울·경기 외 지역은 예약 전 출장비를 안내드립니다" },
+  { label: "서비스 지역 외", value: "5~10만원", note: "서울·경기 외 지역은 거리에 따라 출장비가 별도로 추가됩니다(예약 전 안내)" },
   { label: "개봉 집계", value: "무료", note: null as string | null },
 ];
 
@@ -216,7 +216,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
       <>
         <NoticeItem>서비스는 축의금 접수대 구역 내에서 진행되며, 해당 구역 밖에서 발생한 사안에 대해서는 책임을 지지 않습니다.</NoticeItem>
         <NoticeItem>축의금은 예약 때 또는 사전 통화 때 지정하신 인수자께만 전달합니다. 지정되지 않은 분이 요청하시면 의뢰인께 직접 확인한 뒤 전달합니다.</NoticeItem>
-        <NoticeItem>서비스 지역은 서울·경기 기준이며, 그 외 지역은 예약 전 출장비를 안내드립니다.</NoticeItem>
+        <NoticeItem>서비스 지역은 서울·경기 기준이며, 그 외 지역은 출장비 5~10만원이 별도로 추가됩니다.</NoticeItem>
       </>
     ),
   },

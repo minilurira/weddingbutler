@@ -299,7 +299,7 @@ export default function HomePage() {
           </Reveal>
 
           <p style={{ textAlign: "center", fontSize: 13, color: "#9A8189", margin: "28px 0 0", lineHeight: 1.8 }}>
-            ※ 본사(성남 분당) 기준 이동 거리에 따라 출장비가 추가될 수 있으며, 금액은 예약 후 사전 상담 시 안내드립니다.
+            ※ 서울·경기 외 지역은 이동 거리에 따라 출장비 5~10만원이 별도로 추가되며, 정확한 금액은 예약 전 안내드립니다.
           </p>
         </div>
       </section>
