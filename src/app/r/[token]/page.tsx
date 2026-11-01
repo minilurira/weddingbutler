@@ -109,7 +109,7 @@ export default async function RecordPage({
     </div>
   );
 
-  // 스몰케어는 엑셀 다운로드만 제공 (S17)
+  // 스몰케어·스몰양가는 엑셀 다운로드만 제공 (S17) — 어드민이 스몰양가도 plan "small"로 보낸다
   if (info.plan === "small") {
     return (
       <>
@@ -118,7 +118,7 @@ export default async function RecordPage({
           <section className="wbr-card wbr-gate">
             <h1>{info.coupleName} 님의 축의 기록</h1>
             <p className="wbr-gate__lead">
-              스몰케어 상품은 축의 기록을 엑셀 파일로 드려요.
+              이 상품은 축의 기록을 엑셀 파일로 드려요.
               {info.expiresAt ? ` ${krDate(info.expiresAt)}에 삭제되니 내려받아 보관해 주세요.` : ""}
             </p>
             <a className="wbr-btn wbr-btn--primary wbr-btn--block" href={downloadUrl}>엑셀 다운로드</a>

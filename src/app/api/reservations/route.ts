@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fetchBlockedSlots } from "@/lib/availability";
-import { calcPrice, isOneSide, isPaymentType, PLANS, sideForPlan, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
+import { calcPrice, isBothSidePlan, isOneSide, isPaymentType, PLANS, sideForPlan, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
 import { fetchSpecialOffer, holdSpecialOffer, releaseSpecialOffer, SPECIAL_STATE_MESSAGE, SPECIAL_TOKEN_RE } from "@/lib/special-offer";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     if (!isOneSide(side) && side !== "both") {
       return NextResponse.json({ message: "신랑측, 신부측 또는 양가를 선택해 주세요." }, { status: 400 });
     }
-  } else if (plan !== "premium" && !isOneSide(side)) {
+  } else if (!isBothSidePlan(plan) && !isOneSide(side)) {
     return NextResponse.json({ message: "신랑측 또는 신부측을 선택해 주세요." }, { status: 400 });
   }
 
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
     specialAmount = offer.amount;
   }
 
-  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType);
+  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType, `${year}-${pad(month)}-${pad(day)}`);
   const planInfo = PLANS[plan];
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`

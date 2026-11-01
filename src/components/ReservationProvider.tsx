@@ -29,7 +29,7 @@ export function useReservation(): ReservationContextValue {
 }
 
 function isPlanKey(v: string | null): v is PlanKey {
-  return v === "small" || v === "standard" || v === "premium";
+  return v === "small" || v === "smallboth" || v === "standard" || v === "premium";
 }
 
 export function ReservationProvider({ children }: { children: ReactNode }) {

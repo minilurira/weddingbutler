@@ -7,6 +7,7 @@ import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { PriceTeaserCards } from "@/components/home/PriceTeaserCards";
 import { ReviewMarquee } from "@/components/home/ReviewMarquee";
 import { RecordShowcase } from "@/components/home/RecordShowcase";
+import { HomePopup } from "@/components/home/HomePopup";
 import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { HOME_FAQS } from "@/lib/home-faq";
@@ -85,6 +86,7 @@ export default function HomePage() {
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_LD) }} />
       <Header />
+      <HomePopup />
 
       <section id="top" data-mq="hero" className="hero">
         <div className="hero-bg" aria-hidden="true" />
