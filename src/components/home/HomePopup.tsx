@@ -38,9 +38,9 @@ function todayKst(): string {
 function CardIcon() {
   return (
     <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#33232A" strokeWidth="1.5" />
-      <path d="M1 5h20" stroke="#33232A" strokeWidth="2" />
-      <path d="M4 11h5" stroke="#33232A" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#8E3F5F" strokeWidth="1.5" />
+      <path d="M1 5h20" stroke="#8E3F5F" strokeWidth="2" />
+      <path d="M4 11h5" stroke="#8E3F5F" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -293,12 +293,10 @@ export function HomePopup() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 10,
-                  padding: "8px 14px 8px 10px",
-                  marginBottom: 16,
-                  fontSize: 13,
-                  borderRadius: 999,
-                  border: "1px solid #D9C6CC",
-                  background: "rgba(255,255,255,0.6)",
+                  marginBottom: 14,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#8E3F5F",
                 }}
               >
                 {slide.chip}
