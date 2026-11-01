@@ -131,7 +131,7 @@ export function PriceTeaserCards() {
                   <span style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
                     <span style={{ fontSize: 12, color: dark ? "#E9CAD1" : "#A9647E" }}>연말 이벤트가</span>
                     <span style={{ fontSize: 13, color: dark ? "#B79AA3" : "#A8959B", textDecoration: "line-through" }}>{manwon(PLANS[key].base)}</span>
-                    <span style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600, color: dark ? "#FFFFFF" : "#8E3F5F" }}>{manwon(EVENT.prices[key])}</span>
+                    <span style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 500, color: dark ? "#FFFFFF" : "#8E3F5F" }}>{manwon(EVENT.prices[key])}</span>
                   </span>
                 )}
               </div>

@@ -34,8 +34,8 @@ export default function ServicePage() {
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>OUR SERVICE</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>축의대대행 · 축의대행 서비스</h1>
-        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.</p>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 400, margin: "0 0 18px", letterSpacing: "-0.025em" }}>축의대대행 · 축의대행 서비스</h1>
+        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>전문 교육을 받은 웨딩버틀러가 접수부터 정산까지 책임집니다.</p>
       </section>
 
       <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(56px,9vw,90px)" }}>
@@ -53,7 +53,7 @@ export default function ServicePage() {
             <Image src="/img/butlers.jpeg" alt="웨딩버틀러 현장 응대" fill priority style={{ objectFit: "cover" }} sizes="(max-width: 768px) 100vw, 50vw" />
           </div>
           <div>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 28px", lineHeight: 1.45, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 400, margin: "0 0 28px", lineHeight: 1.45, letterSpacing: "-0.025em" }}>
               예식 당일, 이 모든 것을
               <br />대신 해드립니다
             </h2>
@@ -82,7 +82,7 @@ export default function ServicePage() {
         <div style={{ maxWidth: 1180, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>HOW IT WORKS</p>
-            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,32px)", fontWeight: 600, margin: 0, letterSpacing: "-0.02em" }}>예약부터 정산까지, 네 단계</h2>
+            <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5vw,32px)", fontWeight: 400, margin: 0, letterSpacing: "-0.025em" }}>예약부터 정산까지, 네 단계</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px,1fr))", gap: 20 }}>
             {HOW_IT_WORKS.map((s) => (
@@ -93,7 +93,7 @@ export default function ServicePage() {
                   </span>
                   <span style={{ fontSize: 12, letterSpacing: "0.2em", color: "#9A8189" }}>{s.tag}</span>
                 </div>
-                <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 600, margin: "0 0 12px" }}>{s.title}</h3>
+                <h3 style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 500, margin: "0 0 12px" }}>{s.title}</h3>
                 <p style={{ fontSize: 14, lineHeight: 1.85, color: "#6B5A60", margin: 0 }}>{s.body}</p>
               </div>
             ))}
@@ -103,7 +103,7 @@ export default function ServicePage() {
 
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)" }}>
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
-          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>축의대대행이란 무엇인가요?</h2>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 400, margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.025em" }}>축의대대행이란 무엇인가요?</h2>
           <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.95, color: "#473A3F" }}>
             축의대대행(축의대행, 축의금 대행)은 결혼식 당일 축의대에서 하는 일, 즉 축의금 접수와 식권 배부, 답례품 전달, 정산과 인계를 전문 인력이 대신 맡는 서비스입니다. 가족과 지인에게 부탁하지 않아도 되고, 두 분과 양가 가족이 예식에 온전히 집중하실 수 있습니다.
           </p>
@@ -128,7 +128,7 @@ export default function ServicePage() {
           backgroundPosition: "center 30%",
         }}
       >
-        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 600, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.02em" }}>
+        <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(24px,5.6vw,34px)", fontWeight: 400, color: "#FFFFFF", margin: "0 0 18px", lineHeight: 1.5, letterSpacing: "-0.025em" }}>
           가장 행복한 날의 걱정 하나,
           <br />저희가 덜어드릴게요
         </h2>

@@ -17,8 +17,8 @@ export default function ContactPage() {
 
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>CONTACT</p>
-        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>문의하기</h1>
-        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>궁금한 점을 남겨주시면 영업일 기준 24시간 내 답변드립니다.</p>
+        <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 400, margin: "0 0 18px", letterSpacing: "-0.025em" }}>문의하기</h1>
+        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300, margin: 0 }}>궁금한 점을 남겨주시면 영업일 기준 24시간 내 답변드립니다.</p>
       </section>
 
       <ContactSection />

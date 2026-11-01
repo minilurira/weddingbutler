@@ -27,6 +27,9 @@ body {
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  /* 한국어 단어가 중간에서 끊기지 않게 단어 단위 줄바꿈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 * {
