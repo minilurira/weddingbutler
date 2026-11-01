@@ -23,7 +23,6 @@ interface Slide {
   image: string;
   imagePosition: string;
   eyebrow?: string;
-  chip?: ReactNode;
   title: ReactNode;
   sub: ReactNode;
   highlight?: ReactNode;
@@ -33,16 +32,6 @@ interface Slide {
 
 function todayKst(): string {
   return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-}
-
-function CardIcon() {
-  return (
-    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#33232A" strokeWidth="1.5" />
-      <path d="M1 5h20" stroke="#33232A" strokeWidth="2" />
-      <path d="M4 11h5" stroke="#33232A" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
 }
 
 function buildSlides(): Slide[] {
@@ -75,12 +64,6 @@ function buildSlides(): Slide[] {
     theme: "light",
     image: "/popup/card-payment.jpg",
     imagePosition: "50% 50%",
-    chip: (
-      <>
-        <CardIcon />
-        전액 카드결제 가능
-      </>
-    ),
     title: (
       <>
         예약할 때 카드로,
@@ -286,23 +269,6 @@ export function HomePopup() {
                 <span style={{ width: 22, height: 1, background: "#F1D9DF", opacity: 0.8 }} />
                 {slide.eyebrow}
               </p>
-            )}
-            {slide.chip && (
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "8px 14px 8px 10px",
-                  marginBottom: 16,
-                  fontSize: 13,
-                  borderRadius: 999,
-                  border: "1px solid #D9C6CC",
-                  background: "rgba(255,255,255,0.6)",
-                }}
-              >
-                {slide.chip}
-              </div>
             )}
             <h2 style={{ fontFamily: fontSerif, fontWeight: 600, fontSize: "clamp(26px,7vw,31px)", lineHeight: 1.35, margin: "0 0 12px", letterSpacing: "-0.02em" }}>{slide.title}</h2>
             <p style={{ fontSize: 14.5, lineHeight: 1.75, color: light ? "#5E4E54" : "rgba(255,255,255,0.86)", margin: 0 }}>{slide.sub}</p>

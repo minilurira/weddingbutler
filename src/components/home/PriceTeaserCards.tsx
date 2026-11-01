@@ -31,12 +31,12 @@ const BULLETS: Record<PublicPlanKey, { text: string; muted?: boolean }[]> = {
 
 const EYEBROW: Record<PublicPlanKey, string> = {
   small: "01 SMALL CARE",
-  smallboth: "02 SMALL BOTH",
-  standard: "03 STANDARD",
+  smallboth: "03 SMALL BOTH",
+  standard: "02 STANDARD",
   premium: "04 PREMIUM",
 };
 
-const DELAY: Record<PublicPlanKey, number> = { small: 50, smallboth: 120, standard: 190, premium: 260 };
+const DELAY: Record<PublicPlanKey, number> = { small: 50, standard: 120, smallboth: 190, premium: 260 };
 
 export function PriceTeaserCards() {
   const [selected, setSelected] = useState<PublicPlanKey>("standard");
