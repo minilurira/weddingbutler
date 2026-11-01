@@ -18,6 +18,8 @@ const ROTATE_MS = 5000;
 
 interface Slide {
   id: string;
+  /** dark: 사진 아래쪽을 어둡게 하고 흰 글씨 / light: 밝은 여백 위 위쪽에 진한 글씨 */
+  theme: "dark" | "light";
   image: string;
   imagePosition: string;
   eyebrow?: string;
@@ -36,9 +38,9 @@ function todayKst(): string {
 function CardIcon() {
   return (
     <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#fff" strokeWidth="1.5" />
-      <path d="M1 5h20" stroke="#fff" strokeWidth="2" />
-      <path d="M4 11h5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#33232A" strokeWidth="1.5" />
+      <path d="M1 5h20" stroke="#33232A" strokeWidth="2" />
+      <path d="M4 11h5" stroke="#33232A" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -48,8 +50,9 @@ function buildSlides(): Slide[] {
   if (isEventShowing()) {
     slides.push({
       id: "year-end-event",
+      theme: "dark",
       image: "/popup/year-end-event.jpg",
-      imagePosition: "50% 40%",
+      imagePosition: "50% 45%",
       eyebrow: "YEAR-END EVENT",
       title: EVENT.name,
       sub: (
@@ -60,7 +63,7 @@ function buildSlides(): Slide[] {
       ),
       highlight: (
         <>
-          스몰케어 <b style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{manwon(EVENT.prices.small)}</b>부터
+          스몰케어 <b style={{ fontFamily: fontSerif, fontSize: 20, fontWeight: 600, color: "#FFFFFF" }}>{manwon(EVENT.prices.small)}</b>부터
         </>
       ),
       cta: "이벤트 가격 보기",
@@ -69,8 +72,9 @@ function buildSlides(): Slide[] {
   }
   slides.push({
     id: "card-full-payment",
+    theme: "light",
     image: "/popup/card-payment.jpg",
-    imagePosition: "50% 15%",
+    imagePosition: "50% 50%",
     chip: (
       <>
         <CardIcon />
@@ -83,20 +87,19 @@ function buildSlides(): Slide[] {
         <br />한 번에 끝내세요
       </>
     ),
-    sub: "예식 당일엔 현금 걱정 없이 맡겨 주세요",
+    sub: (
+      <>
+        예식 당일엔
+        <br />
+        현금 걱정 없이 맡겨 주세요
+      </>
+    ),
     cta: "예약하기",
     action: "booking",
   });
   return slides;
 }
 
-const glass: CSSProperties = {
-  border: "1px solid rgba(255,255,255,0.42)",
-  background: "rgba(255,255,255,0.1)",
-  backdropFilter: "blur(6px)",
-  WebkitBackdropFilter: "blur(6px)",
-  borderRadius: 999,
-};
 
 export function HomePopup() {
   const { openModal } = useReservation();
@@ -149,6 +152,7 @@ export function HomePopup() {
 
   if (!open || !count) return null;
   const slide = slides[Math.min(idx, count - 1)];
+  const light = slide.theme === "light";
 
   function hideToday() {
     try {
@@ -223,7 +227,7 @@ export function HomePopup() {
             if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
             setTouchX(null);
           }}
-          style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#33232A" }}
+          style={{ position: "relative", aspectRatio: "4 / 5.2", overflow: "hidden", background: light ? "#EFE5DA" : "#33232A" }}
         >
           {slides.map((s, i) => (
             <Image
@@ -238,7 +242,13 @@ export function HomePopup() {
           ))}
           <div
             aria-hidden="true"
-            style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(25,16,20,0) 28%, rgba(25,16,20,0.5) 52%, rgba(25,16,20,0.9) 100%)" }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              opacity: light ? 0 : 1,
+              transition: "opacity .6s ease",
+              background: "linear-gradient(180deg, rgba(25,16,20,0.25) 0%, rgba(25,16,20,0.05) 25%, rgba(25,16,20,0.45) 50%, rgba(25,16,20,0.9) 100%)",
+            }}
           />
           {count > 1 && (
             <div
@@ -251,7 +261,7 @@ export function HomePopup() {
                 fontSize: 14,
                 letterSpacing: "0.2em",
                 color: "#FFFFFF",
-                background: "rgba(25,16,20,0.3)",
+                background: light ? "rgba(51,35,42,0.55)" : "rgba(25,16,20,0.3)",
                 padding: "4px 12px",
                 borderRadius: 999,
               }}
@@ -259,7 +269,18 @@ export function HomePopup() {
               {String(idx + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
             </div>
           )}
-          <div key={slide.id} style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 1, padding: "0 clamp(22px,6vw,30px) clamp(24px,6vw,30px)", color: "#FFFFFF", animation: "wbPopupUp .5s ease" }}>
+          <div
+            key={slide.id}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              zIndex: 1,
+              ...(light ? { top: 0, padding: "64px 28px 0" } : { bottom: 0, padding: "0 clamp(22px,6vw,30px) 100px" }),
+              color: light ? "#33232A" : "#FFFFFF",
+              animation: "wbPopupUp .5s ease",
+            }}
+          >
             {slide.eyebrow && (
               <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.42em", color: "#F1D9DF", margin: "0 0 12px", display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{ width: 22, height: 1, background: "#F1D9DF", opacity: 0.8 }} />
@@ -267,27 +288,53 @@ export function HomePopup() {
               </p>
             )}
             {slide.chip && (
-              <div style={{ ...glass, display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 10px", marginBottom: 16, fontSize: 13 }}>{slide.chip}</div>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "8px 14px 8px 10px",
+                  marginBottom: 16,
+                  fontSize: 13,
+                  borderRadius: 999,
+                  border: "1px solid #D9C6CC",
+                  background: "rgba(255,255,255,0.6)",
+                }}
+              >
+                {slide.chip}
+              </div>
             )}
             <h2 style={{ fontFamily: fontSerif, fontWeight: 600, fontSize: "clamp(26px,7vw,31px)", lineHeight: 1.35, margin: "0 0 12px", letterSpacing: "-0.02em" }}>{slide.title}</h2>
-            <p style={{ fontSize: 14.5, lineHeight: 1.75, color: "rgba(255,255,255,0.86)", margin: 0 }}>{slide.sub}</p>
+            <p style={{ fontSize: 14.5, lineHeight: 1.75, color: light ? "#5E4E54" : "rgba(255,255,255,0.86)", margin: 0 }}>{slide.sub}</p>
             {slide.highlight && (
-              <div style={{ ...glass, display: "inline-flex", alignItems: "baseline", gap: 6, marginTop: 16, padding: "9px 16px", fontSize: 13.5 }}>{slide.highlight}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 14, fontSize: 14, color: "#F1D9DF" }}>{slide.highlight}</div>
             )}
           </div>
-        </div>
-
-        <div style={{ padding: "18px 22px 0" }}>
           <button
             onClick={act}
-            className="btn-dark-hover"
-            style={{ display: "block", width: "100%", padding: 15, borderRadius: 999, border: "none", background: "#33232A", color: "#F7EEF0", fontSize: 15, fontWeight: 500, cursor: "pointer" }}
+            style={{
+              position: "absolute",
+              zIndex: 2,
+              bottom: light ? 28 : 24,
+              left: light ? 28 : 24,
+              right: light ? "auto" : 24,
+              padding: light ? "14px 26px" : 15,
+              borderRadius: 999,
+              border: "none",
+              background: light ? "#33232A" : "#FBF7F5",
+              color: light ? "#F7EEF0" : "#33232A",
+              fontSize: 15,
+              fontWeight: 500,
+              cursor: "pointer",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
+            }}
           >
             {slide.cta} →
           </button>
         </div>
+
         {count > 1 && (
-          <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "14px 0 2px" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "14px 0 0" }}>
             {slides.map((s, i) => (
               <button
                 key={s.id}
@@ -298,7 +345,7 @@ export function HomePopup() {
             ))}
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 24px 16px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 24px 16px" }}>
           <button onClick={hideToday} style={linkBtn}>
             오늘 하루 보지 않기
           </button>
