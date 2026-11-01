@@ -12,7 +12,7 @@ export interface Plan {
 /** 일반 예약 화면에 보이는 요금제 (스페셜 제외) */
 export type PublicPlanKey = Exclude<PlanKey, "special">;
 
-export const PLAN_ORDER: PublicPlanKey[] = ["small", "smallboth", "standard", "premium"];
+export const PLAN_ORDER: PublicPlanKey[] = ["small", "standard", "smallboth", "premium"];
 
 export const PLANS: Record<PlanKey, Plan> = {
   small: {
