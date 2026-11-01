@@ -424,3 +424,66 @@ button {
 .inv-eq { transform-origin: bottom; animation: invEq 0.9s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .inv-eq { animation: none; } }
 
+
+/* 플로팅 예약문의·예약하기 버튼 (메인 팝업 150, 예약 모달 200보다 아래) */
+.floating-cta {
+  position: fixed;
+  right: 28px;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.floating-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.floating-cta-btn:hover {
+  transform: translateY(-2px);
+}
+.floating-cta-kakao {
+  background: #fee500;
+  color: #191919;
+  border: 1px solid #fee500;
+  box-shadow: 0 10px 28px rgba(51, 35, 42, 0.22);
+}
+.floating-cta-book {
+  background: #33232a;
+  color: #f3e9eb;
+  border: 1px solid rgba(243, 233, 235, 0.35);
+  box-shadow: 0 10px 28px rgba(51, 35, 42, 0.28);
+}
+@media (max-width: 860px) {
+  .floating-cta {
+    right: 14px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+  .floating-cta-btn {
+    gap: 6px;
+    padding: 9px 15px;
+    font-size: 13px;
+    box-shadow: 0 6px 18px rgba(51, 35, 42, 0.22);
+  }
+  .floating-cta-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+@media print {
+  .floating-cta {
+    display: none;
+  }
+}
