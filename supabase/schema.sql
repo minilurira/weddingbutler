@@ -6,7 +6,7 @@ create extension if not exists pgcrypto;
 create table if not exists reservations (
   id uuid primary key default gen_random_uuid(),
   booking_no text not null unique,
-  plan text not null check (plan in ('small', 'standard', 'premium')),
+  plan text not null check (plan in ('small', 'smallboth', 'standard', 'premium', 'special')),
   ceremony_year int not null,
   ceremony_month int not null,
   ceremony_day int not null,

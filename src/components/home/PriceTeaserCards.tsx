@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
-import { PLAN_ORDER, PLANS, type PublicPlanKey } from "@/lib/plans";
+import { useEffect, useState, type CSSProperties } from "react";
+import { DESK_TYPE, EVENT, isEventShowing, manwon, PLAN_ORDER, PLANS, type PublicPlanKey } from "@/lib/plans";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { Reveal } from "@/components/Reveal";
 
@@ -10,6 +10,11 @@ const BULLETS: Record<PublicPlanKey, { text: string; muted?: boolean }[]> = {
     { text: "하객 100명 이하 예식" },
     { text: "웨딩버틀러 2명 배정" },
     { text: "봉투 · 식대 집계 엑셀 파일 제공" },
+  ],
+  smallboth: [
+    { text: "양가 각 하객 60명 이하 예식" },
+    { text: "웨딩버틀러 2명 · 축의대 1곳" },
+    { text: "양가 통합 기록 · 엑셀 파일 제공" },
   ],
   standard: [
     { text: "하객 101~200명 예식" },
@@ -26,17 +31,21 @@ const BULLETS: Record<PublicPlanKey, { text: string; muted?: boolean }[]> = {
 
 const EYEBROW: Record<PublicPlanKey, string> = {
   small: "01 SMALL CARE",
-  standard: "02 STANDARD",
-  premium: "03 PREMIUM",
+  smallboth: "02 SMALL BOTH",
+  standard: "03 STANDARD",
+  premium: "04 PREMIUM",
 };
 
-const DELAY: Record<PublicPlanKey, number> = { small: 50, standard: 150, premium: 250 };
+const DELAY: Record<PublicPlanKey, number> = { small: 50, smallboth: 120, standard: 190, premium: 260 };
 
 export function PriceTeaserCards() {
   const [selected, setSelected] = useState<PublicPlanKey>("standard");
+  // 이벤트가 표시는 브라우저 시각으로 정한다 (기간이 끝난 뒤 정적 HTML과 어긋나지 않게).
+  const [eventOn, setEventOn] = useState(false);
+  useEffect(() => setEventOn(isEventShowing()), []);
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 22, alignItems: "start" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))", gap: 18, alignItems: "start" }}>
       {PLAN_ORDER.map((key) => {
         const isStandard = key === "standard";
         const on = selected === key;
@@ -47,7 +56,7 @@ export function PriceTeaserCards() {
           background: dark ? "#33232A" : "#FFFFFF",
           border: "1px solid " + (dark ? "#33232A" : "#E7D5DA"),
           borderRadius: 4,
-          padding: "44px 34px 38px",
+          padding: "44px 28px 36px",
         };
         return (
           <Reveal key={key} delay={DELAY[key]}>
@@ -88,15 +97,45 @@ export function PriceTeaserCards() {
                   fontFamily: fontSerif,
                   fontSize: 26,
                   fontWeight: 600,
-                  margin: "0 0 22px",
+                  margin: "0 0 12px",
                   color: dark ? "#FFFFFF" : undefined,
-                  paddingBottom: 22,
-                  borderBottom: "1px solid " + (dark ? "rgba(255,255,255,0.16)" : "#E7D5DA"),
                 }}
               >
                 {PLANS[key].name}
               </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 13, margin: "26px 0 0" }}>
+              <div
+                style={{
+                  paddingBottom: 20,
+                  marginBottom: 22,
+                  borderBottom: "1px solid " + (dark ? "rgba(255,255,255,0.16)" : "#E7D5DA"),
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  gap: 12,
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 500,
+                    padding: "4px 10px",
+                    borderRadius: 999,
+                    ...(key === "smallboth" || key === "premium"
+                      ? { background: dark ? "#F3E9EB" : "#33232A", color: dark ? "#33232A" : "#F3E9EB" }
+                      : { background: dark ? "rgba(255,255,255,0.12)" : "#F6ECEF", color: dark ? "#E9CAD1" : "#A9647E" }),
+                  }}
+                >
+                  {DESK_TYPE[key]}
+                </span>
+                {eventOn && (
+                  <span style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 12, color: dark ? "#E9CAD1" : "#A9647E" }}>연말 이벤트가</span>
+                    <span style={{ fontSize: 13, color: dark ? "#B79AA3" : "#A8959B", textDecoration: "line-through" }}>{manwon(PLANS[key].base)}</span>
+                    <span style={{ fontFamily: fontSerif, fontSize: 22, fontWeight: 600, color: dark ? "#FFFFFF" : "#8E3F5F" }}>{manwon(EVENT.prices[key])}</span>
+                  </span>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 13, margin: 0 }}>
                 {BULLETS[key].map((b) => (
                   <div
                     key={b.text}

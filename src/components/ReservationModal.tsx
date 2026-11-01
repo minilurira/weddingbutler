@@ -4,6 +4,10 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   calcPrice,
   DEPOSIT_AMOUNT,
+  DESK_TYPE,
+  EVENT,
+  isBothSidePlan,
+  isEventShowing,
   guestsForPlanSwitch,
   ONSITE_CASH_ONLY_NOTE,
   PAYMENT_TYPES,
@@ -18,6 +22,7 @@ import {
   type PaymentType,
   type PayMethod,
   type PlanKey,
+  type PublicPlanKey,
 } from "@/lib/plans";
 import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
@@ -215,12 +220,17 @@ export function ReservationModal({
   if (!open) return null;
 
   const P = PLANS[state.plan];
-  const oneSide = state.plan !== "premium";
+  const oneSide = !isBothSidePlan(state.plan);
   const side = sideForPlan(state.plan, state.side);
+  const deskLabel = side === "both" && state.plan in DESK_TYPE ? DESK_TYPE[state.plan as PublicPlanKey] : side ? SIDE_LABEL[side] : "선택해 주세요";
   const blockedSlots = blocked.key === dateKey ? blocked.slots : [];
+  const eventShowing = isEventShowing();
+  // 날짜를 고르기 전에는 이벤트 기간 중이면 이벤트가로 보여주고, 날짜를 고르면 그 예식일 기준으로 계산한다.
+  const priceDate = dateKey || (eventShowing ? EVENT.from : null);
   const price = test
     ? testPrice(state.paymentType)
-    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType);
+    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType, priceDate);
+  const eventApplied = !test && price.base < price.listBase;
   const filled = !!(
     state.date &&
     state.time &&
@@ -469,7 +479,7 @@ export function ReservationModal({
             <div data-mq="split" style={{ display: "grid", gridTemplateColumns: "minmax(0,1.35fr) minmax(0,1fr)" }}>
               <div data-mq="split-left" style={{ padding: "clamp(26px,5vw,44px) clamp(18px,4.5vw,40px)", borderRight: "1px solid #E7D5DA" }}>
                 <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#A9647E", marginBottom: 16 }}>STEP 1 · 요금제</div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 8 }}>
                   {PLAN_ORDER.map((k) => (
                     <div
                       key={k}
@@ -477,12 +487,18 @@ export function ReservationModal({
                         pick(k);
                         onPlanChange(k);
                       }}
-                      style={chipStyle(state.plan === k)}
+                      style={{ ...chipStyle(state.plan === k), padding: "11px 4px" }}
                     >
-                      {PLANS[k].name}
+                      <span style={{ display: "block", whiteSpace: "nowrap" }}>{PLANS[k].name}</span>
+                      <span style={{ display: "block", fontSize: 11, marginTop: 3, whiteSpace: "nowrap", opacity: 0.75 }}>{DESK_TYPE[k]}</span>
                     </div>
                   ))}
                 </div>
+                {eventShowing && !test && (
+                  <p style={{ fontSize: 12.5, lineHeight: 1.7, color: "#8E3F5F", margin: "12px 0 0" }}>
+                    {EVENT.name} · {EVENT.label}은 이벤트가로 결제됩니다. (밀봉 · 개봉 집계 모두 적용)
+                  </p>
+                )}
 
                 <div style={{ height: 1, background: "#E7D5DA", margin: "32px 0" }} />
 
@@ -684,13 +700,25 @@ export function ReservationModal({
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "22px 0", borderTop: "1px solid #DCC4CC", borderBottom: "1px solid #DCC4CC" }}>
                   <SummaryRow label="예식 일시" value={whenLabel} />
-                  <SummaryRow label="축의대" value={side ? SIDE_LABEL[side] : "선택해 주세요"} />
+                  <SummaryRow label="축의대" value={deskLabel} />
                   <SummaryRow label="예식장" value={state.venue.trim() || "미입력"} />
                   <SummaryRow label="배정 버틀러" value={`${P.butlers + state.extraButlers}명`} />
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, padding: "22px 0", borderBottom: "1px solid #DCC4CC" }}>
-                  <SummaryRow label="기본 요금" value={won(price.base)} />
+                  {eventApplied ? (
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
+                      <span style={{ fontSize: 13, color: "#6B5A60" }}>
+                        기본 요금 <span style={{ fontSize: 11.5, color: "#8E3F5F" }}>연말 이벤트가</span>
+                      </span>
+                      <span style={{ fontSize: 14, color: "#33232A", fontWeight: 500, textAlign: "right" }}>
+                        <span style={{ fontSize: 12.5, color: "#A8959B", textDecoration: "line-through", marginRight: 6 }}>{won(price.listBase)}</span>
+                        {won(price.base)}
+                      </span>
+                    </div>
+                  ) : (
+                    <SummaryRow label="기본 요금" value={won(price.base)} />
+                  )}
                   <SummaryRow label="버틀러 추가" value={price.extraButlerAmount ? "+ " + won(price.extraButlerAmount) : "-"} />
                 </div>
 
@@ -863,7 +891,7 @@ export function ReservationModal({
               >
                 <SummaryRow label="예약번호" value={state.bookingNo} wide />
                 <SummaryRow label="요금제" value={P.name} wide />
-                {side && <SummaryRow label="축의대" value={SIDE_LABEL[side]} wide />}
+                {side && <SummaryRow label="축의대" value={deskLabel} wide />}
                 <SummaryRow label="예식 일시" value={whenLabel} wide />
                 <SummaryRow label="결제 방식" value={PAYMENT_TYPES[state.paymentType].name} wide />
                 <SummaryRow label="결제한 금액" value={won(price.deposit)} wide />

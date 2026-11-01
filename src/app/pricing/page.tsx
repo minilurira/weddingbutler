@@ -5,10 +5,14 @@ import { OpenModalButton } from "@/components/OpenModalButton";
 import { BOOKING_OPEN_UNTIL_LABEL } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import { DESK_TYPE, EVENT, isEventShowing } from "@/lib/plans";
+
+// 연말 이벤트 표시가 기간이 끝나면 저절로 사라지도록 한 시간마다 다시 그린다.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "가격안내",
-  description: "축의대행·축의금 대행 가격안내. 하객 규모에 맞춘 세 가지 요금, 부가세 포함.",
+  description: "축의대행·축의금 대행 가격안내. 하객 규모와 축의대 유형에 맞춘 네 가지 요금, 부가세 포함.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -19,23 +23,31 @@ const CARDS = [
     name: "스몰케어",
     priceWhole: "39",
     dark: false,
-    bullets: ["하객 100명 이하 예식", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "봉투 · 식대 집계 엑셀 파일 제공"],
+    bullets: ["하객 100명 이하 예식 (신랑측 또는 신부측)", "웨딩버틀러 2명 배정", "축의금 접수 · 봉투 번호 기록 · 하객 안내", "봉투 · 식대 집계 엑셀 파일 제공"],
+  },
+  {
+    plan: "smallboth" as const,
+    eyebrow: "02 SMALL BOTH",
+    name: "스몰양가",
+    priceWhole: "40",
+    dark: false,
+    bullets: ["양가 각 하객 60명 이하 예식", "웨딩버틀러 2명 배정", "양가 통합 축의대 1곳 운영 · 통합 기록", "봉투 · 식대 집계 엑셀 파일 제공"],
   },
   {
     plan: "standard" as const,
-    eyebrow: "02 STANDARD",
+    eyebrow: "03 STANDARD",
     name: "스탠다드",
     priceWhole: "45",
     dark: true,
-    bullets: ["하객 101~200명 예식 (200명 초과 시 1명당 2,000원 추가)", "웨딩버틀러 2명 배정", "스몰케어 구성 포함 · 정산 리포트 제공", "버틀러 추가 가능 (1명당 100,000원)"],
+    bullets: ["하객 101~200명 예식 (신랑측 또는 신부측, 200명 초과 시 1명당 2,000원 추가)", "웨딩버틀러 2명 배정", "스몰케어 구성 포함 · 정산 리포트 제공", "버틀러 추가 가능 (1명당 100,000원)"],
   },
   {
     plan: "premium" as const,
-    eyebrow: "03 PREMIUM",
+    eyebrow: "04 PREMIUM",
     name: "프리미엄",
     priceWhole: "80",
     dark: false,
-    bullets: ["양가 합계 하객 400명 기준", "웨딩버틀러 4명 배정 (양가 2명씩)", "신랑측 · 신부측 축의대 분리 운영", "버틀러 추가 가능 (1명당 100,000원)"],
+    bullets: ["양가 합계 하객 400명 기준", "웨딩버틀러 4명 배정 (양가 2명씩)", "신랑측 · 신부측 축의대 2곳 분리 운영", "버틀러 추가 가능 (1명당 100,000원)"],
   },
 ];
 
@@ -58,15 +70,23 @@ const PRICING_LD = {
   })),
 };
 
-const COMPARE_ROWS: [string, string, string, string][] = [
-  ["기본 요금", "39만원", "45만원", "80만원"],
-  ["기준 하객", "100명 이하", "101~200명", "양가 합계 400명"],
-  ["배정 버틀러", "2명", "2명", "4명"],
-  ["제공 자료", "봉투·식대 집계 엑셀", "정산 리포트", "정산 리포트"],
-  ["기준 초과 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
-  ["버틀러 추가", "해당 없음", "1명 10만원", "1명 10만원"],
-  ["개봉 집계", "무료", "무료", "무료"],
+const COMPARE_HEAD = ["스몰케어", "스몰양가", "스탠다드", "프리미엄"];
+
+const COMPARE_ROWS: [string, string, string, string, string][] = [
+  ["기본 요금", "39만원", "40만원", "45만원", "80만원"],
+  ["축의대 유형", "한측 축의대", "양가 통합 (1곳)", "한측 축의대", "양가 분리 (2곳)"],
+  ["기준 하객", "100명 이하", "양가 각 60명 이하", "101~200명", "양가 합계 400명"],
+  ["배정 버틀러", "2명", "2명", "2명", "4명"],
+  ["제공 자료", "봉투·식대 집계 엑셀", "봉투·식대 집계 엑셀", "정산 리포트", "정산 리포트"],
+  ["기준 초과 하객", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원", "1명당 2,000원"],
+  ["버틀러 추가", "해당 없음", "해당 없음", "1명 10만원", "1명 10만원"],
+  ["개봉 집계", "무료", "무료", "무료", "무료"],
 ];
+
+const EVENT_ROW: [string, string, string, string, string] = [
+  "연말 이벤트가",
+  ...(["small", "smallboth", "standard", "premium"] as const).map((k) => EVENT.prices[k] / 10000 + "만원"),
+] as [string, string, string, string, string];
 
 const EXTRA_COSTS = [
   { label: "기준 초과 하객", value: "1명당 2,000원", note: "접수대에서 접수한 하객 기준 · 혼주·예식장이 직접 안내한 하객은 세지 않습니다" },
@@ -167,6 +187,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
         <NoticeLabel>기준 하객 수</NoticeLabel>
         <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 20 }}>
           <NoticeItem>스몰케어 — 버틀러 2명, 하객 100명 이하</NoticeItem>
+          <NoticeItem>스몰양가 — 버틀러 2명, 양가 각 60명 이하 (양가 합계 120명 기준)</NoticeItem>
           <NoticeItem>스탠다드 — 버틀러 2명, 하객 101 ~ 200명</NoticeItem>
           <NoticeItem>프리미엄 — 버틀러 4명, 양가 합계 400명</NoticeItem>
         </div>
@@ -180,6 +201,7 @@ const NOTICES: { icon: string; title: string; body: React.ReactNode }[] = [
           <NoticeLabel muted>예시</NoticeLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
             <NoticeItem small>스몰케어 하객 130명 → 30명 초과, 6만원 추가</NoticeItem>
+            <NoticeItem small>스몰양가 양가 합계 140명 → 20명 초과, 4만원 추가</NoticeItem>
             <NoticeItem small>스탠다드 하객 220명 → 20명 초과, 4만원 추가</NoticeItem>
             <NoticeItem small>프리미엄 양가 합계 460명 → 60명 초과, 12만원 추가</NoticeItem>
           </div>
@@ -224,6 +246,8 @@ function SectionEyebrow({ children }: { children: React.ReactNode }) {
 }
 
 export default function PricingPage() {
+  const eventOn = isEventShowing();
+  const compareRows = eventOn ? [COMPARE_ROWS[0], EVENT_ROW, ...COMPARE_ROWS.slice(1)] : COMPARE_ROWS;
   return (
     <div style={{ width: "100%", overflowX: "hidden", background: "#F3E9EB", minHeight: "100vh" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PRICING_LD) }} />
@@ -232,12 +256,22 @@ export default function PricingPage() {
       <section style={{ padding: "clamp(54px,9vw,90px) clamp(18px,5vw,24px) clamp(36px,6vw,60px)", textAlign: "center" }}>
         <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>PRICE PLANS</p>
         <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(27px,6.2vw,40px)", fontWeight: 600, margin: "0 0 18px", letterSpacing: "-0.02em" }}>가격안내</h1>
-        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모에 맞춰 세 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
+        <p style={{ fontSize: 16, lineHeight: 1.9, color: "#6B5A60", margin: 0 }}>하객 규모와 축의대 유형에 맞춰 네 가지로 준비했습니다. 모든 금액은 부가세 포함입니다.</p>
+        {eventOn && (
+          <div style={{ display: "inline-flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "6px 12px", marginTop: 24, padding: "12px 22px", borderRadius: 999, background: "#33232A", color: "#F3E9EB", fontSize: 14, lineHeight: 1.6 }}>
+            <span style={{ background: "#A9647E", color: "#FFFFFF", fontSize: 11.5, letterSpacing: "0.12em", padding: "3px 10px", borderRadius: 999 }}>EVENT</span>
+            <span>
+              {EVENT.name} · <b style={{ fontWeight: 500, color: "#FFFFFF" }}>{EVENT.label}</b> 이벤트가 적용 (밀봉 · 개봉 집계 모두)
+            </span>
+          </div>
+        )}
       </section>
 
       <section style={{ padding: "0 clamp(18px,5vw,24px) clamp(56px,9vw,90px)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,300px),1fr))", gap: 22, alignItems: "start" }}>
-          {CARDS.map((c) => (
+        <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,270px),1fr))", gap: 20, alignItems: "start" }}>
+          {CARDS.map((c) => {
+            const eventPrice = eventOn ? EVENT.prices[c.plan] / 10000 : null;
+            return (
             <div
               key={c.plan}
               style={{
@@ -245,7 +279,7 @@ export default function PricingPage() {
                 background: c.dark ? "#33232A" : "#FFFFFF",
                 border: "1px solid " + (c.dark ? "#33232A" : "#E7D5DA"),
                 borderRadius: 4,
-                padding: "46px 36px 40px",
+                padding: "46px 30px 38px",
               }}
             >
               {c.dark && (
@@ -254,7 +288,28 @@ export default function PricingPage() {
                 </div>
               )}
               <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: c.dark ? "#E9CAD1" : "#A9647E", margin: "0 0 10px" }}>{c.eyebrow}</p>
-              <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 24px", color: c.dark ? "#FFFFFF" : undefined }}>{c.name}</h2>
+              <h2 style={{ fontFamily: fontSerif, fontSize: 28, fontWeight: 600, margin: "0 0 12px", color: c.dark ? "#FFFFFF" : undefined }}>{c.name}</h2>
+              <span
+                style={{
+                  display: "inline-block",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  marginBottom: 22,
+                  ...(c.plan === "smallboth" || c.plan === "premium"
+                    ? { background: c.dark ? "#F3E9EB" : "#33232A", color: c.dark ? "#33232A" : "#F3E9EB" }
+                    : { background: c.dark ? "rgba(255,255,255,0.12)" : "#F6ECEF", color: c.dark ? "#E9CAD1" : "#A9647E" }),
+                }}
+              >
+                {DESK_TYPE[c.plan]}
+              </span>
+              {eventPrice !== null && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+                  <span style={{ background: "#A9647E", color: "#FFFFFF", fontSize: 11.5, padding: "3px 9px", borderRadius: 999 }}>연말 이벤트가</span>
+                  <span style={{ color: c.dark ? "#B79AA3" : "#A8959B", textDecoration: "line-through" }}>{c.priceWhole}만원</span>
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -264,7 +319,7 @@ export default function PricingPage() {
                   borderBottom: "1px solid " + (c.dark ? "rgba(255,255,255,0.16)" : "#E7D5DA"),
                 }}
               >
-                <span style={{ fontFamily: fontSerif, fontSize: 46, fontWeight: 600, color: c.dark ? "#FFFFFF" : undefined, letterSpacing: "-0.02em" }}>{c.priceWhole}</span>
+                <span style={{ fontFamily: fontSerif, fontSize: 46, fontWeight: 600, color: c.dark ? "#FFFFFF" : undefined, letterSpacing: "-0.02em" }}>{eventPrice ?? c.priceWhole}</span>
                 <span style={{ fontSize: 18, color: c.dark ? "#F3E9EB" : "#473A3F" }}>만원</span>
                 <span style={{ fontSize: 13, color: c.dark ? "#B79AA3" : "#9A8189", marginLeft: 6 }}>VAT 포함</span>
               </div>
@@ -295,36 +350,61 @@ export default function PricingPage() {
                 이 요금제로 예약
               </OpenModalButton>
             </div>
-          ))}
+            );
+          })}
         </div>
+        {eventOn && (
+          <p style={{ maxWidth: 1280, margin: "18px auto 0", fontSize: 13, lineHeight: 1.8, color: "#9A8189", textAlign: "center" }}>
+            연말 이벤트가는 {EVENT.label}에 적용되며, 2027년 1월 이후 예식은 정가로 예약됩니다.
+          </p>
+        )}
       </section>
 
       <section style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px)", background: "rgba(255,255,255,0.75)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
           <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(23px,4.8vw,30px)", fontWeight: 600, margin: "0 0 34px", letterSpacing: "-0.02em" }}>한 눈에 비교하기</h2>
           <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
-            <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, overflow: "hidden", minWidth: 620 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr 1fr", background: "#33232A" }}>
-                <div style={{ padding: "18px 22px", fontSize: 14, color: "#D8C3C9" }}>항목</div>
-                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스몰케어</div>
-                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>스탠다드</div>
-                <div style={{ padding: "18px 22px", fontSize: 14, color: "#FFFFFF" }}>프리미엄</div>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, overflow: "hidden", minWidth: 760 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1.15fr 1fr 1fr 1fr 1fr", background: "#33232A" }}>
+                <div style={{ padding: "18px 18px", fontSize: 14, color: "#D8C3C9" }}>항목</div>
+                {COMPARE_HEAD.map((h) => (
+                  <div key={h} style={{ padding: "18px 18px", fontSize: 14, color: "#FFFFFF" }}>{h}</div>
+                ))}
               </div>
-              {COMPARE_ROWS.map((row, i) => (
-                <div
-                  key={row[0]}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1.2fr 1fr 1fr 1fr",
-                    borderBottom: i === COMPARE_ROWS.length - 1 ? undefined : "1px solid #F0E3E6",
-                  }}
-                >
-                  <div style={{ padding: "18px 22px", fontSize: 14, color: "#6B5A60" }}>{row[0]}</div>
-                  <div style={{ padding: "18px 22px", fontSize: 15, color: row[1] === "해당 없음" ? "#9A8189" : undefined }}>{row[1]}</div>
-                  <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[2]}</div>
-                  <div style={{ padding: "18px 22px", fontSize: 15 }}>{row[3]}</div>
-                </div>
-              ))}
+              {compareRows.map((row, i) => {
+                const isEvent = row === EVENT_ROW;
+                const isBase = row === COMPARE_ROWS[0] && eventOn;
+                return (
+                  <div
+                    key={row[0]}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1.15fr 1fr 1fr 1fr 1fr",
+                      background: isEvent ? "#FAF1F4" : undefined,
+                      borderBottom: i === compareRows.length - 1 ? undefined : "1px solid #F0E3E6",
+                    }}
+                  >
+                    <div style={{ padding: "18px 18px", fontSize: 14, color: isEvent ? "#8E3F5F" : "#6B5A60", fontWeight: isEvent ? 500 : undefined }}>
+                      {row[0]}
+                      {isEvent && <span style={{ display: "block", fontSize: 12, fontWeight: 400, color: "#9A8189" }}>{EVENT.label}</span>}
+                    </div>
+                    {row.slice(1).map((v, j) => (
+                      <div
+                        key={j}
+                        style={{
+                          padding: "18px 18px",
+                          fontSize: 15,
+                          color: isEvent ? "#8E3F5F" : isBase ? "#A8959B" : v === "해당 없음" ? "#9A8189" : undefined,
+                          fontWeight: isEvent ? 600 : undefined,
+                          textDecoration: isBase ? "line-through" : undefined,
+                        }}
+                      >
+                        {v}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 4, padding: "clamp(22px,4vw,30px) clamp(20px,4vw,32px)", marginTop: 22 }}>

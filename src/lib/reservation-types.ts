@@ -7,7 +7,7 @@ export interface CreateReservationInput {
   day: number;
   time: string;
   name: string;
-  /** 스몰케어·스탠다드만: 신랑측/신부측. 프리미엄은 서버에서 양가로 저장한다. */
+  /** 스몰케어·스탠다드만: 신랑측/신부측. 스몰양가·프리미엄은 서버에서 양가로 저장한다. */
   side?: Side | null;
   phone: string;
   email: string;

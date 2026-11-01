@@ -1,4 +1,4 @@
-export type PlanKey = "small" | "standard" | "premium" | "special";
+export type PlanKey = "small" | "smallboth" | "standard" | "premium" | "special";
 
 export interface Plan {
   key: PlanKey;
@@ -12,7 +12,7 @@ export interface Plan {
 /** 일반 예약 화면에 보이는 요금제 (스페셜 제외) */
 export type PublicPlanKey = Exclude<PlanKey, "special">;
 
-export const PLAN_ORDER: PublicPlanKey[] = ["small", "standard", "premium"];
+export const PLAN_ORDER: PublicPlanKey[] = ["small", "smallboth", "standard", "premium"];
 
 export const PLANS: Record<PlanKey, Plan> = {
   small: {
@@ -22,6 +22,15 @@ export const PLANS: Record<PlanKey, Plan> = {
     incl: 100,
     butlers: 2,
     desc: "식권 100매 이하 · 웨딩버틀러 2명",
+  },
+  // 스몰양가: 양가 하객이 적은 예식. 축의대 1곳에서 양가를 함께 받고 기록도 하나로 합친다.
+  smallboth: {
+    key: "smallboth",
+    name: "스몰양가",
+    base: 400000,
+    incl: 120,
+    butlers: 2,
+    desc: "양가 각 식권 60매 이하 · 통합 축의대 · 웨딩버틀러 2명",
   },
   standard: {
     key: "standard",
@@ -50,6 +59,62 @@ export const PLANS: Record<PlanKey, Plan> = {
   },
 };
 
+/** 축의대 유형: 한측(신랑측 또는 신부측) / 양가 통합(축의대 1곳) / 양가 분리(축의대 2곳) */
+export const DESK_TYPE: Record<PublicPlanKey, string> = {
+  small: "한측 축의대",
+  smallboth: "양가 통합",
+  standard: "한측 축의대",
+  premium: "양가 분리",
+};
+
+/** 양가를 함께 맡는 요금제 (신랑측/신부측을 고르지 않는다) */
+export function isBothSidePlan(plan: PlanKey): boolean {
+  return plan === "premium" || plan === "smallboth";
+}
+
+/**
+ * 연말 이벤트: 예식일이 기간 안이면 기본 요금을 이벤트가로 받는다(기록 방식과 무관).
+ * 날짜는 "YYYY-MM-DD" 문자열로 비교한다. 팝업·취소선 표시는 showUntil(한국시간) 전까지만 보인다.
+ */
+export const EVENT = {
+  name: "연말 웨딩 이벤트",
+  from: "2026-11-01",
+  to: "2026-12-31",
+  label: "11월 1일 ~ 12월 31일 예식",
+  showUntil: new Date("2027-01-01T00:00:00+09:00"),
+  prices: { small: 350000, smallboth: 350000, standard: 400000, premium: 750000 } as Record<PublicPlanKey, number>,
+};
+
+export function dateKey(y: number, m: number, d: number): string {
+  return `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+/** 이벤트 안내(팝업·가격 취소선)를 보여줄 시기인지 */
+export function isEventShowing(now: Date = new Date()): boolean {
+  return now < EVENT.showUntil;
+}
+
+/** 예식일이 이벤트 대상인지 */
+export function isEventDate(ceremonyDate: string | null | undefined): boolean {
+  return !!ceremonyDate && ceremonyDate >= EVENT.from && ceremonyDate <= EVENT.to;
+}
+
+/** 이벤트가 (이벤트 대상 요금제가 아니면 null) */
+export function eventPriceOf(plan: PlanKey): number | null {
+  return plan in EVENT.prices ? EVENT.prices[plan as PublicPlanKey] : null;
+}
+
+/** 예식일 기준 기본 요금: 이벤트 기간 예식이면 이벤트가, 아니면 정가 */
+export function planBase(plan: PlanKey, ceremonyDate: string | null | undefined): number {
+  const ev = eventPriceOf(plan);
+  return ev !== null && isEventDate(ceremonyDate) ? ev : PLANS[plan].base;
+}
+
+/** "39만원"처럼 만원 단위로 짧게 */
+export function manwon(n: number): string {
+  return (n / 10000).toLocaleString("ko-KR") + "만원";
+}
+
 export function won(n: number): string {
   return n.toLocaleString("ko-KR") + "원";
 }
@@ -62,6 +127,8 @@ export interface PriceBreakdown {
   deposit: number;
   balance: number;
   incl: number;
+  /** 정가 기본 요금 (이벤트가가 적용되면 base보다 크다) */
+  listBase: number;
 }
 
 /** Fixed booking deposit, regardless of plan — the remaining balance
@@ -90,29 +157,33 @@ export function calcPrice(
   plan: PlanKey,
   guests: number,
   extraButlers: number,
-  paymentType: PaymentType
+  paymentType: PaymentType,
+  /** 예식일 "YYYY-MM-DD" — 이벤트 기간이면 기본 요금이 이벤트가가 된다 */
+  ceremonyDate: string | null
 ): PriceBreakdown {
   const p = PLANS[plan];
+  const base = planBase(plan, ceremonyDate);
   // Estimated only — actual 기준 초과 식권 fee is settled on-site after the
   // real 식권 배부 매수 is counted, so it's not part of the online total/deposit.
   const over = Math.max(0, guests - p.incl) * 2000;
   const extraButlerAmount = extraButlers * 100000;
-  const total = p.base + extraButlerAmount;
+  const total = base + extraButlerAmount;
   const deposit = paymentType === "full" ? total : Math.min(DEPOSIT_AMOUNT, total);
   return {
-    base: p.base,
+    base,
     over,
     extraButlerAmount,
     total,
     deposit,
     balance: total - deposit,
     incl: p.incl,
+    listBase: p.base,
   };
 }
 
 /** 스페셜 예약: 링크에 정해진 금액을 한 번에 전액 결제한다 (추가 요금·현장 결제 없음). */
 export function specialPrice(amount: number): PriceBreakdown {
-  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit: amount, balance: 0, incl: 0 };
+  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit: amount, balance: 0, incl: 0, listBase: amount };
 }
 
 /** Flat 1,000원 charge used only by the header's hidden test-payment button
@@ -129,6 +200,7 @@ export function testPrice(paymentType: PaymentType): PriceBreakdown {
     deposit: 1000,
     balance: total - 1000,
     incl: 0,
+    listBase: total,
   };
 }
 
@@ -140,6 +212,7 @@ export function paymentTypeOf(balanceAmount: number): PaymentType {
 /** Clamp guest count when switching plans, mirroring the prototype's `pick()` behavior. */
 export function guestsForPlanSwitch(plan: PlanKey, guests: number): number {
   if (plan === "small" && guests > 100) return 100;
+  if (plan === "smallboth" && guests > 120) return 120;
   if (plan === "premium" && guests < 400) return 400;
   return guests;
 }
@@ -164,7 +237,7 @@ export const TIME_SLOTS: string[] = [
   "19:00",
 ];
 
-/** 축의대 구분. 스몰케어·스탠다드는 한쪽(신랑측/신부측)만 맡고, 프리미엄은 양가를 맡는다. */
+/** 축의대 구분. 스몰케어·스탠다드는 한쪽(신랑측/신부측)만 맡고, 스몰양가·프리미엄은 양가를 맡는다. */
 export type Side = "groom" | "bride" | "both";
 export type OneSide = "groom" | "bride";
 
@@ -178,9 +251,9 @@ export function isOneSide(v: unknown): v is OneSide {
   return v === "groom" || v === "bride";
 }
 
-/** 요금제별 축의대 구분: 프리미엄은 항상 양가, 나머지는 고객이 고른 쪽. */
+/** 요금제별 축의대 구분: 스몰양가·프리미엄은 항상 양가, 나머지는 고객이 고른 쪽. */
 export function sideForPlan(plan: PlanKey, side: Side | null | undefined): Side | null {
-  if (plan === "premium") return "both";
+  if (isBothSidePlan(plan)) return "both";
   return side ?? null;
 }
 

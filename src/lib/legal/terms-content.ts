@@ -3,7 +3,7 @@ export const TERMS_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">축의대행 서비스 이용약관</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 10월 25일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 11월 1일</p>
 
   <div style="height:1px; background:#EBDCE0; margin-bottom:34px;"></div>
 
@@ -110,6 +110,7 @@ export const TERMS_HTML = `
       </thead>
       <tbody>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스몰케어</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">100명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">390,000원</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스몰양가</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">양가 각 60명 이하(합계 120명), 양가 통합 축의대 1곳</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">400,000원</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">스탠다드</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">101명 이상 200명 이하</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2명</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; text-align:right; color:#4A3B41; white-space:nowrap;">450,000원</td></tr>
         <tr><td style="padding:11px 14px; color:#4A3B41;">프리미엄</td><td style="padding:11px 14px; color:#4A3B41;">양가 각 200명(합계 400명)</td><td style="padding:11px 14px; color:#4A3B41;">4명(양가 각 2명)</td><td style="padding:11px 14px; text-align:right; color:#4A3B41; white-space:nowrap;">800,000원</td></tr>
       </tbody>
@@ -117,7 +118,7 @@ export const TERMS_HTML = `
   </div>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 다음 각 호는 서비스 제공에 따른 추가 대금으로서, 사전에 안내한 기준에 따라 청구합니다.</p>
   <ol style="font-size:14px; line-height:1.9; color:#6B5A60; margin:0 0 8px; padding-left:22px;">
-    <li>기준 하객 수 초과 : 식권 배부 매수가 기준 하객 수를 초과하는 경우 초과 1매당 2,000원. 프리미엄은 양가 합계 400매를 기준으로 하며, 회사가 아닌 자(의뢰인·혼주·예식장 등)가 직접 배부한 식권은 산정에 포함하지 아니합니다.</li>
+    <li>기준 하객 수 초과 : 식권 배부 매수가 기준 하객 수를 초과하는 경우 초과 1매당 2,000원. 스몰양가는 양가 합계 120매, 프리미엄은 양가 합계 400매를 기준으로 하며, 회사가 아닌 자(의뢰인·혼주·예식장 등)가 직접 배부한 식권은 산정에 포함하지 아니합니다.</li>
     <li>버틀러 추가(스탠다드·프리미엄) : 1명당 100,000원. 의뢰인의 요청으로 예약 시 또는 사전 확인 시 합의합니다.</li>
     <li>서비스 지역(서울특별시, 경기도) 밖의 출장비 : 예약 전 회사가 금액을 안내하고 의뢰인이 동의한 경우에 한합니다.</li>
   </ol>
@@ -127,7 +128,8 @@ export const TERMS_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑥ 제5항의 결제가 이루어지지 아니한 경우, 잔금은 예식일 다음 날까지 납부하여야 하며, 이를 지나면 회사는 납부를 최고한 후 미납 금액에 대하여 법정이율에 따른 지연손해금을 청구할 수 있습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑦ 회사는 결제수단에 따른 어떠한 명목의 수수료도 대금에 추가하여 징수하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑧ 회사는 부가가치세법상 간이과세자로서, 결제 대금에 대하여 현금영수증을 발행합니다(신용카드 결제분은 카드 매출전표로 갈음).</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ 회사는 요금을 변경할 수 있습니다. 다만 변경 전에 성립한 계약에는 종전 요금을 적용합니다. 회사의 과세유형 변경 등 법령상 사유로 부가가치세 처리 방식이 달라지는 경우에도 같습니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ 회사는 기간과 대상 예식일을 정하여 기본 요금을 할인하는 행사를 할 수 있으며, 행사 내용은 사이트에 게시합니다. 행사 대상 예식은 예약 시 할인된 기본 요금으로 결제합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑩ 회사는 요금을 변경할 수 있습니다. 다만 변경 전에 성립한 계약에는 종전 요금을 적용합니다. 회사의 과세유형 변경 등 법령상 사유로 부가가치세 처리 방식이 달라지는 경우에도 같습니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제11조 (예약 내용의 변경)</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이용자는 예약 내용에 의사표시의 불일치가 있는 경우 즉시 변경 또는 취소를 요청할 수 있고, 회사는 지체 없이 이에 따릅니다. 다만 이미 대금을 지급한 경우에는 제13조 및 제14조에 따릅니다.</p>
@@ -275,7 +277,7 @@ export const TERMS_HTML = `
 
   <div style="margin:40px 0 0; padding-top:28px; border-top:1px solid #EBDCE0;">
     <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:0 0 10px;">부칙</h2>
-    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 10월 25일부터 시행합니다.</p>
+    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 11월 1일부터 시행합니다.</p>
     <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0;">② 이 약관 시행 전에 체결된 계약에는 종전 약관을 적용합니다.</p>
   </div>
 
@@ -295,6 +297,8 @@ export const TERMS_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/terms/2026-10-25" style="color:#A9647E;">2026년 10월 25일 시행 이전 약관 보기</a>
+    &nbsp;·&nbsp;
     <a href="/terms/2026-10" style="color:#A9647E;">2026년 10월 13일 시행 이전 약관 보기</a>
     &nbsp;·&nbsp;
     <a href="/terms/2026-09" style="color:#A9647E;">2026년 9월 21일 시행 이전 약관 보기</a>
