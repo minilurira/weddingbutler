@@ -1,13 +1,16 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { useReservation } from "@/components/ReservationProvider";
-import { DEPOSIT_AMOUNT, DESK_TYPE, EVENT, isEventShowing, manwon, PLAN_ORDER, PLANS, type PublicPlanKey } from "@/lib/plans";
+import { EVENT, isEventShowing, manwon } from "@/lib/plans";
 import { fontDisplay, fontSerif } from "@/lib/style";
 
 /**
- * 메인 첫 화면 팝업. 여러 장(SLIDES)이 자동으로 넘어간다.
- * 장을 늘리거나 빼려면 buildSlides()만 고치면 된다. "오늘 하루 보지 않기"는 브라우저에 날짜를 저장한다.
+ * 메인 첫 화면 팝업. 사진 위주의 여러 장(buildSlides)이 자동으로 넘어간다.
+ * 장을 늘리거나 빼려면 buildSlides()만 고치면 된다. 사진은 public/popup/ 에 둔다.
+ * "오늘 하루 보지 않기"는 브라우저에 오늘 날짜(한국시간)를 저장한다.
  */
 
 const HIDE_KEY = "wb_home_popup_hidden_on";
@@ -15,103 +18,28 @@ const ROTATE_MS = 5000;
 
 interface Slide {
   id: string;
-  eyebrow: string;
-  title: string;
+  image: string;
+  imagePosition: string;
+  eyebrow?: string;
+  chip?: ReactNode;
+  title: ReactNode;
   sub: ReactNode;
-  body: ReactNode;
+  highlight?: ReactNode;
   cta: string;
+  action: "pricing" | "booking";
 }
 
 function todayKst(): string {
   return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
 }
 
-const badge = (kind: "one" | "both" | "accent"): CSSProperties => ({
-  fontSize: 11,
-  fontWeight: 500,
-  padding: "3px 8px",
-  borderRadius: 999,
-  whiteSpace: "nowrap",
-  fontFamily: "var(--font-sans), sans-serif",
-  ...(kind === "one"
-    ? { background: "#F6ECEF", color: "#A9647E", border: "1px solid #EBD6DD" }
-    : kind === "both"
-      ? { background: "#33232A", color: "#F3E9EB", border: "1px solid #33232A" }
-      : { background: "#A9647E", color: "#FFFFFF", border: "1px solid #A9647E" }),
-});
-
-const noteStyle: CSSProperties = { fontSize: 12, lineHeight: 1.75, color: "#6B5A60", margin: "10px 2px 14px" };
-
-function EventBody() {
+function CardIcon() {
   return (
-    <>
-      {PLAN_ORDER.map((k: PublicPlanKey) => (
-        <div
-          key={k}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 10,
-            padding: "13px 15px",
-            background: "#FFFFFF",
-            border: "1px solid #E7D5DA",
-            borderRadius: 4,
-            marginBottom: 8,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap", fontFamily: fontSerif, fontWeight: 600, fontSize: 16 }}>
-            {PLANS[k].name}
-            <span style={badge(k === "smallboth" || k === "premium" ? "both" : "one")}>{DESK_TYPE[k]}</span>
-            {k === "smallboth" && <span style={badge("accent")}>NEW</span>}
-          </div>
-          <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
-            <span style={{ fontSize: 13, color: "#A8959B", textDecoration: "line-through", marginRight: 6 }}>{manwon(PLANS[k].base)}</span>
-            <span style={{ fontFamily: fontSerif, fontSize: 19, fontWeight: 700, color: "#8E3F5F" }}>{manwon(EVENT.prices[k])}</span>
-          </div>
-        </div>
-      ))}
-      <p style={noteStyle}>
-        · 밀봉 · 개봉 집계 모두 이벤트가 적용 · 부가세 포함
-        <br />· 스몰양가: 양가 각 60명 이하 · 축의대 1곳 · 버틀러 2명
-      </p>
-    </>
-  );
-}
-
-function PayOption({ title, accent, children, on }: { title: string; accent?: string; children: ReactNode; on?: boolean }) {
-  return (
-    <div style={{ background: "#FFFFFF", border: on ? "1.5px solid #33232A" : "1px solid #E7D5DA", borderRadius: 4, padding: "16px 18px 14px", marginBottom: 10 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-        <span style={{ fontFamily: fontSerif, fontWeight: 600, fontSize: 17, color: on ? "#33232A" : "#473A3F" }}>{title}</span>
-        {accent && <span style={badge("accent")}>{accent}</span>}
-      </div>
-      <p style={{ fontSize: 13.5, lineHeight: 1.75, color: "#6B5A60", margin: 0 }}>{children}</p>
-    </div>
-  );
-}
-
-const B = ({ children }: { children: ReactNode }) => <b style={{ color: "#33232A", fontWeight: 500 }}>{children}</b>;
-
-function CardPayBody() {
-  return (
-    <>
-      <PayOption title="전액결제" accent="추천" on>
-        예약할 때 <B>총 금액을 카드로 결제</B>
-        <br />
-        현장 결제 <B>0원</B> · 당일 따로 챙길 것이 없어요
-      </PayOption>
-      <PayOption title="예약금 결제 후 현장결제">
-        예약할 때 <B>예약금 {manwon(DEPOSIT_AMOUNT)}</B>만 카드로 결제
-        <br />
-        나머지는 예식 당일 현장에서 현금 결제
-      </PayOption>
-      <p style={noteStyle}>
-        · 예약할 때 두 가지 중 고르실 수 있어요 · 카드 결제가 끝나면 예약 확정
-        <br />· KG이니시스 구매안전서비스 · 부가세 포함
-        <br />· 기준 인원을 넘긴 식권만 당일 현장에서 현금 정산
-      </p>
-    </>
+    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+      <rect x="0.75" y="0.75" width="20.5" height="14.5" rx="2.5" stroke="#fff" strokeWidth="1.5" />
+      <path d="M1 5h20" stroke="#fff" strokeWidth="2" />
+      <path d="M4 11h5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -120,40 +48,64 @@ function buildSlides(): Slide[] {
   if (isEventShowing()) {
     slides.push({
       id: "year-end-event",
+      image: "/popup/year-end-event.jpg",
+      imagePosition: "50% 40%",
       eyebrow: "YEAR-END EVENT",
       title: EVENT.name,
       sub: (
         <>
-          <b style={{ color: "#FFFFFF", fontWeight: 500 }}>11월 1일 ~ 12월 31일</b> 예식 한정 특별가
+          11월 1일 – 12월 31일 예식이라면
+          <br />전 요금제를 특별가로 만나보세요
         </>
       ),
-      body: <EventBody />,
-      cta: "이벤트가로 예약하기",
+      highlight: (
+        <>
+          스몰케어 <b style={{ fontFamily: fontSerif, fontSize: 18, fontWeight: 600 }}>{manwon(EVENT.prices.small)}</b>부터
+        </>
+      ),
+      cta: "이벤트 가격 보기",
+      action: "pricing",
     });
   }
   slides.push({
     id: "card-full-payment",
-    eyebrow: "CARD PAYMENT",
-    title: "전액 카드결제 가능",
-    sub: (
+    image: "/popup/card-payment.jpg",
+    imagePosition: "50% 15%",
+    chip: (
       <>
-        예약할 때 <b style={{ color: "#FFFFFF", fontWeight: 500 }}>총 금액을 카드로 한 번에</b> 결제하고
-        <br />
-        예식 당일엔 현금 걱정 없이 맡겨 주세요
+        <CardIcon />
+        전액 카드결제 가능
       </>
     ),
-    body: <CardPayBody />,
+    title: (
+      <>
+        예약할 때 카드로,
+        <br />한 번에 끝내세요
+      </>
+    ),
+    sub: "예식 당일엔 현금 걱정 없이 맡겨 주세요",
     cta: "예약하기",
+    action: "booking",
   });
   return slides;
 }
 
+const glass: CSSProperties = {
+  border: "1px solid rgba(255,255,255,0.42)",
+  background: "rgba(255,255,255,0.1)",
+  backdropFilter: "blur(6px)",
+  WebkitBackdropFilter: "blur(6px)",
+  borderRadius: 999,
+};
+
 export function HomePopup() {
   const { openModal } = useReservation();
+  const router = useRouter();
   const [slides, setSlides] = useState<Slide[]>([]);
   const [open, setOpen] = useState(false);
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [touchX, setTouchX] = useState<number | null>(null);
 
   useEffect(() => {
     // 예약 링크(?booking)로 들어온 경우엔 예약 창이 바로 열리므로 팝업을 띄우지 않는다.
@@ -207,94 +159,146 @@ export function HomePopup() {
     setOpen(false);
   }
 
-  function book() {
+  function act() {
     setOpen(false);
-    openModal();
+    if (slide.action === "pricing") router.push("/pricing");
+    else openModal();
   }
 
-  const arrowBtn: CSSProperties = {
-    width: 30,
-    height: 30,
-    borderRadius: "50%",
-    border: "1px solid #DCC4CC",
-    background: "transparent",
-    color: "#8E7A81",
-    fontSize: 15,
-    lineHeight: 1,
-    cursor: "pointer",
-  };
-  const linkBtn: CSSProperties = { background: "none", border: "none", padding: 0, fontSize: 13, color: "#6B5A60", cursor: "pointer" };
+  const linkBtn: CSSProperties = { background: "none", border: "none", padding: 0, fontSize: 12.5, color: "#8B7980", cursor: "pointer" };
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={slide.title}
+      aria-label="웨딩버틀러 안내"
       data-testid="home-popup"
       onClick={() => setOpen(false)}
       style={{
         position: "fixed",
         inset: 0,
         zIndex: 150,
-        background: "rgba(18,18,18,0.62)",
+        background: "rgba(18,14,16,0.6)",
         overflowY: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: 16,
         fontFamily: "var(--font-sans), sans-serif",
-        color: "#33232A",
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
-        style={{ position: "relative", width: "100%", maxWidth: 440, margin: "auto", background: "#F3E9EB", borderRadius: 6, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
+        style={{ position: "relative", width: "100%", maxWidth: 420, margin: "auto", background: "#FBF7F5", borderRadius: 10, overflow: "hidden", boxShadow: "0 40px 90px rgba(0,0,0,0.5)" }}
       >
         <button
           onClick={() => setOpen(false)}
           aria-label="닫기"
-          style={{ position: "absolute", top: 14, right: 14, zIndex: 2, width: 34, height: 34, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.35)", background: "transparent", color: "#FFFFFF", fontSize: 18, lineHeight: 1, cursor: "pointer" }}
+          style={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            zIndex: 3,
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            border: "1px solid rgba(255,255,255,0.4)",
+            background: "rgba(25,16,20,0.35)",
+            color: "#FFFFFF",
+            fontSize: 18,
+            lineHeight: 1,
+            cursor: "pointer",
+          }}
         >
           ×
         </button>
-        <div key={slide.id} style={{ animation: "wbPopupFade .35s ease" }}>
-          <div style={{ background: "#33232A", color: "#FFFFFF", padding: "clamp(28px,6vw,34px) clamp(22px,6vw,30px) clamp(22px,5vw,28px)", textAlign: "center" }}>
-            <p style={{ fontFamily: fontDisplay, letterSpacing: "0.4em", fontSize: 14, color: "#E9CAD1", margin: "0 0 12px" }}>{slide.eyebrow}</p>
-            <h2 style={{ fontFamily: fontSerif, fontWeight: 600, fontSize: "clamp(23px,6vw,28px)", margin: "0 0 10px", letterSpacing: "-0.02em" }}>{slide.title}</h2>
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: "#D8C3C9", margin: 0 }}>{slide.sub}</p>
+
+        <div
+          onTouchStart={(e) => setTouchX(e.touches[0].clientX)}
+          onTouchEnd={(e) => {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+            setTouchX(null);
+          }}
+          style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#33232A" }}
+        >
+          {slides.map((s, i) => (
+            <Image
+              key={s.id}
+              src={s.image}
+              alt=""
+              fill
+              sizes="420px"
+              priority={i === 0}
+              style={{ objectFit: "cover", objectPosition: s.imagePosition, opacity: i === idx ? 1 : 0, transition: "opacity .6s ease" }}
+            />
+          ))}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(25,16,20,0) 28%, rgba(25,16,20,0.5) 52%, rgba(25,16,20,0.9) 100%)" }}
+          />
+          {count > 1 && (
+            <div
+              style={{
+                position: "absolute",
+                top: 20,
+                left: 20,
+                zIndex: 2,
+                fontFamily: fontDisplay,
+                fontSize: 14,
+                letterSpacing: "0.2em",
+                color: "#FFFFFF",
+                background: "rgba(25,16,20,0.3)",
+                padding: "4px 12px",
+                borderRadius: 999,
+              }}
+            >
+              {String(idx + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+            </div>
+          )}
+          <div key={slide.id} style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 1, padding: "0 clamp(22px,6vw,30px) clamp(24px,6vw,30px)", color: "#FFFFFF", animation: "wbPopupUp .5s ease" }}>
+            {slide.eyebrow && (
+              <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.42em", color: "#F1D9DF", margin: "0 0 12px", display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ width: 22, height: 1, background: "#F1D9DF", opacity: 0.8 }} />
+                {slide.eyebrow}
+              </p>
+            )}
+            {slide.chip && (
+              <div style={{ ...glass, display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 14px 8px 10px", marginBottom: 16, fontSize: 13 }}>{slide.chip}</div>
+            )}
+            <h2 style={{ fontFamily: fontSerif, fontWeight: 600, fontSize: "clamp(26px,7vw,31px)", lineHeight: 1.35, margin: "0 0 12px", letterSpacing: "-0.02em" }}>{slide.title}</h2>
+            <p style={{ fontSize: 14.5, lineHeight: 1.75, color: "rgba(255,255,255,0.86)", margin: 0 }}>{slide.sub}</p>
+            {slide.highlight && (
+              <div style={{ ...glass, display: "inline-flex", alignItems: "baseline", gap: 6, marginTop: 16, padding: "9px 16px", fontSize: 13.5 }}>{slide.highlight}</div>
+            )}
           </div>
-          <div style={{ padding: "clamp(18px,4vw,22px) clamp(16px,5vw,24px) 4px", minHeight: count > 1 ? 380 : undefined }}>{slide.body}</div>
         </div>
-        <div style={{ padding: "0 clamp(16px,5vw,24px)" }}>
+
+        <div style={{ padding: "18px 22px 0" }}>
           <button
-            onClick={book}
+            onClick={act}
             className="btn-dark-hover"
-            style={{ display: "block", width: "100%", padding: 16, borderRadius: 999, border: "none", background: "#33232A", color: "#F3E9EB", fontSize: 15, fontWeight: 500, cursor: "pointer" }}
+            style={{ display: "block", width: "100%", padding: 15, borderRadius: 999, border: "none", background: "#33232A", color: "#F7EEF0", fontSize: 15, fontWeight: 500, cursor: "pointer" }}
           >
-            {slide.cta}
+            {slide.cta} →
           </button>
         </div>
         {count > 1 && (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, padding: "16px 0 2px" }}>
-            <button onClick={() => go(-1)} aria-label="이전" style={arrowBtn}>
-              ‹
-            </button>
+          <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "14px 0 2px" }}>
             {slides.map((s, i) => (
               <button
                 key={s.id}
                 onClick={() => setIdx(i)}
-                aria-label={`${i + 1}번째 안내`}
-                style={{ width: i === idx ? 22 : 7, height: 7, padding: 0, border: "none", borderRadius: 999, background: i === idx ? "#A9647E" : "#DCC4CC", cursor: "pointer", transition: "width .25s ease" }}
+                aria-label={`${i + 1}번째 안내 보기`}
+                style={{ width: i === idx ? 20 : 6, height: 6, padding: 0, border: "none", borderRadius: 999, background: i === idx ? "#A9647E" : "#DCC9CF", cursor: "pointer", transition: "width .25s ease" }}
               />
             ))}
-            <button onClick={() => go(1)} aria-label="다음" style={arrowBtn}>
-              ›
-            </button>
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "12px clamp(16px,5vw,24px) 18px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 24px 16px" }}>
           <button onClick={hideToday} style={linkBtn}>
             오늘 하루 보지 않기
           </button>
@@ -303,7 +307,7 @@ export function HomePopup() {
           </button>
         </div>
       </div>
-      <style>{`@keyframes wbPopupFade{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}`}</style>
+      <style>{`@keyframes wbPopupUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}`}</style>
     </div>
   );
 }
