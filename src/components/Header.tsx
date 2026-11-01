@@ -5,8 +5,7 @@ import Link from "next/link";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
 import { trackKakaoChatClick } from "@/lib/analytics";
-
-const KAKAO_CHAT_URL = "https://pf.kakao.com/_AIhxnX/chat";
+import { FloatingCta, KakaoIcon, KAKAO_CHAT_URL } from "@/components/FloatingCta";
 
 type NavKey = "service" | "pricing" | "invitation" | "myinvitation" | "contact" | "lookup";
 interface NavItem { href: string; label: string; key: NavKey; children?: { href: string; label: string; key: NavKey }[] }
@@ -51,7 +50,9 @@ export function Header({ active }: { active?: NavKey }) {
     if (testKey) openModal(undefined, { test: true, testKey });
   }
 
+  // 플로팅 버튼은 header 밖에 둔다 (header의 backdrop-filter가 position:fixed 기준을 바꾸기 때문)
   return (
+    <>
     <header
       style={{
         position: "sticky",
@@ -247,17 +248,19 @@ export function Header({ active }: { active?: NavKey }) {
               )}
             </div>
           ))}
+          <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
           <button
             onClick={openBookingFromMenu}
             style={{
-              marginTop: 16,
+              flex: 1,
               textAlign: "center",
               background: "#33232A",
               color: "#F3E9EB",
-              padding: 16,
+              padding: "11px 0",
               border: "none",
               borderRadius: 999,
-              fontSize: 15,
+              fontSize: 14,
+              fontWeight: 500,
               cursor: "pointer",
             }}
           >
@@ -272,17 +275,23 @@ export function Header({ active }: { active?: NavKey }) {
               trackKakaoChatClick("gnb_mobile");
             }}
             style={{
-              marginTop: 10,
-              textAlign: "center",
-              border: "1px solid #33232A",
-              color: "#33232A",
-              padding: 15,
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              background: "#FEE500",
+              color: "#191919",
+              padding: "11px 0",
               borderRadius: 999,
-              fontSize: 15,
+              fontSize: 14,
+              fontWeight: 500,
             }}
           >
+            <KakaoIcon size={15} />
             예약문의
           </a>
+          </div>
           {testKey && (
             <button
               onClick={() => {
@@ -307,5 +316,7 @@ export function Header({ active }: { active?: NavKey }) {
         </div>
       )}
     </header>
+    <FloatingCta />
+    </>
   );
 }
