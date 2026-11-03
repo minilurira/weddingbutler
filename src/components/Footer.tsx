@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { fontDisplay } from "@/lib/style";
 import { useReservation } from "@/components/ReservationProvider";
-import { INSTAGRAM_URL, NAVER_BLOG_URL } from "@/lib/seo";
+import { INSTAGRAM_URL, NAVER_BLOG_URL, NAVER_PLACE_URL } from "@/lib/seo";
 
 function openBizInfo() {
   window.open("https://www.ftc.go.kr/bizCommPop.do?wrkr_no=6770803502", "bizCommPop", "width=750,height=700");
@@ -95,6 +95,19 @@ function SocialLinks() {
           <path d="M4 3h5.6l4.8 7.4V3H20v18h-5.6l-4.8-7.4V21H4z" />
         </svg>
       </a>
+      <a
+        href={NAVER_PLACE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="웨딩버틀러 네이버 플레이스"
+        title="네이버 플레이스"
+        style={socialIconStyle}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <path d="M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11z" />
+          <circle cx="12" cy="10" r="2.4" />
+        </svg>
+      </a>
     </div>
   );
 }
@@ -136,9 +149,6 @@ function LegalLinks() {
       <Link href="/privacy" style={{ ...legalLinkStyle, fontWeight: 700 }} className="footer-legal-hover">
         개인정보처리방침
       </Link>
-      <a href="https://naver.me/xpjIOeZJ" target="_blank" rel="noopener noreferrer" style={legalLinkStyle} className="footer-legal-hover">
-        네이버 플레이스
-      </a>
     </div>
   );
 }
@@ -228,6 +238,9 @@ export function Footer({ full = false }: { full?: boolean }) {
               </a>
               <a href={NAVER_BLOG_URL} target="_blank" rel="noopener noreferrer" style={{ color: "#9A8189" }}>
                 네이버 블로그
+              </a>
+              <a href={NAVER_PLACE_URL} target="_blank" rel="noopener noreferrer" style={{ color: "#9A8189" }}>
+                네이버 플레이스
               </a>
             </div>
           </div>
