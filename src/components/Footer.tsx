@@ -136,6 +136,9 @@ function LegalLinks() {
       <Link href="/privacy" style={{ ...legalLinkStyle, fontWeight: 700 }} className="footer-legal-hover">
         개인정보처리방침
       </Link>
+      <a href="https://naver.me/xpjIOeZJ" target="_blank" rel="noopener noreferrer" style={legalLinkStyle} className="footer-legal-hover">
+        네이버 플레이스
+      </a>
     </div>
   );
 }
