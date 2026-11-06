@@ -28,7 +28,7 @@ import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
 import { requestDepositPayment } from "@/lib/portone-client";
-import { stashPendingPurchase, trackPurchase } from "@/lib/analytics";
+import { stashPendingPurchase, trackFunnel, trackPurchase, trackReservationClose, type FunnelStep } from "@/lib/analytics";
 import type {
   AvailabilityResponse,
   ConfirmReservationResponse,
@@ -173,6 +173,39 @@ export function ReservationModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  // ── 예약 퍼널 이벤트 (테스트 예약 창은 제외) ──
+  // 창을 열 때마다 새로 세고, 단계마다 한 번만 보낸다. 닫을 때 결제를 끝내지 않았으면 마지막 단계를 보낸다.
+  const funnelSent = useRef<Set<FunnelStep>>(new Set());
+  const funnelLast = useRef<string>("open");
+  const phaseRef = useRef(state.phase);
+  phaseRef.current = state.phase;
+  const wasOpen = useRef(false);
+  function funnel(step: FunnelStep, params: Record<string, string | number> = {}) {
+    if (test || funnelSent.current.has(step)) return;
+    funnelSent.current.add(step);
+    if (step !== "form_blocked" && step !== "pay_fail") funnelLast.current = step;
+    trackFunnel(step, { plan: state.plan, ...params });
+  }
+  useEffect(() => {
+    if (open && !wasOpen.current) {
+      funnelSent.current = new Set();
+      funnelLast.current = "open";
+    } else if (!open && wasOpen.current && !test && phaseRef.current === "form") {
+      trackReservationClose(funnelLast.current, state.plan);
+    }
+    wasOpen.current = open;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+  useEffect(() => {
+    if (open && state.date && state.time) funnel("date_select");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, state.date, state.time]);
+  const anyInfo = !!(state.name.trim() || state.phone.trim() || state.email.trim() || state.venue.trim());
+  useEffect(() => {
+    if (open && anyInfo) funnel("info_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, anyInfo]);
+
   const dateKey = state.date
     ? `${state.y}-${String(state.m).padStart(2, "0")}-${String(state.date).padStart(2, "0")}`
     : "";
@@ -289,6 +322,7 @@ export function ReservationModal({
 
   async function submit() {
     if (state.phase === "submitting") return;
+    funnel("submit_click");
 
     const miss: string[] = [];
     if (!state.date) miss.push("예식 날짜");
@@ -300,6 +334,7 @@ export function ReservationModal({
     else if (!EMAIL_RE.test(state.email.trim())) miss.push("이메일 (형식을 확인해 주세요)");
     if (!state.venue.trim()) miss.push("예식장 · 홀 이름");
     if (miss.length) {
+      funnel("form_blocked", { reason: "missing" });
       window.alert("아래 항목을 입력해 주세요.\n\n· " + miss.join("\n· "));
       return;
     }
@@ -308,6 +343,7 @@ export function ReservationModal({
     if (!state.agreeRefund) need.push("취소·환불 기준 확인");
     if (!state.agreePrivacy) need.push("개인정보 수집·이용 동의");
     if (need.length) {
+      funnel("form_blocked", { reason: "agree" });
       window.alert("아래 필수 항목에 동의해 주세요.\n\n· " + need.join("\n· "));
       return;
     }
@@ -354,6 +390,7 @@ export function ReservationModal({
         test,
       };
       stashPendingPurchase(created.id, purchase);
+      funnel("pay_window");
 
       const payResult = await requestDepositPayment({
         paymentId: created.paymentId,
@@ -366,6 +403,7 @@ export function ReservationModal({
         redirectUrl: returnUrl.toString(),
       });
       if (!payResult.ok) {
+        funnel("pay_fail", { where: "window" });
         throw new Error(payResult.message || "결제가 취소되었습니다.");
       }
 
