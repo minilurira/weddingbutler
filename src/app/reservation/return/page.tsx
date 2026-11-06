@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { fontSerif } from "@/lib/style";
 import type { ConfirmReservationResponse } from "@/lib/reservation-types";
-import { takePendingPurchase, trackPurchase } from "@/lib/analytics";
+import { takePendingPurchase, trackFunnel, trackPurchase } from "@/lib/analytics";
 
 /** 모바일 결제(이니시스 리다이렉트 방식)가 끝나고 돌아오는 페이지.
  * 예약 생성 시점에 이미 만들어 둔 예약 id·paymentId로 결제를 확정한다 —
@@ -41,6 +41,9 @@ function ReturnContent() {
           setBookingNo(data.bookingNo || "");
           setPhase("done");
         } else {
+          // 모바일 결제창에서 취소·실패하고 돌아온 경우 (테스트 결제는 제외)
+          const pending = takePendingPurchase(rid);
+          if (pending && !pending.test) trackFunnel("pay_fail", { plan: pending.plan, where: "return" });
           setMessage(data.message || "결제가 확인되지 않았습니다.");
           setPhase("error");
         }

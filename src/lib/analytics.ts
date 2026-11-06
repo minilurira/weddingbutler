@@ -91,3 +91,26 @@ export function trackContactPageView() {
 export function trackKakaoChatClick(location: string) {
   gtag("event", "kakao_chat_click", { location });
 }
+
+// ── 예약 퍼널 ──────────────────────────────────────────────
+// 예약 창을 연 뒤 어디까지 왔는지 단계별로 보낸다. 한 번 열 때 단계마다 한 번만 보낸다(ReservationModal).
+// 어드민 유입·검색의 "예약 퍼널" 카드가 이벤트 이름으로 집계하므로 이름을 바꾸면 어드민도 같이 바꾼다.
+export const FUNNEL_EVENTS = {
+  date_select: "reservation_date_select", // 날짜·시간 선택
+  info_start: "reservation_info_start", // 이름·연락처 등 첫 입력
+  submit_click: "reservation_submit_click", // 결제하기 클릭
+  form_blocked: "reservation_form_blocked", // 결제하기를 눌렀지만 빈칸·미동의로 막힘
+  pay_window: "reservation_pay_window", // 결제창 열림
+  pay_fail: "reservation_pay_fail", // 결제창 닫음·결제 실패
+} as const;
+
+export type FunnelStep = keyof typeof FUNNEL_EVENTS;
+
+export function trackFunnel(step: FunnelStep, params: Record<string, string | number> = {}) {
+  gtag("event", FUNNEL_EVENTS[step], params);
+}
+
+/** 결제를 끝내지 않고 예약 창을 닫음. last_step = 닫기 직전까지 온 단계 */
+export function trackReservationClose(lastStep: string, plan: string) {
+  gtag("event", "reservation_close", { last_step: lastStep, plan });
+}
