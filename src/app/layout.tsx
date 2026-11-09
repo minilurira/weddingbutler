@@ -48,6 +48,7 @@ export const metadata: Metadata = {
     other: {
       "naver-site-verification":
         process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION || "d714f906d1ed62c2d1468a07a7e41f032cf2126b",
+      "msvalidate.01": "D4E50752609221D961F50D4274E87D4C",
     },
   },
 };
