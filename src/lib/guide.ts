@@ -23,7 +23,7 @@ export interface GuideArticle {
   cta: "reserve" | "invitation";
 }
 
-export const GUIDE_UPDATED = "2026-10-26";
+export const GUIDE_UPDATED = "2026-11-09";
 
 export const GUIDES: GuideArticle[] = [
   {
