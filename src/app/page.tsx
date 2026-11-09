@@ -329,6 +329,10 @@ export default function HomePage() {
               ["/guide/vs-friend", "축의대행 vs 지인에게 부탁"],
               ["/guide/free-mobile-invitation", "무료 모바일청첩장 만들기"],
               ["/guide/invitation-greeting-examples", "모바일 청첩장 문구 예시"],
+              ["/guide/chuiuldaedaehaeng", "축의대대행·축의금 대행 비교"],
+              ["/guide/settlement", "축의금 정산 방법: 접수부터 인계까지"],
+              ["/guide/checklist", "결혼식 당일 축의대 준비 체크리스트"],
+              ["/guide/seoul-gyeonggi", "서울·경기 축의대행 이용 안내"],
             ].map(([href, label]) => (
               <Link key={href} href={href} style={{ display: "block", background: "#FFFFFF", border: "1px solid #EFE0E4", borderRadius: 4, padding: "18px 20px", fontSize: 15.5, color: "#33232A", fontWeight: 500 }}>{label} <span aria-hidden="true" style={{ color: "#A9647E" }}>→</span></Link>
             ))}

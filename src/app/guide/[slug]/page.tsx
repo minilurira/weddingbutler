@@ -76,6 +76,7 @@ export default function GuideArticlePage({ params }: { params: { slug: string } 
           <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>{g.eyebrow}</p>
           <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 400, margin: "0 0 22px", lineHeight: 1.4, letterSpacing: "-0.025em", color: "#33232A" }}>{g.title}</h1>
           <p style={{ margin: 0, fontSize: 17, lineHeight: 1.95, color: "#5E4D53", fontWeight: 300 }}>{g.lead}</p>
+          <p style={{ margin: "18px 0 0", fontSize: 13, color: "#9A8189" }}>{GUIDE_UPDATED.slice(0, 7)} 기준 · 작성: 웨딩버틀러</p>
         </div>
       </section>
 
@@ -112,7 +113,7 @@ export default function GuideArticlePage({ params }: { params: { slug: string } 
             <div style={{ borderTop: "1px solid #E7D5DA" }}>
               {g.faq.map((f) => (
                 <details key={f.q} style={{ borderBottom: "1px solid #E7D5DA", padding: "4px 2px" }}>
-                  <summary style={{ cursor: "pointer", padding: "16px 0", fontSize: 16, fontWeight: 600, color: "#33232A" }}>{f.q}</summary>
+                  <summary style={{ cursor: "pointer", padding: "16px 0" }}><h3 style={{ display: "inline", margin: 0, fontSize: 16, fontWeight: 600, color: "#33232A" }}>{f.q}</h3></summary>
                   <p style={{ margin: "0 0 16px", fontSize: 15, lineHeight: 1.85, color: "#6B5A60" }}>{f.a}</p>
                 </details>
               ))}
