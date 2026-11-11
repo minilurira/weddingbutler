@@ -137,6 +137,9 @@ const legalLinkStyle = { color: "#9A8189" } as const;
 function LegalLinks() {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginTop: 18, fontSize: 12.5 }}>
+      <Link href="/ceo" style={legalLinkStyle} className="footer-legal-hover">
+        대표버틀러 소개
+      </Link>
       <Link href="/guide" style={legalLinkStyle} className="footer-legal-hover">
         축의대행 가이드
       </Link>
@@ -203,6 +206,9 @@ export function Footer({ full = false }: { full?: boolean }) {
               </Link>
               <Link href="/pricing" style={{ color: "#9A8189" }}>
                 가격안내
+              </Link>
+              <Link href="/ceo" style={{ color: "#9A8189" }}>
+                대표버틀러 소개
               </Link>
               <Link href="/guide" style={{ color: "#9A8189" }}>
                 축의대행 가이드

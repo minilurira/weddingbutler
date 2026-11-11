@@ -304,6 +304,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section id="ceo" style={{ padding: "clamp(56px,9vw,90px) clamp(18px,5vw,24px) 0" }}>
+        <Reveal style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
+          <p style={{ fontFamily: fontDisplay, fontSize: 14, letterSpacing: "0.4em", color: "#A9647E", margin: "0 0 16px" }}>REPRESENTATIVE BUTLER</p>
+          <h2 style={{ fontFamily: fontSerif, fontSize: "clamp(22px,4.6vw,30px)", fontWeight: 400, margin: "0 0 22px", letterSpacing: "-0.025em", lineHeight: 1.5 }}>약속을 가장 먼저 지키는<br />두 대표 버틀러가 직접 운영합니다</h2>
+          <div style={{ display: "flex", justifyContent: "center", gap: 16, margin: "0 0 20px" }}>
+            {[["/img/ceo.jpg", "대표 버틀러 이강"], ["/img/ceo2.jpg", "대표 버틀러 최소연"]].map(([src, alt]) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={src} src={src} alt={alt} width={92} height={92} loading="lazy" style={{ width: 92, height: 92, borderRadius: "50%", objectFit: "cover", objectPosition: "50% 22%", border: "2px solid #FFFFFF" }} />
+            ))}
+          </div>
+          <Link href="/ceo" style={{ color: "#8E4E68", textDecoration: "underline", fontSize: 14.5 }}>대표 버틀러 소개 보기 <span aria-hidden="true">→</span></Link>
+        </Reveal>
+      </section>
+
       <section id="review" style={{ padding: "clamp(64px,11vw,120px) 0" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 clamp(18px,5vw,24px)" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
