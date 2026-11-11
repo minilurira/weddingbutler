@@ -76,6 +76,9 @@ export default function GuideArticlePage({ params }: { params: { slug: string } 
           <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>{g.eyebrow}</p>
           <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 400, margin: "0 0 22px", lineHeight: 1.4, letterSpacing: "-0.025em", color: "#33232A" }}>{g.title}</h1>
           <p style={{ margin: 0, fontSize: 17, lineHeight: 1.95, color: "#5E4D53", fontWeight: 300 }}>{g.lead}</p>
+          {g.download && (
+            <a href={g.download.href} download={g.download.filename} style={{ display: "inline-block", margin: "22px 0 0", background: "#33232A", color: "#FFFFFF", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500 }}>{g.download.label}</a>
+          )}
           <p style={{ margin: "18px 0 0", fontSize: 13, color: "#9A8189" }}>{GUIDE_UPDATED.slice(0, 7)} 기준 · 작성: 웨딩버틀러</p>
         </div>
       </section>

@@ -11,8 +11,8 @@ import { DESK_TYPE, EVENT, isEventShowing } from "@/lib/plans";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "가격안내",
-  description: "축의대행·축의금 대행 가격안내. 하객 규모와 축의대 유형에 맞춘 네 가지 요금, 부가세 포함.",
+  title: "축의금 대행 가격안내, 연말 이벤트 35만원부터",
+  description: "축의금 대행·축의대행 가격안내. 연말 이벤트 35만원부터, 하객 규모와 축의대 유형에 맞춘 네 가지 요금, 부가세 포함.",
   alternates: { canonical: "/pricing" },
 };
 

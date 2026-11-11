@@ -13,7 +13,9 @@ export const metadata: Metadata = {
 };
 
 const GROUPS = [
-  { title: "축의대행 · 축의대대행 가이드", slugs: ["what-is-chuiuldaehaeng", "chuiuldaedaehaeng", "cost", "how-many-staff", "vs-friend", "settlement", "checklist", "seoul-gyeonggi"] },
+  { title: "축의대행 · 축의대대행 가이드", slugs: ["what-is-chuiuldaehaeng", "chuiuldaedaehaeng", "cost", "how-many-staff", "vs-friend", "settlement", "checklist"] },
+  { title: "지역별 축의대행 안내", slugs: ["seoul-gyeonggi", "suwon-chuiuldaehaeng", "seongnam-pangyo-chuiuldaehaeng", "paju-chuiuldaehaeng", "ilsan-chuiuldaehaeng", "incheon-chuiuldaehaeng"] },
+  { title: "무료 양식", slugs: ["chuiuldaehaeng-excel"] },
   { title: "무료 모바일청첩장 가이드", slugs: ["free-mobile-invitation", "invitation-greeting-examples"] },
 ];
 
