@@ -26,7 +26,7 @@ const HOLIDAYS: ReadonlySet<string> = new Set([
   "2026-10-05", // 개천절 (대체공휴일 10/5)
   "2026-10-09", // 한글날
   "2026-12-25", // 성탄절
-  // 2027 (1~5월 — 우주항공청 2027 월력요항 기준. 6월 이후는 예약을 열 때 추가)
+  // 2027 (우주항공청 월력요항 기준. 임시공휴일이 생기면 추가)
   "2027-01-01", // 신정
   "2027-02-06",
   "2027-02-07",
@@ -37,11 +37,18 @@ const HOLIDAYS: ReadonlySet<string> = new Set([
   "2027-05-03", // 노동절 (대체공휴일 5/3)
   "2027-05-05", // 어린이날
   "2027-05-13", // 부처님오신날
+  "2027-08-16", // 광복절 (대체공휴일 8/16)
+  "2027-09-14",
+  "2027-09-15",
+  "2027-09-16", // 추석 연휴
+  "2027-10-04", // 개천절 (대체공휴일 10/4)
+  "2027-10-11", // 한글날 (대체공휴일 10/11)
+  "2027-12-27", // 성탄절 (대체공휴일 12/27)
 ]);
 
 /** 온라인 예약을 받는 마지막 예식일(이 날까지 포함). 더 늘릴 땐 이 값과 HOLIDAYS 를 함께 갱신한다. */
-export const BOOKING_OPEN_UNTIL = { year: 2027, month: 5, day: 31 } as const;
-export const BOOKING_OPEN_UNTIL_LABEL = "2027년 5월 31일";
+export const BOOKING_OPEN_UNTIL = { year: 2027, month: 12, day: 31 } as const;
+export const BOOKING_OPEN_UNTIL_LABEL = "2027년 12월 31일";
 
 function pad2(n: number): string {
   return String(n).padStart(2, "0");
