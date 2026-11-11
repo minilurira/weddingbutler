@@ -46,7 +46,7 @@ function buildSlides(): Slide[] {
       title: EVENT.name,
       sub: (
         <>
-          11월 1일 – 12월 31일 예식이라면
+          12월 31일까지 예약하면 예식이 내년이어도
           <br />전 요금제를 특별가로 만나보세요
         </>
       ),

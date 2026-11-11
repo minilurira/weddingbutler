@@ -359,7 +359,7 @@ export default function PricingPage() {
         </div>
         {eventOn && (
           <p style={{ maxWidth: 1280, margin: "18px auto 0", fontSize: 13, lineHeight: 1.8, color: "#9A8189", textAlign: "center" }}>
-            연말 이벤트가는 {EVENT.label}에 적용되며, 2027년 1월 이후 예식은 정가로 예약됩니다.
+            연말 이벤트가는 {EVENT.label}하신 분께 예식일(내년 포함)과 관계없이 적용되며, 2027년 1월 1일부터 하는 예약은 정가입니다.
           </p>
         )}
       </section>

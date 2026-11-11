@@ -73,14 +73,12 @@ export function isBothSidePlan(plan: PlanKey): boolean {
 }
 
 /**
- * 연말 이벤트: 예식일이 기간 안이면 기본 요금을 이벤트가로 받는다(기록 방식과 무관).
- * 날짜는 "YYYY-MM-DD" 문자열로 비교한다. 팝업·취소선 표시는 showUntil(한국시간) 전까지만 보인다.
+ * 연말 이벤트: 예약(결제)한 날이 showUntil(한국시간) 전이면 예식일과 상관없이 기본 요금을 이벤트가로 받는다(기록 방식과 무관).
+ * 팝업·취소선 표시도 같은 시점까지만 보인다.
  */
 export const EVENT = {
   name: "연말 웨딩 이벤트",
-  from: "2026-11-01",
-  to: "2026-12-31",
-  label: "11월 1일 ~ 12월 31일 예식",
+  label: "12월 31일까지 예약",
   showUntil: new Date("2027-01-01T00:00:00+09:00"),
   prices: { small: 350000, smallboth: 350000, standard: 400000, premium: 750000 } as Record<PublicPlanKey, number>,
 };
@@ -94,20 +92,15 @@ export function isEventShowing(now: Date = new Date()): boolean {
   return now < EVENT.showUntil;
 }
 
-/** 예식일이 이벤트 대상인지 */
-export function isEventDate(ceremonyDate: string | null | undefined): boolean {
-  return !!ceremonyDate && ceremonyDate >= EVENT.from && ceremonyDate <= EVENT.to;
-}
-
 /** 이벤트가 (이벤트 대상 요금제가 아니면 null) */
 export function eventPriceOf(plan: PlanKey): number | null {
   return plan in EVENT.prices ? EVENT.prices[plan as PublicPlanKey] : null;
 }
 
-/** 예식일 기준 기본 요금: 이벤트 기간 예식이면 이벤트가, 아니면 정가 */
-export function planBase(plan: PlanKey, ceremonyDate: string | null | undefined): number {
+/** 예약 시점 기준 기본 요금: 이벤트 기간에 예약하면 이벤트가, 아니면 정가 */
+export function planBase(plan: PlanKey): number {
   const ev = eventPriceOf(plan);
-  return ev !== null && isEventDate(ceremonyDate) ? ev : PLANS[plan].base;
+  return ev !== null && isEventShowing() ? ev : PLANS[plan].base;
 }
 
 /** "39만원"처럼 만원 단위로 짧게 */
@@ -157,12 +150,10 @@ export function calcPrice(
   plan: PlanKey,
   guests: number,
   extraButlers: number,
-  paymentType: PaymentType,
-  /** 예식일 "YYYY-MM-DD" — 이벤트 기간이면 기본 요금이 이벤트가가 된다 */
-  ceremonyDate: string | null
+  paymentType: PaymentType
 ): PriceBreakdown {
   const p = PLANS[plan];
-  const base = planBase(plan, ceremonyDate);
+  const base = planBase(plan);
   // Estimated only — actual 기준 초과 식권 fee is settled on-site after the
   // real 식권 배부 매수 is counted, so it's not part of the online total/deposit.
   const over = Math.max(0, guests - p.incl) * 2000;

@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
     specialAmount = offer.amount;
   }
 
-  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType, `${year}-${pad(month)}-${pad(day)}`);
+  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType);
   const planInfo = PLANS[plan];
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`

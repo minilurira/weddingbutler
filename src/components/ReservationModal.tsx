@@ -258,11 +258,9 @@ export function ReservationModal({
   const deskLabel = side === "both" && state.plan in DESK_TYPE ? DESK_TYPE[state.plan as PublicPlanKey] : side ? SIDE_LABEL[side] : "선택해 주세요";
   const blockedSlots = blocked.key === dateKey ? blocked.slots : [];
   const eventShowing = isEventShowing();
-  // 날짜를 고르기 전에는 이벤트 기간 중이면 이벤트가로 보여주고, 날짜를 고르면 그 예식일 기준으로 계산한다.
-  const priceDate = dateKey || (eventShowing ? EVENT.from : null);
   const price = test
     ? testPrice(state.paymentType)
-    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType, priceDate);
+    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType);
   const eventApplied = !test && price.base < price.listBase;
   const filled = !!(
     state.date &&
@@ -534,7 +532,7 @@ export function ReservationModal({
                 </div>
                 {eventShowing && !test && (
                   <p style={{ fontSize: 12.5, lineHeight: 1.7, color: "#8E3F5F", margin: "12px 0 0" }}>
-                    {EVENT.name} · {EVENT.label}은 이벤트가로 결제됩니다. (밀봉 · 개봉 집계 모두 적용)
+                    {EVENT.name} · {EVENT.label}하시면 예식일과 관계없이 이벤트가로 결제됩니다. (밀봉 · 개봉 집계 모두 적용)
                   </p>
                 )}
 

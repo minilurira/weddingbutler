@@ -128,7 +128,7 @@ export const TERMS_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑥ 제5항의 결제가 이루어지지 아니한 경우, 잔금은 예식일 다음 날까지 납부하여야 하며, 이를 지나면 회사는 납부를 최고한 후 미납 금액에 대하여 법정이율에 따른 지연손해금을 청구할 수 있습니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑦ 회사는 결제수단에 따른 어떠한 명목의 수수료도 대금에 추가하여 징수하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑧ 회사는 부가가치세법상 간이과세자로서, 결제 대금에 대하여 현금영수증을 발행합니다(신용카드 결제분은 카드 매출전표로 갈음).</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ 회사는 기간과 대상 예식일을 정하여 기본 요금을 할인하는 행사를 할 수 있으며, 행사 내용은 사이트에 게시합니다. 행사 대상 예식은 예약 시 할인된 기본 요금으로 결제합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑨ 회사는 기간과 대상을 정하여 기본 요금을 할인하는 행사를 할 수 있으며, 행사 내용은 사이트에 게시합니다. 행사 기간에 예약하는 경우 예식일과 관계없이 예약 시 할인된 기본 요금으로 결제합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">⑩ 회사는 요금을 변경할 수 있습니다. 다만 변경 전에 성립한 계약에는 종전 요금을 적용합니다. 회사의 과세유형 변경 등 법령상 사유로 부가가치세 처리 방식이 달라지는 경우에도 같습니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제11조 (예약 내용의 변경)</h2>
