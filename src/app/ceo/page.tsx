@@ -17,10 +17,10 @@ export const metadata: Metadata = {
 
 interface Person { name: string; role: string; photo: string; greeting: string; facts: string[] }
 
-// 회사명과 상세 경력은 싣지 않는다. 재직 중이라는 사실과 축의대행 경력 햇수만 밝힌다.
+// 회사명과 상세 경력은 싣지 않는다. 재직 중이라는 사실과 축의대행 경력 햇수만 밝힌다. 현직 사명은 쓰지 않는다.
 const PEOPLE: Person[] = [
-  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", greeting: "직장에 다니며 축의대행을 3년째 이어 오고 있습니다.", facts: ["현직 직장인", "축의대행 3년"] },
-  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", greeting: "직장에 다니며 축의대행을 4년째 이어 오고 있습니다.", facts: ["현직 직장인", "축의대행 4년"] },
+  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", greeting: "결제 기업에 다니며 축의대행을 3년째 해 왔습니다. 한 번 한 약속은 시간까지 지킵니다.", facts: ["결제 기업 재직 중", "축의대행 3년"] },
+  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", greeting: "대기업에 다니며 축의대행을 4년째 해 왔습니다. 예식 날에는 약속한 시간보다 먼저 와 있습니다.", facts: ["대기업 재직 중", "축의대행 4년"] },
 ];
 
 export default function CeoPage() {
