@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   openGraph: { type: "profile", locale: "ko_KR", url: `${SITE_URL}/ceo`, siteName: SITE_NAME, title: TITLE, description: DESC, images: [{ url: "/img/ceo.jpg", width: 777, height: 1000, alt: "웨딩버틀러 대표 버틀러 이강" }] },
 };
 
-interface Person { name: string; role: string; photo: string; greeting: string; facts: string[] }
+interface Person { name: string; role: string; photo: string; greeting: string; motto: string; facts: string[] }
 
 // 회사명과 상세 경력은 싣지 않는다. 재직 중이라는 사실과 축의대행 경력 햇수만 밝힌다. 현직 사명은 쓰지 않는다.
 const PEOPLE: Person[] = [
-  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", greeting: "결제 기업에 다니며 축의대행을 3년째 해 왔습니다. 한 번 한 약속은 시간까지 지킵니다.", facts: ["결제 기업 재직 중", "축의대행 3년"] },
-  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", greeting: "대기업에 다니며 축의대행을 4년째 해 왔습니다. 예식 날에는 약속한 시간보다 먼저 와 있습니다.", facts: ["대기업 재직 중", "축의대행 4년"] },
+  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", motto: "약속은 지킬 수 있을 때만 하고, 한 번 하면 반드시 지킵니다.", greeting: "결제 기업에 다니며 축의대행을 3년째 해 왔습니다. 한 번 한 약속은 시간까지 지킵니다.", facts: ["결제 기업 재직 중", "축의대행 3년"] },
+  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", motto: "늦지 않는 것이 고객께 드리는 가장 기본적인 예의입니다.", greeting: "대기업에 다니며 축의대행을 4년째 해 왔습니다. 예식 날에는 약속한 시간보다 먼저 와 있습니다.", facts: ["대기업 재직 중", "축의대행 4년"] },
 ];
 
 export default function CeoPage() {
@@ -40,10 +40,9 @@ export default function CeoPage() {
       <main style={{ padding: "clamp(50px,8vw,84px) clamp(18px,5vw,24px) clamp(40px,6vw,64px)" }}>
         <div style={{ maxWidth: 980, margin: "0 auto" }}>
           <p style={{ fontFamily: fontDisplay, fontSize: 13, letterSpacing: "0.34em", color: "#A9647E", margin: "0 0 14px" }}>REPRESENTATIVE BUTLER</p>
-          <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 400, margin: "0 0 16px", lineHeight: 1.4, letterSpacing: "-0.025em", color: "#33232A" }}>
+          <h1 style={{ fontFamily: fontSerif, fontSize: "clamp(26px,5.6vw,38px)", fontWeight: 400, margin: "0 0 clamp(26px,5vw,44px)", lineHeight: 1.4, letterSpacing: "-0.025em", color: "#33232A" }}>
             축의금은 돈이 오가는 일,<br />그래서 두 대표가 직접 기준을 만들었습니다
           </h1>
-          <p style={{ margin: "0 0 clamp(26px,5vw,44px)", fontSize: 18, lineHeight: 1.9, color: "#5E4D53", fontWeight: 300 }}>약속을 무엇보다 먼저 지키고, 예식 1시간 전에는 반드시 도착합니다.</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "clamp(44px,8vw,80px)" }}>
             {PEOPLE.map((x) => (
               <section key={x.name} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,280px),1fr))", gap: "clamp(24px,5vw,48px)", alignItems: "start" }}>
@@ -53,7 +52,8 @@ export default function CeoPage() {
                   <p style={{ margin: "12px 0 0", fontSize: 14, color: "#5E4D53", textAlign: "center" }}>{x.role} <span style={{ color: "#33232A", fontWeight: 500 }}>{x.name}</span></p>
                 </div>
                 <div>
-                  {x.greeting && <p style={{ margin: "0 0 18px", fontSize: 17, lineHeight: 1.95, color: "#473A3F", fontWeight: 300 }}>{x.greeting}</p>}
+                  <p style={{ margin: "0 0 18px", fontFamily: fontSerif, fontSize: "clamp(19px,4.4vw,24px)", lineHeight: 1.6, color: "#33232A", letterSpacing: "-0.02em" }}>&ldquo;{x.motto}&rdquo;</p>
+                  {x.greeting && <p style={{ margin: "0 0 18px", fontSize: 15.5, lineHeight: 1.95, color: "#5E4D53", fontWeight: 300 }}>{x.greeting}</p>}
                   {x.facts.length > 0 && (
                     <ul style={{ listStyle: "none", margin: "0 0 28px", padding: 0, display: "flex", flexWrap: "wrap", gap: 10 }}>
                       {x.facts.map((f) => <li key={f} style={{ background: "#FFFFFF", border: "1px solid #E7D5DA", borderRadius: 999, padding: "6px 14px", fontSize: 13.5, color: "#8E4E68" }}>{f}</li>)}
