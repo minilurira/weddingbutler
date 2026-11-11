@@ -14,7 +14,7 @@ interface NavItem { href: string; label: string; key: NavKey; children?: { href:
 const NAV: NavItem[] = [
   { href: "/service", label: "서비스", key: "service" },
   { href: "/pricing", label: "가격안내", key: "pricing" },
-  { href: "/ceo", label: "대표소개", key: "ceo" },
+  { href: "/ceo", label: "대표버틀러 소개", key: "ceo" },
   {
     href: "/invitation",
     label: "무료 청첩장",
@@ -102,7 +102,7 @@ export function Header({ active }: { active?: NavKey }) {
                   <Link
                     href={item.href}
                     aria-haspopup="true"
-                    style={{ color: active === item.key || active === "myinvitation" ? "#A9647E" : "#473A3F" }}
+                    style={{ color: active === item.key || active === "myinvitation" ? "#A9647E" : "#473A3F", whiteSpace: "nowrap" }}
                   >
                     {item.label} <span aria-hidden="true" style={{ fontSize: 10, opacity: 0.6 }}>▾</span>
                   </Link>
@@ -120,7 +120,7 @@ export function Header({ active }: { active?: NavKey }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  style={{ color: active === item.key ? "#A9647E" : "#473A3F" }}
+                  style={{ color: active === item.key ? "#A9647E" : "#473A3F", whiteSpace: "nowrap" }}
                 >
                   {item.label}
                 </Link>
