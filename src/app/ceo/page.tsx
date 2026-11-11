@@ -18,9 +18,12 @@ export const metadata: Metadata = {
 interface Person { name: string; role: string; photo: string; greeting: string; motto: string; facts: string[] }
 
 // 회사명과 상세 경력은 싣지 않는다. 재직 중이라는 사실과 축의대행 경력 햇수만 밝힌다. 현직 사명은 쓰지 않는다.
+// 두 대표가 함께 지키는 현장 원칙. 사이트의 서비스 안내와 같은 내용만 쓴다.
+const COMMON = ["예식 1시간 전 도착", "2인 1조 교차 검수", "접수부터 전달까지 카메라 기록", "인계확인서 서명"];
+
 const PEOPLE: Person[] = [
-  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", motto: "약속은 지킬 수 있을 때만 하고, 한 번 하면 반드시 지킵니다.", greeting: "결제 기업에 다니며 축의대행을 3년째 해 왔습니다. 한 번 한 약속은 시간까지 지킵니다.", facts: ["결제 기업 재직 중", "축의대행 3년"] },
-  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", motto: "늦지 않는 것이 고객께 드리는 가장 기본적인 예의입니다.", greeting: "대기업에 다니며 축의대행을 4년째 해 왔습니다. 예식 날에는 약속한 시간보다 먼저 와 있습니다.", facts: ["대기업 재직 중", "축의대행 4년"] },
+  { name: "이강", role: "대표 버틀러", photo: "/img/ceo.jpg", motto: "약속은 지킬 수 있을 때만 하고, 한 번 하면 반드시 지킵니다.", greeting: "결제 기업에 다니며 축의대행을 3년째 해 왔습니다. 한 번 한 약속은 시간까지 지킵니다.", facts: ["결제 기업 재직 중", "축의대행 3년", "예약과 정산 시스템 직접 운영", ...COMMON] },
+  { name: "최소연", role: "대표 버틀러", photo: "/img/ceo2.jpg", motto: "늦지 않는 것이 고객께 드리는 가장 기본적인 예의입니다.", greeting: "대기업에 다니며 축의대행을 4년째 해 왔습니다. 예식 날에는 약속한 시간보다 먼저 와 있습니다.", facts: ["대기업 재직 중", "축의대행 4년", ...COMMON] },
 ];
 
 export default function CeoPage() {
