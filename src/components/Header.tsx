@@ -7,13 +7,14 @@ import { useReservation } from "@/components/ReservationProvider";
 import { trackKakaoChatClick } from "@/lib/analytics";
 import { FloatingCta, KakaoIcon, KAKAO_CHAT_URL } from "@/components/FloatingCta";
 
-type NavKey = "service" | "pricing" | "invitation" | "myinvitation" | "contact" | "lookup";
+type NavKey = "service" | "pricing" | "ceo" | "invitation" | "myinvitation" | "contact" | "lookup";
 interface NavItem { href: string; label: string; key: NavKey; children?: { href: string; label: string; key: NavKey }[] }
 
 // "무료 청첩장" 아래에 "내 청첩장"(만든 청첩장 관리·대시보드)을 하위 메뉴로 둔다
 const NAV: NavItem[] = [
   { href: "/service", label: "서비스", key: "service" },
   { href: "/pricing", label: "가격안내", key: "pricing" },
+  { href: "/ceo", label: "대표소개", key: "ceo" },
   {
     href: "/invitation",
     label: "무료 청첩장",
