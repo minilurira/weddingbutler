@@ -3,7 +3,7 @@ export const TERMS_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">축의대행 서비스 이용약관</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 11월 1일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 34px;">웨딩버틀러 · 시행일 2026년 11월 12일</p>
 
   <div style="height:1px; background:#EBDCE0; margin-bottom:34px;"></div>
 
@@ -234,6 +234,7 @@ export const TERMS_HTML = `
   <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:24px 0 10px;">제21조 (손해배상)</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 회사의 귀책사유로 이용자에게 손해가 발생한 경우 회사는 통상의 손해를 배상합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">② 고의·중과실이 없는 경우의 배상 한도는 해당 이용계약의 총 대금으로 합니다. 다만 봉투의 분실 등 회사의 보관 책임 범위에서 발생한 손해에는 이 한도를 적용하지 아니합니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">③ 제2항에도 불구하고 회사의 대표 및 스태프(버틀러를 포함합니다)의 고의·과실 또는 관리 소홀로 축의금 결손(도난·분실·오계산 등)이 발생한 경우, 회사는 총 대금 한도를 적용하지 아니하고 실제 발생한 결손액 전액(100%)을 배상합니다.</p>
 
   <div style="font-size:12px; letter-spacing:0.22em; color:#A9647E; margin:40px 0 6px; padding-top:28px; border-top:1px solid #EBDCE0;">제 5 장 &nbsp;개인정보 및 기타</div>
 
@@ -277,7 +278,7 @@ export const TERMS_HTML = `
 
   <div style="margin:40px 0 0; padding-top:28px; border-top:1px solid #EBDCE0;">
     <h2 style="font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:600; margin:0 0 10px;">부칙</h2>
-    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 11월 1일부터 시행합니다.</p>
+    <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">① 이 약관은 2026년 11월 12일부터 시행합니다.</p>
     <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0;">② 이 약관 시행 전에 체결된 계약에는 종전 약관을 적용합니다.</p>
   </div>
 
@@ -297,6 +298,8 @@ export const TERMS_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/terms/2026-11" style="color:#A9647E;">2026년 11월 1일 시행 이전 약관 보기</a>
+    &nbsp;·&nbsp;
     <a href="/terms/2026-10-25" style="color:#A9647E;">2026년 10월 25일 시행 이전 약관 보기</a>
     &nbsp;·&nbsp;
     <a href="/terms/2026-10" style="color:#A9647E;">2026년 10월 13일 시행 이전 약관 보기</a>
