@@ -10,7 +10,7 @@ const PAGES: { route: string; updated: string }[] = [
   { route: "/invitation", updated: "2026-10-27" },
   { route: "/ceo", updated: "2026-11-11" },
   { route: "/contact", updated: "2026-10-25" },
-  { route: "/terms", updated: "2026-11-01" },
+  { route: "/terms", updated: "2026-11-12" },
   { route: "/terms/invitation", updated: "2026-10-27" },
   { route: "/privacy", updated: "2026-10-25" },
 ];
