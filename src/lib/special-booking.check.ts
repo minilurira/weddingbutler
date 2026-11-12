@@ -50,7 +50,14 @@ const body = (o: object = {}) => ({ plan: "special", specialToken: TOKEN, year: 
   offer = { ...offer, state: "open" }; holdOk = false; assert.equal((await post(body())).status, 409); holdOk = true;
   assert.equal((await post(body({ specialToken: "short" }))).status, 400);
   assert.equal((await post(body({ specialToken: undefined }))).status, 400);
-  assert.equal((await post(body({ paymentType: "deposit" }))).status, 400);
+  // 예약금 결제: 10만원만 결제, 나머지는 현장
+  calls.length = 0; res = await post(body({ paymentType: "deposit" })); j = await res.json();
+  assert.equal(res.status, 200, JSON.stringify(j)); assert.equal(j.amount, 100000); assert.match(j.orderName, /예약금/);
+  assert.equal(inserted.total_amount, 1200000); assert.equal(inserted.deposit_amount, 100000); assert.equal(inserted.balance_amount, 1100000);
+  // 10만원 이하 링크는 예약금 결제 불가 (점유도 푼다)
+  calls.length = 0; offer = { ...offer, amount: 100000 };
+  assert.equal((await post(body({ paymentType: "deposit" }))).status, 400); assert.deepEqual(calls, ["hold:WB", "release:WB"]);
+  offer = { ...offer, amount: 1200000 }; calls.length = 0;
   assert.equal((await post(body({ side: null }))).status, 400);
   assert.equal((await post(body({ day: 4 }))).status, 400);          // 11/4 수요일 — 주말·공휴일이 아님
 

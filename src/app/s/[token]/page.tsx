@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// 관리자가 만들어 보낸 스페셜 예약 링크. 날짜·시간·예식장을 고르고 정해진 금액을 전액 결제한다.
+// 관리자가 만들어 보낸 스페셜 예약 링크. 날짜·시간·예식장을 고르고 정해진 금액을 전액 또는 예약금(나머지는 현장 현금)으로 결제한다.
 export default async function SpecialPage({ params }: { params: { token: string } }) {
   const offer = await fetchSpecialOffer(params.token);
   const problem = !offer

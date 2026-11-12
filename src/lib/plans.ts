@@ -172,9 +172,15 @@ export function calcPrice(
   };
 }
 
-/** 스페셜 예약: 링크에 정해진 금액을 한 번에 전액 결제한다 (추가 요금·현장 결제 없음). */
-export function specialPrice(amount: number): PriceBreakdown {
-  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit: amount, balance: 0, incl: 0, listBase: amount };
+/** 스페셜 예약: 링크에 정해진 금액을 전액 결제하거나, 예약금(DEPOSIT_AMOUNT)만 결제하고 나머지는 현장에서 현금으로 받는다. */
+export function specialPrice(amount: number, paymentType: PaymentType = "full"): PriceBreakdown {
+  const deposit = paymentType === "full" || !specialAllowsDeposit(amount) ? amount : DEPOSIT_AMOUNT;
+  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit, balance: amount - deposit, incl: 0, listBase: amount };
+}
+
+/** 스페셜 금액이 예약금보다 커야 예약금 결제를 고를 수 있다. */
+export function specialAllowsDeposit(amount: number): boolean {
+  return amount > DEPOSIT_AMOUNT;
 }
 
 /** Flat 1,000원 charge used only by the header's hidden test-payment button

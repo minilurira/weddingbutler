@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
-import { SIDE_LABEL, TIME_SLOTS, won, type Side } from "@/lib/plans";
+import { DEPOSIT_AMOUNT, ONSITE_CASH_ONLY_NOTE, PAYMENT_TYPES, SIDE_LABEL, TIME_SLOTS, specialAllowsDeposit, won, type PaymentType, type Side } from "@/lib/plans";
 import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
@@ -44,6 +44,11 @@ export default function SpecialBooking({ token, amount, label }: { token: string
   const [phase, setPhase] = useState<"form" | "submitting" | "done">("form");
   const [error, setError] = useState("");
   const [bookingNo, setBookingNo] = useState("");
+  const depositOk = specialAllowsDeposit(amount);
+  const [paymentType, setPaymentType] = useState<PaymentType>(depositOk ? "deposit" : "full");
+  const payType: PaymentType = depositOk ? paymentType : "full";
+  const payNow = payType === "deposit" ? DEPOSIT_AMOUNT : amount;
+  const onsite = amount - payNow;
 
   const dateKey = day ? `${ym.y}-${String(ym.m).padStart(2, "0")}-${String(day).padStart(2, "0")}` : "";
 
@@ -104,7 +109,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           plan: "special", specialToken: token, year: ym.y, month: ym.m, day, time, name, side, phone, email, venue, memo,
-          guests: guestCount, extraButlers: 0, payMethod: "신용카드", paymentType: "full",
+          guests: guestCount, extraButlers: 0, payMethod: "신용카드", paymentType: payType,
         }),
       });
       created = (await res.json()) as CreateReservationResponse & { message?: string };
@@ -113,7 +118,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
       const returnUrl = new URL("/reservation/return", window.location.origin);
       returnUrl.searchParams.set("rid", created.id);
       returnUrl.searchParams.set("paymentId", created.paymentId);
-      const purchase = { bookingNo: created.bookingNo, amount: created.amount, plan: "special", paymentType: "full" };
+      const purchase = { bookingNo: created.bookingNo, amount: created.amount, plan: "special", paymentType: payType };
       stashPendingPurchase(created.id, purchase);
       const pay = await requestDepositPayment({
         paymentId: created.paymentId, orderName: created.orderName, amount: created.amount, payMethod: "신용카드",
@@ -145,7 +150,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
         <div style={{ maxWidth: 440 }}>
           <h1 style={{ fontFamily: fontSerif, fontSize: 26, fontWeight: 600, margin: "0 0 14px" }}>예약이 접수되었습니다</h1>
           <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60", margin: "0 0 26px" }}>
-            결제가 완료되었습니다. 예약확인서를 알림톡과 이메일로 보내드립니다.<br />예식 7일 전 담당 매니저가 연락드립니다.
+            결제가 완료되었습니다.{onsite > 0 && ` 남은 ${won(onsite)}은 예식 당일 현장에서 현금으로 결제해 주세요.`} 예약확인서를 알림톡과 이메일로 보내드립니다.<br />예식 7일 전 담당 매니저가 연락드립니다.
           </p>
           {bookingNo && <div style={{ display: "inline-block", background: "#E9CAD1", padding: "16px 28px", borderRadius: 4, fontSize: 14, marginBottom: 30 }}><span style={{ color: "#6B5A60" }}>예약번호</span> {bookingNo}</div>}
           <div><Link href="/" style={{ display: "inline-block", background: "#33232A", color: "#F3E9EB", padding: "14px 30px", borderRadius: 999, fontSize: 14 }}>홈으로 돌아가기</Link></div>
@@ -212,11 +217,32 @@ export default function SpecialBooking({ token, amount, label }: { token: string
       </div>
 
       <div style={divider} />
+      {depositOk && (
+        <>
+          <div style={eyebrow}>STEP 4 · 결제 방식</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 8, marginBottom: 10 }}>
+            {(["deposit", "full"] as const).map((t) => (
+              <div key={t} onClick={() => setPaymentType(t)} style={{ ...chip(payType === t), padding: "14px 8px", lineHeight: 1.5 }}>
+                {PAYMENT_TYPES[t].name}<br />
+                <span style={{ fontSize: 12, opacity: 0.8 }}>{t === "deposit" ? `지금 ${won(DEPOSIT_AMOUNT)} · 현장 ${won(amount - DEPOSIT_AMOUNT)}` : `지금 ${won(amount)}`}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 12, lineHeight: 1.7, color: "#9A8189", margin: "0 0 24px" }}>
+            {payType === "deposit" ? `예약금 ${won(DEPOSIT_AMOUNT)}을 카드로 결제하고, 남은 ${won(amount - DEPOSIT_AMOUNT)}은 예식 당일 현장에서 결제합니다. ${ONSITE_CASH_ONLY_NOTE}` : `총 ${won(amount)}을 카드로 한 번에 결제합니다. 현장 결제 금액은 없습니다.`}
+          </p>
+        </>
+      )}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-        <span style={{ fontSize: 15, color: "#473A3F" }}>결제 금액 (신용카드 · 전액)</span>
-        <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600 }}>{won(amount)}</span>
+        <span style={{ fontSize: 15, color: "#473A3F" }}>결제 금액 (신용카드 · {PAYMENT_TYPES[payType].short})</span>
+        <span style={{ fontFamily: fontSerif, fontSize: 30, fontWeight: 600 }}>{won(payNow)}</span>
       </div>
-      <p style={{ textAlign: "right", fontSize: 12, lineHeight: 1.7, color: "#9A8189", margin: "6px 0 20px" }}>부가세 포함 · 기준 인원을 초과한 식권이 생기면 그 금액만 당일 현장에서 현금으로 정산합니다.</p>
+      {onsite > 0 && (
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12, marginTop: 6, fontSize: 13.5, color: "#6B5A60" }}>
+          <span>현장 결제 (현금)</span><span>{won(onsite)}</span>
+        </div>
+      )}
+      <p style={{ textAlign: "right", fontSize: 12, lineHeight: 1.7, color: "#9A8189", margin: "6px 0 20px" }}>부가세 포함 · 총 {won(amount)} · 기준 인원을 초과한 식권이 생기면 그 금액만 당일 현장에서 현금으로 정산합니다.</p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
         {([
@@ -233,7 +259,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
 
       {error && <div role="alert" style={{ background: "#F7E4E4", color: "#8E3A3A", padding: "12px 14px", borderRadius: 4, fontSize: 13.5, lineHeight: 1.7, marginBottom: 14 }}>{error}</div>}
       <button type="button" onClick={submit} disabled={phase === "submitting"} style={{ width: "100%", padding: 18, borderRadius: 999, border: "none", fontSize: 16, fontWeight: 500, cursor: phase === "submitting" ? "default" : "pointer", background: ready ? "#33232A" : "#DCC4CC", color: ready ? "#F3E9EB" : "#6B5A60", opacity: phase === "submitting" ? 0.7 : 1 }}>
-        {phase === "submitting" ? "결제 진행 중..." : ready ? `${won(amount)} 결제하기` : missing.length ? "날짜 · 시간 · 정보를 입력해 주세요" : "필수 항목에 동의해 주세요"}
+        {phase === "submitting" ? "결제 진행 중..." : ready ? `${won(payNow)} 결제하기` : missing.length ? "날짜 · 시간 · 정보를 입력해 주세요" : "필수 항목에 동의해 주세요"}
       </button>
     </main>
   );

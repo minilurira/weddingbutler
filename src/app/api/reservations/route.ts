@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fetchBlockedSlots } from "@/lib/availability";
-import { calcPrice, isBothSidePlan, isOneSide, isPaymentType, PLANS, sideForPlan, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
+import { calcPrice, isBothSidePlan, isOneSide, isPaymentType, PLANS, sideForPlan, specialAllowsDeposit, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
 import { fetchSpecialOffer, holdSpecialOffer, releaseSpecialOffer, SPECIAL_STATE_MESSAGE, SPECIAL_TOKEN_RE } from "@/lib/special-offer";
 import { supabaseAdmin } from "@/lib/supabase";
 import type {
@@ -57,8 +57,7 @@ export async function POST(req: NextRequest) {
     !Number.isInteger(extraButlers) ||
     extraButlers < 0 ||
     !payMethod ||
-    !isPaymentType(paymentType) ||
-    (isSpecial && paymentType !== "full")
+    !isPaymentType(paymentType)
   ) {
     return NextResponse.json({ message: "Missing or invalid fields." }, { status: 400 });
   }
@@ -110,9 +109,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: SPECIAL_STATE_MESSAGE.held }, { status: 409 });
     }
     specialAmount = offer.amount;
+    if (paymentType === "deposit" && !specialAllowsDeposit(specialAmount)) {
+      await releaseSpecialOffer(specialToken!, bookingNo);
+      return NextResponse.json({ message: "이 링크는 전액결제만 가능합니다." }, { status: 400 });
+    }
   }
 
-  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount) : calcPrice(plan, guests, extraButlers, paymentType);
+  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount, paymentType) : calcPrice(plan, guests, extraButlers, paymentType);
   const planInfo = PLANS[plan];
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
