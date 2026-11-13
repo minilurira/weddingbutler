@@ -14,6 +14,7 @@ interface NavItem { href: string; label: string; key: NavKey; children?: { href:
 const NAV: NavItem[] = [
   { href: "/service", label: "서비스", key: "service" },
   { href: "/pricing", label: "가격안내", key: "pricing" },
+  { href: "/ceo", label: "대표버틀러 소개", key: "ceo" },
   {
     href: "/invitation",
     label: "무료 청첩장",
