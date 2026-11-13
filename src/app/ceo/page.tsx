@@ -51,7 +51,10 @@ export default function CeoPage() {
               <section key={x.name} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,280px),1fr))", gap: "clamp(24px,5vw,48px)", alignItems: "start" }}>
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={x.photo} width={777} height={1000} alt={`웨딩버틀러 ${x.role} ${x.name}`} style={{ width: "100%", height: "auto", borderRadius: 4, display: "block" }} />
+                  <div style={{ width: "min(100%, 360px)", aspectRatio: "1 / 1", margin: "0 auto", borderRadius: "50%", overflow: "hidden", background: "linear-gradient(160deg, #F6E4EA 0%, #E5C6D0 100%)", border: "6px solid #FFFFFF", boxShadow: "0 18px 40px rgba(169,100,126,0.22)" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={x.photo} width={777} height={1000} alt={`웨딩버틀러 ${x.role} ${x.name}`} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 12%", display: "block", mixBlendMode: "multiply" }} />
+                  </div>
                   <p style={{ margin: "12px 0 0", fontSize: 14, color: "#5E4D53", textAlign: "center" }}>{x.role} <span style={{ color: "#33232A", fontWeight: 500 }}>{x.name}</span></p>
                 </div>
                 <div>
