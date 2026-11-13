@@ -254,8 +254,8 @@ export function sideForPlan(plan: PlanKey, side: Side | null | undefined): Side 
   return side ?? null;
 }
 
-/** 이미 잡힌 예식 시각 기준으로 앞 1시간 ~ 뒤 2시간(양 끝 포함)은 다른 예약을 받지 않는다. */
-export const BLOCK_BEFORE_MIN = 60;
+/** 이미 잡힌 예식 시각 기준으로 앞 2시간 ~ 뒤 2시간(양 끝 포함)은 다른 예약을 받지 않는다. */
+export const BLOCK_BEFORE_MIN = 120;
 export const BLOCK_AFTER_MIN = 120;
 
 function toMinutes(t: string): number | null {
