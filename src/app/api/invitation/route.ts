@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { publicUrl, serverError, sessionPhone, unauthorized } from "@/lib/invitation/api";
 import { TERMS_VERSION } from "@/lib/invitation/content";
-import { createInvitation, listByPhone } from "@/lib/invitation/store";
+import { createInvitation, isPaid, listByPhone } from "@/lib/invitation/store";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,7 @@ export async function GET() {
   try {
     const rows = await listByPhone(phone);
     return NextResponse.json({
-      invitations: rows.map((r) => ({ id: r.id, template: r.template, paid: Boolean(r.paid_at), status: r.status, url: publicUrl(r.slug), groom: r.content.groom, bride: r.content.bride, date: r.content.date, updatedAt: r.updated_at })),
+      invitations: rows.map((r) => ({ id: r.id, template: r.template, paid: isPaid(r), status: r.status, url: publicUrl(r.slug), groom: r.content.groom, bride: r.content.bride, date: r.content.date, updatedAt: r.updated_at })),
     });
   } catch (err) {
     return serverError("list", err);

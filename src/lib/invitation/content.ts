@@ -12,6 +12,8 @@ export const TEMPLATE_INFO: Record<InvitationTemplate, { name: string; premium: 
 export const isTemplate = (v: unknown): v is InvitationTemplate => typeof v === "string" && (INVITATION_TEMPLATES as readonly string[]).includes(v);
 export const isPremium = (t: string) => isTemplate(t) && TEMPLATE_INFO[t].premium;
 export const PREMIUM_PRICE = 20000;
+/** true면 프리미엄 템플릿도 결제 없이 발행하고, 제작자 대시보드까지 쓴다(전체 무료 기간). 유료로 되돌리려면 false. */
+export const PREMIUM_FREE = true;
 
 export const GALLERY_MAX = 12; // 무료 템플릿
 export const GALLERY_MAX_PREMIUM = 30;

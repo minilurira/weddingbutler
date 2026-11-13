@@ -8,6 +8,7 @@ import {
   GREETINGS,
   RECEPT_LABELS,
   INVITATION_TEMPLATES,
+  PREMIUM_FREE,
   PREMIUM_PRICE,
   TEMPLATE_INFO,
   TITLES,
@@ -440,12 +441,12 @@ export function InvitationEditor({ id }: { id: string }) {
           {msg && <div role="alert" style={{ position: "sticky", top: 76, zIndex: 35, marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FBE9E9", color: "#8A2F3D", fontSize: 14, boxShadow: "0 6px 18px rgba(138,47,61,0.18)" }}>{msg}</div>}
           {missing.length > 0 && status !== "published" && <div style={{ marginBottom: 14, padding: "12px 16px", borderRadius: 12, background: "#FFFFFF", border: "1px dashed #C07E96", fontSize: 13, color: "#473A3F" }}>발행하려면 <b>{missing.join(", ")}</b>이(가) 필요해요.</div>}
 
-          <Card title="템플릿" hint={`프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드가 있어요. 고르고 꾸미는 것은 무료이고, 결제는 발행할 때 한 번만 해요.`}>
+          <Card title="템플릿" hint={PREMIUM_FREE ? `모든 템플릿이 무료예요. 프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드까지 쓸 수 있어요.` : `프리미엄 템플릿은 주차 안내·예식장 메모·사진 ${galleryMax("modern")}장·제작자 대시보드가 있어요. 고르고 꾸미는 것은 무료이고, 결제는 발행할 때 한 번만 해요.`}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
               {INVITATION_TEMPLATES.map((t) => (
                 <button key={t} type="button" aria-pressed={template === t} onClick={() => changeTemplate(t)} style={{ ...chip(template === t), borderRadius: 14, padding: "10px 12px", textAlign: "left", height: "auto" }}>
                   <span style={{ display: "block", fontSize: 14, fontWeight: 700 }}>{TEMPLATE_INFO[t].name}</span>
-                  <span style={{ display: "block", fontSize: 12, color: TEMPLATE_INFO[t].premium ? "#8E4E68" : "#2F6B45", fontWeight: 600 }}>{TEMPLATE_INFO[t].premium ? (paid ? "결제 완료" : `${PREMIUM_PRICE.toLocaleString("ko-KR")}원`) : "무료"}</span>
+                  <span style={{ display: "block", fontSize: 12, color: TEMPLATE_INFO[t].premium ? "#8E4E68" : "#2F6B45", fontWeight: 600 }}>{TEMPLATE_INFO[t].premium ? (PREMIUM_FREE || paid ? "무료" : `${PREMIUM_PRICE.toLocaleString("ko-KR")}원`) : "무료"}</span>
                 </button>
               ))}
             </div>

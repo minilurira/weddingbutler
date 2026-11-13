@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
-import { AUDIO_BUCKET, PREMIUM_PRICE, TERMS_VERSION, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
+import { AUDIO_BUCKET, PREMIUM_FREE, PREMIUM_PRICE, TERMS_VERSION, defaultContent, galleryMax, isExpired, isPremium, sanitizeContent, type InvitationContent } from "@/lib/invitation/content";
 import { newSlug } from "@/lib/invitation/guard";
 
 // 모바일 청첩장 DB 접근 (Supabase, 서버 전용). 테이블은 supabase/invitation.sql.
@@ -244,7 +244,8 @@ export async function setTemplate(id: string, phone: string, template: string): 
   return data ? normalize(data) : null;
 }
 
-export const isPaid = (row: Pick<InvitationRow, "paid_at">) => Boolean(row.paid_at);
+/** 결제 완료로 본다. 전체 무료 기간(PREMIUM_FREE)에는 모든 청첩장이 결제한 것과 같다. */
+export const isPaid = (row: Pick<InvitationRow, "paid_at">) => PREMIUM_FREE || Boolean(row.paid_at);
 
 /** 결제 주문을 만든다. 금액은 서버가 정한다(브라우저가 보낸 값은 쓰지 않는다). */
 export async function createOrder(row: InvitationRow): Promise<{ paymentId: string; amount: number }> {
