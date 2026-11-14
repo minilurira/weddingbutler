@@ -1,11 +1,13 @@
 export const SITE_URL = "https://weddingbutler.co.kr";
 export const SITE_NAME = "웨딩버틀러";
-export const SITE_TITLE = `${SITE_NAME} | 축의대대행 · 축의금 대행 · 무료 모바일청첩장`;
+export const SITE_TITLE = `${SITE_NAME} | 축의대 업체 · 축의대행 · 축의대대행 · 무료 모바일청첩장`;
 export const SITE_DESCRIPTION =
-  "축의금 대행·축의대행 웨딩버틀러, 연말 이벤트 35만원부터. 온라인 예약과 카드결제, 접수부터 정산까지 책임집니다.";
+  "축의대 업체 웨딩버틀러, 축의대행·축의금 대행 연말 이벤트 35만원부터. 온라인 예약과 카드결제, 접수부터 정산까지 책임집니다.";
 // 구글은 meta keywords를 쓰지 않고 네이버도 비중이 낮다. 비슷한 변형을 늘어놓지 말고 핵심어만 둔다.
 export const SITE_KEYWORDS = [
   "웨딩버틀러",
+  "축의대 업체",
+  "축의대행 업체",
   "축의대행",
   "축의대대행",
   "축의금 대행",

@@ -25,6 +25,17 @@ export function LocalBusinessJsonLd() {
     ],
     priceRange: "390,000원 ~ 800,000원",
     paymentAccepted: "신용카드",
+    knowsAbout: ["축의대 업체", "축의대행", "축의대대행", "축의금 대행", "결혼식 축의대 운영"],
+    makesOffer: {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: "축의대 운영 대행",
+        serviceType: "축의대 업체 · 축의대행",
+        description: "결혼식 축의대에서 축의금 접수, 식권 배부, 봉투 정산, 인계까지 대신 운영합니다.",
+        areaServed: ["서울특별시", "경기도"],
+      },
+    },
     ...(SITE_SAME_AS.length ? { sameAs: SITE_SAME_AS } : {}),
   };
 

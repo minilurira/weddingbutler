@@ -25,7 +25,7 @@ export interface GuideArticle {
   download?: { href: string; label: string; filename: string };
 }
 
-export const GUIDE_UPDATED = "2026-11-11";
+export const GUIDE_UPDATED = "2026-11-14";
 
 // 지역별 안내: 같은 틀에 지역명, 세부 지역, 출장비 기준만 바꾼다. 확인되지 않은 예식장 이름은 싣지 않는다.
 function region(o: { slug: string; n: string; name: string; areas: string[]; inside: boolean; note: string }): GuideArticle {
@@ -132,14 +132,14 @@ export const GUIDES: GuideArticle[] = [
   },
   {
     slug: "chuiuldaedaehaeng",
-    title: "축의대대행·축의금 대행 비교: 무엇을 확인하고 고를까",
-    description: "축의대대행, 축의금 대행 업체를 고를 때 꼭 확인할 일의 범위·인원·정산 방식을 정리했습니다.",
+    title: "축의대 업체 고르는 법: 축의대대행·축의금 대행 비교",
+    description: "축의대 업체(축의대대행·축의금 대행)를 고를 때 꼭 확인할 일의 범위·인원·정산 방식을 정리했습니다.",
     eyebrow: "GUIDE 02",
     lead:
-      "'축의대대행'을 검색하면 여러 업체가 나오지만 하는 일과 요금 구조는 서로 다릅니다. 같은 축의금 대행이라도 확인할 항목을 알고 비교하면 예식 당일 불안을 크게 줄일 수 있습니다.",
+      "'축의대 업체'나 '축의대대행'을 검색하면 여러 업체가 나오지만 하는 일과 요금 구조는 서로 다릅니다. 같은 축의금 대행이라도 확인할 항목을 알고 비교하면 예식 당일 불안을 크게 줄일 수 있습니다.",
     sections: [
       {
-        h2: "업체를 비교할 때 확인할 다섯 가지",
+        h2: "축의대 업체를 비교할 때 확인할 다섯 가지",
         bullets: [
           "일의 범위: 접수만 하는지, 식권 배부·방명록·답례품·정산·인계까지 포함하는지",
           "인원: 하객 수에 맞는 인원이 배치되는지, 추가 인원 요금이 얼마인지",
