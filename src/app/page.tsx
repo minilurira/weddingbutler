@@ -97,7 +97,7 @@ export default function HomePage() {
             </p>
             <h1 className="hero-title" style={{ fontFamily: fontSerif, fontWeight: 400, color: "#FFFFFF", margin: 0, letterSpacing: "-0.02em" }}>
               <span className="hero-kicker" style={{ display: "block", fontWeight: 500, letterSpacing: "0.04em", color: "#E9CAD1" }}>
-                축의대행 · 축의대대행 웨딩버틀러
+                축의대 업체 · 축의대행 웨딩버틀러
               </span>
               축의대는 맡기고,
               <br />
@@ -343,7 +343,7 @@ export default function HomePage() {
               ["/guide/vs-friend", "축의대행 vs 지인에게 부탁"],
               ["/guide/free-mobile-invitation", "무료 모바일청첩장 만들기"],
               ["/guide/invitation-greeting-examples", "모바일 청첩장 문구 예시"],
-              ["/guide/chuiuldaedaehaeng", "축의대대행·축의금 대행 비교"],
+              ["/guide/chuiuldaedaehaeng", "축의대 업체 고르는 법"],
               ["/guide/settlement", "축의금 정산 방법: 접수부터 인계까지"],
               ["/guide/checklist", "결혼식 당일 축의대 준비 체크리스트"],
               ["/guide/seoul-gyeonggi", "서울·경기 축의대행 이용 안내"],
