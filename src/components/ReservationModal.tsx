@@ -34,6 +34,7 @@ import type {
   ConfirmReservationResponse,
   CreateReservationResponse,
 } from "@/lib/reservation-types";
+import { SOURCE_OPTIONS, SOURCE_OTHER, sourceFromParam } from "@/lib/reservation-types";
 
 const FIXED_PAY_METHOD: PayMethod = "신용카드";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,6 +54,8 @@ interface ModalState {
   email: string;
   venue: string;
   memo: string;
+  source: string; // SOURCE_OPTIONS 중 하나, "기타", 또는 ""(선택 안 함)
+  sourceEtc: string;
   agreeTerms: boolean;
   agreeRefund: boolean;
   agreePrivacy: boolean;
@@ -80,6 +83,8 @@ function initialState(plan: PlanKey): ModalState {
     email: "",
     venue: "",
     memo: "",
+    source: "",
+    sourceEtc: "",
     agreeTerms: false,
     agreeRefund: false,
     agreePrivacy: false,
@@ -140,6 +145,18 @@ export function ReservationModal({
   const patch = (
     p: Partial<ModalState> | ((s: ModalState) => Partial<ModalState>)
   ) => setState((s) => ({ ...s, ...(typeof p === "function" ? p(s) : p) }));
+
+  // 링크의 ?src= 값(인스타 프로필 링크 등)을 처음 들어온 순간 저장해 두었다가, 예약창의 "알게 된 경로"를 미리 채운다.
+  useEffect(() => {
+    try {
+      const fromUrl = sourceFromParam(new URLSearchParams(window.location.search).get("src"));
+      if (fromUrl) sessionStorage.setItem("wb_src", fromUrl);
+      const saved = fromUrl || sessionStorage.getItem("wb_src") || "";
+      if (saved) setState((s) => (s.source ? s : { ...s, source: saved }));
+    } catch {
+      /* 저장소를 못 쓰는 환경이면 고객이 직접 고른다 */
+    }
+  }, []);
 
   function pick(p: PlanKey) {
     patch((s) => ({ plan: p, guests: guestsForPlanSwitch(p, s.guests) }));
@@ -363,6 +380,7 @@ export function ReservationModal({
           email: state.email,
           venue: state.venue,
           memo: state.memo,
+          source: state.source === SOURCE_OTHER ? (state.sourceEtc.trim() ? `기타: ${state.sourceEtc.trim()}` : "기타") : state.source,
           guests: state.guests,
           extraButlers: state.extraButlers,
           payMethod: FIXED_PAY_METHOD,
@@ -666,6 +684,19 @@ export function ReservationModal({
                       className="field-focus"
                       style={fieldInputStyle}
                     />
+                  </label>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      웨딩버틀러를 어떻게 알게 되셨나요? <span style={{ fontSize: 12, color: "#9A8189" }}>(선택)</span>
+                    </span>
+                    <select value={state.source} onChange={(e) => patch({ source: e.target.value })} className="field-focus" style={fieldInputStyle}>
+                      <option value="">선택 안 함</option>
+                      {SOURCE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+                      <option value={SOURCE_OTHER}>{SOURCE_OTHER} (직접 입력)</option>
+                    </select>
+                    {state.source === SOURCE_OTHER && (
+                      <input value={state.sourceEtc} onChange={(e) => patch({ sourceEtc: e.target.value })} maxLength={40} placeholder="알게 된 경로를 적어 주세요." className="field-focus" style={{ ...fieldInputStyle, marginTop: 8 }} />
+                    )}
                   </label>
                   <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                     <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>

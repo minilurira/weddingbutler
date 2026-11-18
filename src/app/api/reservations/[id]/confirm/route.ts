@@ -100,6 +100,7 @@ export async function POST(
       phone: reservation.phone,
       venue: reservation.venue ?? "",
       customerMemo: reservation.memo ?? null,
+      source: reservation.source ?? null,
       guests: reservation.guests,
       payMethod: reservation.pay_method,
       depositAmount: reservation.deposit_amount,

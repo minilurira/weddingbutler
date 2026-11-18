@@ -14,6 +14,8 @@ export interface CreateReservationInput {
   venue: string;
   /** 고객이 남기는 요청 사항(선택, 최대 500자) */
   memo?: string;
+  /** 고객이 고른 유입 경로(선택, 최대 60자) */
+  source?: string;
   guests: number;
   extraButlers: number;
   payMethod: string;
@@ -54,3 +56,13 @@ export interface ContactInput {
   message: string;
   agree: boolean;
 }
+
+/** 예약 시 묻는 "알게 된 경로" 선택지. 마지막 "기타"는 직접 입력. */
+export const SOURCE_OPTIONS = ["네이버 검색", "네이버 스마트플레이스", "인스타그램", "당근", "숨고", "크몽", "지인 소개", "블로그·카페 후기"] as const;
+export const SOURCE_OTHER = "기타";
+/** 주소의 ?src= 값(링크마다 붙여 둔 짧은 이름)을 선택지로 바꾼다. 모르는 값은 "" */
+const SRC_PARAM: Record<string, (typeof SOURCE_OPTIONS)[number]> = {
+  naver: "네이버 검색", place: "네이버 스마트플레이스", insta: "인스타그램", instagram: "인스타그램",
+  daangn: "당근", soomgo: "숨고", kmong: "크몽", friend: "지인 소개", blog: "블로그·카페 후기",
+};
+export const sourceFromParam = (v: string | null | undefined): string => SRC_PARAM[(v ?? "").trim().toLowerCase()] ?? "";
