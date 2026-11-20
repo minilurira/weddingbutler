@@ -101,6 +101,7 @@ export async function POST(
       venue: reservation.venue ?? "",
       customerMemo: reservation.memo ?? null,
       source: reservation.source ?? null,
+      referralCode: reservation.referral_code ?? null,
       guests: reservation.guests,
       payMethod: reservation.pay_method,
       depositAmount: reservation.deposit_amount,

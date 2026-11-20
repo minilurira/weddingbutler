@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { formatPhoneInput } from "@/lib/phone";
 import type { LookupReservation } from "@/lib/lookup-api";
+import { ReferralCard } from "./ReferralCard";
 
 const ERRORS: Record<string, string> = {
   invalid_phone: "휴대폰 번호를 다시 확인해 주세요.",
@@ -172,6 +173,7 @@ export function LookupView() {
           {message && <p role="status" style={{ margin: 0, padding: "14px 16px", borderRadius: 14, background: "#FFFFFF", fontSize: 14, lineHeight: 1.7, color: "#A9647E" }}>{message}</p>}
           {list.length === 0 && <div style={{ ...card, textAlign: "center", color: "#9A8189" }}>이 번호로 된 예약이 없어요.</div>}
           {list.map((r) => <ReservationCard key={r.id} r={r} onCancel={() => { setMessage(""); setCancelTarget(r); }} />)}
+          <ReferralCard />
           <p style={{ margin: "6px 0 0", fontSize: 13, lineHeight: 1.8, color: "#9A8189" }}>
             예약 변경이나 궁금한 점은 카카오톡 채널 @웨딩버틀러 또는 <a href="tel:01059189203" style={{ color: "#9A8189" }}>010-5918-9203</a>으로 문의해 주세요.
           </p>

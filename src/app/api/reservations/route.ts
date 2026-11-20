@@ -5,6 +5,7 @@ import { fetchBlockedSlots } from "@/lib/availability";
 import { calcPrice, isBothSidePlan, isOneSide, isPaymentType, PLANS, sideForPlan, specialAllowsDeposit, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
 import { fetchSpecialOffer, holdSpecialOffer, releaseSpecialOffer, SPECIAL_STATE_MESSAGE, SPECIAL_TOKEN_RE } from "@/lib/special-offer";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkReferralCode, normalizeRefCode } from "@/lib/referral";
 import type {
   CreateReservationInput,
   CreateReservationResponse,
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, side, phone, email, venue, memo, source, guests, extraButlers, payMethod, paymentType, test, testKey, specialToken } =
+  const { plan, year, month, day, time, name, side, phone, email, venue, memo, source, referralCode, guests, extraButlers, payMethod, paymentType, test, testKey, specialToken } =
     body;
 
   const isTest = test === true;
@@ -121,39 +122,52 @@ export async function POST(req: NextRequest) {
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
     : `웨딩버틀러 ${planInfo.name} ${paymentType === "full" ? "서비스 전액" : "예약금"}`;
 
+  // 추천 코드: 확인되면 저장, 없는/정지된 코드는 버린다. 어드민에 닿지 않으면 일단 저장하고 어드민이 접수 때 다시 확인한다.
+  let refCode: string | null = null;
+  if (!isTest && normalizeRefCode(referralCode)) {
+    const ref = await checkReferralCode(referralCode);
+    refCode = ref.valid ? ref.code : ref.reason === "unavailable" ? normalizeRefCode(referralCode) : null;
+  }
+
   try {
     const db = supabaseAdmin();
-    const { data, error } = await db
+    const row: Record<string, unknown> = {
+      booking_no: bookingNo,
+      plan,
+      ceremony_year: year,
+      ceremony_month: month,
+      ceremony_day: day,
+      ceremony_time: time,
+      couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
+      side: sideForPlan(plan, isSpecial ? side : isOneSide(side) ? side : null),
+      phone: phone.trim(),
+      email: email.trim(),
+      venue: venue?.trim() || null,
+      memo: typeof memo === "string" ? memo.trim().slice(0, 500) || null : null,
+      ...(typeof source === "string" && source.trim() ? { source: source.trim().slice(0, 60) } : {}),
+      guests,
+      extra_butlers: extraButlers,
+      pay_method: payMethod,
+      base_amount: price.base,
+      over_amount: price.over,
+      extra_butler_amount: price.extraButlerAmount,
+      total_amount: price.total,
+      deposit_amount: price.deposit,
+      balance_amount: price.balance,
+      payment_status: "pending",
+      portone_payment_id: paymentId,
+      ...(isSpecial ? { special_token: specialToken } : {}),
+    };
+    let { data, error } = await db
       .from("reservations")
-      .insert({
-        booking_no: bookingNo,
-        plan,
-        ceremony_year: year,
-        ceremony_month: month,
-        ceremony_day: day,
-        ceremony_time: time,
-        couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
-        side: sideForPlan(plan, isSpecial ? side : isOneSide(side) ? side : null),
-        phone: phone.trim(),
-        email: email.trim(),
-        venue: venue?.trim() || null,
-        memo: typeof memo === "string" ? memo.trim().slice(0, 500) || null : null,
-        ...(typeof source === "string" && source.trim() ? { source: source.trim().slice(0, 60) } : {}),
-        guests,
-        extra_butlers: extraButlers,
-        pay_method: payMethod,
-        base_amount: price.base,
-        over_amount: price.over,
-        extra_butler_amount: price.extraButlerAmount,
-        total_amount: price.total,
-        deposit_amount: price.deposit,
-        balance_amount: price.balance,
-        payment_status: "pending",
-        portone_payment_id: paymentId,
-        ...(isSpecial ? { special_token: specialToken } : {}),
-      })
+      .insert(refCode ? { ...row, referral_code: refCode } : row)
       .select("id")
       .single();
+    // 추천 코드 컬럼(supabase/referral.sql)이 아직 없으면 코드 없이 저장한다. 예약은 막지 않는다.
+    if (error && refCode && (error.code === "42703" || error.code === "PGRST204")) {
+      console.error("[reservations] referral_code column missing — saving without it", error.message);
+      ({ data, error } = await db.from("reservations").insert(row).select("id").single());
+    }
 
     if (error || !data) throw error ?? new Error("insert returned no data");
 

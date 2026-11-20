@@ -35,6 +35,7 @@ import type {
   CreateReservationResponse,
 } from "@/lib/reservation-types";
 import { SOURCE_OPTIONS, SOURCE_OTHER, sourceFromParam } from "@/lib/reservation-types";
+import { captureRefFromUrl, normalizeRefCode } from "@/lib/referral";
 
 const FIXED_PAY_METHOD: PayMethod = "신용카드";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,6 +57,8 @@ interface ModalState {
   memo: string;
   source: string; // SOURCE_OPTIONS 중 하나, "기타", 또는 ""(선택 안 함)
   sourceEtc: string;
+  /** 영업대행 추천 코드(선택). ?ref= 링크로 들어오면 자동으로 채운다 */
+  referralCode: string;
   agreeTerms: boolean;
   agreeRefund: boolean;
   agreePrivacy: boolean;
@@ -85,6 +88,7 @@ function initialState(plan: PlanKey): ModalState {
     memo: "",
     source: "",
     sourceEtc: "",
+    referralCode: "",
     agreeTerms: false,
     agreeRefund: false,
     agreePrivacy: false,
@@ -156,7 +160,37 @@ export function ReservationModal({
     } catch {
       /* 저장소를 못 쓰는 환경이면 고객이 직접 고른다 */
     }
+    // 추천 링크(?ref=)로 들어왔으면 30일 동안 추천 코드를 채우고, 알게 된 경로는 '지인 소개'로 둔다.
+    const ref = captureRefFromUrl();
+    if (ref) setState((s) => (s.referralCode ? s : { ...s, referralCode: ref, source: s.source || "지인 소개" }));
   }, []);
+
+  // 추천 코드 확인: 입력이 멈추면 어드민에 물어 코드 주인(가린 이름)을 보여 준다.
+  const [refCheck, setRefCheck] = useState<{ code: string; state: "checking" | "ok" | "bad" | "error"; name: string }>({ code: "", state: "ok", name: "" });
+  useEffect(() => {
+    const code = normalizeRefCode(state.referralCode);
+    if (!state.referralCode.trim()) return;
+    if (!code) {
+      setRefCheck({ code: state.referralCode, state: "bad", name: "" });
+      return;
+    }
+    let alive = true;
+    setRefCheck({ code, state: "checking", name: "" });
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/referral/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code }) });
+        const r = (await res.json()) as { valid?: boolean; name?: string; reason?: string };
+        if (!alive) return;
+        setRefCheck({ code, state: r.valid ? "ok" : r.reason === "unavailable" ? "error" : "bad", name: r.name ?? "" });
+      } catch {
+        if (alive) setRefCheck({ code, state: "error", name: "" });
+      }
+    }, 450);
+    return () => {
+      alive = false;
+      clearTimeout(t);
+    };
+  }, [state.referralCode]);
 
   function pick(p: PlanKey) {
     patch((s) => ({ plan: p, guests: guestsForPlanSwitch(p, s.guests) }));
@@ -381,6 +415,7 @@ export function ReservationModal({
           venue: state.venue,
           memo: state.memo,
           source: state.source === SOURCE_OTHER ? (state.sourceEtc.trim() ? `기타: ${state.sourceEtc.trim()}` : "기타") : state.source,
+          referralCode: normalizeRefCode(state.referralCode) || undefined,
           guests: state.guests,
           extraButlers: state.extraButlers,
           payMethod: FIXED_PAY_METHOD,
@@ -696,6 +731,27 @@ export function ReservationModal({
                     </select>
                     {state.source === SOURCE_OTHER && (
                       <input value={state.sourceEtc} onChange={(e) => patch({ sourceEtc: e.target.value })} maxLength={40} placeholder="알게 된 경로를 적어 주세요." className="field-focus" style={{ ...fieldInputStyle, marginTop: 8 }} />
+                    )}
+                  </label>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      추천 코드 <span style={{ fontSize: 12, color: "#9A8189" }}>(선택)</span>
+                    </span>
+                    <input
+                      value={state.referralCode}
+                      onChange={(e) => patch({ referralCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12) })}
+                      placeholder="소개받은 코드가 있으면 입력해 주세요 (예: WB7K3QD)"
+                      autoCapitalize="characters"
+                      className="field-focus"
+                      style={fieldInputStyle}
+                    />
+                    {state.referralCode.trim() && (
+                      <span style={{ fontSize: 12.5, marginTop: 6, color: refCheck.state === "ok" ? "#2F7A4C" : refCheck.state === "bad" ? "#B03A3A" : "#9A8189" }}>
+                        {refCheck.state === "checking" && "코드를 확인하고 있어요…"}
+                        {refCheck.state === "ok" && `${refCheck.name ? `${refCheck.name}님의 ` : ""}추천 코드가 적용됩니다.`}
+                        {refCheck.state === "bad" && "확인되지 않는 코드예요. 코드를 다시 확인해 주세요. (코드 없이도 예약할 수 있어요)"}
+                        {refCheck.state === "error" && "지금은 코드를 확인할 수 없어요. 입력한 코드는 예약 후 확인해 적용해 드려요."}
+                      </span>
                     )}
                   </label>
                   <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>

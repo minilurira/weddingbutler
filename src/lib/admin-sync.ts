@@ -15,6 +15,7 @@ export interface AdminSyncInput {
   venue: string;
   customerMemo: string | null;
   source?: string | null;
+  referralCode?: string | null;
   guests: number;
   payMethod: string;
   depositAmount: number;
@@ -63,6 +64,7 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         plan: PLANS[input.plan].name,
         customerMemo: input.customerMemo?.trim() || undefined,
         source: input.source?.trim() || undefined,
+        referralCode: input.referralCode?.trim() || undefined,
         memo: `결제 수단: ${input.payMethod} · ${PAYMENT_TYPES[input.paymentType].name}`,
         paidAmount: input.depositAmount,
         paymentType: input.paymentType,

@@ -16,6 +16,8 @@ export interface CreateReservationInput {
   memo?: string;
   /** 고객이 고른 유입 경로(선택, 최대 60자) */
   source?: string;
+  /** 영업대행 추천 코드(선택). 서버가 어드민에서 다시 확인한다 */
+  referralCode?: string;
   guests: number;
   extraButlers: number;
   payMethod: string;
