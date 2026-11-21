@@ -41,14 +41,38 @@ function allowed(key: string): boolean {
   return true;
 }
 
+const ALERT_COOLDOWN_MS = 30 * 60_000;
+
+/** 같은 오류는 30분에 한 번만 카카오워크로 알린다. 서버리스는 인스턴스가 바뀌므로 저장된 오류 기록(error_logs)에서 센다. */
+async function notifyKakaoWork(source: string, scope: string, msg: string): Promise<void> {
+  const appKey = process.env.KAKAOWORK_APPROVAL_APP_KEY;
+  const conversationId = process.env.KAKAOWORK_ERROR_CONVERSATION_ID || process.env.KAKAOWORK_APPROVAL_CONVERSATION_ID;
+  if (!appKey || !conversationId) return;
+  try {
+    const since = new Date(Date.now() - ALERT_COOLDOWN_MS).toISOString();
+    const { data } = await supabaseAdmin().from("error_logs").select("id").eq("source", source).eq("scope", scope.slice(0, 80)).eq("message", msg).gte("created_at", since).limit(2);
+    if (!data || data.length > 1) return; // 방금 저장한 1건뿐일 때만 알린다
+    const where = source === "browser" ? "고객 화면" : "홈페이지";
+    await fetch("https://api.kakaowork.com/v1/messages.send", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${appKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ conversation_id: conversationId, text: `⚠️ [웨딩버틀러 오류] ${where}${scope ? ` · ${scope}` : ""}\n${msg.slice(0, 300)}\n자세한 내용: https://admin.weddingbutler.co.kr/errors` }),
+      signal: AbortSignal.timeout(3000),
+    });
+  } catch {
+    // 알림 실패가 서비스에 영향을 주지 않게 한다
+  }
+}
+
 export async function saveErrorLog(source: string, scope: string, message: string, detail = ""): Promise<void> {
   const msg = redact(message).slice(0, 500);
   if (!allowed(`${source}|${scope}|${msg}`)) return;
   try {
-    await Promise.race([
+    const saved = await Promise.race([
       supabaseAdmin().from("error_logs").insert({ source, scope: scope.slice(0, 80), message: msg, detail: redact(detail).slice(0, 2000) }),
-      new Promise((resolve) => setTimeout(resolve, 2500)),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 2500)),
     ]);
+    if (saved && !saved.error) await notifyKakaoWork(source, scope, msg);
   } catch {
     // 기록 실패가 서비스에 영향을 주지 않게 한다
   }
