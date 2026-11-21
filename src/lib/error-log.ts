@@ -41,22 +41,16 @@ function allowed(key: string): boolean {
   return true;
 }
 
-const ALERT_COOLDOWN_MS = 30 * 60_000;
-
-/** 같은 오류는 30분에 한 번만 카카오워크로 알린다. 서버리스는 인스턴스가 바뀌므로 저장된 오류 기록(error_logs)에서 센다. */
+/** 오류 알림은 어드민이 보낸다(알림방·카카오워크 봇은 어드민이 관리, 같은 오류는 30분에 한 번). 여기서는 요청만 한다. */
 async function notifyKakaoWork(source: string, scope: string, msg: string): Promise<void> {
-  const appKey = process.env.KAKAOWORK_APPROVAL_APP_KEY;
-  const conversationId = process.env.KAKAOWORK_ERROR_CONVERSATION_ID || process.env.KAKAOWORK_APPROVAL_CONVERSATION_ID;
-  if (!appKey || !conversationId) return;
+  const base = process.env.ADMIN_API_URL;
+  const key = process.env.ADMIN_API_KEY;
+  if (!base || !key) return;
   try {
-    const since = new Date(Date.now() - ALERT_COOLDOWN_MS).toISOString();
-    const { data } = await supabaseAdmin().from("error_logs").select("id").eq("source", source).eq("scope", scope.slice(0, 80)).eq("message", msg).gte("created_at", since).limit(2);
-    if (!data || data.length > 1) return; // 방금 저장한 1건뿐일 때만 알린다
-    const where = source === "browser" ? "고객 화면" : "홈페이지";
-    await fetch("https://api.kakaowork.com/v1/messages.send", {
+    await fetch(new URL("/api/public/error-notice", base), {
       method: "POST",
-      headers: { Authorization: `Bearer ${appKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ conversation_id: conversationId, text: `⚠️ [웨딩버틀러 오류] ${where}${scope ? ` · ${scope}` : ""}\n${msg.slice(0, 300)}\n자세한 내용: https://admin.weddingbutler.co.kr/errors` }),
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ source, scope: scope.slice(0, 80), message: msg }),
       signal: AbortSignal.timeout(3000),
     });
   } catch {
