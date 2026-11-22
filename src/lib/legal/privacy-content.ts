@@ -3,7 +3,7 @@ export const PRIVACY_HTML = `
 
   <div style="font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:0.24em; color:#C79BA8;">WEDDING BUTLER</div>
   <h1 style="font-family:'Noto Serif KR',serif; font-size:clamp(23px,5vw,30px); font-weight:600; letter-spacing:-0.02em; margin:14px 0 8px; line-height:1.45;">개인정보처리방침</h1>
-  <p style="font-size:13px; color:#9A8189; margin:0 0 28px;">시행일 2026년 10월 20일</p>
+  <p style="font-size:13px; color:#9A8189; margin:0 0 28px;">시행일 2026년 11월 22일</p>
 
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">웨딩버틀러(이하 "회사")는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 다음과 같이 개인정보처리방침을 수립·공개합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 8px;">회사는 결혼식 축의금 접수·기록·인계 대행 서비스를 제공하는 과정에서, 서비스를 신청한 의뢰인뿐만 아니라 예식에 참석한 하객의 개인정보를 처리합니다. 하객이 낸 금액은 의뢰인이 개봉 집계 방식을 선택한 경우에만 기록하며, 밀봉 방식에서는 수집하지 아니합니다.</p>
@@ -44,7 +44,7 @@ export const PRIVACY_HTML = `
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(5) 마케팅 및 광고</h3>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">이벤트·광고성 정보 제공을 목적으로 개인정보를 처리합니다. 정보주체가 별도로 동의한 경우에 한합니다.</p>
   <h3 style="font-size:14px; font-weight:500; color:#A9647E; margin:16px 0 6px;">(6) 서비스 이용 통계 및 개선</h3>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">사이트 방문·이용 현황의 통계 분석과 서비스 개선을 목적으로 행태정보를 처리합니다(제13항).</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">사이트 방문·이용 현황의 통계 분석과 서비스 개선을 목적으로 행태정보를 처리합니다(제13항). 예약 시 이용자가 선택하여 알려 주신 '알게 된 경로'는 어떤 채널이 예약으로 이어지는지 파악하는 마케팅 효과 분석과 서비스 개선에만 이용하며, 선택하지 않아도 예약에는 아무런 제한이 없습니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">2. 개인정보의 처리 및 보유 기간</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(1) 회사는 동의받은 보유·이용기간 내에서 개인정보를 처리·보유하며, 목적이 달성되거나 정보주체의 삭제 요청이 있으면 지체 없이 파기합니다.</p>
@@ -103,7 +103,7 @@ export const PRIVACY_HTML = `
       </thead>
       <tbody>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">문의</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">성함, 연락처, 예식 예정일, 예식장 지역, 문의 유형, 문의 내용</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
-        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">의뢰인 성명, 휴대전화번호, 이메일, 예식 일시 및 장소, 예상 하객 규모, 요금제</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신랑·신부 성명</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">예약</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">의뢰인 성명, 휴대전화번호, 이메일, 예식 일시 및 장소, 예상 하객 규모, 요금제</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">신랑·신부 성명, 요청 사항, 알게 된 경로(예약 시 선택)</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">인수자·확인 담당자 지정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">성명, 의뢰인과의 관계, 휴대전화번호</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">현장 접수</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">하객 성명, 봉투 고유번호, 신랑측·신부측 구분, 식권 배부 매수</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">개봉 집계 (의뢰인이 선택한 경우)</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">봉투 고유번호별 금액</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#9A8189;">―</td></tr>
@@ -116,7 +116,7 @@ export const PRIVACY_HTML = `
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">카드번호·유효기간 등 결제 인증정보는 결제대행사(KG이니시스)가 자사 결제창에서 직접 수집하며, 회사는 이를 수집·보유하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#8E4E66; margin:0 0 14px;">밀봉 방식에서는 하객이 낸 금액을 수집·기록하지 아니합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(2) 자동 생성·수집 정보 — 접속 로그, 접속 IP, 쿠키, 서비스 이용 기록, 결제 기록, 운영 구역 촬영 영상, 행태정보(방문 페이지, 유입 경로, 체류 시간, 기기·브라우저 종류 등. 제13항)</p>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 수집 방법 — 사이트 예약·문의 양식, 전화·문자·카카오톡 채널 상담, 예약 사전 확인 통화, 현장 접수 기록 및 인계확인서</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(3) 수집 방법 — 사이트 예약·문의 양식, 전화·문자·카카오톡 채널 상담, 예약 사전 확인 통화, 현장 접수 기록 및 인계확인서. 예약 양식의 '알게 된 경로'는 이용자가 직접 선택하며, 접속한 링크 주소에 포함된 채널 표시(src 값)가 있으면 미리 선택되어 보이고 이용자가 바꿀 수 있습니다. 이 값은 예약을 완료하기 전까지 브라우저의 임시 저장소(sessionStorage)에만 보관되고 브라우저를 닫으면 삭제됩니다.</p>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">4. 하객의 개인정보 처리에 관한 사항</h2>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 회사는 축의금 접수 시 하객의 성명과 봉투 고유번호, 신랑측·신부측 구분을 기록합니다. 의뢰인이 개봉 집계 방식을 선택한 경우에는 접수 마감 후 봉투별 금액을 추가로 기록합니다. 이는 정산 리포트를 작성하기 위한 최소한의 항목입니다.</p>
@@ -258,7 +258,7 @@ export const PRIVACY_HTML = `
   </div>
 
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">16. 개인정보처리방침의 변경</h2>
-  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 이 방침은 2026년 10월 20일부터 적용됩니다.</p>
+  <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 8px;">(1) 이 방침은 2026년 11월 22일부터 적용됩니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(2) 방침을 변경하는 경우 시행 7일 전부터 사이트에 공지합니다. 수집 항목, 이용 목적, 제3자 제공 등 정보주체의 권리에 중요한 변경은 30일 전부터 공지합니다.</p>
   <p style="font-size:14.5px; line-height:1.95; color:#4A3B41; margin:0 0 14px;">(3) 이전 방침은 사이트에서 열람할 수 있도록 게시합니다.</p>
   <div style="overflow-x:auto; margin:0 0 14px;">
@@ -274,7 +274,8 @@ export const PRIVACY_HTML = `
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 1월 1일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">최초 수립</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제1차 개정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 9월 17일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">회원제 운영 중단에 따른 개정. 회원 가입·관리 및 회원 탈퇴 관련 조항을 삭제하고, 비회원 예약 조회 및 게시판 이용에 관한 처리 항목을 신설</td></tr>
         <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제2차 개정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 9월 21일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">기록 방식(밀봉/개봉 집계) 선택제 도입에 따라 개봉 집계 시 봉투별 금액 처리 근거 신설. 위탁업체에 Vercel·Supabase 추가 및 개인정보 국외 이전 조항(제9항) 신설. 인수자·잔금 결제자, 환불 계좌, 현금영수증 등 실제 수집 항목 정비</td></tr>
-        <tr><td style="padding:11px 14px; color:#4A3B41;">제3차 개정</td><td style="padding:11px 14px; color:#4A3B41;">2026년 10월 20일</td><td style="padding:11px 14px; color:#4A3B41;">Google Analytics 도입에 따라 행태정보 수집·이용 및 거부 방법(제13항) 신설. 위탁업체 및 국외 이전(제8항·제9항)에 Google LLC 추가. 처리 목적에 이용 통계 분석 추가</td></tr>
+        <tr><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">제3차 개정</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">2026년 10월 20일</td><td style="padding:11px 14px; border-bottom:1px solid #F2E6EA; color:#4A3B41;">Google Analytics 도입에 따라 행태정보 수집·이용 및 거부 방법(제13항) 신설. 위탁업체 및 국외 이전(제8항·제9항)에 Google LLC 추가. 처리 목적에 이용 통계 분석 추가</td></tr>
+        <tr><td style="padding:11px 14px; color:#4A3B41;">제4차 개정</td><td style="padding:11px 14px; color:#4A3B41;">2026년 11월 22일</td><td style="padding:11px 14px; color:#4A3B41;">예약 시 선택 항목으로 '알게 된 경로' 수집 추가(제3항), 처리 목적에 마케팅 효과 분석 추가(제1항), 고객센터 연락처 변경</td></tr>
       </tbody>
     </table>
   </div>
@@ -290,6 +291,7 @@ export const PRIVACY_HTML = `
   </div>
 
   <p style="font-size:12.5px; color:#9A8189; margin:22px 0 0;">
+    <a href="/privacy/2026-10" style="color:#A9647E;">2026년 10월 20일 시행 이전 방침 보기</a><br />
     <a href="/privacy/2026-09" style="color:#A9647E;">2026년 9월 21일 시행 이전 방침 보기</a><br />
     <a href="/privacy/2026-01" style="color:#A9647E;">2026년 1월 1일 시행 이전 방침 보기</a>
   </p>
