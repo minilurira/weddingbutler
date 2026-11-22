@@ -188,11 +188,11 @@ export function travelRegionOf(key: unknown): TravelRegion | null {
   return TRAVEL_REGIONS.find((r) => r.key === key) ?? null;
 }
 
-/** 고르는 칸에 보이는 이름: "강원 영동 (강릉·속초·동해 등) · 출장비 10만원" */
+/** 고르는 칸에 보이는 이름: "강원 강릉·속초·동해 등 · 출장비 10만원", 무료 지역은 "서울"처럼 이름만 */
 export function travelRegionLabel(r: TravelRegion): string {
-  const name = r.hint ? `${r.name} (${r.hint})` : r.name;
+  const name = r.hint ? `${r.name.split(" ")[0]} ${r.hint}` : r.name;
   if (!r.bookable) return `${name} · 예약 문의`;
-  return `${name} · ${r.fee ? "출장비 " + manwon(r.fee) : "출장비 없음"}`;
+  return r.fee ? `${name} · 출장비 ${manwon(r.fee)}` : name;
 }
 
 /** 출장비 안내 문구에 쓰는 범위 */
