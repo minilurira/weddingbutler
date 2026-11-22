@@ -299,7 +299,7 @@ export default function HomePage() {
           </Reveal>
 
           <p style={{ textAlign: "center", fontSize: 13, color: "#9A8189", margin: "28px 0 0", lineHeight: 1.8 }}>
-            ※ 서울·경기 외 지역은 이동 거리에 따라 출장비 5~10만원이 별도로 추가되며, 정확한 금액은 예약 전 안내드립니다.
+            ※ 서울·경기·인천 외 지역은 이동 거리에 따라 출장비 5~15만원이 추가되며, 예약 화면에서 지역을 고르면 금액이 바로 표시됩니다.
           </p>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import type { PaymentType, PlanKey, Side } from "@/lib/plans";
+import type { EnvelopeMode, PaymentType, PlanKey, Side } from "@/lib/plans";
 
 export interface CreateReservationInput {
   plan: PlanKey;
@@ -12,6 +12,10 @@ export interface CreateReservationInput {
   phone: string;
   email: string;
   venue: string;
+  /** 예식장 지역(TRAVEL_REGIONS key). 일반 예약은 필수, 스페셜·테스트는 없어도 된다(출장비 0원). */
+  region?: string;
+  /** 봉투 처리 방식: 밀봉 / 개봉 집계 (테스트 결제는 없어도 된다) */
+  envelopeMode?: EnvelopeMode;
   /** 고객이 남기는 요청 사항(선택, 최대 500자) */
   memo?: string;
   /** 고객이 고른 유입 경로(선택, 최대 60자) */

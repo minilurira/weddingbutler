@@ -2,9 +2,10 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { BOOKING_OPEN_UNTIL_LABEL, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fetchBlockedSlots } from "@/lib/availability";
-import { calcPrice, isBothSidePlan, isOneSide, isPaymentType, PLANS, sideForPlan, specialAllowsDeposit, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
+import { calcPrice, isBothSidePlan, isEnvelopeMode, isOneSide, isPaymentType, PLANS, travelRegionOf, sideForPlan, specialAllowsDeposit, specialPrice, testPrice, type PlanKey } from "@/lib/plans";
 import { fetchSpecialOffer, holdSpecialOffer, releaseSpecialOffer, SPECIAL_STATE_MESSAGE, SPECIAL_TOKEN_RE } from "@/lib/special-offer";
 import { supabaseAdmin } from "@/lib/supabase";
+import { logError } from "@/lib/error-log";
 import type {
   CreateReservationInput,
   CreateReservationResponse,
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { plan, year, month, day, time, name, side, phone, email, venue, memo, source, guests, extraButlers, payMethod, paymentType, test, testKey, specialToken } =
+  const { plan, year, month, day, time, name, side, phone, email, venue, region, envelopeMode, memo, source, guests, extraButlers, payMethod, paymentType, test, testKey, specialToken } =
     body;
 
   const isTest = test === true;
@@ -80,6 +81,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "신랑측 또는 신부측을 선택해 주세요." }, { status: 400 });
   }
 
+  // 일반 예약은 예식장 지역(출장비)과 봉투 처리 방식을 꼭 고른다. 스페셜은 지역 없이 링크 금액만 받는다.
+  const travelRegion = travelRegionOf(region);
+  if (!isTest && !isSpecial) {
+    if (!travelRegion) {
+      return NextResponse.json({ message: "예식장 지역을 선택해 주세요." }, { status: 400 });
+    }
+    if (!travelRegion.bookable) {
+      return NextResponse.json({ message: `${travelRegion.name} 예식은 홈페이지 예약이 어렵습니다. 카카오톡 채널로 문의해 주세요.` }, { status: 400 });
+    }
+  }
+  if (!isTest && !isEnvelopeMode(envelopeMode)) {
+    return NextResponse.json({ message: "봉투 처리 방식(밀봉 · 개봉 집계)을 선택해 주세요." }, { status: 400 });
+  }
+  const travelFee = !isTest && !isSpecial && travelRegion ? travelRegion.fee : 0;
+
   // 예약 화면에서 막은 시간을 서버에서도 다시 확인한다(두 고객이 거의 동시에 같은 시간대를 고르는 경우).
   // 파이프라인 점검용 테스트 결제는 실제 시간대와 무관하므로 확인하지 않는다.
   if (!isTest) {
@@ -115,7 +131,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount, paymentType) : calcPrice(plan, guests, extraButlers, paymentType);
+  const price = isTest ? testPrice(paymentType) : isSpecial ? specialPrice(specialAmount, paymentType) : calcPrice(plan, guests, extraButlers, paymentType, travelFee);
   const planInfo = PLANS[plan];
   const orderName = isTest
     ? `[TEST] 웨딩버틀러 ${planInfo.name} 결제 파이프라인 점검 (1,000원)`
@@ -123,37 +139,45 @@ export async function POST(req: NextRequest) {
 
   try {
     const db = supabaseAdmin();
-    const { data, error } = await db
-      .from("reservations")
-      .insert({
-        booking_no: bookingNo,
-        plan,
-        ceremony_year: year,
-        ceremony_month: month,
-        ceremony_day: day,
-        ceremony_time: time,
-        couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
-        side: sideForPlan(plan, isSpecial ? side : isOneSide(side) ? side : null),
-        phone: phone.trim(),
-        email: email.trim(),
-        venue: venue?.trim() || null,
-        memo: typeof memo === "string" ? memo.trim().slice(0, 500) || null : null,
-        ...(typeof source === "string" && source.trim() ? { source: source.trim().slice(0, 60) } : {}),
-        guests,
-        extra_butlers: extraButlers,
-        pay_method: payMethod,
-        base_amount: price.base,
-        over_amount: price.over,
-        extra_butler_amount: price.extraButlerAmount,
-        total_amount: price.total,
-        deposit_amount: price.deposit,
-        balance_amount: price.balance,
-        payment_status: "pending",
-        portone_payment_id: paymentId,
-        ...(isSpecial ? { special_token: specialToken } : {}),
-      })
-      .select("id")
-      .single();
+    const row = {
+      booking_no: bookingNo,
+      plan,
+      ceremony_year: year,
+      ceremony_month: month,
+      ceremony_day: day,
+      ceremony_time: time,
+      couple_name: isTest ? `[TEST] ${name.trim()}` : name.trim(),
+      side: sideForPlan(plan, isSpecial ? side : isOneSide(side) ? side : null),
+      phone: phone.trim(),
+      email: email.trim(),
+      venue: venue?.trim() || null,
+      memo: typeof memo === "string" ? memo.trim().slice(0, 500) || null : null,
+      ...(typeof source === "string" && source.trim() ? { source: source.trim().slice(0, 60) } : {}),
+      guests,
+      extra_butlers: extraButlers,
+      pay_method: payMethod,
+      base_amount: price.base,
+      over_amount: price.over,
+      extra_butler_amount: price.extraButlerAmount,
+      total_amount: price.total,
+      deposit_amount: price.deposit,
+      balance_amount: price.balance,
+      payment_status: "pending",
+      portone_payment_id: paymentId,
+      ...(isSpecial ? { special_token: specialToken } : {}),
+    };
+    // 지역·출장비·봉투 방식 칸(supabase/travel_envelope.sql). 아직 칸이 없으면 이 값만 빼고 저장해 예약은 막지 않는다
+    // (출장비는 total_amount·balance_amount에 이미 들어 있다).
+    const extra = {
+      region: travelRegion?.key ?? null,
+      travel_fee: price.travelFee,
+      envelope_mode: isEnvelopeMode(envelopeMode) ? envelopeMode : null,
+    };
+    let { data, error } = await db.from("reservations").insert({ ...row, ...extra }).select("id").single();
+    if (error && (error.code === "PGRST204" || error.code === "42703")) {
+      logError("[reservations] region/travel_fee/envelope_mode columns missing — saved without them", error);
+      ({ data, error } = await db.from("reservations").insert(row).select("id").single());
+    }
 
     if (error || !data) throw error ?? new Error("insert returned no data");
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
-import { DEPOSIT_AMOUNT, ONSITE_CASH_ONLY_NOTE, PAYMENT_TYPES, SIDE_LABEL, TIME_SLOTS, specialAllowsDeposit, won, type PaymentType, type Side } from "@/lib/plans";
+import { DEPOSIT_AMOUNT, ENVELOPE_MODES, ONSITE_CASH_ONLY_NOTE, PAYMENT_TYPES, SIDE_LABEL, TIME_SLOTS, specialAllowsDeposit, won, type EnvelopeMode, type PaymentType, type Side } from "@/lib/plans";
 import { firstBookableDate, isBookableDow, maxBookingDate, minBookingDate } from "@/lib/booking-calendar";
 import { fontDisplay, fontSerif } from "@/lib/style";
 import { formatPhoneInput } from "@/lib/phone";
@@ -39,6 +39,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
   const [email, setEmail] = useState("");
   const [venue, setVenue] = useState("");
   const [guests, setGuests] = useState("");
+  const [envelope, setEnvelope] = useState<EnvelopeMode | null>(null);
   const [memo, setMemo] = useState("");
   const [agree, setAgree] = useState({ terms: false, refund: false, privacy: false });
   const [phase, setPhase] = useState<"form" | "submitting" | "done">("form");
@@ -92,6 +93,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
   const missing = [
     !day && "예식 날짜", !time && "예식 시간", !side && "신랑측 · 신부측 · 양가", !name.trim() && "성함", !phone.trim() && "연락처",
     !EMAIL_RE.test(email.trim()) && "이메일", !venue.trim() && "예식장 · 홀 이름", guestCount < 1 && "예상 하객 수",
+    !envelope && "봉투 처리 방식",
   ].filter(Boolean) as string[];
   const agreed = agree.terms && agree.refund && agree.privacy;
   const ready = missing.length === 0 && agreed;
@@ -108,7 +110,7 @@ export default function SpecialBooking({ token, amount, label }: { token: string
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan: "special", specialToken: token, year: ym.y, month: ym.m, day, time, name, side, phone, email, venue, memo,
+          plan: "special", specialToken: token, year: ym.y, month: ym.m, day, time, name, side, phone, email, venue, memo, envelopeMode: envelope,
           guests: guestCount, extraButlers: 0, payMethod: "신용카드", paymentType: payType,
         }),
       });
@@ -212,6 +214,17 @@ export default function SpecialBooking({ token, amount, label }: { token: string
           <input type="email" style={inputStyle} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" /></label>
         <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>예식장 · 홀 이름<input style={inputStyle} value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="서울 · 그랜드컨벤션 3층 그레이스홀" /></label>
         <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>예상 하객 수 <input style={inputStyle} value={guests} onChange={(e) => setGuests(e.target.value.replace(/[^0-9]/g, ""))} inputMode="numeric" placeholder="예: 200" /></label>
+        <div style={{ ...labelStyle, gridColumn: "1 / -1" }}>
+          <span>봉투 처리 방식 <span style={{ fontSize: 12, color: "#9A8189" }}>둘 다 무료 · 예식 7일 전 사전 통화까지 바꿀 수 있습니다.</span></span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {(["sealed", "opened"] as const).map((m) => (
+              <div key={m} onClick={() => setEnvelope(m)} style={{ ...chip(envelope === m), padding: "12px 10px", lineHeight: 1.5 }}>
+                <div style={{ fontWeight: 500 }}>{ENVELOPE_MODES[m].name}</div>
+                <div style={{ fontSize: 11.5, opacity: 0.8, marginTop: 2 }}>{ENVELOPE_MODES[m].desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
         <label style={{ ...labelStyle, gridColumn: "1 / -1" }}>요청 사항 <span style={{ fontSize: 12, color: "#9A8189" }}>(선택)</span>
           <textarea style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }} rows={3} maxLength={500} value={memo} onChange={(e) => setMemo(e.target.value)} placeholder="전달하실 내용이 있으면 남겨 주세요." /></label>
       </div>

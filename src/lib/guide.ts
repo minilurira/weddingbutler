@@ -30,8 +30,8 @@ export const GUIDE_UPDATED = "2026-11-14";
 // 지역별 안내: 같은 틀에 지역명, 세부 지역, 출장비 기준만 바꾼다. 확인되지 않은 예식장 이름은 싣지 않는다.
 function region(o: { slug: string; n: string; name: string; areas: string[]; inside: boolean; note: string }): GuideArticle {
   const trip = o.inside
-    ? `${o.name}은 경기도 안이라 출장비가 따로 붙지 않습니다.`
-    : `${o.name}은 서울·경기 밖 지역이라 이동 거리에 따라 출장비 5~10만원이 별도로 추가되며, 정확한 금액은 예약 전에 안내드립니다.`;
+    ? `${o.name}은 서울·경기·인천 지역이라 출장비가 따로 붙지 않습니다.`
+    : `${o.name}은 서울·경기·인천 밖 지역이라 이동 거리에 따라 출장비 5~15만원이 추가되며, 예약 화면에서 지역을 고르면 금액이 바로 표시됩니다.`;
   return {
     slug: o.slug,
     title: `${o.name} 축의대행: 축의금 대행 연말 이벤트 35만원부터`,
@@ -40,7 +40,7 @@ function region(o: { slug: string; n: string; name: string; areas: string[]; ins
     lead: `${o.name}에서 결혼식을 준비 중이라면 웨딩버틀러가 축의대를 대신 운영합니다. 예식 1시간 전에 도착해 접수대를 세팅하고, 접수부터 정산과 인계까지 맡습니다. ${trip}`,
     sections: [
       { h2: `${o.name} 운영 지역`, bullets: o.areas, body: [o.note] },
-      { h2: "출장비", body: [trip, "예식장 위치를 알려 주시면 예약 전에 가능 여부와 금액을 먼저 확인해 드립니다."] },
+      { h2: "출장비", body: [trip, "예약 화면에서 예식장 지역을 고르면 출장비가 총 금액에 함께 표시됩니다."] },
       {
         h2: "요금",
         body: ["하객 규모에 따라 네 가지 요금제가 있고 모든 금액은 부가세 포함입니다. 12월 31일까지 예약하면 예식일이 내년이어도 연말 이벤트가가 적용됩니다."],
@@ -125,7 +125,7 @@ export const GUIDES: GuideArticle[] = [
     faq: [
       { q: "축의대대행과 축의대행은 다른 서비스인가요?", a: "아니요. 같은 서비스를 부르는 이름이 다를 뿐입니다. 축의대 대행, 축의금 대행도 같은 의미입니다." },
       { q: "예약은 어떻게 하나요?", a: "웨딩버틀러 홈페이지에서 예식 날짜와 시간, 요금제를 고르고 결제하면 예약이 확정됩니다." },
-      { q: "운영 지역은 어디인가요?", a: "서울과 경기 지역에서 운영합니다. 자세한 내용은 서울·경기 안내 글을 확인해 주세요." },
+      { q: "운영 지역은 어디인가요?", a: "서울·경기·인천은 출장비 없이 운영하고, 그 밖 지역은 이동 거리에 따라 출장비 5~15만원이 추가됩니다(제주는 문의). 자세한 내용은 서울·경기 안내 글을 확인해 주세요." },
     ],
     related: ["chuiuldaedaehaeng", "cost", "settlement"],
     cta: "reserve",
@@ -408,7 +408,7 @@ export const GUIDES: GuideArticle[] = [
     description: "서울·경기 지역 결혼식 축의대행(축의대대행) 이용 안내입니다. 예약 방법과 요금을 확인하세요.",
     eyebrow: "GUIDE 08",
     lead:
-      "웨딩버틀러는 서울과 경기 지역의 결혼식에서 축의대행을 운영합니다. 예식장이 서울·경기에 있다면 홈페이지에서 날짜를 고르고 바로 예약할 수 있습니다. 지역 밖의 예식은 문의로 가능 여부를 확인해 드립니다(출장비 5~10만원 별도).",
+      "웨딩버틀러는 서울과 경기 지역의 결혼식에서 축의대행을 운영합니다. 예식장이 서울·경기에 있다면 홈페이지에서 날짜를 고르고 바로 예약할 수 있습니다. 인천도 출장비가 없고, 그 밖 지역은 예약 화면에서 지역을 고르면 출장비(5~15만원)가 더해진 금액으로 바로 예약할 수 있습니다(제주는 문의).",
     sections: [
       {
         h2: "운영 지역",
@@ -541,7 +541,7 @@ export const GUIDES: GuideArticle[] = [
   region({ slug: "seongnam-pangyo-chuiuldaehaeng", n: "02", name: "성남 판교 분당", areas: ["분당구(판교 포함)", "수정구", "중원구"], inside: true, note: "웨딩버틀러는 분당과 판교를 중심으로 운영해 이 지역 예식은 이동 부담이 적습니다." }),
   region({ slug: "paju-chuiuldaehaeng", n: "03", name: "파주", areas: ["운정", "금촌", "교하", "문산"], inside: true, note: "파주시 전 지역이 경기 운영 지역입니다. 예식장 위치를 알려 주세요." }),
   region({ slug: "ilsan-chuiuldaehaeng", n: "04", name: "일산 고양", areas: ["일산동구", "일산서구", "덕양구"], inside: true, note: "고양시 세 개 구 모두 운영 지역입니다." }),
-  region({ slug: "incheon-chuiuldaehaeng", n: "05", name: "인천", areas: ["중구와 동구", "미추홀구와 연수구", "남동구와 부평구", "계양구와 서구"], inside: false, note: "인천은 서울·경기 밖이라 예약 전 문의를 통해 가능 여부와 출장비를 확인합니다." }),
+  region({ slug: "incheon-chuiuldaehaeng", n: "05", name: "인천", areas: ["중구와 동구", "미추홀구와 연수구", "남동구와 부평구", "계양구와 서구"], inside: true, note: "인천 전 지역이 운영 지역이며 출장비가 없습니다." }),
   {
     slug: "chuiuldaehaeng-excel",
     title: "축의금 장부 엑셀 양식 무료 다운로드: 축의대 접수 기록표",

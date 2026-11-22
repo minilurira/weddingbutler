@@ -108,6 +108,9 @@ export async function POST(
       extraButlers: reservation.extra_butlers ?? 0,
       totalAmount: reservation.total_amount,
       onsiteAmount: reservation.balance_amount,
+      region: reservation.region ?? null,
+      travelFee: reservation.travel_fee ?? 0,
+      envelopeMode: reservation.envelope_mode ?? null,
     });
 
     const res: ConfirmReservationResponse = { ok: true, bookingNo: reservation.booking_no };

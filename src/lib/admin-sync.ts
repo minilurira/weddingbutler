@@ -1,5 +1,5 @@
-import type { PaymentType, PlanKey, Side } from "@/lib/plans";
-import { PAYMENT_TYPES, PLANS } from "@/lib/plans";
+import type { EnvelopeMode, PaymentType, PlanKey, Side } from "@/lib/plans";
+import { PAYMENT_TYPES, PLANS, travelRegionOf } from "@/lib/plans";
 
 import { logError } from "@/lib/error-log";
 export interface AdminSyncInput {
@@ -22,6 +22,10 @@ export interface AdminSyncInput {
   extraButlers: number;
   totalAmount: number;
   onsiteAmount: number;
+  /** TRAVEL_REGIONS key (없으면 null) */
+  region?: string | null;
+  travelFee?: number;
+  envelopeMode?: EnvelopeMode | null;
 }
 
 function pad(n: number) {
@@ -69,6 +73,9 @@ export async function syncReservationToAdmin(input: AdminSyncInput): Promise<voi
         extraButlers: input.extraButlers,
         totalAmount: input.totalAmount,
         onsiteAmount: input.onsiteAmount,
+        region: travelRegionOf(input.region)?.name ?? undefined,
+        travelFee: input.travelFee ?? 0,
+        envelopeMode: input.envelopeMode ?? undefined,
       }),
     });
     if (!res.ok) {

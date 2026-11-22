@@ -116,6 +116,8 @@ export interface PriceBreakdown {
   base: number;
   over: number;
   extraButlerAmount: number;
+  /** 예식장 지역 출장비 (서울·경기·인천 0원) */
+  travelFee: number;
   total: number;
   deposit: number;
   balance: number;
@@ -146,11 +148,74 @@ export function isPaymentType(v: unknown): v is PaymentType {
 /** 현장 결제는 현금으로만 받는다 — 예약 화면·FAQ에 같은 문구로 안내한다. */
 export const ONSITE_CASH_ONLY_NOTE = "현장 결제 금액은 현금으로만 결제할 수 있습니다.";
 
+/**
+ * 예식장 지역별 출장비 (성남 운중동 출발, 편도 자차 이동 시간 기준, 예약 1건당).
+ * 연말 이벤트 할인은 기본 요금에만 적용되고 출장비는 그대로 더한다.
+ * 예약금 결제면 예약금은 그대로이고 출장비는 현장 결제 금액에 들어간다.
+ * 어드민 src/lib/pricing.ts의 TRAVEL_REGIONS와 같이 바꾼다.
+ */
+export interface TravelRegion {
+  key: string;
+  name: string;
+  /** 고르는 칸에 붙는 세부 지역 안내 */
+  hint?: string;
+  fee: number;
+  /** false면 홈페이지 예약 불가(문의로 안내) */
+  bookable: boolean;
+}
+
+export const TRAVEL_REGIONS: TravelRegion[] = [
+  { key: "seoul", name: "서울", fee: 0, bookable: true },
+  { key: "gyeonggi", name: "경기", fee: 0, bookable: true },
+  { key: "incheon", name: "인천", fee: 0, bookable: true },
+  { key: "daejeon", name: "대전·세종", fee: 50000, bookable: true },
+  { key: "chungbuk", name: "충북", fee: 50000, bookable: true },
+  { key: "chungnam", name: "충남", fee: 50000, bookable: true },
+  { key: "gangwon-west", name: "강원 영서", hint: "춘천·원주·홍천 등", fee: 50000, bookable: true },
+  { key: "gangwon-east", name: "강원 영동", hint: "강릉·속초·동해 등", fee: 100000, bookable: true },
+  { key: "jeonbuk", name: "전북", fee: 100000, bookable: true },
+  { key: "daegu", name: "대구", fee: 100000, bookable: true },
+  { key: "gyeongbuk", name: "경북", fee: 100000, bookable: true },
+  { key: "gwangju", name: "광주", fee: 150000, bookable: true },
+  { key: "jeonnam", name: "전남", fee: 150000, bookable: true },
+  { key: "busan", name: "부산", fee: 150000, bookable: true },
+  { key: "ulsan", name: "울산", fee: 150000, bookable: true },
+  { key: "gyeongnam", name: "경남", fee: 150000, bookable: true },
+  { key: "jeju", name: "제주", fee: 0, bookable: false },
+];
+
+export function travelRegionOf(key: unknown): TravelRegion | null {
+  return TRAVEL_REGIONS.find((r) => r.key === key) ?? null;
+}
+
+/** 고르는 칸에 보이는 이름: "강원 영동 (강릉·속초·동해 등) · 출장비 10만원" */
+export function travelRegionLabel(r: TravelRegion): string {
+  const name = r.hint ? `${r.name} (${r.hint})` : r.name;
+  if (!r.bookable) return `${name} · 예약 문의`;
+  return `${name} · ${r.fee ? "출장비 " + manwon(r.fee) : "출장비 없음"}`;
+}
+
+/** 출장비 안내 문구에 쓰는 범위 */
+export const TRAVEL_FEE_RANGE = "5~15만원";
+
+/** 봉투 처리 방식: 밀봉(봉투를 열지 않고 전달) / 개봉 집계(봉투별 금액·총액 정리). 둘 다 무료. */
+export type EnvelopeMode = "sealed" | "opened";
+
+export const ENVELOPE_MODES: Record<EnvelopeMode, { name: string; desc: string }> = {
+  sealed: { name: "밀봉", desc: "봉투를 열지 않고 번호 순서대로 봉인해 전달" },
+  opened: { name: "개봉 집계", desc: "예식 후 버틀러 2명이 카메라 앞에서 열어 봉투별 금액·총액 정리" },
+};
+
+export function isEnvelopeMode(v: unknown): v is EnvelopeMode {
+  return v === "sealed" || v === "opened";
+}
+
 export function calcPrice(
   plan: PlanKey,
   guests: number,
   extraButlers: number,
-  paymentType: PaymentType
+  paymentType: PaymentType,
+  travelFee = 0
 ): PriceBreakdown {
   const p = PLANS[plan];
   const base = planBase(plan);
@@ -158,12 +223,13 @@ export function calcPrice(
   // real 식권 배부 매수 is counted, so it's not part of the online total/deposit.
   const over = Math.max(0, guests - p.incl) * 2000;
   const extraButlerAmount = extraButlers * 100000;
-  const total = base + extraButlerAmount;
+  const total = base + extraButlerAmount + travelFee;
   const deposit = paymentType === "full" ? total : Math.min(DEPOSIT_AMOUNT, total);
   return {
     base,
     over,
     extraButlerAmount,
+    travelFee,
     total,
     deposit,
     balance: total - deposit,
@@ -175,7 +241,7 @@ export function calcPrice(
 /** 스페셜 예약: 링크에 정해진 금액을 전액 결제하거나, 예약금(DEPOSIT_AMOUNT)만 결제하고 나머지는 현장에서 현금으로 받는다. */
 export function specialPrice(amount: number, paymentType: PaymentType = "full"): PriceBreakdown {
   const deposit = paymentType === "full" || !specialAllowsDeposit(amount) ? amount : DEPOSIT_AMOUNT;
-  return { base: amount, over: 0, extraButlerAmount: 0, total: amount, deposit, balance: amount - deposit, incl: 0, listBase: amount };
+  return { base: amount, over: 0, extraButlerAmount: 0, travelFee: 0, total: amount, deposit, balance: amount - deposit, incl: 0, listBase: amount };
 }
 
 /** 스페셜 금액이 예약금보다 커야 예약금 결제를 고를 수 있다. */
@@ -193,6 +259,7 @@ export function testPrice(paymentType: PaymentType): PriceBreakdown {
     base: total,
     over: 0,
     extraButlerAmount: 0,
+    travelFee: 0,
     total,
     deposit: 1000,
     balance: total - 1000,

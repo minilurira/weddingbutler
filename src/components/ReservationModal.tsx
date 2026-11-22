@@ -5,6 +5,7 @@ import {
   calcPrice,
   DEPOSIT_AMOUNT,
   DESK_TYPE,
+  ENVELOPE_MODES,
   EVENT,
   isBothSidePlan,
   isEventShowing,
@@ -17,7 +18,11 @@ import {
   sideForPlan,
   testPrice,
   TIME_SLOTS,
+  TRAVEL_REGIONS,
+  travelRegionLabel,
+  travelRegionOf,
   won,
+  type EnvelopeMode,
   type OneSide,
   type PaymentType,
   type PayMethod,
@@ -53,6 +58,9 @@ interface ModalState {
   phone: string;
   email: string;
   venue: string;
+  /** TRAVEL_REGIONS의 key, 고르기 전엔 "" */
+  region: string;
+  envelope: EnvelopeMode | null;
   memo: string;
   source: string; // SOURCE_OPTIONS 중 하나, "기타", 또는 ""(선택 안 함)
   sourceEtc: string;
@@ -82,6 +90,8 @@ function initialState(plan: PlanKey): ModalState {
     phone: "",
     email: "",
     venue: "",
+    region: "",
+    envelope: null,
     memo: "",
     source: "",
     sourceEtc: "",
@@ -275,9 +285,10 @@ export function ReservationModal({
   const deskLabel = side === "both" && state.plan in DESK_TYPE ? DESK_TYPE[state.plan as PublicPlanKey] : side ? SIDE_LABEL[side] : "선택해 주세요";
   const blockedSlots = blocked.key === dateKey ? blocked.slots : [];
   const eventShowing = isEventShowing();
+  const region = travelRegionOf(state.region);
   const price = test
     ? testPrice(state.paymentType)
-    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType);
+    : calcPrice(state.plan, state.guests, state.extraButlers, state.paymentType, region?.bookable ? region.fee : 0);
   const eventApplied = !test && price.base < price.listBase;
   const filled = !!(
     state.date &&
@@ -286,7 +297,9 @@ export function ReservationModal({
     state.name.trim() &&
     state.phone.trim() &&
     EMAIL_RE.test(state.email.trim()) &&
-    state.venue.trim()
+    region?.bookable &&
+    state.venue.trim() &&
+    state.envelope
   );
   const agreed = state.agreeTerms && state.agreeRefund && state.agreePrivacy;
   const ready = filled && agreed;
@@ -347,7 +360,10 @@ export function ReservationModal({
     if (!state.phone.trim()) miss.push("연락처");
     if (!state.email.trim()) miss.push("이메일");
     else if (!EMAIL_RE.test(state.email.trim())) miss.push("이메일 (형식을 확인해 주세요)");
+    if (!region) miss.push("예식장 지역");
+    else if (!region.bookable) miss.push(`예식장 지역 (${region.name}은 홈페이지 예약이 어려워 문의로 안내드립니다)`);
     if (!state.venue.trim()) miss.push("예식장 · 홀 이름");
+    if (!state.envelope) miss.push("봉투 처리 방식 (밀봉 · 개봉 집계)");
     if (miss.length) {
       funnel("form_blocked", { reason: "missing" });
       window.alert("아래 항목을 입력해 주세요.\n\n· " + miss.join("\n· "));
@@ -379,6 +395,8 @@ export function ReservationModal({
           phone: state.phone,
           email: state.email,
           venue: state.venue,
+          region: state.region,
+          envelopeMode: state.envelope,
           memo: state.memo,
           source: state.source === SOURCE_OTHER ? (state.sourceEtc.trim() ? `기타: ${state.sourceEtc.trim()}` : "기타") : state.source,
           guests: state.guests,
@@ -676,15 +694,44 @@ export function ReservationModal({
                     />
                   </label>
                   <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      예식장 지역 <span style={{ fontSize: 12, color: "#9A8189" }}>서울·경기·인천은 출장비가 없습니다.</span>
+                    </span>
+                    <select value={state.region} onChange={(e) => patch({ region: e.target.value })} className="field-focus" style={fieldInputStyle}>
+                      <option value="">지역을 선택해 주세요</option>
+                      {TRAVEL_REGIONS.map((r) => (
+                        <option key={r.key} value={r.key}>{travelRegionLabel(r)}</option>
+                      ))}
+                    </select>
+                    {region && !region.bookable && (
+                      <span style={{ fontSize: 12, color: "#8E3F5F", lineHeight: 1.6 }}>
+                        {region.name} 예식은 홈페이지 예약이 어렵습니다. 카카오톡 채널로 문의해 주시면 가능 여부와 비용을 안내드립니다.
+                      </span>
+                    )}
+                  </label>
+                  <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                     예식장 · 홀 이름
                     <input
                       value={state.venue}
                       onChange={(e) => patch({ venue: e.target.value })}
-                      placeholder="서울 · 그랜드컨벤션 3층 그레이스홀"
+                      placeholder="그랜드컨벤션 3층 그레이스홀"
                       className="field-focus"
                       style={fieldInputStyle}
                     />
                   </label>
+                  <div style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
+                    <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
+                      봉투 처리 방식 <span style={{ fontSize: 12, color: "#9A8189" }}>둘 다 무료 · 예식 7일 전 사전 통화까지 바꿀 수 있습니다.</span>
+                    </span>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                      {(["sealed", "opened"] as const).map((m) => (
+                        <div key={m} onClick={() => patch({ envelope: m })} style={{ ...chipStyle(state.envelope === m), padding: "12px 10px", lineHeight: 1.5 }}>
+                          <div style={{ fontWeight: 500 }}>{ENVELOPE_MODES[m].name}</div>
+                          <div style={{ fontSize: 11.5, opacity: 0.8, marginTop: 2 }}>{ENVELOPE_MODES[m].desc}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   <label style={{ ...fieldLabelStyle, gridColumn: "1 / -1" }}>
                     <span style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: 6 }}>
                       웨딩버틀러를 어떻게 알게 되셨나요? <span style={{ fontSize: 12, color: "#9A8189" }}>(선택)</span>
@@ -768,7 +815,8 @@ export function ReservationModal({
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, padding: "22px 0", borderTop: "1px solid #DCC4CC", borderBottom: "1px solid #DCC4CC" }}>
                   <SummaryRow label="예식 일시" value={whenLabel} />
                   <SummaryRow label="축의대" value={deskLabel} />
-                  <SummaryRow label="예식장" value={state.venue.trim() || "미입력"} />
+                  <SummaryRow label="예식장" value={[region?.name, state.venue.trim()].filter(Boolean).join(" · ") || "미입력"} />
+                  <SummaryRow label="봉투 처리" value={state.envelope ? ENVELOPE_MODES[state.envelope].name : "선택해 주세요"} />
                   <SummaryRow label="배정 버틀러" value={`${P.butlers + state.extraButlers}명`} />
                 </div>
 
@@ -787,6 +835,7 @@ export function ReservationModal({
                     <SummaryRow label="기본 요금" value={won(price.base)} />
                   )}
                   <SummaryRow label="버틀러 추가" value={price.extraButlerAmount ? "+ " + won(price.extraButlerAmount) : "-"} />
+                  <SummaryRow label="출장비" value={price.travelFee ? "+ " + won(price.travelFee) : region?.bookable ? "없음" : "-"} />
                 </div>
 
                 <div style={{ padding: "20px 0 0" }}>
