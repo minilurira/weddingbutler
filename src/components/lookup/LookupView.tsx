@@ -173,7 +173,7 @@ export function LookupView() {
           {list.length === 0 && <div style={{ ...card, textAlign: "center", color: "#9A8189" }}>이 번호로 된 예약이 없어요.</div>}
           {list.map((r) => <ReservationCard key={r.id} r={r} onCancel={() => { setMessage(""); setCancelTarget(r); }} />)}
           <p style={{ margin: "6px 0 0", fontSize: 13, lineHeight: 1.8, color: "#9A8189" }}>
-            예약 변경이나 궁금한 점은 카카오톡 채널 @웨딩버틀러 또는 <a href="tel:01059189203" style={{ color: "#9A8189" }}>010-5918-9203</a>으로 문의해 주세요.
+            예약 변경이나 궁금한 점은 카카오톡 채널 @웨딩버틀러 또는 <a href="tel:01044181003" style={{ color: "#9A8189" }}>010-4418-1003</a>으로 문의해 주세요.
           </p>
         </div>
       )}

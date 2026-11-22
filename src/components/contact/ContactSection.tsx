@@ -246,8 +246,8 @@ export function ContactSection() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,220px),1fr))", gap: "20px 32px", fontSize: 14, color: "#F3E9EB", lineHeight: 1.7 }}>
               <div>
                 <div style={{ fontSize: 12, color: "#B79AA3", marginBottom: 4 }}>전화</div>
-                <a href="tel:01059189203" style={{ color: "#F3E9EB" }}>
-                  010-5918-9203
+                <a href="tel:01044181003" style={{ color: "#F3E9EB" }}>
+                  010-4418-1003
                 </a>
               </div>
               <div>

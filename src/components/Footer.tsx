@@ -124,7 +124,7 @@ function BusinessInfo({ style }: { style: React.CSSProperties }) {
       <br />
       경기도 성남시 분당구 운중로 124, 8층 804-S80호
       <br />
-      고객센터 010-5918-9203 (매일 09:00~22:00) · cs@weddingbutler.co.kr
+      고객센터 010-4418-1003 (매일 09:00~22:00) · cs@weddingbutler.co.kr
       <br />
       카카오톡 채널 @웨딩버틀러
       <br />© 2026 Wedding Butler. All rights reserved.
@@ -230,8 +230,8 @@ export function Footer({ full = false }: { full?: boolean }) {
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", color: "#D8C3C9", marginBottom: 16 }}>CONTACT</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 14, color: "#9A8189" }}>
-              <a href="tel:01059189203" style={{ color: "#9A8189" }}>
-                010-5918-9203
+              <a href="tel:01044181003" style={{ color: "#9A8189" }}>
+                010-4418-1003
               </a>
               <span>
                 경기 성남시 분당구 운중로 124

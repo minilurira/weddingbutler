@@ -290,7 +290,7 @@ export const TERMS_HTML = `
       <div style="color:#9A8189;">사업장 소재지</div><div style="color:#4A3B41;">경기도 성남시 분당구 운중로 124, 8층 804-S80호 (운중동)</div>
       <div style="color:#9A8189;">사업자등록번호</div><div style="color:#4A3B41;">677-08-03502</div>
       <div style="color:#9A8189;">통신판매업 신고번호</div><div style="color:#4A3B41;">제2026-성남분당A-0820호</div>
-      <div style="color:#9A8189;">전화</div><div style="color:#4A3B41;">010-5918-9203 (09:00~22:00)</div>
+      <div style="color:#9A8189;">전화</div><div style="color:#4A3B41;">010-4418-1003 (09:00~22:00)</div>
       <div style="color:#9A8189;">전자우편</div><div style="color:#4A3B41;">cs@weddingbutler.co.kr</div>
       <div style="color:#9A8189;">개인정보 보호책임자</div><div style="color:#4A3B41;">이강</div>
       <div style="color:#9A8189;">구매안전서비스</div><div style="color:#4A3B41;">KG이니시스 에스크로</div>

@@ -10,7 +10,7 @@ export function LocalBusinessJsonLd() {
     description: SITE_DESCRIPTION,
     logo: `${SITE_URL}/brand/wb-logo-512.png`,
     email: "cs@weddingbutler.co.kr",
-    telephone: "010-5918-9203",
+    telephone: "010-4418-1003",
     image: `${SITE_URL}/img/hero-desk.jpeg`,
     address: {
       "@type": "PostalAddress",

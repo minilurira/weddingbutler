@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export const SUPPORT_PHONE = '010-5918-9203';
+export const SUPPORT_PHONE = '010-4418-1003';
 
 /** 인증·만료·다운로드 전용 화면처럼 기록 본문이 없는 화면의 공통 틀 */
 export function RecordFrame({ children }: { children: React.ReactNode }) {

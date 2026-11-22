@@ -232,7 +232,7 @@ export const PRIVACY_HTML = `
   <h2 style="font-family:'Noto Serif KR',serif; font-size:17px; font-weight:600; margin:40px 0 12px; padding-top:28px; border-top:1px solid #EBDCE0;">14. 개인정보 보호책임자</h2>
   <div style="display:grid; grid-template-columns:140px 1fr; gap:10px 16px; font-size:13.5px; line-height:1.7; background:#FAF3F5; border-radius:4px; padding:20px 22px; margin:0 0 14px;">
     <div style="color:#9A8189;">개인정보 보호책임자</div><div style="color:#4A3B41;">이강 (대표)</div>
-    <div style="color:#9A8189;">전화</div><div style="color:#4A3B41;">010-5918-9203</div>
+    <div style="color:#9A8189;">전화</div><div style="color:#4A3B41;">010-4418-1003</div>
     <div style="color:#9A8189;">이메일</div><div style="color:#4A3B41;">cs@weddingbutler.co.kr</div>
     <div style="color:#9A8189;">카카오톡 채널</div><div style="color:#4A3B41;">@웨딩버틀러</div>
   </div>
