@@ -194,7 +194,7 @@ button {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: url("/img/hero-desk.jpeg") 62% 30% / cover no-repeat;
+  background: url("/img/hero-main.webp") 100% 50% / cover no-repeat;
   animation: hero-zoom 18s ease-out both;
 }
 .hero::before {
@@ -237,7 +237,7 @@ button {
 
 @media (max-width: 860px) {
   .hero { min-height: calc(100svh - 64px); align-items: flex-end; }
-  .hero-bg { background-position: 52% 12%; }
+  .hero-bg { background-image: url("/img/hero-main-mobile.webp"); background-position: 52% 100%; }
   .hero::before {
     background: linear-gradient(180deg, rgba(38, 22, 29, 0.05) 0%, rgba(38, 22, 29, 0) 38%, rgba(38, 22, 29, 0.62) 58%, rgba(38, 22, 29, 0.92) 78%, rgba(38, 22, 29, 0.96) 100%);
   }
