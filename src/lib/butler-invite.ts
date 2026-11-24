@@ -24,12 +24,12 @@ function endpoint(token: string): { url: URL; key: string } | null {
 }
 
 /** 어드민에 닿지 못하면 null */
-export async function fetchInvite(token: string): Promise<{ state: InviteState; info?: InviteInfo } | null> {
+export async function fetchInvite(token: string): Promise<{ state: InviteState; info?: InviteInfo; locked?: boolean } | null> {
   const ep = endpoint(token);
   if (!ep) return INVITE_TOKEN_RE.test(token) ? null : { state: "not_found" };
   try {
     const res = await fetch(ep.url, { headers: { Authorization: `Bearer ${ep.key}` }, cache: "no-store", signal: AbortSignal.timeout(5000) });
-    return res.ok ? ((await res.json()) as { state: InviteState; info?: InviteInfo }) : null;
+    return res.ok ? ((await res.json()) as { state: InviteState; info?: InviteInfo; locked?: boolean }) : null;
   } catch (err) {
     logError("[butler-invite] fetch failed", err);
     return null;
@@ -49,9 +49,9 @@ export async function respondInvite(token: string, action: "accept" | "decline")
 }
 
 export const INVITE_STATE_MESSAGE: Record<Exclude<InviteState, "pending">, string> = {
-  available: "참석 가능으로 응답하셨습니다. 배정이 확정되면 따로 안내드립니다. 기한 전에는 아래에서 답을 바꿀 수 있습니다.",
-  unavailable: "참석 불가로 응답하셨습니다. 기한 전에는 아래에서 답을 바꿀 수 있습니다.",
+  available: "참석 가능으로 응답하셨습니다. 배정이 확정되면 따로 안내드립니다. 예식일 전까지는 아래에서 답을 바꿀 수 있습니다.",
+  unavailable: "참석 불가로 응답하셨습니다. 예식일 전까지는 아래에서 답을 바꿀 수 있습니다.",
   cancelled: "취소된 문의입니다. 자세한 내용은 웨딩버틀러로 연락해 주세요.",
-  expired: "응답 기한이 지난 문의입니다. 참석이 가능하시면 웨딩버틀러로 연락해 주세요.",
+  expired: "응답할 수 있는 기간이 지난 문의입니다. 참석이 가능하시면 웨딩버틀러로 연락해 주세요.",
   not_found: "유효하지 않은 링크입니다. 링크 주소를 다시 확인해 주세요.",
 };

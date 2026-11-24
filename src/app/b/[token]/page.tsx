@@ -19,7 +19,7 @@ export default async function ButlerInvitePage({ params }: { params: { token: st
         {!res ? (
           <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60" }}>링크를 확인하지 못했습니다. 잠시 후 다시 열어 주세요.</p>
         ) : info && (state === "pending" || state === "available" || state === "unavailable") ? (
-          <InviteResponse token={params.token} info={info} initial={state} />
+          <InviteResponse token={params.token} info={info} initial={state} locked={Boolean(res?.locked)} />
         ) : (
           <p style={{ fontSize: 15, lineHeight: 1.9, color: "#6B5A60" }}>{INVITE_STATE_MESSAGE[state === "pending" || state === undefined ? "not_found" : state]}</p>
         )}
