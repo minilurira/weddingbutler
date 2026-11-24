@@ -44,7 +44,7 @@ export default function InviteResponse({ token, info, initial, locked }: { token
             <button type="button" disabled={pending || state === "available"} onClick={() => send("accept")} style={{ ...btn(state === "available" ? "#33232A" : "#33232A", "#F3E9EB"), opacity: state === "unavailable" ? 0.55 : 1 }}>{pending ? "처리 중…" : "참석 가능"}</button>
             <button type="button" disabled={pending || state === "unavailable"} onClick={() => send("decline")} style={{ ...btn("#fff", "#33232A", "#DCC4CC"), opacity: state === "available" ? 0.55 : 1 }}>참석 불가</button>
           </div>
-          <p style={{ fontSize: 13, color: "#8C7A80", margin: "14px 0 0", lineHeight: 1.7 }}>{state === "pending" ? `${info.deadline}까지 응답해 주세요. ` : "예식일 전까지 이 링크에서 답을 바꿀 수 있습니다. "}참석 가능으로 응답하셔도 배정은 따로 확정해 안내드립니다.</p>
+          <p style={{ fontSize: 13, color: "#8C7A80", margin: "14px 0 0", lineHeight: 1.7 }}>{state === "pending" ? `${info.deadline}까지 응답해 주세요. 응답 후에도 ${info.changeUntil}까지는 이 링크에서 답을 바꿀 수 있습니다. ` : `${info.changeUntil}까지 이 링크에서 답을 바꿀 수 있습니다. `}참석 가능으로 응답하셔도 배정은 따로 확정해 안내드립니다.</p>
         </>
       ) : null}
       {error ? <p style={{ fontSize: 14, color: "#A9647E", margin: "14px 0 0" }}>{error}</p> : null}

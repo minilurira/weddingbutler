@@ -12,6 +12,8 @@ export interface InviteInfo {
   venue: string;
   start: string;
   deadline: string;
+  /** 답을 바꿀 수 있는 마지막 시각 */
+  changeUntil: string;
 }
 
 export const INVITE_TOKEN_RE = /^[0-9a-f]{32}$/;
@@ -49,9 +51,9 @@ export async function respondInvite(token: string, action: "accept" | "decline")
 }
 
 export const INVITE_STATE_MESSAGE: Record<Exclude<InviteState, "pending">, string> = {
-  available: "참석 가능으로 응답하셨습니다. 배정이 확정되면 따로 안내드립니다. 예식일 전까지는 아래에서 답을 바꿀 수 있습니다.",
-  unavailable: "참석 불가로 응답하셨습니다. 예식일 전까지는 아래에서 답을 바꿀 수 있습니다.",
+  available: "참석 가능으로 응답하셨습니다. 배정이 확정되면 따로 안내드립니다. 변경 가능 기간 안에는 아래에서 답을 바꿀 수 있습니다.",
+  unavailable: "참석 불가로 응답하셨습니다. 변경 가능 기간 안에는 아래에서 답을 바꿀 수 있습니다.",
   cancelled: "취소된 문의입니다. 자세한 내용은 웨딩버틀러로 연락해 주세요.",
-  expired: "응답할 수 있는 기간이 지난 문의입니다. 참석이 가능하시면 웨딩버틀러로 연락해 주세요.",
+  expired: "응답·변경할 수 있는 기간이 지난 문의입니다. 참석이 가능하시면 웨딩버틀러로 연락해 주세요.",
   not_found: "유효하지 않은 링크입니다. 링크 주소를 다시 확인해 주세요.",
 };
