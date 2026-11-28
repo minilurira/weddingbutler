@@ -17,6 +17,10 @@ export const RELATIONS = ['친척', '친구', '직장', '지인'] as const;
 
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 
+/** 금액이 0원인 줄(식권만 받은 하객 등)은 봉투로 세지 않는다. 금액 미기록(null)·밀봉은 센다. */
+export const isEnvelope = (e: RecordEntry) => e.amount !== 0;
+const countEnvelopes = (rs: RecordEntry[]) => rs.filter(isEnvelope).length;
+
 export interface RecordStats {
   envelopes: number;
   tickets: number;
@@ -32,27 +36,28 @@ export function computeStats(entries: RecordEntry[], opened: boolean): RecordSta
   const sides = (['신랑측', '신부측'] as Side[])
     .map((side) => {
       const rs = entries.filter((e) => e.side === side);
-      return { side, envelopes: rs.length, tickets: sum(rs.map((e) => e.tickets)), amount: opened ? sum(rs.map(amt)) : null };
+      if (rs.length === 0) return null;
+      return { side, envelopes: countEnvelopes(rs), tickets: sum(rs.map((e) => e.tickets)), amount: opened ? sum(rs.map(amt)) : null };
     })
-    .filter((s) => s.envelopes > 0);
+    .filter((s): s is RecordStats['sides'][number] => s !== null);
 
   const relLabel = (r?: string) => (r && (RELATIONS as readonly string[]).includes(r) ? r : '기타');
   const relOrder = [...RELATIONS, '기타'];
   const relations = relOrder
     .map((label) => {
       const rs = entries.filter((e) => relLabel(e.relation) === label);
-      return { label, envelopes: rs.length, amount: opened ? sum(rs.map(amt)) : null };
+      return { label, envelopes: countEnvelopes(rs), amount: opened ? sum(rs.map(amt)) : null };
     })
     .filter((r) => r.envelopes > 0);
 
   return {
-    envelopes: entries.length,
+    envelopes: countEnvelopes(entries),
     tickets: sum(entries.map((e) => e.tickets)),
     totalAmount: opened ? sum(entries.map(amt)) : null,
     sides,
     relations,
     buckets: opened
-      ? BUCKETS.map((b) => ({ ...b, count: entries.filter((e) => bucketOf(amt(e)) === b.key).length }))
+      ? BUCKETS.map((b) => ({ ...b, count: entries.filter((e) => isEnvelope(e) && bucketOf(amt(e)) === b.key).length }))
       : null,
   };
 }

@@ -5,13 +5,11 @@ interface Props {
   stats: RecordStats;
   opened: boolean;
   showSides: boolean;
-  envelopeMismatch: boolean;
-  handoverEnvelopeCount: number;
   facts: { label: string; value: string }[];
 }
 
 /** S15 — 혼주도 보므로 숫자 카드를 차트보다 위, 크게. 차트는 2개 이내. */
-export function SummaryTab({ stats, opened, showSides, envelopeMismatch, handoverEnvelopeCount, facts }: Props) {
+export function SummaryTab({ stats, opened, showSides, facts }: Props) {
   const relMax = Math.max(1, ...stats.relations.map((r) => (opened ? r.amount ?? 0 : r.envelopes)));
   const bucketMax = Math.max(1, ...(stats.buckets ?? []).map((b) => b.count));
 
@@ -28,11 +26,6 @@ export function SummaryTab({ stats, opened, showSides, envelopeMismatch, handove
         <div className="wbr-stat">
           <div className="wbr-stat__label">봉투</div>
           <div className="wbr-stat__value">{num(stats.envelopes)}<span className="wbr-stat__unit">매</span></div>
-          <div className="wbr-muted">
-            {envelopeMismatch
-              ? `인계확인서 ${handoverEnvelopeCount}매 — 고객센터로 문의해 주세요`
-              : `인계확인서 ${handoverEnvelopeCount}매와 일치`}
-          </div>
         </div>
         <div className="wbr-stat">
           <div className="wbr-stat__label">식권</div>
