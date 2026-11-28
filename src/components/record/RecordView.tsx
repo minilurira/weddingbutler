@@ -9,6 +9,7 @@ import { SummaryTab } from './SummaryTab';
 import { GuestList } from './GuestList';
 import { IconDownload, IconLock, IconVideo } from './icons';
 import { RecordFooter } from './RecordFrame';
+import { RecordVideos, videosOf } from './RecordVideos';
 
 type Tab = 'summary' | 'list';
 
@@ -24,6 +25,8 @@ export function RecordView({ meta, entries }: RecordPayload) {
   const opened = meta.recordMode === 'opened';
   const premium = meta.plan === 'premium';
   const stats = useMemo(() => computeStats(entries, opened), [entries, opened]);
+
+  const videos = useMemo(() => videosOf(meta), [meta]);
 
   const extraGuests = Math.max(0, stats.tickets - meta.baseGuests);
 
@@ -70,9 +73,18 @@ export function RecordView({ meta, entries }: RecordPayload) {
             </button>
           </div>
           <div className="wbr-actions">
-            {meta.videoUrl && (
-              <a className="wbr-btn" href={meta.videoUrl} target="_blank" rel="noopener noreferrer">
-                <IconVideo /> 운영 영상 보기
+            {videos.length > 0 && (
+              <a
+                className="wbr-btn"
+                href="#wbr-videos"
+                onClick={(e) => {
+                  // 영상은 요약 탭 맨 위에 있다. 리스트 탭에서 누르면 요약 탭으로 돌아가 영상으로 이동
+                  e.preventDefault();
+                  setTab('summary');
+                  requestAnimationFrame(() => document.getElementById('wbr-videos')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+                }}
+              >
+                <IconVideo /> 영상 보기{videos.length > 1 ? ` ${videos.length}` : ''}
               </a>
             )}
             <a className="wbr-btn wbr-btn--primary" href={meta.downloadUrl}>
@@ -89,7 +101,8 @@ export function RecordView({ meta, entries }: RecordPayload) {
         )}
 
         {tab === 'summary' ? (
-          <div id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
+          <div id="panel-summary" role="tabpanel" aria-labelledby="tab-summary" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <RecordVideos videos={videos} />
             <SummaryTab
               stats={stats}
               opened={opened}
