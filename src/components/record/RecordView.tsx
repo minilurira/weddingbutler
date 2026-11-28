@@ -26,7 +26,6 @@ export function RecordView({ meta, entries }: RecordPayload) {
   const stats = useMemo(() => computeStats(entries, opened), [entries, opened]);
 
   const extraGuests = Math.max(0, stats.tickets - meta.baseGuests);
-  const envelopeMismatch = meta.handoverEnvelopeCount !== stats.envelopes;
 
   return (
     <div className="wbr">
@@ -67,7 +66,7 @@ export function RecordView({ meta, entries }: RecordPayload) {
               요약
             </button>
             <button role="tab" id="tab-list" aria-controls="panel-list" aria-selected={tab === 'list'} className="wbr-tab" onClick={() => setTab('list')}>
-              하객 리스트 {stats.envelopes}
+              하객 리스트 {entries.length}
             </button>
           </div>
           <div className="wbr-actions">
@@ -95,8 +94,6 @@ export function RecordView({ meta, entries }: RecordPayload) {
               stats={stats}
               opened={opened}
               showSides={premium}
-              envelopeMismatch={envelopeMismatch}
-              handoverEnvelopeCount={meta.handoverEnvelopeCount}
               facts={[
                 { label: '축의금 인수자', value: meta.receiverLabel },
                 { label: '인계 시각', value: meta.live ? '인계 전' : krDateTime(meta.handoverAt) },
