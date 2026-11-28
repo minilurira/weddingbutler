@@ -142,3 +142,11 @@
 .wbr-btn--block { justify-content: center; width: 100%; }
 .wbr-btn:disabled { opacity: 0.6; cursor: default; }
 .wbr-preview-banner { font-family: var(--wb-font); background: var(--wb-info-bg); color: var(--wb-info-fg); font-size: 14px; text-align: center; padding: 8px 16px; }
+
+/* 축의 기록 영상 (유튜브 임베드) */
+.wbr-videos__grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+.wbr-videos__grid--two { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+.wbr-video { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.wbr-video__label { font-size: 15px; font-weight: 700; }
+.wbr-video__frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--wb-r-sm); overflow: hidden; background: #000; }
+.wbr-video__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

@@ -1,4 +1,4 @@
-import type { PlanCode, RecordPayload } from "@/types/record";
+import type { PlanCode, RecordPayload, RecordVideo } from "@/types/record";
 
 import { logError } from "@/lib/error-log";
 // 축의 기록은 어드민 DB에 있다. 홈페이지 서버만 이 함수들로 어드민 /api/public/records/* 를 부른다.
@@ -6,7 +6,7 @@ import { logError } from "@/lib/error-log";
 export type Viewer = "customer" | "admin";
 
 export type RecordInfo =
-  | { state: "ok"; status: string; plan: PlanCode; coupleName: string; phoneMasked: string; expiresAt: string | null }
+  | { state: "ok"; status: string; plan: PlanCode; coupleName: string; phoneMasked: string; expiresAt: string | null; videos?: RecordVideo[] }
   | { state: "expired"; expiresAt?: string }
   | { state: "not_found" }
   /** 예약번호로 연 주소인데 기록이 아직 열리지 않음(작성 전·작성 중) */

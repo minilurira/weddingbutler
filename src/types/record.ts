@@ -36,11 +36,19 @@ export interface RecordMeta {
   baseGuests: number;          // 상품 기본 하객
   extraGuestFee: number;       // 1명당
   downloadUrl: string;         // 서버 라우트(밀봉이면 금액 열 제외된 파일)
+  /** 예전 어드민 호환용 (videos가 없을 때만 씀) */
   videoUrl?: string;
+  /** 운영 영상. 양가 요금제는 신랑측·신부측 2개 */
+  videos?: RecordVideo[];
   supportPhone: string;
 }
 
 export interface RecordPayload {
   meta: RecordMeta;
   entries: RecordEntry[];
+}
+
+export interface RecordVideo {
+  label: string;
+  url: string;
 }

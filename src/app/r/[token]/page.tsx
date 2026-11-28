@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import "@/styles/wb-tokens.css";
 import "@/styles/wb-record.css";
 import { RecordView } from "@/components/record/RecordView";
+import { RecordVideos } from "@/components/record/RecordVideos";
 import { RecordGate } from "@/components/record/RecordGate";
 import { LiveRefresh } from "@/components/record/LiveRefresh";
 import { RecordFrame, SUPPORT_PHONE } from "@/components/record/RecordFrame";
@@ -123,6 +124,7 @@ export default async function RecordPage({
             </p>
             <a className="wbr-btn wbr-btn--primary wbr-btn--block" href={downloadUrl}>엑셀 다운로드</a>
           </section>
+          <RecordVideos videos={info.videos ?? []} />
         </RecordFrame>
       </>
     );
